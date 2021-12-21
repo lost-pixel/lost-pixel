@@ -14,3 +14,7 @@ jobs:
         uses: ./
         with:
           LOST_PIXEL_URL: 'https://example.com/api'
+
+      - name: Setup tmate session
+        uses: mxschmitt/action-tmate@v3
+
