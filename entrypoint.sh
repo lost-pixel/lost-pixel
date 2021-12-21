@@ -7,7 +7,7 @@ echo $STORYBOOK_PATH
 
 ls -lah $STORYBOOK_PATH
 
-# ls -lah
+ls -lah
 # ls ./node_modules/
 # ls ./node_modules/.bin
 
@@ -15,4 +15,4 @@ STORYBOOK="npm run storybook"
 TEST="npm run test"
 
 
-# ./node_modules/.bin/concurrently "${STORYBOOK}" "${TEST}" --success first --kill-others
+./node_modules/.bin/concurrently "${STORYBOOK}" "${TEST}" --success first --kill-others
