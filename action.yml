@@ -4,6 +4,9 @@ inputs:
   LOST_PIXEL_URL:
     description: 'URL to Lost Pixel server'
     required: true
+  STORYBOOK_PATH:
+    description: 'Path to the built storybook files'
+    required: true
 runs:
   using: 'docker'
   image: 'Dockerfile'
