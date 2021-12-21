@@ -1,0 +1,23 @@
+{
+  "name": "lost-pixel-action",
+  "version": "1.0.0",
+  "description": "GitHub Action for Lost Pixel integration",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/chriskalmar/lost-pixel-action.git"
+  },
+  "keywords": [],
+  "author": "Chris Kalmar",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/chriskalmar/lost-pixel-action/issues"
+  },
+  "homepage": "https://github.com/chriskalmar/lost-pixel-action#readme",
+  "devDependencies": {
+    "loki": "^0.28.1"
+  }
+}
