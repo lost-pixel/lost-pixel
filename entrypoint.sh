@@ -7,9 +7,9 @@ echo $STORYBOOK_PATH
 
 ls -lah $STORYBOOK_PATH
 
-ls -lah
-ls ./node_modules/
-ls ./node_modules/.bin
+# ls -lah
+# ls ./node_modules/
+# ls ./node_modules/.bin
 
 STORYBOOK="npm run storybook"
 TEST="npm run test"
