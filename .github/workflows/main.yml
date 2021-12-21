@@ -1,0 +1,16 @@
+on: [push]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+    name: Lost Pixel
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Test Action Container
+        uses: ./
+        with:
+          LOST_PIXEL_URL: 'https://example.com/api'
