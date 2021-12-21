@@ -5,13 +5,14 @@ echo $INPUT_STORYBOOK_PATH
 # env
 # cat /github/workflow/event.json
 
-STORYBOOK_PATH=$PWD/$INPUT_STORYBOOK_PATH
-ls -lah $STORYBOOK_PATH
 
+STORYBOOK_PATH=/github/workspace/$INPUT_STORYBOOK_PATH
+ls -lah $STORYBOOK_PATH
 
 
 STORYBOOK="npm run storybook"
 TEST="npm run test"
+
 
 
 cd /app
