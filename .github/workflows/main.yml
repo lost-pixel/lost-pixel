@@ -10,6 +10,15 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
 
+      - uses: actions/setup-node@v2
+        with:
+          node-version: 14.x
+          cache: 'npm'
+      - run: |
+          cd examples/storybook-demo
+          npm ci
+          npm run build-storybook
+
       - name: Test Action Container
         uses: ./
         with:
