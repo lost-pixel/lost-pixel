@@ -26,5 +26,6 @@ jobs:
           STORYBOOK_PATH: 'examples/storybook-demo/storybook-static'
 
       - name: Setup tmate session
+        if: ${{ failure() }}
         uses: mxschmitt/action-tmate@v3
 
