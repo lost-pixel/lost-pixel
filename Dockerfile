@@ -8,10 +8,9 @@ WORKDIR /app
 
 COPY package.json .
 COPY package-lock.json .
-
-RUN npm install
-
 COPY entrypoint.sh /entrypoint.sh
 COPY loki.config.js /loki.config.js
+
+RUN npm install
 
 ENTRYPOINT ["/entrypoint.sh"]
