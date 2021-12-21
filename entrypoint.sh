@@ -2,6 +2,7 @@
 
 echo $INPUT_LOST_PIXEL_URL
 env
+cat /github/workflow/event.json
 
 STORYBOOK="npm run storybook"
 TEST="npm run test"
