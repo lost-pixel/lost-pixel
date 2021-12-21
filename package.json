@@ -18,6 +18,7 @@
   },
   "homepage": "https://github.com/chriskalmar/lost-pixel-action#readme",
   "dependencies": {
-    "loki": "^0.28.1"
+    "loki": "^0.28.1",
+    "serve": "^13.0.2"
   }
 }
