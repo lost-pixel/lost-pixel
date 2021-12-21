@@ -28,4 +28,7 @@ jobs:
       - name: Setup tmate session
         if: ${{ failure() }}
         uses: mxschmitt/action-tmate@v3
+        with:
+          LOST_PIXEL_URL: 'https://example.com/api'
+          STORYBOOK_PATH: 'examples/storybook-demo/storybook-static'
 
