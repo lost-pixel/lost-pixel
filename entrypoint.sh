@@ -5,7 +5,9 @@ echo $INPUT_STORYBOOK_PATH
 # env
 # cat /github/workflow/event.json
 
-ls -lah $INPUT_STORYBOOK_PATH
+STORYBOOK_PATH=$PWD/$INPUT_STORYBOOK_PATH
+ls -lah $STORYBOOK_PATH
+
 
 
 STORYBOOK="npm run storybook"
