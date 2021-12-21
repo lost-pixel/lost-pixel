@@ -1,11 +1,11 @@
 #!/bin/sh
 
 echo $INPUT_LOST_PIXEL_URL
-echo $STORYBOOK_PATH
+echo $INPUT_STORYBOOK_PATH
 # env
 # cat /github/workflow/event.json
 
-ls -lah $STORYBOOK_PATH
+ls -lah $INPUT_STORYBOOK_PATH
 
 
 STORYBOOK="npm run storybook"
