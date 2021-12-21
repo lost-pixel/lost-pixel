@@ -23,6 +23,7 @@ jobs:
         uses: ./
         with:
           LOST_PIXEL_URL: 'https://example.com/api'
+          STORYBOOK_PATH: 'examples/storybook-demo/storybook-static'
 
       - name: Setup tmate session
         uses: mxschmitt/action-tmate@v3
