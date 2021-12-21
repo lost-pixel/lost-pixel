@@ -4,6 +4,8 @@ ENV NODE_ENV production
 
 RUN apk add chromium
 
+WORKDIR /app
+
 COPY package.json .
 COPY package-lock.json .
 
