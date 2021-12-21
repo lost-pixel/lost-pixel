@@ -1,5 +1,8 @@
 #!/bin/sh
 
+echo $INPUT_LOST_PIXEL_URL
+env
+
 STORYBOOK="npm run storybook"
 TEST="npm run test"
 
