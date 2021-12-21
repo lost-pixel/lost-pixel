@@ -4,7 +4,7 @@
   "description": "GitHub Action for Lost Pixel integration",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "loki test"
   },
   "repository": {
     "type": "git",
@@ -17,7 +17,7 @@
     "url": "https://github.com/chriskalmar/lost-pixel-action/issues"
   },
   "homepage": "https://github.com/chriskalmar/lost-pixel-action#readme",
-  "devDependencies": {
+  "dependencies": {
     "loki": "^0.28.1"
   }
 }
