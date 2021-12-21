@@ -1,0 +1,9 @@
+name: 'Lost Pixel'
+description: 'Lost Pixel integration'
+inputs:
+  LOST_PIXEL_URL:
+    description: 'URL to Lost Pixel server'
+    required: true
+runs:
+  using: 'docker'
+  image: 'Dockerfile'
