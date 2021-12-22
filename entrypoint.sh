@@ -29,7 +29,7 @@ cd /app
 # ls ./node_modules/.bin
 
 
-./node_modules/.bin/concurrently "${DEBUG}" "${STORYBOOK}" "${TEST}" --success first --kill-others
+./node_modules/.bin/concurrently "${STORYBOOK}" "${TEST}" --success first --kill-others
 
 
 # STORYBOOK_PATH=/github/workspace/$INPUT_STORYBOOK_PATH
