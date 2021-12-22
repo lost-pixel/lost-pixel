@@ -10,14 +10,14 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
 
-      - uses: actions/setup-node@v2
-        with:
-          node-version: 14.x
-          cache: 'npm'
-      - run: |
-          cd examples/storybook-demo
-          npm ci
-          npm run build-storybook
+      # - uses: actions/setup-node@v2
+      #   with:
+      #     node-version: 14.x
+      #     cache: 'npm'
+      # - run: |
+      #     cd examples/storybook-demo
+      #     npm ci
+      #     npm run build-storybook
 
       - name: Test Action Container
         uses: ./
@@ -25,10 +25,10 @@ jobs:
           LOST_PIXEL_URL: 'https://example.com/api'
           STORYBOOK_PATH: 'examples/storybook-demo/storybook-static'
 
-      - name: Setup tmate session
-        if: ${{ failure() }}
-        uses: mxschmitt/action-tmate@v3
-        with:
-          LOST_PIXEL_URL: 'https://example.com/api'
-          STORYBOOK_PATH: 'examples/storybook-demo/storybook-static'
+      # - name: Setup tmate session
+      #   if: ${{ failure() }}
+      #   uses: mxschmitt/action-tmate@v3
+      #   with:
+      #     LOST_PIXEL_URL: 'https://example.com/api'
+      #     STORYBOOK_PATH: 'examples/storybook-demo/storybook-static'
 

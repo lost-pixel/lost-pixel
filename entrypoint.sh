@@ -12,6 +12,12 @@ ls -lah $STORYBOOK_PATH
 
 STORYBOOK="npm run storybook"
 TEST="npm run test"
+DEBUG="npm run debug"
+DEBUG3="STORYBOOK_PATH=${STORYBOOK_PATH} npm run debug"
+DEBUG4="STORYBOOK_PATH=/yolo/github/workspace/$INPUT_STORYBOOK_PATH npm run debug"
+
+echo "DEBUG1:"
+npm run debug
 
 
 
@@ -21,4 +27,4 @@ ls -lah
 # ls ./node_modules/.bin
 
 
-./node_modules/.bin/concurrently "${STORYBOOK}" "${TEST}" --success first --kill-others
+./node_modules/.bin/concurrently "${DEBUG}" "${STORYBOOK}" "${TEST}" --success first --kill-others

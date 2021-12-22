@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "loki --verboseRenderer --requireReference --port 9009 test",
-    "storybook": "serve -l 9009 $STORYBOOK_PATH"
+    "storybook": "serve -l 9009 $STORYBOOK_PATH",
+    "debug": "echo '>>>'; echo $STORYBOOK_PATH; echo '<<<'"
   },
   "repository": {
     "type": "git",
