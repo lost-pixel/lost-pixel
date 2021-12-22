@@ -23,7 +23,7 @@ echo $STORYBOOK_PATH
 
 
 
-# cd /app
+cd /app
 # ls -lah
 # ls ./node_modules/
 # ls ./node_modules/.bin
