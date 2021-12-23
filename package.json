@@ -19,5 +19,8 @@
   "homepage": "https://github.com/chriskalmar/lost-pixel-action#readme",
   "dependencies": {
     "loki": "^0.28.1"
+  },
+  "devDependencies": {
+    "typescript": "^4.5.4"
   }
 }
