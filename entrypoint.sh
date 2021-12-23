@@ -11,5 +11,8 @@ cd /app
 --verboseRenderer \
 --requireReference \
 --reactUri file:$STORYBOOK_PATH \
+--reference /github/workspace/.loki/reference \
+--output /github/workspace/.loki/current \
+--difference /github/workspace/.loki/difference \
 --chromeFlags="--headless --disable-gpu --hide-scrollbars --no-sandbox" \
 update
