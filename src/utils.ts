@@ -8,32 +8,34 @@ type Comparison = {
 
 type PrepareComparisonList = {
   changes: Changes;
+  baseUrl: string;
 };
 
 export const prepareComparisonList = ({
   changes,
+  baseUrl,
 }: PrepareComparisonList): Comparison[] => {
   const comparisonList: Comparison[] = [];
 
   changes.addition.forEach((file) => {
     comparisonList.push({
       type: 'ADDITION',
-      afterImageUrl: file,
+      afterImageUrl: [baseUrl, file].join('/'),
     });
   });
 
   changes.deletion.forEach((file) => {
     comparisonList.push({
       type: 'DELETION',
-      beforeImageUrl: file,
+      beforeImageUrl: [baseUrl, file].join('/'),
     });
   });
 
   changes.difference.forEach((file) => {
     comparisonList.push({
       type: 'DIFFERENCE',
-      beforeImageUrl: file,
-      afterImageUrl: file,
+      beforeImageUrl: [baseUrl, file].join('/'),
+      afterImageUrl: [baseUrl, file].join('/'),
     });
   });
 
