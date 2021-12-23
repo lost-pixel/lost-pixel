@@ -1,15 +1,17 @@
 {
   "compilerOptions": {
     "incremental": true,
-    "target": "es2016",
+    "target": "es5",
     "module": "commonjs",
     "moduleResolution": "node",
     "resolveJsonModule": true,
-    "noEmit": true,
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
     "strict": true,
     "noImplicitAny": true,
-    "skipLibCheck": true
-  }
+    "skipLibCheck": true,
+    "outDir": "dist",
+  },
+  "include": ["src/**/*"],
+  "exclude": ["node_modules", "dist/**/*" , "**/*.spec.ts"]
 }
