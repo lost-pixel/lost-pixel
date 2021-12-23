@@ -40,4 +40,18 @@ describe(getChanges, () => {
       addition: ['c.png', 'd.png'],
     });
   });
+
+  it('should highlight removed files', () => {
+    expect(
+      getChanges({
+        reference: ['a.png', 'b.png', 'c.png', 'd.png'],
+        current: ['a.png', 'd.png'],
+        difference: [],
+      }),
+    ).toEqual({
+      difference: [],
+      deletion: ['b.png', 'c.png'],
+      addition: [],
+    });
+  });
 });
