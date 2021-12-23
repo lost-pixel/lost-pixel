@@ -40,15 +40,13 @@ echo "GITHUB_REF_TYPE=$GITHUB_REF_TYPE"
 
 
 cd /app
-# ls -lah
-# ls ./node_modules/
-# ls ./node_modules/.bin
 
-
-./node_modules/.bin/concurrently "${STORYBOOK}" "${TEST}" --success first --kill-others
-
-
-# STORYBOOK_PATH=/github/workspace/$INPUT_STORYBOOK_PATH
-# DEBUG3="STORYBOOK_PATH=${STORYBOOK_PATH} npm run debug"
-# DEBUG4="STORYBOOK_PATH=/yolo/github/workspace/$INPUT_STORYBOOK_PATH npm run debug"
-# ./node_modules/.bin/concurrently  "${DEBUG}" "${DEBUG3}" "${DEBUG4}"
+./node_modules/.bin/loki \
+--verboseRenderer \
+--requireReference \
+--reactUri file:$STORYBOOK_PATH \
+--reference /github/workspace/.loki/reference \
+--output /github/workspace/.loki/current \
+--difference /github/workspace/.loki/difference \
+--chromeFlags="--headless --disable-gpu --hide-scrollbars --no-sandbox" \
+update
