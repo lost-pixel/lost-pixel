@@ -1,5 +1,23 @@
-export const diffFolders = (files1: string[], files2: string[]): string[] => {
-  const diff = files1.filter((file) => !files2.includes(file));
+export type Files = {
+  reference: string[];
+  current: string[];
+  difference: string[];
+};
 
-  return diff;
+export type Changes = {
+  difference: string[];
+  deletion: string[];
+  addition: string[];
+};
+
+export const getChanges = (files: Files): Changes => {
+  return {
+    difference: files.difference.sort(),
+    deletion: files.reference
+      .filter((file) => !files.current.includes(file))
+      .sort(),
+    addition: files.current
+      .filter((file) => !files.reference.includes(file))
+      .sort(),
+  };
 };
