@@ -54,4 +54,18 @@ describe(getChanges, () => {
       addition: [],
     });
   });
+
+  it('should highlight changed files', () => {
+    expect(
+      getChanges({
+        reference: ['a.png', 'b.png'],
+        current: ['a.png', 'b.png'],
+        difference: ['b.png'],
+      }),
+    ).toEqual({
+      difference: ['b.png'],
+      deletion: [],
+      addition: [],
+    });
+  });
 });
