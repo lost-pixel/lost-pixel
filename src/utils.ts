@@ -35,24 +35,28 @@ export const prepareComparisonList = ({
   const comparisonList: Comparison[] = [];
 
   changes.addition.forEach((file) => {
+    const afterFile = extendFileName({ fileName: file, extension: 'after' });
     comparisonList.push({
       type: 'ADDITION',
-      afterImageUrl: [baseUrl, file].join('/'),
+      afterImageUrl: [baseUrl, afterFile].join('/'),
     });
   });
 
   changes.deletion.forEach((file) => {
+    const beforeFile = extendFileName({ fileName: file, extension: 'before' });
     comparisonList.push({
       type: 'DELETION',
-      beforeImageUrl: [baseUrl, file].join('/'),
+      beforeImageUrl: [baseUrl, beforeFile].join('/'),
     });
   });
 
   changes.difference.forEach((file) => {
+    const beforeFile = extendFileName({ fileName: file, extension: 'before' });
+    const afterFile = extendFileName({ fileName: file, extension: 'after' });
     comparisonList.push({
       type: 'DIFFERENCE',
-      beforeImageUrl: [baseUrl, file].join('/'),
-      afterImageUrl: [baseUrl, file].join('/'),
+      beforeImageUrl: [baseUrl, beforeFile].join('/'),
+      afterImageUrl: [baseUrl, afterFile].join('/'),
     });
   });
 

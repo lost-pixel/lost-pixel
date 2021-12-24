@@ -30,12 +30,12 @@ describe(prepareComparisonList, () => {
         baseUrl: 'https://s3',
       }),
     ).toEqual([
-      { afterImageUrl: 'https://s3/c.png', type: 'ADDITION' },
-      { afterImageUrl: 'https://s3/d.png', type: 'ADDITION' },
-      { beforeImageUrl: 'https://s3/b.png', type: 'DELETION' },
+      { afterImageUrl: 'https://s3/c.after.png', type: 'ADDITION' },
+      { afterImageUrl: 'https://s3/d.after.png', type: 'ADDITION' },
+      { beforeImageUrl: 'https://s3/b.before.png', type: 'DELETION' },
       {
-        afterImageUrl: 'https://s3/a.png',
-        beforeImageUrl: 'https://s3/a.png',
+        afterImageUrl: 'https://s3/a.after.png',
+        beforeImageUrl: 'https://s3/a.before.png',
         type: 'DIFFERENCE',
       },
     ]);
