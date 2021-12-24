@@ -1,4 +1,4 @@
-import { prepareComparisonList } from './utils';
+import { extendFileName, prepareComparisonList } from './utils';
 import { getChanges } from './diff';
 
 describe(prepareComparisonList, () => {
@@ -39,5 +39,35 @@ describe(prepareComparisonList, () => {
         type: 'DIFFERENCE',
       },
     ]);
+  });
+});
+
+describe(extendFileName, () => {
+  it('should extend file names', () => {
+    expect(extendFileName({ fileName: 'a.png', extension: 'after' })).toEqual(
+      'a.after.png',
+    );
+
+    expect(
+      extendFileName({ fileName: 'another.one.png', extension: 'after' }),
+    ).toEqual('another.one.after.png');
+
+    expect(
+      extendFileName({ fileName: 'One More .png', extension: 'before' }),
+    ).toEqual('One More .before.png');
+  });
+
+  it('should handle irregular file names', () => {
+    expect(extendFileName({ fileName: '.png', extension: 'after' })).toEqual(
+      'after.png',
+    );
+
+    expect(extendFileName({ fileName: 'test', extension: 'after' })).toEqual(
+      'after.test',
+    );
+
+    expect(extendFileName({ fileName: '', extension: 'before' })).toEqual(
+      'before',
+    );
   });
 });
