@@ -7,6 +7,18 @@ inputs:
   STORYBOOK_PATH:
     description: 'Path to the built storybook files'
     required: true
+  S3_END_POINT:
+    description: 'S3 end point'
+    required: true
+  S3_BUCKET_NAME:
+    description: 'S3 bucket name'
+    required: true
+  S3_ACCESS_KEY:
+    description: 'S3 access key'
+    required: true
+  S3_SECRET_KEY:
+    description: 'S3 secret key'
+    required: true
 runs:
   using: 'docker'
   image: 'Dockerfile'
