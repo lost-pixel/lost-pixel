@@ -4,6 +4,9 @@ inputs:
   LOST_PIXEL_URL:
     description: 'URL to Lost Pixel server'
     required: true
+  LOST_PIXEL_PROJECT_ID:
+    description: 'Unique project ID'
+    required: true
   STORYBOOK_PATH:
     description: 'Path to the built storybook files'
     required: true
