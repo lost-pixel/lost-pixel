@@ -1,10 +1,14 @@
-import fs from 'fs';
+const requiredEnvVars = [
+  'LOST_PIXEL_URL',
+  'LOST_PIXEL_PROJECT_ID',
+  'S3_END_POINT',
+  'S3_ACCESS_KEY',
+  'S3_SECRET_KEY',
+  'S3_BUCKET_NAME',
+];
 
-const diffFolders = (path1: string, path2: string): string[] => {
-  const files1 = fs.readdirSync(path1);
-  const files2 = fs.readdirSync(path2);
-
-  const diff = files1.filter((file) => !files2.includes(file));
-
-  return diff;
-};
+requiredEnvVars.forEach((envVar) => {
+  if (!process.env[envVar]) {
+    throw new Error(`Missing required env var: ${envVar}`);
+  }
+});
