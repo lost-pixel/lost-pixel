@@ -22,6 +22,7 @@
   },
   "homepage": "https://github.com/chriskalmar/lost-pixel-action#readme",
   "dependencies": {
+    "dotenv": "^10.0.0",
     "loki": "^0.28.1",
     "minio": "^7.0.25"
   },
