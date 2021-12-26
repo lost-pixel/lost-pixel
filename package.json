@@ -7,7 +7,7 @@
     "test": "jest",
     "test:watch": "jest --watch",
     "build": "rimraf dist && tsc",
-    "dev": "ts-node src/",
+    "dev": "ts-node -r ./loadEnv src/",
     "start": "NODE_ENV=production node dist/index.js"
   },
   "repository": {
