@@ -22,10 +22,12 @@
   },
   "homepage": "https://github.com/chriskalmar/lost-pixel-action#readme",
   "dependencies": {
-    "loki": "^0.28.1"
+    "loki": "^0.28.1",
+    "minio": "^7.0.25"
   },
   "devDependencies": {
     "@types/jest": "27.0.3",
+    "@types/minio": "^7.0.11",
     "@types/node": "17.0.4",
     "jest": "27.4.5",
     "rimraf": "3.0.2",
