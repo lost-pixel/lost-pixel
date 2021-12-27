@@ -27,10 +27,20 @@ requiredEnvVars.forEach((envVar) => {
 });
 
 const run = async () => {
+  const reference = getImageList(imagePathReference);
+  const current = getImageList(imagePathCurrent);
+  const difference = getImageList(imagePathDifference);
+
+  if (reference === null && current === null) {
+    throw new Error(
+      'No reference or current images found. Check paths configuration.',
+    );
+  }
+
   const files = {
-    reference: getImageList(imagePathReference),
-    current: getImageList(imagePathCurrent),
-    difference: getImageList(imagePathDifference),
+    reference: reference || [],
+    current: current || [],
+    difference: difference || [],
   };
 
   const changes = getChanges(files);

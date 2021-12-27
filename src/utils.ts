@@ -183,13 +183,13 @@ export const prepareComparisonList = ({
   return [comparisonList, uploadList];
 };
 
-export const getImageList = (path: string): string[] => {
+export const getImageList = (path: string): string[] | null => {
   try {
     const files = readdirSync(path);
 
     return files.filter((name) => name.endsWith('.png'));
   } catch (error) {
     console.error(error);
-    return [];
+    return null;
   }
 };
