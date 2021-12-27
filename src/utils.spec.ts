@@ -14,7 +14,7 @@ describe(prepareComparisonList, () => {
         changes,
         baseUrl: 'https://s3',
       }),
-    ).toEqual([]);
+    ).toEqual([[], []]);
   });
 
   it('should build comparisons', () => {
@@ -30,14 +30,63 @@ describe(prepareComparisonList, () => {
         baseUrl: 'https://s3',
       }),
     ).toEqual([
-      { afterImageUrl: 'https://s3/c.after.png', type: 'ADDITION' },
-      { afterImageUrl: 'https://s3/d.after.png', type: 'ADDITION' },
-      { beforeImageUrl: 'https://s3/b.before.png', type: 'DELETION' },
-      {
-        afterImageUrl: 'https://s3/a.after.png',
-        beforeImageUrl: 'https://s3/a.before.png',
-        type: 'DIFFERENCE',
-      },
+      [
+        { afterImageUrl: 'https://s3/c.after.png', type: 'ADDITION' },
+        { afterImageUrl: 'https://s3/d.after.png', type: 'ADDITION' },
+        { beforeImageUrl: 'https://s3/b.before.png', type: 'DELETION' },
+        {
+          afterImageUrl: 'https://s3/a.after.png',
+          beforeImageUrl: 'https://s3/a.before.png',
+          type: 'DIFFERENCE',
+        },
+      ],
+      [
+        {
+          filePath: 'c.png',
+          metaData: {
+            'content-type': 'image/png',
+            original: 'c.png',
+            type: 'ADDITION',
+          },
+          path: 'c.after.png',
+        },
+        {
+          filePath: 'd.png',
+          metaData: {
+            'content-type': 'image/png',
+            original: 'd.png',
+            type: 'ADDITION',
+          },
+          path: 'd.after.png',
+        },
+        {
+          filePath: 'b.png',
+          metaData: {
+            'content-type': 'image/png',
+            original: 'b.png',
+            type: 'DELETION',
+          },
+          path: 'b.before.png',
+        },
+        {
+          filePath: 'a.png',
+          metaData: {
+            'content-type': 'image/png',
+            original: 'a.png',
+            type: 'DIFFERENCE',
+          },
+          path: 'a.before.png',
+        },
+        {
+          filePath: 'a.png',
+          metaData: {
+            'content-type': 'image/png',
+            original: 'a.png',
+            type: 'DIFFERENCE',
+          },
+          path: 'a.after.png',
+        },
+      ],
     ]);
   });
 });
