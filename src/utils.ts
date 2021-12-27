@@ -1,5 +1,6 @@
 import { readdirSync } from 'fs';
 import { UploadFile } from './upload';
+import { normalize, join } from 'path';
 
 type File = {
   name: string;
@@ -75,15 +76,19 @@ const createUploadItem = ({
   path,
   file,
   type,
-}: CreateUploadItem): UploadFile => ({
-  path,
-  filePath: [file.path, file.name].join('/'),
-  metaData: {
-    'content-type': 'image/png',
-    type,
-    original: [file.path, file.name].join('/'),
-  },
-});
+}: CreateUploadItem): UploadFile => {
+  const filePath = normalize(join(file.path, file.name));
+
+  return {
+    path,
+    filePath,
+    metaData: {
+      'content-type': 'image/png',
+      type,
+      original: filePath,
+    },
+  };
+};
 
 type Comparison = {
   beforeImageUrl?: string;
