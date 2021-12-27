@@ -10,7 +10,7 @@ const minio = new MinioClient({
   useSSL: process.env.S3_END_POINT_SSL === '0' ? false : true,
 });
 
-type UploadFile = {
+export type UploadFile = {
   path: string;
   filePath: string;
   metaData: ItemBucketMetadata;
