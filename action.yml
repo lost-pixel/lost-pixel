@@ -22,6 +22,9 @@ inputs:
   S3_SECRET_KEY:
     description: 'S3 secret key'
     required: true
+  S3_BASE_URL:
+    description: 'Base url to uploaded images'
+    required: true
 runs:
   using: 'docker'
   image: 'Dockerfile'
