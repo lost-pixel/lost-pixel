@@ -22,10 +22,10 @@
   },
   "homepage": "https://github.com/chriskalmar/lost-pixel-action#readme",
   "dependencies": {
+    "axios": "^0.24.0",
     "dotenv": "^10.0.0",
     "loki": "^0.28.1",
-    "minio": "^7.0.25",
-    "node-fetch": "^3.1.0"
+    "minio": "^7.0.25"
   },
   "devDependencies": {
     "@types/jest": "27.0.3",
