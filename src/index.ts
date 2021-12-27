@@ -64,6 +64,8 @@ const run = async () => {
   const uploadPromises = uploadList.map(uploadFile);
 
   await Promise.all(uploadPromises);
+
+  log(JSON.stringify(comparisons));
 };
 
 run();
