@@ -2,8 +2,6 @@ FROM node:16-alpine
 
 RUN apk add chromium
 
-ENV NODE_ENV production
-
 WORKDIR /app
 
 COPY package.json .
@@ -16,5 +14,7 @@ COPY entrypoint.sh /entrypoint.sh
 
 RUN npm install
 RUN npm run build
+
+ENV NODE_ENV production
 
 ENTRYPOINT ["/entrypoint.sh"]
