@@ -1,6 +1,6 @@
 import { Client as MinioClient, ItemBucketMetadata } from 'minio';
 import { Comparison, log } from './utils';
-import fetch from 'node-fetch';
+import axios from 'axios';
 
 const minio = new MinioClient({
   endPoint: process.env.S3_END_POINT || '--unknown--',
@@ -42,10 +42,9 @@ export const sendToAPI = async ({
 }) => {
   log('Sending to API');
 
-  const response = await fetch(
+  const response = await axios.post(
     process.env.LOST_PIXEL_URL || 'http://localhost:3000',
     {
-      method: 'POST',
       headers: {
         'Content-Type': 'application/json',
         'X-API-KEY': process.env.LOST_PIXEL_API_KEY || '--unknown--',
@@ -61,7 +60,7 @@ export const sendToAPI = async ({
     },
   );
 
-  if (!response.ok) {
+  if (!response.data.success) {
     throw new Error(
       `Failed to send to API. Status: ${response.status} ${response.statusText}`,
     );
