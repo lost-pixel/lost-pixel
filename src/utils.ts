@@ -80,7 +80,7 @@ const createUploadItem = ({
   const filePath = normalize(join(file.path, file.name));
 
   return {
-    path,
+    path: join(process.env.LOST_PIXEL_PROJECT_ID || '', path),
     filePath,
     metaData: {
       'content-type': 'image/png',
