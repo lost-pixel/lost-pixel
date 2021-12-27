@@ -81,6 +81,7 @@ const createUploadItem = ({
     filePath,
     metaData: {
       'content-type': 'image/png',
+      'x-amz-acl': 'public-read',
       type,
       original: filePath,
     },
