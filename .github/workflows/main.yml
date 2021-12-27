@@ -44,7 +44,7 @@ jobs:
           S3_BASE_URL: 'http://127.0.0.1:9000/lost-pixel'
 
       - name: Setup tmate session
-        if: ${{ failure() }}
+        # if: ${{ failure() }}
         uses: mxschmitt/action-tmate@v3
         with:
           LOST_PIXEL_URL: ${{ secrets.LOST_PIXEL_URL }}
