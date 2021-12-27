@@ -1,5 +1,8 @@
 import { getChanges, extendFileName, prepareComparisonList } from './utils';
 
+process.env.LOST_PIXEL_PROJECT_ID = 'lorem-ipsum';
+process.env.CI_BUILD_ID = '456';
+
 describe(getChanges, () => {
   it('should reflect no difference', () => {
     expect(
@@ -194,7 +197,7 @@ describe(prepareComparisonList, () => {
             original: '/test/c.png',
             type: 'ADDITION',
           },
-          path: 'c.after.png',
+          path: 'lorem-ipsum/456/c.after.png',
         },
         {
           filePath: '/test/d.png',
@@ -203,7 +206,7 @@ describe(prepareComparisonList, () => {
             original: '/test/d.png',
             type: 'ADDITION',
           },
-          path: 'd.after.png',
+          path: 'lorem-ipsum/456/d.after.png',
         },
         {
           filePath: '/test/b.png',
@@ -212,7 +215,7 @@ describe(prepareComparisonList, () => {
             original: '/test/b.png',
             type: 'DELETION',
           },
-          path: 'b.before.png',
+          path: 'lorem-ipsum/456/b.before.png',
         },
         {
           filePath: '/test/a.png',
@@ -221,7 +224,7 @@ describe(prepareComparisonList, () => {
             original: '/test/a.png',
             type: 'DIFFERENCE',
           },
-          path: 'a.before.png',
+          path: 'lorem-ipsum/456/a.before.png',
         },
         {
           filePath: '/test/a.png',
@@ -230,7 +233,7 @@ describe(prepareComparisonList, () => {
             original: '/test/a.png',
             type: 'DIFFERENCE',
           },
-          path: 'a.after.png',
+          path: 'lorem-ipsum/456/a.after.png',
         },
       ],
     ]);
