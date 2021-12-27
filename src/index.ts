@@ -56,7 +56,11 @@ const run = async () => {
 
   const [comparisons, uploadList] = prepareComparisonList({
     changes,
-    baseUrl: process.env.S3_BASE_URL || '--unknown--',
+    baseUrl: [
+      process.env.S3_BASE_URL,
+      process.env.S3_BUCKET_NAME,
+      process.env.CI_BUILD_ID,
+    ].join('/'),
   });
 
   log(`Uploading ${uploadList.length} files`);
