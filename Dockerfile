@@ -2,13 +2,13 @@ FROM node:16-alpine
 
 RUN apk add chromium
 
-ENV NODE_ENV development
+ENV NODE_ENV production
 
 WORKDIR /app
 
 COPY package.json .
 COPY package-lock.json .
-COPY src .
+COPY src src/
 COPY loki.config.js .
 COPY tsconfig.json .
 COPY loadEnv.js .
