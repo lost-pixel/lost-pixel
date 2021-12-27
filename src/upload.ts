@@ -1,5 +1,6 @@
 import { Client as MinioClient, ItemBucketMetadata } from 'minio';
 import { Comparison, log } from './utils';
+import fetch from 'node-fetch';
 
 const minio = new MinioClient({
   endPoint: process.env.S3_END_POINT || '--unknown--',
