@@ -184,7 +184,12 @@ export const prepareComparisonList = ({
 };
 
 export const getImageList = (path: string): string[] => {
-  const files = readdirSync(path);
+  try {
+    const files = readdirSync(path);
 
-  return files.filter((name) => name.endsWith('.png'));
+    return files.filter((name) => name.endsWith('.png'));
+  } catch (error) {
+    console.error(error);
+    return [];
+  }
 };
