@@ -22,4 +22,4 @@ cd /app
 --chromeFlags="--headless --disable-gpu --hide-scrollbars --no-sandbox" \
 test
 
-npm run dev
+npm run start
