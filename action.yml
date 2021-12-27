@@ -4,6 +4,9 @@ inputs:
   LOST_PIXEL_URL:
     description: 'URL to Lost Pixel server'
     required: true
+  LOST_PIXEL_API_KEY:
+    description: 'Lost Pixel API key'
+    required: true
   LOST_PIXEL_PROJECT_ID:
     description: 'Unique project ID'
     required: true
