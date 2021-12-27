@@ -1,7 +1,5 @@
 FROM node:16-alpine
 
-ENV NODE_ENV production
-
 RUN apk add chromium
 
 WORKDIR /app
@@ -13,5 +11,7 @@ COPY loki.config.js /loki.config.js
 
 RUN npm install
 RUN npm run build
+
+ENV NODE_ENV production
 
 ENTRYPOINT ["/entrypoint.sh"]
