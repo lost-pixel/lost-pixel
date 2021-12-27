@@ -33,7 +33,10 @@ export const getChanges = (files: Files): Changes => {
   };
 };
 
-type ExtendFileName = { fileName: string; extension: 'after' | 'before' };
+type ExtendFileName = {
+  fileName: string;
+  extension: 'after' | 'before' | 'difference';
+};
 
 export const extendFileName = ({ fileName, extension }: ExtendFileName) => {
   const parts = fileName.split('.').filter((part) => part !== '');
@@ -153,6 +156,10 @@ export const prepareComparisonList = ({
       fileName,
       extension: 'after',
     });
+    const differenceFile = extendFileName({
+      fileName,
+      extension: 'difference',
+    });
     const type = 'DIFFERENCE';
 
     comparisonList.push({
@@ -174,6 +181,15 @@ export const prepareComparisonList = ({
       createUploadItem({
         uploadFileName: afterFile,
         path: imagePathCurrent,
+        fileName,
+        type,
+      }),
+    );
+
+    uploadList.push(
+      createUploadItem({
+        uploadFileName: differenceFile,
+        path: imagePathDifference,
         fileName,
         type,
       }),

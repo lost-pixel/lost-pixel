@@ -5,6 +5,7 @@ import {
   prepareComparisonList,
   imagePathCurrent,
   imagePathReference,
+  imagePathDifference,
 } from './utils';
 
 process.env.LOST_PIXEL_PROJECT_ID = 'lorem-ipsum';
@@ -178,6 +179,15 @@ describe(prepareComparisonList, () => {
             type: 'DIFFERENCE',
           },
           uploadPath: 'lorem-ipsum/456/a.after.png',
+        },
+        {
+          filePath: join(imagePathDifference, 'a.png'),
+          metaData: {
+            'content-type': 'image/png',
+            original: join(imagePathDifference, 'a.png'),
+            type: 'DIFFERENCE',
+          },
+          uploadPath: 'lorem-ipsum/456/a.difference.png',
         },
       ],
     ]);
