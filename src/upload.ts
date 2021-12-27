@@ -1,4 +1,5 @@
 import { Client as MinioClient, ItemBucketMetadata } from 'minio';
+import { log } from './utils';
 
 const minio = new MinioClient({
   endPoint: process.env.S3_END_POINT || '--unknown--',
@@ -20,10 +21,13 @@ export const uploadFile = async ({
   uploadPath,
   filePath,
   metaData,
-}: UploadFile) =>
-  minio.fPutObject(
+}: UploadFile) => {
+  log(`Uploading '${filePath}' to '${uploadPath}'`);
+
+  return minio.fPutObject(
     process.env.S3_BUCKET_NAME || '--unknown--',
     uploadPath,
     filePath,
     metaData,
   );
+};

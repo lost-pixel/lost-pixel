@@ -5,6 +5,7 @@ import {
   imagePathCurrent,
   imagePathDifference,
   imagePathReference,
+  log,
   prepareComparisonList,
 } from './utils';
 
@@ -27,6 +28,8 @@ requiredEnvVars.forEach((envVar) => {
 });
 
 const run = async () => {
+  log('Collecting files');
+
   const reference = getImageList(imagePathReference);
   const current = getImageList(imagePathCurrent);
   const difference = getImageList(imagePathDifference);
@@ -37,6 +40,10 @@ const run = async () => {
     );
   }
 
+  log(`Found ${reference?.length ?? 0} reference images`);
+  log(`Found ${current?.length ?? 0} current images`);
+  log(`Found ${difference?.length ?? 0} difference images`);
+
   const files = {
     reference: reference || [],
     current: current || [],
@@ -45,10 +52,14 @@ const run = async () => {
 
   const changes = getChanges(files);
 
+  log(`Preparing comparison list`);
+
   const [comparisons, uploadList] = prepareComparisonList({
     changes,
     baseUrl: process.env.S3_BASE_URL || '--unknown--',
   });
+
+  log(`Uploading ${uploadList.length} files`);
 
   const uploadPromises = uploadList.map(uploadFile);
 

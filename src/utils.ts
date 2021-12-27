@@ -9,6 +9,8 @@ export const imagePathCurrent =
 export const imagePathDifference =
   process.env.IMAGE_PATH_DIFFERENCE || './.loki/difference/';
 
+export const log = console.log;
+
 export type Files = {
   reference: string[];
   current: string[];
