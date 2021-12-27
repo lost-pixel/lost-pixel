@@ -1,5 +1,12 @@
 import { uploadFile } from './upload';
-import { getChanges, getImageList, prepareComparisonList } from './utils';
+import {
+  getChanges,
+  getImageList,
+  imagePathCurrent,
+  imagePathDifference,
+  imagePathReference,
+  prepareComparisonList,
+} from './utils';
 
 const requiredEnvVars = [
   'LOST_PIXEL_URL',
@@ -20,13 +27,9 @@ requiredEnvVars.forEach((envVar) => {
 
 const run = async () => {
   const files = {
-    reference: getImageList(
-      process.env.IMAGE_PATH_REFERENCE || './.loki/reference/',
-    ),
-    current: getImageList(process.env.IMAGE_PATH_CURRENT || './.loki/current/'),
-    difference: getImageList(
-      process.env.IMAGE_PATH_DIFFERENCE || './.loki/difference/',
-    ),
+    reference: getImageList(imagePathReference),
+    current: getImageList(imagePathCurrent),
+    difference: getImageList(imagePathDifference),
   };
 
   const changes = getChanges(files);
