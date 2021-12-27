@@ -10,11 +10,22 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
 
-      - uses: actions/setup-node@v2
+      - name: Setup Node
+        uses: actions/setup-node@v2
         with:
           node-version: 14.x
           cache: 'npm'
-      - run: |
+
+      - name: Install dependencies
+        run: |
+          npm install
+          npm -g install jest
+
+      - name: Test
+        run: npm run test
+
+      - name: Build Demo Storybook
+        run: |
           cd examples/storybook-demo
           npm ci
           npm run build-storybook
