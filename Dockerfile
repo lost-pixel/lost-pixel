@@ -12,5 +12,6 @@ COPY entrypoint.sh /entrypoint.sh
 COPY loki.config.js /loki.config.js
 
 RUN npm install
+RUN npm run build
 
 ENTRYPOINT ["/entrypoint.sh"]
