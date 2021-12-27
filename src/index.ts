@@ -58,7 +58,7 @@ const run = async () => {
     changes,
     baseUrl: [
       process.env.S3_BASE_URL,
-      process.env.S3_BUCKET_NAME,
+      process.env.LOST_PIXEL_PROJECT_ID,
       process.env.CI_BUILD_ID,
     ].join('/'),
   });
