@@ -69,7 +69,7 @@ const run = async () => {
 
   await Promise.all(uploadPromises);
 
-  log(JSON.stringify(comparisons));
+  log(JSON.stringify(comparisons, null, 2));
 };
 
 run();
