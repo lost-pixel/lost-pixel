@@ -139,6 +139,7 @@ describe(prepareComparisonList, () => {
           filePath: join(imagePathCurrent, 'c.png'),
           metaData: {
             'content-type': 'image/png',
+            'x-amz-acl': 'public-read',
             original: join(imagePathCurrent, 'c.png'),
             type: 'ADDITION',
           },
@@ -148,6 +149,7 @@ describe(prepareComparisonList, () => {
           filePath: join(imagePathCurrent, 'd.png'),
           metaData: {
             'content-type': 'image/png',
+            'x-amz-acl': 'public-read',
             original: join(imagePathCurrent, 'd.png'),
             type: 'ADDITION',
           },
@@ -157,6 +159,7 @@ describe(prepareComparisonList, () => {
           filePath: join(imagePathReference, 'b.png'),
           metaData: {
             'content-type': 'image/png',
+            'x-amz-acl': 'public-read',
             original: join(imagePathReference, 'b.png'),
             type: 'DELETION',
           },
@@ -166,6 +169,7 @@ describe(prepareComparisonList, () => {
           filePath: join(imagePathReference, 'a.png'),
           metaData: {
             'content-type': 'image/png',
+            'x-amz-acl': 'public-read',
             original: join(imagePathReference, 'a.png'),
             type: 'DIFFERENCE',
           },
@@ -175,6 +179,7 @@ describe(prepareComparisonList, () => {
           filePath: join(imagePathCurrent, 'a.png'),
           metaData: {
             'content-type': 'image/png',
+            'x-amz-acl': 'public-read',
             original: join(imagePathCurrent, 'a.png'),
             type: 'DIFFERENCE',
           },
@@ -184,6 +189,7 @@ describe(prepareComparisonList, () => {
           filePath: join(imagePathDifference, 'a.png'),
           metaData: {
             'content-type': 'image/png',
+            'x-amz-acl': 'public-read',
             original: join(imagePathDifference, 'a.png'),
             type: 'DIFFERENCE',
           },
