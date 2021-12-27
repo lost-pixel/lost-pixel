@@ -1,27 +1,48 @@
 import { readdirSync } from 'fs';
 import { UploadFile } from './upload';
 
+type File = {
+  name: string;
+  path: string;
+};
+
 export type Files = {
-  reference: string[];
-  current: string[];
-  difference: string[];
+  reference: File[];
+  current: File[];
+  difference: File[];
 };
 
 export type Changes = {
-  difference: string[];
-  deletion: string[];
-  addition: string[];
+  difference: File[];
+  deletion: File[];
+  addition: File[];
+};
+
+const sortFiles = (a: File, b: File): number => {
+  if (a.name < b.name) {
+    return -1;
+  }
+  if (a.name > b.name) {
+    return 1;
+  }
+  return 0;
 };
 
 export const getChanges = (files: Files): Changes => {
   return {
-    difference: files.difference.sort(),
+    difference: files.difference.sort(sortFiles),
     deletion: files.reference
-      .filter((file) => !files.current.includes(file))
-      .sort(),
+      // .filter((file) => !files.current.includes(file))
+      .filter(
+        (file) => !files.current.find((file2) => file.name === file2.name),
+      )
+      .sort(sortFiles),
     addition: files.current
-      .filter((file) => !files.reference.includes(file))
-      .sort(),
+      // .filter((file) => !files.reference.includes(file))
+      .filter(
+        (file) => !files.reference.find((file2) => file.name === file2.name),
+      )
+      .sort(sortFiles),
   };
 };
 
@@ -46,21 +67,21 @@ type ComparisonType = 'ADDITION' | 'DELETION' | 'DIFFERENCE';
 
 type CreateUploadItem = {
   path: string;
-  filePath: string;
+  file: File;
   type: ComparisonType;
 };
 
 const createUploadItem = ({
   path,
-  filePath,
+  file,
   type,
 }: CreateUploadItem): UploadFile => ({
   path,
-  filePath,
+  filePath: [file.path, file.name].join('/'),
   metaData: {
     'content-type': 'image/png',
     type,
-    original: filePath,
+    original: [file.path, file.name].join('/'),
   },
 });
 
@@ -83,7 +104,10 @@ export const prepareComparisonList = ({
   const uploadList: UploadFile[] = [];
 
   changes.addition.forEach((file) => {
-    const afterFile = extendFileName({ fileName: file, extension: 'after' });
+    const afterFile = extendFileName({
+      fileName: file.name,
+      extension: 'after',
+    });
     const type = 'ADDITION';
 
     comparisonList.push({
@@ -94,14 +118,17 @@ export const prepareComparisonList = ({
     uploadList.push(
       createUploadItem({
         path: afterFile,
-        filePath: file,
+        file,
         type,
       }),
     );
   });
 
   changes.deletion.forEach((file) => {
-    const beforeFile = extendFileName({ fileName: file, extension: 'before' });
+    const beforeFile = extendFileName({
+      fileName: file.name,
+      extension: 'before',
+    });
     const type = 'DELETION';
 
     comparisonList.push({
@@ -112,15 +139,21 @@ export const prepareComparisonList = ({
     uploadList.push(
       createUploadItem({
         path: beforeFile,
-        filePath: file,
+        file,
         type,
       }),
     );
   });
 
   changes.difference.forEach((file) => {
-    const beforeFile = extendFileName({ fileName: file, extension: 'before' });
-    const afterFile = extendFileName({ fileName: file, extension: 'after' });
+    const beforeFile = extendFileName({
+      fileName: file.name,
+      extension: 'before',
+    });
+    const afterFile = extendFileName({
+      fileName: file.name,
+      extension: 'after',
+    });
     const type = 'DIFFERENCE';
 
     comparisonList.push({
@@ -132,7 +165,7 @@ export const prepareComparisonList = ({
     uploadList.push(
       createUploadItem({
         path: beforeFile,
-        filePath: file,
+        file,
         type,
       }),
     );
@@ -140,7 +173,7 @@ export const prepareComparisonList = ({
     uploadList.push(
       createUploadItem({
         path: afterFile,
-        filePath: file,
+        file,
         type,
       }),
     );
@@ -149,8 +182,10 @@ export const prepareComparisonList = ({
   return [comparisonList, uploadList];
 };
 
-export const getImageList = (path: string): string[] => {
+export const getImageList = (path: string): File[] => {
   const files = readdirSync(path);
 
-  return files.filter((file) => file.endsWith('.png'));
+  return files
+    .filter((name) => name.endsWith('.png'))
+    .map((name) => ({ name, path }));
 };

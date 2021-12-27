@@ -1,11 +1,150 @@
-import { extendFileName, prepareComparisonList } from './utils';
-import { getChanges } from './diff';
+import { getChanges, extendFileName, prepareComparisonList } from './utils';
+
+describe(getChanges, () => {
+  it('should reflect no difference', () => {
+    expect(
+      getChanges({
+        reference: [
+          { path: '/test', name: 'a.png' },
+          { path: '/test', name: 'b.png' },
+        ],
+        current: [
+          { path: '/test', name: 'a.png' },
+          { path: '/test', name: 'b.png' },
+        ],
+        difference: [],
+      }),
+    ).toEqual({
+      difference: [],
+      deletion: [],
+      addition: [],
+    });
+
+    expect(
+      getChanges({
+        reference: [
+          { path: '/test', name: 'a.png' },
+          { path: '/test', name: 'b.png' },
+        ],
+        current: [
+          { path: '/test', name: 'b.png' },
+          { path: '/test', name: 'a.png' },
+        ],
+        difference: [],
+      }),
+    ).toEqual({
+      difference: [],
+      deletion: [],
+      addition: [],
+    });
+  });
+
+  it('should highlight added files', () => {
+    expect(
+      getChanges({
+        reference: [
+          { path: '/test', name: 'a.png' },
+          { path: '/test', name: 'b.png' },
+        ],
+        current: [
+          { path: '/test', name: 'a.png' },
+          { path: '/test', name: 'b.png' },
+          { path: '/test', name: 'd.png' },
+          { path: '/test', name: 'c.png' },
+        ],
+        difference: [],
+      }),
+    ).toEqual({
+      difference: [],
+      deletion: [],
+      addition: [
+        { path: '/test', name: 'c.png' },
+        { path: '/test', name: 'd.png' },
+      ],
+    });
+  });
+
+  it('should highlight removed files', () => {
+    expect(
+      getChanges({
+        reference: [
+          { path: '/test', name: 'a.png' },
+          { path: '/test', name: 'b.png' },
+          { path: '/test', name: 'c.png' },
+          { path: '/test', name: 'd.png' },
+        ],
+        current: [
+          { path: '/test', name: 'a.png' },
+          { path: '/test', name: 'd.png' },
+        ],
+        difference: [],
+      }),
+    ).toEqual({
+      difference: [],
+      deletion: [
+        { path: '/test', name: 'b.png' },
+        { path: '/test', name: 'c.png' },
+      ],
+      addition: [],
+    });
+  });
+
+  it('should highlight changed files', () => {
+    expect(
+      getChanges({
+        reference: [
+          { path: '/test', name: 'a.png' },
+          { path: '/test', name: 'b.png' },
+        ],
+        current: [
+          { path: '/test', name: 'a.png' },
+          { path: '/test', name: 'b.png' },
+        ],
+        difference: [{ path: '/test', name: 'b.png' }],
+      }),
+    ).toEqual({
+      difference: [{ path: '/test', name: 'b.png' }],
+      deletion: [],
+      addition: [],
+    });
+  });
+
+  it('should highlight added/remove/changed files', () => {
+    expect(
+      getChanges({
+        reference: [
+          { path: '/test', name: 'a.png' },
+          { path: '/test', name: 'b.png' },
+        ],
+        current: [
+          { path: '/test', name: 'a.png' },
+          { path: '/test', name: 'd.png' },
+          { path: '/test', name: 'c.png' },
+        ],
+        difference: [{ path: '/test', name: 'a.png' }],
+      }),
+    ).toEqual({
+      difference: [{ path: '/test', name: 'a.png' }],
+      deletion: [{ path: '/test', name: 'b.png' }],
+      addition: [
+        { path: '/test', name: 'c.png' },
+        { path: '/test', name: 'd.png' },
+      ],
+    });
+  });
+});
 
 describe(prepareComparisonList, () => {
   it('should return empty list if no changes found', () => {
     const changes = getChanges({
-      reference: ['a.png', 'b.png'],
-      current: ['a.png', 'b.png'],
+      reference: [
+        { path: '/test', name: 'a.png' },
+        { path: '/test', name: 'b.png' },
+      ],
+      current: [
+        { path: '/test', name: 'a.png' },
+        { path: '/test', name: 'b.png' },
+      ],
       difference: [],
     });
 
@@ -19,9 +158,16 @@ describe(prepareComparisonList, () => {
 
   it('should build comparisons', () => {
     const changes = getChanges({
-      reference: ['a.png', 'b.png'],
-      current: ['a.png', 'd.png', 'c.png'],
-      difference: ['a.png'],
+      reference: [
+        { path: '/test', name: 'a.png' },
+        { path: '/test', name: 'b.png' },
+      ],
+      current: [
+        { path: '/test', name: 'a.png' },
+        { path: '/test', name: 'd.png' },
+        { path: '/test', name: 'c.png' },
+      ],
+      difference: [{ path: '/test', name: 'a.png' }],
     });
 
     expect(
@@ -42,46 +188,46 @@ describe(prepareComparisonList, () => {
       ],
       [
         {
-          filePath: 'c.png',
+          filePath: '/test/c.png',
           metaData: {
             'content-type': 'image/png',
-            original: 'c.png',
+            original: '/test/c.png',
             type: 'ADDITION',
           },
           path: 'c.after.png',
         },
         {
-          filePath: 'd.png',
+          filePath: '/test/d.png',
           metaData: {
             'content-type': 'image/png',
-            original: 'd.png',
+            original: '/test/d.png',
             type: 'ADDITION',
           },
           path: 'd.after.png',
         },
         {
-          filePath: 'b.png',
+          filePath: '/test/b.png',
           metaData: {
             'content-type': 'image/png',
-            original: 'b.png',
+            original: '/test/b.png',
             type: 'DELETION',
           },
           path: 'b.before.png',
         },
         {
-          filePath: 'a.png',
+          filePath: '/test/a.png',
           metaData: {
             'content-type': 'image/png',
-            original: 'a.png',
+            original: '/test/a.png',
             type: 'DIFFERENCE',
           },
           path: 'a.before.png',
         },
         {
-          filePath: 'a.png',
+          filePath: '/test/a.png',
           metaData: {
             'content-type': 'image/png',
-            original: 'a.png',
+            original: '/test/a.png',
             type: 'DIFFERENCE',
           },
           path: 'a.after.png',
