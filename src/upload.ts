@@ -11,15 +11,19 @@ const minio = new MinioClient({
 });
 
 export type UploadFile = {
-  path: string;
+  uploadPath: string;
   filePath: string;
   metaData: ItemBucketMetadata;
 };
 
-export const uploadFile = async ({ path, filePath, metaData }: UploadFile) =>
+export const uploadFile = async ({
+  uploadPath,
+  filePath,
+  metaData,
+}: UploadFile) =>
   minio.fPutObject(
     process.env.S3_BUCKET_NAME || '--unknown--',
-    path,
+    uploadPath,
     filePath,
     metaData,
   );
