@@ -9,10 +9,10 @@ WORKDIR /app
 COPY package.json .
 COPY package-lock.json .
 COPY src .
+COPY loki.config.js .
+COPY tsconfig.json .
+COPY loadEnv.js .
 COPY entrypoint.sh /entrypoint.sh
-COPY loki.config.js /loki.config.js
-COPY tsconfig.json /tsconfig.json
-COPY loadEnv.js /loadEnv.js
 
 RUN npm install
 RUN npm run build
