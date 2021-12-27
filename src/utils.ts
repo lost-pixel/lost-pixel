@@ -2,48 +2,34 @@ import { readdirSync } from 'fs';
 import { UploadFile } from './upload';
 import { normalize, join } from 'path';
 
-type File = {
-  name: string;
-  path: string;
-};
+export const imagePathReference =
+  process.env.IMAGE_PATH_REFERENCE || './.loki/reference/';
+export const imagePathCurrent =
+  process.env.IMAGE_PATH_CURRENT || './.loki/current/';
+export const imagePathDifference =
+  process.env.IMAGE_PATH_DIFFERENCE || './.loki/difference/';
 
 export type Files = {
-  reference: File[];
-  current: File[];
-  difference: File[];
+  reference: string[];
+  current: string[];
+  difference: string[];
 };
 
 export type Changes = {
-  difference: File[];
-  deletion: File[];
-  addition: File[];
-};
-
-const sortFiles = (a: File, b: File): number => {
-  if (a.name < b.name) {
-    return -1;
-  }
-  if (a.name > b.name) {
-    return 1;
-  }
-  return 0;
+  difference: string[];
+  deletion: string[];
+  addition: string[];
 };
 
 export const getChanges = (files: Files): Changes => {
   return {
-    difference: files.difference.sort(sortFiles),
+    difference: files.difference.sort(),
     deletion: files.reference
-      // .filter((file) => !files.current.includes(file))
-      .filter(
-        (file) => !files.current.find((file2) => file.name === file2.name),
-      )
-      .sort(sortFiles),
+      .filter((file) => !files.current.includes(file))
+      .sort(),
     addition: files.current
-      // .filter((file) => !files.reference.includes(file))
-      .filter(
-        (file) => !files.reference.find((file2) => file.name === file2.name),
-      )
-      .sort(sortFiles),
+      .filter((file) => !files.reference.includes(file))
+      .sort(),
   };
 };
 
@@ -67,23 +53,25 @@ export const extendFileName = ({ fileName, extension }: ExtendFileName) => {
 type ComparisonType = 'ADDITION' | 'DELETION' | 'DIFFERENCE';
 
 type CreateUploadItem = {
+  uploadFileName: string;
   path: string;
-  file: File;
+  fileName: string;
   type: ComparisonType;
 };
 
 const createUploadItem = ({
+  uploadFileName,
   path,
-  file,
+  fileName,
   type,
 }: CreateUploadItem): UploadFile => {
-  const filePath = normalize(join(file.path, file.name));
+  const filePath = normalize(join(path, fileName));
 
   return {
-    path: join(
+    uploadPath: join(
       process.env.LOST_PIXEL_PROJECT_ID || 'none',
       process.env.CI_BUILD_ID || '1',
-      path,
+      uploadFileName,
     ),
     filePath,
     metaData: {
@@ -112,9 +100,9 @@ export const prepareComparisonList = ({
   const comparisonList: Comparison[] = [];
   const uploadList: UploadFile[] = [];
 
-  changes.addition.forEach((file) => {
+  changes.addition.forEach((fileName) => {
     const afterFile = extendFileName({
-      fileName: file.name,
+      fileName,
       extension: 'after',
     });
     const type = 'ADDITION';
@@ -126,16 +114,17 @@ export const prepareComparisonList = ({
 
     uploadList.push(
       createUploadItem({
-        path: afterFile,
-        file,
+        uploadFileName: afterFile,
+        path: imagePathCurrent,
+        fileName,
         type,
       }),
     );
   });
 
-  changes.deletion.forEach((file) => {
+  changes.deletion.forEach((fileName) => {
     const beforeFile = extendFileName({
-      fileName: file.name,
+      fileName,
       extension: 'before',
     });
     const type = 'DELETION';
@@ -147,20 +136,21 @@ export const prepareComparisonList = ({
 
     uploadList.push(
       createUploadItem({
-        path: beforeFile,
-        file,
+        uploadFileName: beforeFile,
+        path: imagePathReference,
+        fileName,
         type,
       }),
     );
   });
 
-  changes.difference.forEach((file) => {
+  changes.difference.forEach((fileName) => {
     const beforeFile = extendFileName({
-      fileName: file.name,
+      fileName,
       extension: 'before',
     });
     const afterFile = extendFileName({
-      fileName: file.name,
+      fileName,
       extension: 'after',
     });
     const type = 'DIFFERENCE';
@@ -173,16 +163,18 @@ export const prepareComparisonList = ({
 
     uploadList.push(
       createUploadItem({
-        path: beforeFile,
-        file,
+        uploadFileName: beforeFile,
+        path: imagePathReference,
+        fileName,
         type,
       }),
     );
 
     uploadList.push(
       createUploadItem({
-        path: afterFile,
-        file,
+        uploadFileName: afterFile,
+        path: imagePathCurrent,
+        fileName,
         type,
       }),
     );
@@ -191,10 +183,8 @@ export const prepareComparisonList = ({
   return [comparisonList, uploadList];
 };
 
-export const getImageList = (path: string): File[] => {
+export const getImageList = (path: string): string[] => {
   const files = readdirSync(path);
 
-  return files
-    .filter((name) => name.endsWith('.png'))
-    .map((name) => ({ name, path }));
+  return files.filter((name) => name.endsWith('.png'));
 };

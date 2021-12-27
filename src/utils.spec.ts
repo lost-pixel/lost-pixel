@@ -1,4 +1,11 @@
-import { getChanges, extendFileName, prepareComparisonList } from './utils';
+import { join } from 'path';
+import {
+  getChanges,
+  extendFileName,
+  prepareComparisonList,
+  imagePathCurrent,
+  imagePathReference,
+} from './utils';
 
 process.env.LOST_PIXEL_PROJECT_ID = 'lorem-ipsum';
 process.env.CI_BUILD_ID = '456';
@@ -7,14 +14,8 @@ describe(getChanges, () => {
   it('should reflect no difference', () => {
     expect(
       getChanges({
-        reference: [
-          { path: '/test', name: 'a.png' },
-          { path: '/test', name: 'b.png' },
-        ],
-        current: [
-          { path: '/test', name: 'a.png' },
-          { path: '/test', name: 'b.png' },
-        ],
+        reference: ['a.png', 'b.png'],
+        current: ['a.png', 'b.png'],
         difference: [],
       }),
     ).toEqual({
@@ -25,14 +26,8 @@ describe(getChanges, () => {
 
     expect(
       getChanges({
-        reference: [
-          { path: '/test', name: 'a.png' },
-          { path: '/test', name: 'b.png' },
-        ],
-        current: [
-          { path: '/test', name: 'b.png' },
-          { path: '/test', name: 'a.png' },
-        ],
+        reference: ['a.png', 'b.png'],
+        current: ['b.png', 'a.png'],
         difference: [],
       }),
     ).toEqual({
@@ -45,49 +40,27 @@ describe(getChanges, () => {
   it('should highlight added files', () => {
     expect(
       getChanges({
-        reference: [
-          { path: '/test', name: 'a.png' },
-          { path: '/test', name: 'b.png' },
-        ],
-        current: [
-          { path: '/test', name: 'a.png' },
-          { path: '/test', name: 'b.png' },
-          { path: '/test', name: 'd.png' },
-          { path: '/test', name: 'c.png' },
-        ],
+        reference: ['a.png', 'b.png'],
+        current: ['a.png', 'b.png', 'd.png', 'c.png'],
         difference: [],
       }),
     ).toEqual({
       difference: [],
       deletion: [],
-      addition: [
-        { path: '/test', name: 'c.png' },
-        { path: '/test', name: 'd.png' },
-      ],
+      addition: ['c.png', 'd.png'],
     });
   });
 
   it('should highlight removed files', () => {
     expect(
       getChanges({
-        reference: [
-          { path: '/test', name: 'a.png' },
-          { path: '/test', name: 'b.png' },
-          { path: '/test', name: 'c.png' },
-          { path: '/test', name: 'd.png' },
-        ],
-        current: [
-          { path: '/test', name: 'a.png' },
-          { path: '/test', name: 'd.png' },
-        ],
+        reference: ['a.png', 'b.png', 'c.png', 'd.png'],
+        current: ['a.png', 'd.png'],
         difference: [],
       }),
     ).toEqual({
       difference: [],
-      deletion: [
-        { path: '/test', name: 'b.png' },
-        { path: '/test', name: 'c.png' },
-      ],
+      deletion: ['b.png', 'c.png'],
       addition: [],
     });
   });
@@ -95,18 +68,12 @@ describe(getChanges, () => {
   it('should highlight changed files', () => {
     expect(
       getChanges({
-        reference: [
-          { path: '/test', name: 'a.png' },
-          { path: '/test', name: 'b.png' },
-        ],
-        current: [
-          { path: '/test', name: 'a.png' },
-          { path: '/test', name: 'b.png' },
-        ],
-        difference: [{ path: '/test', name: 'b.png' }],
+        reference: ['a.png', 'b.png'],
+        current: ['a.png', 'b.png'],
+        difference: ['b.png'],
       }),
     ).toEqual({
-      difference: [{ path: '/test', name: 'b.png' }],
+      difference: ['b.png'],
       deletion: [],
       addition: [],
     });
@@ -115,24 +82,14 @@ describe(getChanges, () => {
   it('should highlight added/remove/changed files', () => {
     expect(
       getChanges({
-        reference: [
-          { path: '/test', name: 'a.png' },
-          { path: '/test', name: 'b.png' },
-        ],
-        current: [
-          { path: '/test', name: 'a.png' },
-          { path: '/test', name: 'd.png' },
-          { path: '/test', name: 'c.png' },
-        ],
-        difference: [{ path: '/test', name: 'a.png' }],
+        reference: ['a.png', 'b.png'],
+        current: ['a.png', 'd.png', 'c.png'],
+        difference: ['a.png'],
       }),
     ).toEqual({
-      difference: [{ path: '/test', name: 'a.png' }],
-      deletion: [{ path: '/test', name: 'b.png' }],
-      addition: [
-        { path: '/test', name: 'c.png' },
-        { path: '/test', name: 'd.png' },
-      ],
+      difference: ['a.png'],
+      deletion: ['b.png'],
+      addition: ['c.png', 'd.png'],
     });
   });
 });
@@ -140,14 +97,8 @@ describe(getChanges, () => {
 describe(prepareComparisonList, () => {
   it('should return empty list if no changes found', () => {
     const changes = getChanges({
-      reference: [
-        { path: '/test', name: 'a.png' },
-        { path: '/test', name: 'b.png' },
-      ],
-      current: [
-        { path: '/test', name: 'a.png' },
-        { path: '/test', name: 'b.png' },
-      ],
+      reference: ['a.png', 'b.png'],
+      current: ['a.png', 'b.png'],
       difference: [],
     });
 
@@ -161,16 +112,9 @@ describe(prepareComparisonList, () => {
 
   it('should build comparisons', () => {
     const changes = getChanges({
-      reference: [
-        { path: '/test', name: 'a.png' },
-        { path: '/test', name: 'b.png' },
-      ],
-      current: [
-        { path: '/test', name: 'a.png' },
-        { path: '/test', name: 'd.png' },
-        { path: '/test', name: 'c.png' },
-      ],
-      difference: [{ path: '/test', name: 'a.png' }],
+      reference: ['a.png', 'b.png'],
+      current: ['a.png', 'd.png', 'c.png'],
+      difference: ['a.png'],
     });
 
     expect(
@@ -191,49 +135,49 @@ describe(prepareComparisonList, () => {
       ],
       [
         {
-          filePath: '/test/c.png',
+          filePath: join(imagePathCurrent, 'c.png'),
           metaData: {
             'content-type': 'image/png',
-            original: '/test/c.png',
+            original: join(imagePathCurrent, 'c.png'),
             type: 'ADDITION',
           },
-          path: 'lorem-ipsum/456/c.after.png',
+          uploadPath: 'lorem-ipsum/456/c.after.png',
         },
         {
-          filePath: '/test/d.png',
+          filePath: join(imagePathCurrent, 'd.png'),
           metaData: {
             'content-type': 'image/png',
-            original: '/test/d.png',
+            original: join(imagePathCurrent, 'd.png'),
             type: 'ADDITION',
           },
-          path: 'lorem-ipsum/456/d.after.png',
+          uploadPath: 'lorem-ipsum/456/d.after.png',
         },
         {
-          filePath: '/test/b.png',
+          filePath: join(imagePathReference, 'b.png'),
           metaData: {
             'content-type': 'image/png',
-            original: '/test/b.png',
+            original: join(imagePathReference, 'b.png'),
             type: 'DELETION',
           },
-          path: 'lorem-ipsum/456/b.before.png',
+          uploadPath: 'lorem-ipsum/456/b.before.png',
         },
         {
-          filePath: '/test/a.png',
+          filePath: join(imagePathReference, 'a.png'),
           metaData: {
             'content-type': 'image/png',
-            original: '/test/a.png',
+            original: join(imagePathReference, 'a.png'),
             type: 'DIFFERENCE',
           },
-          path: 'lorem-ipsum/456/a.before.png',
+          uploadPath: 'lorem-ipsum/456/a.before.png',
         },
         {
-          filePath: '/test/a.png',
+          filePath: join(imagePathCurrent, 'a.png'),
           metaData: {
             'content-type': 'image/png',
-            original: '/test/a.png',
+            original: join(imagePathCurrent, 'a.png'),
             type: 'DIFFERENCE',
           },
-          path: 'lorem-ipsum/456/a.after.png',
+          uploadPath: 'lorem-ipsum/456/a.after.png',
         },
       ],
     ]);
