@@ -1,5 +1,5 @@
 import { Client as MinioClient, ItemBucketMetadata } from 'minio';
-import { log } from './utils';
+import { Comparison, log } from './utils';
 
 const minio = new MinioClient({
   endPoint: process.env.S3_END_POINT || '--unknown--',
@@ -30,4 +30,42 @@ export const uploadFile = async ({
     filePath,
     metaData,
   );
+};
+
+export const sendToAPI = async ({
+  comparisons,
+  event,
+}: {
+  comparisons: Comparison[];
+  event: Record<string, unknown>;
+}) => {
+  log('Sending to API');
+
+  const response = await fetch(
+    process.env.LOST_PIXEL_URL || 'http://localhost:3000',
+    {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-API-KEY': process.env.LOST_PIXEL_API_KEY || '--unknown--',
+      },
+      body: JSON.stringify({
+        projectId: process.env.LOST_PIXEL_PROJECT_ID,
+        buildNumber: process.env.CI_BUILD_ID,
+        buildStatus: 'PASSING',
+        branchName: 'feature/abc',
+        commit: '1234567890',
+        buildMeta: event,
+        comparisons,
+      }),
+    },
+  );
+
+  if (!response.ok) {
+    throw new Error(
+      `Failed to send to API. Status: ${response.status} ${response.statusText}`,
+    );
+  }
+
+  log(`Successfully sent to API with response: ${response.status}`);
 };

@@ -1,4 +1,4 @@
-import { readdirSync } from 'fs';
+import { readdirSync, readFileSync } from 'fs';
 import { UploadFile } from './upload';
 import { normalize, join } from 'path';
 
@@ -88,7 +88,7 @@ const createUploadItem = ({
   };
 };
 
-type Comparison = {
+export type Comparison = {
   beforeImageUrl?: string;
   afterImageUrl?: string;
   type: ComparisonType;
@@ -211,4 +211,8 @@ export const getImageList = (path: string): string[] | null => {
     console.error(error);
     return null;
   }
+};
+
+export const getEventData = (path: string): Record<string, unknown> => {
+  return require(path);
 };

@@ -1,6 +1,7 @@
-import { uploadFile } from './upload';
+import { sendToAPI, uploadFile } from './upload';
 import {
   getChanges,
+  getEventData,
   getImageList,
   imagePathCurrent,
   imagePathDifference,
@@ -61,6 +62,11 @@ const run = async () => {
       process.env.LOST_PIXEL_PROJECT_ID,
       process.env.CI_BUILD_ID,
     ].join('/'),
+  });
+
+  sendToAPI({
+    comparisons,
+    event: getEventData(process.env.EVENT_PATH || '/event.json'),
   });
 
   log(`Uploading ${uploadList.length} files`);
