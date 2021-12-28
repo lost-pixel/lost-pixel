@@ -54,7 +54,8 @@ export const sendToAPI = async ({
     {
       projectId: process.env.LOST_PIXEL_PROJECT_ID,
       buildNumber: process.env.CI_BUILD_ID,
-      branchName: process.env.COMMIT_REF,
+      branchRef: process.env.COMMIT_REF,
+      branchName: process.env.COMMIT_REF_NAME,
       commit: process.env.COMMIT_HASH,
       buildMeta: event,
       comparisons,
