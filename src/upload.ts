@@ -53,7 +53,8 @@ export const sendToAPI = async ({
     process.env.LOST_PIXEL_URL || 'http://localhost:3000',
     {
       projectId: process.env.LOST_PIXEL_PROJECT_ID,
-      buildNumber: process.env.CI_BUILD_ID,
+      buildId: process.env.CI_BUILD_ID,
+      buildNumber: process.env.CI_BUILD_NUMBER,
       branchRef: process.env.COMMIT_REF,
       branchName: process.env.COMMIT_REF_NAME,
       commit: process.env.COMMIT_HASH,

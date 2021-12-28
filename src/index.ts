@@ -15,6 +15,7 @@ const requiredEnvVars = [
   'LOST_PIXEL_API_KEY',
   'LOST_PIXEL_PROJECT_ID',
   'CI_BUILD_ID',
+  'CI_BUILD_NUMBER',
   'S3_END_POINT',
   'S3_ACCESS_KEY',
   'S3_SECRET_KEY',
