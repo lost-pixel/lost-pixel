@@ -2,6 +2,13 @@ import { Client as MinioClient, ItemBucketMetadata } from 'minio';
 import { Comparison, log } from './utils';
 import axios from 'axios';
 
+export const apiClient = axios.create({
+  headers: {
+    'Content-type': 'application/json',
+    'X-API-KEY': process.env.LOST_PIXEL_API_KEY || '--unknown--',
+  },
+});
+
 const minio = new MinioClient({
   endPoint: process.env.S3_END_POINT || '--unknown--',
   accessKey: process.env.S3_ACCESS_KEY || '--unknown--',
@@ -42,29 +49,23 @@ export const sendToAPI = async ({
 }) => {
   log('Sending to API');
 
-  const response = await axios.post(
+  const response = await apiClient.post(
     process.env.LOST_PIXEL_URL || 'http://localhost:3000',
     {
-      headers: {
-        'Content-Type': 'application/json',
-        'X-API-KEY': process.env.LOST_PIXEL_API_KEY || '--unknown--',
-      },
-      body: JSON.stringify({
-        projectId: process.env.LOST_PIXEL_PROJECT_ID,
-        buildNumber: process.env.CI_BUILD_ID,
-        branchName: process.env.COMMIT_REF,
-        commit: process.env.COMMIT_HASH,
-        buildMeta: event,
-        comparisons,
-      }),
+      projectId: process.env.LOST_PIXEL_PROJECT_ID,
+      buildNumber: process.env.CI_BUILD_ID,
+      branchName: process.env.COMMIT_REF,
+      commit: process.env.COMMIT_HASH,
+      buildMeta: event,
+      comparisons,
     },
   );
 
-  if (!response.data.success) {
+  if (response.status !== 200) {
     throw new Error(
       `Failed to send to API. Status: ${response.status} ${response.statusText}`,
     );
   }
 
-  log(`Successfully sent to API with response: ${response.status}`);
+  log('Successfully sent to API');
 };
