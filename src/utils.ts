@@ -91,6 +91,7 @@ const createUploadItem = ({
 export type Comparison = {
   beforeImageUrl?: string;
   afterImageUrl?: string;
+  differenceImageUrl?: string;
   type: ComparisonType;
 };
 
@@ -169,6 +170,7 @@ export const prepareComparisonList = ({
       type,
       beforeImageUrl: [baseUrl, beforeFile].join('/'),
       afterImageUrl: [baseUrl, afterFile].join('/'),
+      differenceImageUrl: [baseUrl, differenceFile].join('/'),
     });
 
     uploadList.push(
