@@ -1,5 +1,6 @@
-# lost-pixel-action
-GitHub Action for Lost Pixel integration
+# GitHub Action for Lost Pixel integration
+
+Run visual regression test on your Storybook stories and conveniently compare and approve visual differences using a UI.
 
 ## Setup
 
@@ -11,7 +12,7 @@ Example workflow for a project called `your-project-name` using an S3 bucket on 
 
 ```
 - name: Lost Pixel
-  uses: lost-pixel/lost-pixel-action
+  uses: lost-pixel/lost-pixel-action@v1beta
   with:
     LOST_PIXEL_URL: ${{ secrets.LOST_PIXEL_URL }}
     LOST_PIXEL_API_KEY: ${{ secrets.LOST_PIXEL_API_KEY }}
