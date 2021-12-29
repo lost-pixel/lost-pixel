@@ -20,12 +20,6 @@ export const createPage = ({ user, onLogout, onLogin, onCreateAccount }) => {
       process starting with atomic components and ending with pages.
     </p>
     <p>
-      Lorem impsum....
-    </p>
-    <p>
-      Lorem impsum....
-    </p>
-    <p>
       Render pages with mock data. This makes it easy to build and review page states without
       needing to navigate to them in your app. Here are some handy patterns for managing page data
       in Storybook:
