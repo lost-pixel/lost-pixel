@@ -131,6 +131,7 @@ describe(prepareComparisonList, () => {
         {
           afterImageUrl: 'https://s3/a.after.png',
           beforeImageUrl: 'https://s3/a.before.png',
+          differenceImageUrl: 'https://s3/a.difference.png',
           type: 'DIFFERENCE',
         },
       ],
