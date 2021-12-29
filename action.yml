@@ -1,5 +1,9 @@
 name: 'Lost Pixel'
-description: 'Lost Pixel integration'
+description: 'Lost Pixel Integration'
+author: 'Chris Kalmar'
+branding:
+  icon: 'image'
+  color: 'purple'
 inputs:
   LOST_PIXEL_URL:
     description: 'URL to Lost Pixel server'
