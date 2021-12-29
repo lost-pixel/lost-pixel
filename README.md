@@ -1,2 +1,25 @@
 # lost-pixel-action
 GitHub Action for Lost Pixel integration
+
+## Setup
+
+The integration is done by adding this action to your workflow file.
+
+### Using You Own Lost Pixel Server
+
+Example workflow for a project called `your-project-name` using an S3 bucket on Digital Ocean.
+
+```
+- name: Lost Pixel
+  uses: lost-pixel/lost-pixel-action
+  with:
+    LOST_PIXEL_URL: ${{ secrets.LOST_PIXEL_URL }}
+    LOST_PIXEL_API_KEY: ${{ secrets.LOST_PIXEL_API_KEY }}
+    LOST_PIXEL_PROJECT_ID: ${{ secrets.LOST_PIXEL_PROJECT_ID }}
+    STORYBOOK_PATH: 'path/to/storybook-static'
+    S3_END_POINT: 'fra1.digitaloceanspaces.com'
+    S3_ACCESS_KEY: ${{ secrets.S3_ACCESS_KEY }}
+    S3_SECRET_KEY: ${{ secrets.S3_SECRET_KEY }}
+    S3_BUCKET_NAME: 'your-project-name'
+    S3_BASE_URL: 'https://your-project-name.fra1.digitaloceanspaces.com'
+```
