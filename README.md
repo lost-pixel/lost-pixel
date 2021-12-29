@@ -1,6 +1,6 @@
 # GitHub Action for Lost Pixel integration
 
-Run visual regression test on your Storybook stories and conveniently compare and approve visual differences using a UI.
+Run visual regression tests on your Storybook stories and conveniently compare and approve visual differences using a UI.
 
 ## Setup
 
