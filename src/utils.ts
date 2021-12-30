@@ -2,12 +2,28 @@ import { readdirSync, readFileSync } from 'fs';
 import { UploadFile } from './upload';
 import { normalize, join } from 'path';
 
-export const imagePathReference =
-  process.env.IMAGE_PATH_REFERENCE || './.loki/reference/';
-export const imagePathCurrent =
-  process.env.IMAGE_PATH_CURRENT || './.loki/current/';
-export const imagePathDifference =
-  process.env.IMAGE_PATH_DIFFERENCE || './.loki/difference/';
+export const imagePathBase = process.env.IMAGE_PATH_BASE || '';
+
+export const relativeImagePathReference =
+  process.env.IMAGE_PATH_REFERENCE || '.loki/reference/';
+
+export const imagePathReference = join(
+  imagePathBase,
+  relativeImagePathReference,
+);
+
+export const relativeImagePathCurrent =
+  process.env.IMAGE_PATH_CURRENT || '.loki/current/';
+
+export const imagePathCurrent = join(imagePathBase, relativeImagePathCurrent);
+
+export const relativeImagePathDifference =
+  process.env.IMAGE_PATH_DIFFERENCE || '.loki/difference/';
+
+export const imagePathDifference = join(
+  imagePathBase,
+  relativeImagePathDifference,
+);
 
 export const log = console.log;
 
@@ -118,7 +134,7 @@ export const prepareComparisonList = ({
     comparisonList.push({
       type,
       afterImageUrl: [baseUrl, afterFile].join('/'),
-      path: join(imagePathReference, fileName),
+      path: join(relativeImagePathReference, fileName),
     });
 
     uploadList.push(
@@ -141,7 +157,7 @@ export const prepareComparisonList = ({
     comparisonList.push({
       type,
       beforeImageUrl: [baseUrl, beforeFile].join('/'),
-      path: join(imagePathReference, fileName),
+      path: join(relativeImagePathReference, fileName),
     });
 
     uploadList.push(
@@ -174,7 +190,7 @@ export const prepareComparisonList = ({
       beforeImageUrl: [baseUrl, beforeFile].join('/'),
       afterImageUrl: [baseUrl, afterFile].join('/'),
       differenceImageUrl: [baseUrl, differenceFile].join('/'),
-      path: join(imagePathReference, fileName),
+      path: join(relativeImagePathReference, fileName),
     });
 
     uploadList.push(

@@ -13,9 +13,10 @@ export S3_ACCESS_KEY=$INPUT_S3_ACCESS_KEY
 export S3_SECRET_KEY=$INPUT_S3_SECRET_KEY
 export S3_BUCKET_NAME=$INPUT_S3_BUCKET_NAME
 export S3_BASE_URL=$INPUT_S3_BASE_URL
-export IMAGE_PATH_REFERENCE=$WORKSPACE/.loki/reference
-export IMAGE_PATH_CURRENT=$WORKSPACE/.loki/current
-export IMAGE_PATH_DIFFERENCE=$WORKSPACE/.loki/difference
+export IMAGE_PATH_BASE=$WORKSPACE
+export IMAGE_PATH_REFERENCE=.loki/reference
+export IMAGE_PATH_CURRENT=.loki/current
+export IMAGE_PATH_DIFFERENCE=.loki/difference
 export EVENT_PATH=$GITHUB_EVENT_PATH
 export COMMIT_HASH=$GITHUB_SHA
 export COMMIT_REF=$GITHUB_REF
@@ -33,6 +34,7 @@ echo "S3_ACCESS_KEY=*****************"
 echo "S3_SECRET_KEY=*****************"
 echo "S3_BUCKET_NAME=$S3_BUCKET_NAME"
 echo "S3_BASE_URL=$S3_BASE_URL"
+echo "IMAGE_PATH_BASE=$IMAGE_PATH_BASE"
 echo "IMAGE_PATH_REFERENCE=$IMAGE_PATH_REFERENCE"
 echo "IMAGE_PATH_CURRENT=$IMAGE_PATH_CURRENT"
 echo "IMAGE_PATH_DIFFERENCE=$IMAGE_PATH_DIFFERENCE"
@@ -47,9 +49,9 @@ cd /app
 --verboseRenderer \
 --requireReference \
 --reactUri file:$STORYBOOK_PATH \
---reference $WORKSPACE/.loki/reference \
---output $WORKSPACE/.loki/current \
---difference $WORKSPACE/.loki/difference \
+--reference $IMAGE_PATH_BASE/$IMAGE_PATH_REFERENCE \
+--output $IMAGE_PATH_BASE/$IMAGE_PATH_CURRENT \
+--difference $IMAGE_PATH_BASE/$IMAGE_PATH_DIFFERENCE \
 --chromeFlags="--headless --disable-gpu --hide-scrollbars --no-sandbox" \
 test
 
