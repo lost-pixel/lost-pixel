@@ -125,14 +125,27 @@ describe(prepareComparisonList, () => {
       }),
     ).toEqual([
       [
-        { afterImageUrl: 'https://s3/c.after.png', type: 'ADDITION' },
-        { afterImageUrl: 'https://s3/d.after.png', type: 'ADDITION' },
-        { beforeImageUrl: 'https://s3/b.before.png', type: 'DELETION' },
+        {
+          afterImageUrl: 'https://s3/c.after.png',
+          type: 'ADDITION',
+          path: '.loki/reference/c.png',
+        },
+        {
+          afterImageUrl: 'https://s3/d.after.png',
+          type: 'ADDITION',
+          path: '.loki/reference/d.png',
+        },
+        {
+          beforeImageUrl: 'https://s3/b.before.png',
+          type: 'DELETION',
+          path: '.loki/reference/b.png',
+        },
         {
           afterImageUrl: 'https://s3/a.after.png',
           beforeImageUrl: 'https://s3/a.before.png',
           differenceImageUrl: 'https://s3/a.difference.png',
           type: 'DIFFERENCE',
+          path: '.loki/reference/a.png',
         },
       ],
       [
