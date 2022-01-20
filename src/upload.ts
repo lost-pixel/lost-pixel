@@ -1,6 +1,16 @@
 import { Client as MinioClient, ItemBucketMetadata } from 'minio';
 import { Comparison, log } from './utils';
 import axios from 'axios';
+import {
+  PullRequestEvent,
+  CheckSuiteRequestedEvent,
+  CheckRunRerequestedEvent,
+} from '@octokit/webhooks-types';
+
+type WebhookEvent =
+  | PullRequestEvent
+  | CheckSuiteRequestedEvent
+  | CheckRunRerequestedEvent;
 
 export const apiClient = axios.create({
   headers: {
@@ -45,7 +55,7 @@ export const sendToAPI = async ({
   event,
 }: {
   comparisons: Comparison[];
-  event: Record<string, unknown>;
+  event: WebhookEvent;
 }) => {
   log('Sending to API');
 
@@ -57,6 +67,8 @@ export const sendToAPI = async ({
       buildNumber: process.env.CI_BUILD_NUMBER,
       branchRef: process.env.COMMIT_REF,
       branchName: process.env.COMMIT_REF_NAME,
+      owner: event.repository.owner.name,
+      repoName: event.repository.name,
       commit: process.env.COMMIT_HASH,
       buildMeta: event,
       comparisons,
