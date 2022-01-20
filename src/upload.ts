@@ -7,7 +7,7 @@ import {
   CheckRunRerequestedEvent,
 } from '@octokit/webhooks-types';
 
-type WebhookEvent =
+export type WebhookEvent =
   | PullRequestEvent
   | CheckSuiteRequestedEvent
   | CheckRunRerequestedEvent;

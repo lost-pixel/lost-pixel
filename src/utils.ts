@@ -1,5 +1,5 @@
 import { readdirSync, readFileSync } from 'fs';
-import { UploadFile } from './upload';
+import { UploadFile, WebhookEvent } from './upload';
 import { normalize, join } from 'path';
 
 export const imagePathBase = process.env.IMAGE_PATH_BASE || '';
@@ -235,6 +235,6 @@ export const getImageList = (path: string): string[] | null => {
   }
 };
 
-export const getEventData = (path: string): Record<string, unknown> => {
+export const getEventData = (path: string): WebhookEvent => {
   return require(path);
 };
