@@ -59,6 +59,8 @@ export const sendToAPI = async ({
 }) => {
   log('Sending to API');
 
+  const [repoOwner, repoName] = process.env.REPOSITORY.split('/');
+
   const response = await apiClient.post(
     process.env.LOST_PIXEL_URL || 'http://localhost:3000',
     {
@@ -67,8 +69,8 @@ export const sendToAPI = async ({
       buildNumber: process.env.CI_BUILD_NUMBER,
       branchRef: process.env.COMMIT_REF,
       branchName: process.env.COMMIT_REF_NAME,
-      owner: event.repository.owner.name,
-      repoName: event.repository.name,
+      repoOwner,
+      repoName,
       commit: process.env.COMMIT_HASH,
       buildMeta: event,
       comparisons,
