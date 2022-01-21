@@ -59,7 +59,7 @@ export const sendToAPI = async ({
 }) => {
   log('Sending to API');
 
-  const [repoOwner, repoName] = process.env.REPOSITORY.split('/');
+  const [repoOwner, repoName] = process.env.REPOSITORY!.split('/');
 
   const response = await apiClient.post(
     process.env.LOST_PIXEL_URL || 'http://localhost:3000',

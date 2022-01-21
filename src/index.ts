@@ -21,6 +21,10 @@ const requiredEnvVars = [
   'S3_SECRET_KEY',
   'S3_BUCKET_NAME',
   'S3_BASE_URL',
+  'REPOSITORY',
+  'COMMIT_REF',
+  'COMMIT_REF_NAME',
+  'COMMIT_HASH',
 ];
 
 requiredEnvVars.forEach((envVar) => {
