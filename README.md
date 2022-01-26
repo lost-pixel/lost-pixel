@@ -15,7 +15,6 @@ Example workflow for a project called `your-project-name` using an S3 bucket on 
   uses: lost-pixel/lost-pixel-action@v1beta
   with:
     LOST_PIXEL_URL: ${{ secrets.LOST_PIXEL_URL }}
-    LOST_PIXEL_API_KEY: ${{ secrets.LOST_PIXEL_API_KEY }}
     LOST_PIXEL_PROJECT_ID: ${{ secrets.LOST_PIXEL_PROJECT_ID }}
     STORYBOOK_PATH: 'path/to/storybook-static'
     S3_END_POINT: 'fra1.digitaloceanspaces.com'

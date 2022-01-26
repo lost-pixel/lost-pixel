@@ -12,7 +12,6 @@ import {
 
 const requiredEnvVars = [
   'LOST_PIXEL_URL',
-  'LOST_PIXEL_API_KEY',
   'LOST_PIXEL_PROJECT_ID',
   'CI_BUILD_ID',
   'CI_BUILD_NUMBER',

@@ -15,7 +15,6 @@ export type WebhookEvent =
 export const apiClient = axios.create({
   headers: {
     'Content-type': 'application/json',
-    'X-API-KEY': process.env.LOST_PIXEL_API_KEY || '--unknown--',
   },
 });
 

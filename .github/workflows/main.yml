@@ -34,7 +34,6 @@ jobs:
       #   uses: ./
       #   with:
       #     LOST_PIXEL_URL: ${{ secrets.LOST_PIXEL_URL_1 }}
-      #     LOST_PIXEL_API_KEY: ${{ secrets.LOST_PIXEL_API_KEY }}
       #     LOST_PIXEL_PROJECT_ID: ${{ secrets.LOST_PIXEL_PROJECT_ID_1 }}
       #     STORYBOOK_PATH: 'examples/storybook-demo/storybook-static'
       #     S3_END_POINT: 'fra1.digitaloceanspaces.com'
@@ -47,7 +46,6 @@ jobs:
       #   uses: ./
       #   with:
       #     LOST_PIXEL_URL: ${{ secrets.LOST_PIXEL_URL_2 }}
-      #     LOST_PIXEL_API_KEY: ${{ secrets.LOST_PIXEL_API_KEY }}
       #     LOST_PIXEL_PROJECT_ID: ${{ secrets.LOST_PIXEL_PROJECT_ID_2 }}
       #     STORYBOOK_PATH: 'examples/storybook-demo/storybook-static'
       #     S3_END_POINT: 'fra1.digitaloceanspaces.com'
@@ -61,7 +59,6 @@ jobs:
       #   uses: mxschmitt/action-tmate@v3
       #   with:
       #     LOST_PIXEL_URL: ${{ secrets.LOST_PIXEL_URL }}
-      #     LOST_PIXEL_API_KEY: ${{ secrets.LOST_PIXEL_API_KEY }}
       #     LOST_PIXEL_PROJECT_ID: 'l0s+p1xl'
       #     STORYBOOK_PATH: 'examples/storybook-demo/storybook-static'
       #     S3_END_POINT: 'fra1.digitaloceanspaces.com'
