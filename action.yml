@@ -13,7 +13,7 @@ inputs:
     required: true
   STORYBOOK_PATH:
     description: 'Path to the built storybook files'
-    required: true
+    required: false
   S3_END_POINT:
     description: 'S3 end point'
     required: true
