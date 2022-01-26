@@ -28,7 +28,7 @@ inputs:
     required: true
   S3_BASE_URL:
     description: 'Base url to uploaded images'
-    required: true
+    required: false
 runs:
   using: 'docker'
   image: 'Dockerfile'

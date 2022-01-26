@@ -20,5 +20,4 @@ Example workflow for a project called `your-project-name` using an S3 bucket on 
     S3_ACCESS_KEY: ${{ secrets.S3_ACCESS_KEY }}
     S3_SECRET_KEY: ${{ secrets.S3_SECRET_KEY }}
     S3_BUCKET_NAME: 'your-project-name'
-    S3_BASE_URL: 'https://your-project-name.fra1.digitaloceanspaces.com'
 ```

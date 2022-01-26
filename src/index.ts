@@ -18,7 +18,6 @@ const requiredEnvVars = [
   'S3_ACCESS_KEY',
   'S3_SECRET_KEY',
   'S3_BUCKET_NAME',
-  'S3_BASE_URL',
   'REPOSITORY',
   'COMMIT_REF',
   'COMMIT_REF_NAME',
@@ -59,10 +58,14 @@ const run = async () => {
 
     log(`Preparing comparison list`);
 
+    const s3BaseUrl =
+      process.env.S3_BASE_URL ||
+      `https://${process.env.S3_BUCKET_NAME}.${process.env.S3_END_POINT}`;
+
     const [comparisons, uploadList] = prepareComparisonList({
       changes,
       baseUrl: [
-        process.env.S3_BASE_URL,
+        s3BaseUrl,
         process.env.LOST_PIXEL_PROJECT_ID,
         process.env.CI_BUILD_ID,
       ].join('/'),

@@ -39,7 +39,6 @@ jobs:
       #     S3_ACCESS_KEY: ${{ secrets.S3_ACCESS_KEY }}
       #     S3_SECRET_KEY: ${{ secrets.S3_SECRET_KEY }}
       #     S3_BUCKET_NAME: 'lost-pixel'
-      #     S3_BASE_URL: 'https://lost-pixel.fra1.digitaloceanspaces.com'
 
       # - name: Test Action Container 2
       #   uses: ./
@@ -50,7 +49,6 @@ jobs:
       #     S3_ACCESS_KEY: ${{ secrets.S3_ACCESS_KEY }}
       #     S3_SECRET_KEY: ${{ secrets.S3_SECRET_KEY }}
       #     S3_BUCKET_NAME: 'lost-pixel'
-      #     S3_BASE_URL: 'https://lost-pixel.fra1.digitaloceanspaces.com'
 
       # - name: Setup tmate session
       #   if: ${{ failure() }}
@@ -62,5 +60,4 @@ jobs:
       #     S3_ACCESS_KEY: ${{ secrets.S3_ACCESS_KEY }}
       #     S3_SECRET_KEY: ${{ secrets.S3_SECRET_KEY }}
       #     S3_BUCKET_NAME: 'lost-pixel'
-      #     S3_BASE_URL: 'http://127.0.0.1:9000/lost-pixel'
 
