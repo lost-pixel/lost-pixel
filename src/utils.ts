@@ -230,7 +230,7 @@ export const getImageList = (path: string): string[] | null => {
 
     return files.filter((name) => name.endsWith('.png'));
   } catch (error) {
-    console.error(error);
+    log(error);
     return null;
   }
 };

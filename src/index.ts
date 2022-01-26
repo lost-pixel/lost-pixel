@@ -56,31 +56,41 @@ const run = async () => {
     difference: difference || [],
   };
 
-  const changes = getChanges(files);
+  try {
+    const changes = getChanges(files);
 
-  log(`Preparing comparison list`);
+    log(`Preparing comparison list`);
 
-  const [comparisons, uploadList] = prepareComparisonList({
-    changes,
-    baseUrl: [
-      process.env.S3_BASE_URL,
-      process.env.LOST_PIXEL_PROJECT_ID,
-      process.env.CI_BUILD_ID,
-    ].join('/'),
-  });
+    const [comparisons, uploadList] = prepareComparisonList({
+      changes,
+      baseUrl: [
+        process.env.S3_BASE_URL,
+        process.env.LOST_PIXEL_PROJECT_ID,
+        process.env.CI_BUILD_ID,
+      ].join('/'),
+    });
 
-  sendToAPI({
-    comparisons,
-    event: getEventData(process.env.EVENT_PATH || '/event.json'),
-  });
+    await sendToAPI({
+      comparisons,
+      event: getEventData(process.env.EVENT_PATH || '/event.json'),
+    });
 
-  log(`Uploading ${uploadList.length} files`);
+    log(`Uploading ${uploadList.length} files`);
 
-  const uploadPromises = uploadList.map(uploadFile);
+    const uploadPromises = uploadList.map(uploadFile);
 
-  await Promise.all(uploadPromises);
+    await Promise.all(uploadPromises);
 
-  log(JSON.stringify(comparisons, null, 2));
+    log(JSON.stringify(comparisons, null, 2));
+  } catch (error) {
+    if (error instanceof Error) {
+      log(error.message);
+    } else {
+      log(error);
+    }
+
+    process.exit(1);
+  }
 };
 
 run();
