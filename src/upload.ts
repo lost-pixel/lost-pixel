@@ -61,7 +61,7 @@ export const sendToAPI = async ({
   const [repoOwner, repoName] = process.env.REPOSITORY!.split('/');
 
   const response = await apiClient.post(
-    process.env.LOST_PIXEL_URL || 'http://localhost:3000',
+    process.env.LOST_PIXEL_URL || 'https://app.lost-pixel.com/api/callback',
     {
       projectId: process.env.LOST_PIXEL_PROJECT_ID,
       buildId: process.env.CI_BUILD_ID,

@@ -11,7 +11,6 @@ import {
 } from './utils';
 
 const requiredEnvVars = [
-  'LOST_PIXEL_URL',
   'LOST_PIXEL_PROJECT_ID',
   'CI_BUILD_ID',
   'CI_BUILD_NUMBER',
