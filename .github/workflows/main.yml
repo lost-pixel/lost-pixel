@@ -24,6 +24,22 @@ jobs:
       - name: Test
         run: npm run test
 
+      - name: Set Docker tag
+        run: echo RELEASE_VERSION=$(echo ${GITHUB_RUN_NUMBER}-${GITHUB_SHA:0:8}) >> $GITHUB_ENV
+
+      - name: Display Docker tag
+        run: echo "${{ env.RELEASE_VERSION }}"
+
+      - name: Publish to Registry
+        uses: elgohr/Publish-Docker-Github-Action@191af57e15535d28b83589e3b5f0c31e76aa8733
+        with:
+          name: lostpixel/lost-pixel-action
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+          dockerfile: apps/lost-pixel-app/Dockerfile
+          tags: "${{ env.RELEASE_VERSION }}"
+          buildoptions: '--compress --force-rm'
+
       # - name: Build Demo Storybook
       #   run: |
       #     cd examples/storybook-demo
