@@ -36,7 +36,6 @@ jobs:
           name: lostpixel/lost-pixel-action
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
-          dockerfile: apps/lost-pixel-app/Dockerfile
           tags: "${{ env.RELEASE_VERSION }}"
           buildoptions: '--compress --force-rm'
 
