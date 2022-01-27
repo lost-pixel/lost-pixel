@@ -29,6 +29,9 @@ inputs:
   S3_BASE_URL:
     description: 'Base url to uploaded images'
     required: false
+  IMAGE_PATH_BASE:
+    description: 'Base path of screenshot files'
+    required: false
 runs:
   using: 'docker'
   image: 'Dockerfile'
