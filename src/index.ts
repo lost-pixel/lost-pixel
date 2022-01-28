@@ -71,12 +71,12 @@ const run = async () => {
       ].join('/'),
     });
 
-    await sendToAPI({
-      comparisons,
-      event: process.env.EVENT_PATH
-        ? getEventData(process.env.EVENT_PATH)
-        : undefined,
-    });
+    // await sendToAPI({
+    //   comparisons,
+    //   event: process.env.EVENT_PATH
+    //     ? getEventData(process.env.EVENT_PATH)
+    //     : undefined,
+    // });
 
     log(`Uploading ${uploadList.length} files`);
 
