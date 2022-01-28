@@ -46,7 +46,11 @@ echo "COMMIT_REF=$COMMIT_REF"
 echo "COMMIT_REF_NAME=$COMMIT_REF_NAME"
 echo "REPOSITORY=$REPOSITORY"
 
+
 cd /app
+mkdir -p $IMAGE_PATH_BASE/$IMAGE_PATH_REFERENCE
+mkdir -p $IMAGE_PATH_BASE/$IMAGE_PATH_CURRENT
+mkdir -p $IMAGE_PATH_BASE/$IMAGE_PATH_DIFFERENCE
 
 ./node_modules/.bin/loki \
 --verboseRenderer \
