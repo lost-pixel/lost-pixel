@@ -73,7 +73,9 @@ const run = async () => {
 
     await sendToAPI({
       comparisons,
-      event: getEventData(process.env.EVENT_PATH || '/event.json'),
+      event: process.env.EVENT_PATH
+        ? getEventData(process.env.EVENT_PATH)
+        : undefined,
     });
 
     log(`Uploading ${uploadList.length} files`);

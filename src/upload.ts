@@ -54,7 +54,7 @@ export const sendToAPI = async ({
   event,
 }: {
   comparisons: Comparison[];
-  event: WebhookEvent;
+  event?: WebhookEvent;
 }) => {
   log('Sending to API');
 
