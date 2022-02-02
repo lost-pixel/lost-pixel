@@ -20,6 +20,7 @@ export const apiClient = axios.create({
 
 const minio = new MinioClient({
   endPoint: process.env.S3_END_POINT || '--unknown--',
+  region: process.env.S3_REGION || undefined,
   accessKey: process.env.S3_ACCESS_KEY || '--unknown--',
   secretKey: process.env.S3_SECRET_KEY || '--unknown--',
   port: process.env.S3_END_POINT_PORT

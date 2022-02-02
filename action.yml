@@ -17,6 +17,9 @@ inputs:
   S3_END_POINT:
     description: 'S3 end point'
     required: true
+  S3_REGION:
+    description: 'S3 region'
+    required: false
   S3_BUCKET_NAME:
     description: 'S3 bucket name'
     required: true
