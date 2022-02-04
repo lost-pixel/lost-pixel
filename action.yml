@@ -29,6 +29,9 @@ inputs:
   S3_SECRET_KEY:
     description: 'S3 secret key'
     required: true
+  S3_SESSION_TOKEN:
+    description: 'S3 session token (AWS only)'
+    required: false
   S3_BASE_URL:
     description: 'Base url to uploaded images'
     required: false

@@ -23,6 +23,7 @@ const minio = new MinioClient({
   region: process.env.S3_REGION || undefined,
   accessKey: process.env.S3_ACCESS_KEY || '--unknown--',
   secretKey: process.env.S3_SECRET_KEY || '--unknown--',
+  sessionToken: process.env.S3_SESSION_TOKEN || undefined,
   port: process.env.S3_END_POINT_PORT
     ? Number(process.env.S3_END_POINT_PORT)
     : 443,
