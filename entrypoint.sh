@@ -59,7 +59,7 @@ mkdir -p $IMAGE_PATH_BASE/$IMAGE_PATH_REFERENCE
 mkdir -p $IMAGE_PATH_BASE/$IMAGE_PATH_CURRENT
 mkdir -p $IMAGE_PATH_BASE/$IMAGE_PATH_DIFFERENCE
 
-./node_modules/.bin/loki \
+DEBUG=loki:* ./node_modules/.bin/loki \
 --verboseRenderer \
 --requireReference \
 --reactUri file:$STORYBOOK_PATH \
