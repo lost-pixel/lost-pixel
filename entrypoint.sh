@@ -68,6 +68,7 @@ DEBUG=loki:* ./node_modules/.bin/loki \
 --difference $IMAGE_PATH_BASE/$IMAGE_PATH_DIFFERENCE \
 --chromeFlags="--headless --disable-gpu --hide-scrollbars --no-sandbox" \
 --chromeConcurrency=$CONCURRENCY \
+--enable-logging=stderr --v=1 \
 test
 
 npm run start
