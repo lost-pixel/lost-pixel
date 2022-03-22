@@ -1,0 +1,16 @@
+diff --git a/node_modules/@loki/target-chrome-core/src/create-chrome-target.js b/node_modules/@loki/target-chrome-core/src/create-chrome-target.js
+index f2e9972..865d47b 100644
+--- a/node_modules/@loki/target-chrome-core/src/create-chrome-target.js
++++ b/node_modules/@loki/target-chrome-core/src/create-chrome-target.js
+@@ -193,8 +193,11 @@ function createChromeTarget(
+ 
+       debug(`Navigating to ${url}`);
+       startObservingRequests();
++      debug(`after startObservingRequests`);
+       await Page.navigate({ url });
++      debug(`after Page.navigate`);
+       await Page.loadEventFired();
++      debug(`after Page.loadEventFired`);
+ 
+       if (selectorToBePresent) {
+         debug(`Awaiting selector "${selectorToBePresent}"`);
