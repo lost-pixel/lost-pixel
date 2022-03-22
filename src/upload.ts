@@ -43,12 +43,21 @@ export const uploadFile = async ({
 }: UploadFile) => {
   log(`Uploading '${filePath}' to '${uploadPath}'`);
 
-  return minio.fPutObject(
-    process.env.S3_BUCKET_NAME || '--unknown--',
-    uploadPath,
-    filePath,
-    metaData,
-  );
+  return new Promise((resolve, reject) => {
+    minio.fPutObject(
+      process.env.S3_BUCKET_NAME || '--unknown--',
+      uploadPath,
+      filePath,
+      metaData,
+      (err, objInfo) => {
+        if (err) {
+          reject(err);
+        } else {
+          resolve(objInfo);
+        }
+      },
+    );
+  });
 };
 
 export const sendToAPI = async ({
