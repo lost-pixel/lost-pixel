@@ -235,6 +235,11 @@ export const getImageList = (path: string): string[] | null => {
   }
 };
 
-export const getEventData = (path: string): WebhookEvent => {
-  return require(path);
+export const getEventData = (path: string): WebhookEvent | undefined => {
+  try {
+    return require(path);
+  } catch (error) {
+    log(error);
+    return undefined;
+  }
 };
