@@ -1,3 +1,4 @@
+import path from 'path';
 import { firefox } from 'playwright';
 
 export type Story = {
@@ -17,6 +18,22 @@ type WindowObject = typeof window & {
 
 type CrawlerResult = {
   stories: Story[] | null;
+};
+
+export const getStoryBookUrl = (url: string) => {
+  if (
+    url.startsWith('http://') ||
+    url.startsWith('https://') ||
+    url.startsWith('file://')
+  ) {
+    return url;
+  }
+
+  if (url.startsWith('/')) {
+    return `file://${url}`;
+  }
+
+  return `file://${path.normalize(path.join(process.cwd(), url))}`;
 };
 
 export const collectStories = async (url: string) => {
