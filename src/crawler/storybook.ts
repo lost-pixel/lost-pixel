@@ -48,7 +48,7 @@ export const getIframeUrl = (url: string) =>
 export const collectStories = async (url: string) => {
   const browser = await firefox.launch();
   const page = await browser.newPage();
-  const iframeUrl = getIframeUrl(url);
+  const iframeUrl = getIframeUrl(getStoryBookUrl(url));
 
   await page.goto(iframeUrl);
 
