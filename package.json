@@ -9,7 +9,7 @@
     "build": "rimraf dist && tsc",
     "build-example-storybook": "rimraf examples/storybook-demo/storybook-static && cd examples/storybook-demo && npm run build-storybook",
     "dev": "ts-node -r ./loadEnv src/",
-    "play": "ts-node -r ./loadEnv src/crawler/storybook.ts",
+    "try": "ts-node -r ./loadEnv src/try.ts",
     "start": "NODE_ENV=production node dist/index.js"
   },
   "repository": {
@@ -26,7 +26,6 @@
   "dependencies": {
     "axios": "^0.24.0",
     "dotenv": "^10.0.0",
-    "loki": "^0.28.1",
     "minio": "^7.0.25",
     "playwright": "^1.20.1"
   },
