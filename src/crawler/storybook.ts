@@ -6,7 +6,11 @@ export type Story = {
   id: string;
   kind: string;
   story: string;
-  parameters: Record<string, unknown>;
+  parameters?: {
+    lostpixel?: {
+      disable?: boolean;
+    };
+  };
 };
 
 interface StorybookClientApi {
@@ -96,15 +100,17 @@ export const generateShotItems = (
 ): ShotItem[] => {
   const iframeUrl = getIframeUrl(getStoryBookUrl(baseUrl));
 
-  const shotItems = stories.map((story) => {
-    const filePath = generateFilePath(story);
+  const shotItems = stories
+    .filter((story) => story.parameters?.lostpixel?.disable !== true)
+    .map((story) => {
+      const filePath = generateFilePath(story);
 
-    return {
-      id: story.id,
-      url: `${iframeUrl}?id=${story.id}&viewMode=story`,
-      filePath,
-    };
-  });
+      return {
+        id: story.id,
+        url: `${iframeUrl}?id=${story.id}&viewMode=story`,
+        filePath,
+      };
+    });
 
   return shotItems;
 };
