@@ -18,11 +18,14 @@ type CrawlerResult = {
   stories: Story[] | null;
 };
 
-(async () => {
+export const collectStories = async (url: string) => {
   const browser = await firefox.launch();
   const page = await browser.newPage();
+  const iframeUrl = url.endsWith('/')
+    ? `${url}iframe.html`
+    : `${url}/iframe.html`;
 
-  await page.goto('http://localhost:8080/iframe.html');
+  await page.goto(iframeUrl);
 
   await page.waitForFunction(
     () => (window as WindowObject).__STORYBOOK_CLIENT_API__,
@@ -54,6 +57,7 @@ type CrawlerResult = {
       }),
   );
 
-  console.log(result);
   await browser.close();
-})();
+
+  return result;
+};
