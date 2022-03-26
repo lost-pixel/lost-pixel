@@ -1,0 +1,48 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`collectStories should collect stories from StoryBook 1`] = `
+Object {
+  "stories": Array [
+    Object {
+      "id": "example-button--primary",
+      "kind": "Example/Button",
+      "story": "Primary",
+    },
+    Object {
+      "id": "example-button--secondary",
+      "kind": "Example/Button",
+      "story": "Secondary",
+    },
+    Object {
+      "id": "example-button--large",
+      "kind": "Example/Button",
+      "story": "Large",
+    },
+    Object {
+      "id": "example-button--small",
+      "kind": "Example/Button",
+      "story": "Small",
+    },
+    Object {
+      "id": "example-header--logged-in",
+      "kind": "Example/Header",
+      "story": "Logged In",
+    },
+    Object {
+      "id": "example-header--logged-out",
+      "kind": "Example/Header",
+      "story": "Logged Out",
+    },
+    Object {
+      "id": "example-page--logged-in",
+      "kind": "Example/Page",
+      "story": "Logged In",
+    },
+    Object {
+      "id": "example-page--logged-out",
+      "kind": "Example/Page",
+      "story": "Logged Out",
+    },
+  ],
+}
+`;
