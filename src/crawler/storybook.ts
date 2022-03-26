@@ -1,5 +1,6 @@
 import path from 'path';
 import { firefox } from 'playwright';
+import { ShotItem } from '../shots/shots';
 
 export type Story = {
   id: string;
@@ -80,4 +81,30 @@ export const collectStories = async (url: string) => {
   await browser.close();
 
   return result;
+};
+
+const generateFilePath = (story: Story) => {
+  const fileName = `${story.id}.png`;
+  const filePath = path.join(process.cwd(), '.lostpixel', fileName);
+
+  return filePath;
+};
+
+export const generateShotItems = (
+  baseUrl: string,
+  stories: Story[],
+): ShotItem[] => {
+  const iframeUrl = getIframeUrl(getStoryBookUrl(baseUrl));
+
+  const shotItems = stories.map((story) => {
+    const filePath = generateFilePath(story);
+
+    return {
+      id: story.id,
+      url: `${iframeUrl}?id=${story.id}&viewMode=story`,
+      filePath,
+    };
+  });
+
+  return shotItems;
 };
