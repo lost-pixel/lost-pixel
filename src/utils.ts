@@ -1,10 +1,11 @@
-import { existsSync, mkdirSync, readdirSync } from 'fs';
+import { existsSync, mkdirSync, readdirSync, writeFileSync } from 'fs';
 import { UploadFile, WebhookEvent } from './upload';
-import { normalize, join } from 'path';
+import path, { normalize, join } from 'path';
 import {
   shotsBaselinePath,
   shotsCurrentPath,
   shotsDifferencePath,
+  shotsPath,
 } from './constants';
 
 export const imagePathBase = process.env.IMAGE_PATH_BASE || '';
@@ -257,4 +258,10 @@ export const createShotsFolders = () => {
       mkdirSync(path, { recursive: true });
     }
   });
+
+  const ignoreFile = path.join(shotsPath, '.gitignore');
+
+  if (!existsSync(ignoreFile)) {
+    writeFileSync(ignoreFile, 'current\ndifference\n');
+  }
 };
