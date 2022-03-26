@@ -1,5 +1,6 @@
 import path from 'path';
 import { firefox } from 'playwright';
+import { shotsCurrentPath } from '../constants';
 import { ShotItem } from '../shots/shots';
 
 export type Story = {
@@ -89,7 +90,7 @@ export const collectStories = async (url: string) => {
 
 const generateFilePath = (story: Story) => {
   const fileName = `${story.id}.png`;
-  const filePath = path.join(process.cwd(), '.lostpixel', fileName);
+  const filePath = path.join(shotsCurrentPath, fileName);
 
   return filePath;
 };
