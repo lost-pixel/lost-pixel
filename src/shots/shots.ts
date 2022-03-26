@@ -27,10 +27,15 @@ export const takeScreenShots = async (shotItems: ShotItem[]) => {
       const [index, shotItem] = item;
       const progress = `${index + 1}/${total}`;
 
-      log(`[${progress}] Taking screenshot of ${shotItem.id}`);
+      log(`[${progress}] Taking screenshot of '${shotItem.id}'`);
+
+      const startTime = performance.now();
       await takeScreenShot(browser, shotItem);
+      const endTime = performance.now();
+      const elapsedTime = Number((endTime - startTime) / 1000).toFixed(3);
+
       log(
-        `[${progress}] Screenshot of ${shotItem.id} taken and saved to ${shotItem.filePath}`,
+        `[${progress}] Screenshot of '${shotItem.id}' taken and saved to '${shotItem.filePath}' in ${elapsedTime}s`,
       );
     },
   );
