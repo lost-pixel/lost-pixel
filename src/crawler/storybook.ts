@@ -4,6 +4,7 @@ export type Story = {
   id: string;
   kind: string;
   story: string;
+  parameters: Record<string, unknown>;
 };
 
 interface StorybookClientApi {
@@ -45,6 +46,7 @@ export const collectStories = async (url: string) => {
               id: item.id,
               kind: item.kind,
               story: item.story,
+              parameters: item.parameters,
             }));
 
             res({ stories });
