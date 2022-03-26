@@ -36,12 +36,13 @@ export const getStoryBookUrl = (url: string) => {
   return `file://${path.normalize(path.join(process.cwd(), url))}`;
 };
 
+export const getIframeUrl = (url: string) =>
+  url.endsWith('/') ? `${url}iframe.html` : `${url}/iframe.html`;
+
 export const collectStories = async (url: string) => {
   const browser = await firefox.launch();
   const page = await browser.newPage();
-  const iframeUrl = url.endsWith('/')
-    ? `${url}iframe.html`
-    : `${url}/iframe.html`;
+  const iframeUrl = getIframeUrl(url);
 
   await page.goto(iframeUrl);
 

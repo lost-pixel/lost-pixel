@@ -1,5 +1,5 @@
 import path from 'path';
-import { collectStories, getStoryBookUrl } from './storybook';
+import { collectStories, getIframeUrl, getStoryBookUrl } from './storybook';
 
 const storyBookUrl = getStoryBookUrl(
   'examples/storybook-demo/storybook-static',
@@ -29,6 +29,18 @@ describe(getStoryBookUrl, () => {
 
     expect(getStoryBookUrl('https://example.com/storybook')).toBe(
       'https://example.com/storybook',
+    );
+  });
+});
+
+describe(getIframeUrl, () => {
+  it('should attach the iframe document to the URL', () => {
+    expect(getIframeUrl('https://example.com/storybook')).toBe(
+      'https://example.com/storybook/iframe.html',
+    );
+
+    expect(getIframeUrl('https://example.com/storybook/')).toBe(
+      'https://example.com/storybook/iframe.html',
     );
   });
 });
