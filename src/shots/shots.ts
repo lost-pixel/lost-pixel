@@ -13,7 +13,7 @@ const takeScreenShot = async (browser: Browser, shotItem: ShotItem) => {
   const page = await browser.newPage();
   await page.goto(shotItem.url);
   await page.waitForLoadState();
-  await page.screenshot({ path: shotItem.filePath });
+  await page.screenshot({ path: shotItem.filePath, fullPage: true });
 };
 
 export const takeScreenShots = async (shotItems: ShotItem[]) => {
