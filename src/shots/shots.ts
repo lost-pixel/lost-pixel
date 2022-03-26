@@ -1,4 +1,5 @@
 import { Browser, firefox } from 'playwright';
+import { mapLimit } from 'async';
 import { log } from '../utils';
 
 export type ShotItem = {
@@ -18,8 +19,11 @@ export const takeScreenShots = async (shotItems: ShotItem[]) => {
   const browser = await firefox.launch();
   const total = shotItems.length;
 
-  await Promise.all(
-    shotItems.map(async (shotItem, index) => {
+  await mapLimit<[number, ShotItem], void>(
+    shotItems.entries(),
+    5,
+    async (item: [number, ShotItem]) => {
+      const [index, shotItem] = item;
       const progress = `${index + 1}/${total}`;
 
       log(`[${progress}] Taking screenshot of ${shotItem.id}`);
@@ -27,7 +31,7 @@ export const takeScreenShots = async (shotItems: ShotItem[]) => {
       log(
         `[${progress}] Screenshot of ${shotItem.id} taken and saved to ${shotItem.filePath}`,
       );
-    }),
+    },
   );
 
   await browser.close();
