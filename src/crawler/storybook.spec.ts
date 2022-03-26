@@ -13,4 +13,22 @@ describe(collectStories, () => {
   it('should collect stories from StoryBook', async () => {
     expect(await collectStories(storyBookUrl)).toMatchSnapshot();
   });
+
+  it('should fail when using invalid path to StoryBook', () => {
+    expect(() => collectStories('this/path/does/not/exist')).rejects.toThrow(
+      'Invalid url',
+    );
+  });
+
+  it('should fail when using invalid url to StoryBook', () => {
+    expect(() => collectStories('http://localhost:99999')).rejects.toThrow(
+      'Invalid url',
+    );
+  });
+
+  it('should timeout when using invalid url to StoryBook', () => {
+    expect(() =>
+      collectStories(`${storyBookUrl}/nothing/here`),
+    ).rejects.toThrow('NS_ERROR_FILE_NOT_FOUND');
+  });
 });
