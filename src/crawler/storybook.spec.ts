@@ -1,9 +1,13 @@
-import path from 'path';
+import { createShotsFolders } from '../utils';
 import { collectStories, getIframeUrl, getStoryBookUrl } from './storybook';
 
 const storyBookUrl = getStoryBookUrl(
   'examples/storybook-demo/storybook-static',
 );
+
+beforeAll(async () => {
+  createShotsFolders();
+});
 
 describe(getStoryBookUrl, () => {
   it('should return a full StoryBook URL', () => {

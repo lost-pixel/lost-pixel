@@ -7,3 +7,5 @@ export const shotsPath = process.env.SHOTS_PATH?.startsWith('/')
 export const shotsBaselinePath = `${shotsPath}/baseline`;
 
 export const shotsCurrentPath = `${shotsPath}/current`;
+
+export const shotsDifferencePath = `${shotsPath}/difference`;

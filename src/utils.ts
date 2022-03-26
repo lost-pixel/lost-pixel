@@ -1,6 +1,11 @@
-import { readdirSync, readFileSync } from 'fs';
+import { existsSync, mkdirSync, readdirSync } from 'fs';
 import { UploadFile, WebhookEvent } from './upload';
 import { normalize, join } from 'path';
+import {
+  shotsBaselinePath,
+  shotsCurrentPath,
+  shotsDifferencePath,
+} from './constants';
 
 export const imagePathBase = process.env.IMAGE_PATH_BASE || '';
 
@@ -242,4 +247,14 @@ export const getEventData = (path: string): WebhookEvent | undefined => {
     log(error);
     return undefined;
   }
+};
+
+export const createShotsFolders = () => {
+  const paths = [shotsBaselinePath, shotsCurrentPath, shotsDifferencePath];
+
+  paths.forEach((path) => {
+    if (!existsSync(path)) {
+      mkdirSync(path, { recursive: true });
+    }
+  });
 };
