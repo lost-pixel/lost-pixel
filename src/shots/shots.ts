@@ -1,6 +1,7 @@
 import { Browser, firefox } from 'playwright';
 import { mapLimit } from 'async';
 import { log } from '../utils';
+import { shotConcurrency } from '../constants';
 
 export type ShotItem = {
   id: string;
@@ -21,7 +22,7 @@ export const takeScreenShots = async (shotItems: ShotItem[]) => {
 
   await mapLimit<[number, ShotItem], void>(
     shotItems.entries(),
-    5,
+    shotConcurrency,
     async (item: [number, ShotItem]) => {
       const [index, shotItem] = item;
       const progress = `${index + 1}/${total}`;

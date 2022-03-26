@@ -9,3 +9,5 @@ export const shotsBaselinePath = `${shotsPath}/baseline`;
 export const shotsCurrentPath = `${shotsPath}/current`;
 
 export const shotsDifferencePath = `${shotsPath}/difference`;
+
+export const shotConcurrency = Number(process.env.SHOT_CONCURRENCY) || 5;
