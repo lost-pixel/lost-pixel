@@ -12,7 +12,15 @@ export type ShotItem = {
 const takeScreenShot = async (browser: Browser, shotItem: ShotItem) => {
   const page = await browser.newPage();
   await page.goto(shotItem.url);
-  await page.waitForLoadState();
+
+  try {
+    await page.waitForLoadState('networkidle', {
+      timeout: 30_000,
+    });
+  } catch (e) {
+    log(`Timeout waiting for page load state: ${shotItem.url}`);
+  }
+
   await page.screenshot({
     path: shotItem.filePath,
     fullPage: true,
