@@ -6,15 +6,18 @@ export const waitForNetworkRequests = ({
   logger,
   timeout = 30_000,
   waitForFirstRequest = 1_000,
+  waitForLastRequest = 1_000,
 }: {
   page: Page;
   logger: typeof log;
   timeout?: number;
   waitForFirstRequest?: number;
+  waitForLastRequest?: number;
 }) =>
   new Promise((resolve, reject) => {
     let requestCounter = 0;
     let requests = new Set<Request>();
+    let lastRequestTimeoutId: NodeJS.Timeout;
 
     const timeoutId = setTimeout(() => {
       const pendingUrls = [...requests].map((request) => request.url());
@@ -31,6 +34,7 @@ export const waitForNetworkRequests = ({
 
     const onRequest = (request: Request) => {
       clearTimeout(firstRequestTimeoutId);
+      clearTimeout(lastRequestTimeoutId);
 
       requestCounter++;
       requests.add(request);
@@ -38,18 +42,23 @@ export const waitForNetworkRequests = ({
     };
 
     const onRequestFinished = (request: Request) => {
+      clearTimeout(lastRequestTimeoutId);
       requestCounter--;
       requests.delete(request);
       logger(`- ${request.url()}`);
 
-      if (requestCounter === 0) {
-        cleanup();
-        resolve(true);
-      }
+      lastRequestTimeoutId = setTimeout(() => {
+        if (requestCounter === 0) {
+          cleanup();
+          resolve(true);
+        }
+      }, waitForLastRequest);
     };
 
     function cleanup() {
       clearTimeout(timeoutId);
+      clearTimeout(firstRequestTimeoutId);
+      clearTimeout(lastRequestTimeoutId);
       page.removeListener('request', onRequest);
       page.removeListener('requestfinished', onRequestFinished);
       page.removeListener('requestfailed', onRequestFinished);
