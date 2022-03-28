@@ -11,7 +11,7 @@ import {
 export const imagePathBase = process.env.IMAGE_PATH_BASE || '';
 
 export const relativeImagePathReference =
-  process.env.IMAGE_PATH_REFERENCE || '.loki/reference/';
+  process.env.IMAGE_PATH_REFERENCE || '.lostpixel/reference/';
 
 export const imagePathReference = join(
   imagePathBase,
@@ -19,12 +19,12 @@ export const imagePathReference = join(
 );
 
 export const relativeImagePathCurrent =
-  process.env.IMAGE_PATH_CURRENT || '.loki/current/';
+  process.env.IMAGE_PATH_CURRENT || '.lostpixel/current/';
 
 export const imagePathCurrent = join(imagePathBase, relativeImagePathCurrent);
 
 export const relativeImagePathDifference =
-  process.env.IMAGE_PATH_DIFFERENCE || '.loki/difference/';
+  process.env.IMAGE_PATH_DIFFERENCE || '.lostpixel/difference/';
 
 export const imagePathDifference = join(
   imagePathBase,

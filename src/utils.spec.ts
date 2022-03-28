@@ -128,24 +128,24 @@ describe(prepareComparisonList, () => {
         {
           afterImageUrl: 'https://s3/c.after.png',
           type: 'ADDITION',
-          path: '.loki/reference/c.png',
+          path: '.lostpixel/reference/c.png',
         },
         {
           afterImageUrl: 'https://s3/d.after.png',
           type: 'ADDITION',
-          path: '.loki/reference/d.png',
+          path: '.lostpixel/reference/d.png',
         },
         {
           beforeImageUrl: 'https://s3/b.before.png',
           type: 'DELETION',
-          path: '.loki/reference/b.png',
+          path: '.lostpixel/reference/b.png',
         },
         {
           afterImageUrl: 'https://s3/a.after.png',
           beforeImageUrl: 'https://s3/a.before.png',
           differenceImageUrl: 'https://s3/a.difference.png',
           type: 'DIFFERENCE',
-          path: '.loki/reference/a.png',
+          path: '.lostpixel/reference/a.png',
         },
       ],
       [
