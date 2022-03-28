@@ -10,7 +10,9 @@ export type ShotItem = {
 };
 
 const takeScreenShot = async (browser: Browser, shotItem: ShotItem) => {
-  const page = await browser.newPage();
+  const context = await browser.newContext();
+  const page = await context.newPage();
+
   await page.goto(shotItem.url);
 
   try {
@@ -26,6 +28,8 @@ const takeScreenShot = async (browser: Browser, shotItem: ShotItem) => {
     fullPage: true,
     animations: 'disabled',
   });
+
+  await context.close();
 };
 
 export const takeScreenShots = async (shotItems: ShotItem[]) => {
