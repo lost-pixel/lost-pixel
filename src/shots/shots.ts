@@ -2,6 +2,7 @@ import { Browser, firefox } from 'playwright';
 import { mapLimit } from 'async';
 import { log } from '../utils';
 import { shotConcurrency } from '../constants';
+import { waitForNetworkRequests } from './utils';
 
 export type ShotItem = {
   id: string;
@@ -20,7 +21,13 @@ const takeScreenShot = async (browser: Browser, shotItem: ShotItem) => {
       timeout: 30_000,
     });
   } catch (e) {
-    log(`Timeout waiting for page load state: ${shotItem.url}`);
+    log(`Timeout while waiting for page load state: ${shotItem.url}`);
+  }
+
+  try {
+    await waitForNetworkRequests({ page, timeout: 30_000 });
+  } catch (e) {
+    log(`Timeout while waiting for all network requests: ${shotItem.url}`);
   }
 
   await page.screenshot({
