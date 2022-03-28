@@ -1,5 +1,16 @@
+import { url } from 'inspector';
 import { Page, Request } from 'playwright';
 import { log } from '../utils';
+
+const checkIgnoreUrls = (url: string, ignoreUrls: string[]) => {
+  for (const ignoreUrl of ignoreUrls) {
+    if (url.includes(ignoreUrl)) {
+      return true;
+    }
+  }
+
+  return false;
+};
 
 export const waitForNetworkRequests = ({
   page,
@@ -7,12 +18,14 @@ export const waitForNetworkRequests = ({
   timeout = 30_000,
   waitForFirstRequest = 1_000,
   waitForLastRequest = 1_000,
+  ignoreUrls = [],
 }: {
   page: Page;
   logger: typeof log;
   timeout?: number;
   waitForFirstRequest?: number;
   waitForLastRequest?: number;
+  ignoreUrls?: string[];
 }) =>
   new Promise((resolve, reject) => {
     let requestCounter = 0;
@@ -36,16 +49,21 @@ export const waitForNetworkRequests = ({
       clearTimeout(firstRequestTimeoutId);
       clearTimeout(lastRequestTimeoutId);
 
-      requestCounter++;
-      requests.add(request);
-      logger(`+ ${request.url()}`);
+      if (!checkIgnoreUrls(request.url(), ignoreUrls)) {
+        requestCounter++;
+        requests.add(request);
+        logger(`+ ${request.url()}`);
+      }
     };
 
     const onRequestFinished = (request: Request) => {
       clearTimeout(lastRequestTimeoutId);
-      requestCounter--;
-      requests.delete(request);
-      logger(`- ${request.url()}`);
+
+      if (!checkIgnoreUrls(request.url(), ignoreUrls)) {
+        requestCounter--;
+        requests.delete(request);
+        logger(`- ${request.url()}`);
+      }
 
       lastRequestTimeoutId = setTimeout(() => {
         if (requestCounter === 0) {

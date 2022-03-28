@@ -33,7 +33,12 @@ const takeScreenShot = async ({
   }
 
   try {
-    await waitForNetworkRequests({ page, timeout: 30_000, logger });
+    await waitForNetworkRequests({
+      page,
+      timeout: 30_000,
+      logger,
+      ignoreUrls: ['/__webpack_hmr'],
+    });
   } catch (e) {
     logger(`Timeout while waiting for all network requests: ${shotItem.url}`);
   }
