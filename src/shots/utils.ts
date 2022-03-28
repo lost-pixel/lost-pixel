@@ -5,10 +5,12 @@ export const waitForNetworkRequests = ({
   page,
   logger,
   timeout = 30_000,
+  waitForFirstRequest = 1_000,
 }: {
   page: Page;
   logger: typeof log;
   timeout?: number;
+  waitForFirstRequest?: number;
 }) =>
   new Promise((resolve, reject) => {
     let requestCounter = 0;
@@ -22,7 +24,14 @@ export const waitForNetworkRequests = ({
       reject(new Error('Timeout'));
     }, timeout);
 
+    const firstRequestTimeoutId = setTimeout(() => {
+      cleanup();
+      resolve(true);
+    }, waitForFirstRequest);
+
     const onRequest = (request: Request) => {
+      clearTimeout(firstRequestTimeoutId);
+
       requestCounter++;
       requests.add(request);
       logger(`+ ${request.url()}`);
