@@ -10,7 +10,15 @@ export type ShotItem = {
   filePath: string;
 };
 
-const takeScreenShot = async (browser: Browser, shotItem: ShotItem) => {
+const takeScreenShot = async ({
+  browser,
+  shotItem,
+  logger,
+}: {
+  browser: Browser;
+  shotItem: ShotItem;
+  logger: typeof log;
+}) => {
   const context = await browser.newContext();
   const page = await context.newPage();
 
@@ -21,13 +29,13 @@ const takeScreenShot = async (browser: Browser, shotItem: ShotItem) => {
       timeout: 30_000,
     });
   } catch (e) {
-    log(`Timeout while waiting for page load state: ${shotItem.url}`);
+    logger(`Timeout while waiting for page load state: ${shotItem.url}`);
   }
 
   try {
-    await waitForNetworkRequests({ page, timeout: 30_000 });
+    await waitForNetworkRequests({ page, timeout: 30_000, logger });
   } catch (e) {
-    log(`Timeout while waiting for all network requests: ${shotItem.url}`);
+    logger(`Timeout while waiting for all network requests: ${shotItem.url}`);
   }
 
   await page.screenshot({
@@ -48,17 +56,18 @@ export const takeScreenShots = async (shotItems: ShotItem[]) => {
     shotConcurrency,
     async (item: [number, ShotItem]) => {
       const [index, shotItem] = item;
-      const progress = `${index + 1}/${total}`;
+      const logger = (message: string, ...rest: unknown[]) =>
+        log(`[${index + 1}/${total}] ${message}`, ...rest);
 
-      log(`[${progress}] Taking screenshot of '${shotItem.id}'`);
+      logger(`Taking screenshot of '${shotItem.id}'`);
 
       const startTime = performance.now();
-      await takeScreenShot(browser, shotItem);
+      await takeScreenShot({ browser, shotItem, logger });
       const endTime = performance.now();
       const elapsedTime = Number((endTime - startTime) / 1000).toFixed(3);
 
-      log(
-        `[${progress}] Screenshot of '${shotItem.id}' taken and saved to '${shotItem.filePath}' in ${elapsedTime}s`,
+      logger(
+        `Screenshot of '${shotItem.id}' taken and saved to '${shotItem.filePath}' in ${elapsedTime}s`,
       );
     },
   );

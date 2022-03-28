@@ -3,9 +3,11 @@ import { log } from '../utils';
 
 export const waitForNetworkRequests = ({
   page,
+  logger,
   timeout = 30_000,
 }: {
   page: Page;
+  logger: typeof log;
   timeout?: number;
 }) =>
   new Promise((resolve, reject) => {
@@ -13,6 +15,9 @@ export const waitForNetworkRequests = ({
     let requests = new Set<Request>();
 
     const timeoutId = setTimeout(() => {
+      const pendingUrls = [...requests].map((request) => request.url());
+      logger('Pending requests:', pendingUrls);
+
       cleanup();
       reject(new Error('Timeout'));
     }, timeout);
@@ -20,13 +25,13 @@ export const waitForNetworkRequests = ({
     const onRequest = (request: Request) => {
       requestCounter++;
       requests.add(request);
-      log('+ ' + request.url());
+      logger(`+ ${request.url()}`);
     };
 
     const onRequestFinished = (request: Request) => {
       requestCounter--;
       requests.delete(request);
-      log('- ' + request.url());
+      logger(`- ${request.url()}`);
 
       if (requestCounter === 0) {
         cleanup();
