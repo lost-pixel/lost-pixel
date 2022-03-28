@@ -14,7 +14,7 @@ const takeScreenShot = async (browser: Browser, shotItem: ShotItem) => {
   await page.goto(shotItem.url);
 
   try {
-    await page.waitForLoadState('networkidle', {
+    await page.waitForLoadState('load', {
       timeout: 30_000,
     });
   } catch (e) {
