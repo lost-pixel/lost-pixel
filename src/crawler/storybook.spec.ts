@@ -56,7 +56,7 @@ describe(collectStories, () => {
 
   it('should fail when using invalid path to StoryBook', () => {
     expect(() => collectStories('this/path/does/not/exist')).rejects.toThrow(
-      'Invalid url',
+      'NS_ERROR_FILE_NOT_FOUND',
     );
   });
 

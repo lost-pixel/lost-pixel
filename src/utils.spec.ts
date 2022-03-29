@@ -1,12 +1,10 @@
 import { join } from 'path';
+import { getChanges, extendFileName, prepareComparisonList } from './utils';
 import {
-  getChanges,
-  extendFileName,
-  prepareComparisonList,
   imagePathCurrent,
   imagePathBaseline,
   imagePathDifference,
-} from './utils';
+} from './constants';
 
 process.env.LOST_PIXEL_PROJECT_ID = 'lorem-ipsum';
 process.env.CI_BUILD_ID = '456';

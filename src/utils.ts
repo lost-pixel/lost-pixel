@@ -2,31 +2,12 @@ import { existsSync, mkdirSync, readdirSync, writeFileSync } from 'fs';
 import { UploadFile, WebhookEvent } from './upload';
 import path, { normalize, join } from 'path';
 import {
-  shotsBaselinePath,
-  shotsCurrentPath,
-  shotsDifferencePath,
-  shotsPath,
-} from './constants';
-
-export const imagePathBase = process.env.IMAGE_PATH_BASE || '';
-
-export const relativeImagePathBaseline =
-  process.env.IMAGE_PATH_BASELINE || '.lostpixel/baseline/';
-
-export const imagePathBaseline = join(imagePathBase, relativeImagePathBaseline);
-
-export const relativeImagePathCurrent =
-  process.env.IMAGE_PATH_CURRENT || '.lostpixel/current/';
-
-export const imagePathCurrent = join(imagePathBase, relativeImagePathCurrent);
-
-export const relativeImagePathDifference =
-  process.env.IMAGE_PATH_DIFFERENCE || '.lostpixel/difference/';
-
-export const imagePathDifference = join(
   imagePathBase,
-  relativeImagePathDifference,
-);
+  imagePathBaseline,
+  imagePathCurrent,
+  imagePathDifference,
+  relativeImagePathBaseline,
+} from './constants';
 
 export const log = console.log;
 
@@ -248,7 +229,7 @@ export const getEventData = (path: string): WebhookEvent | undefined => {
 };
 
 export const createShotsFolders = () => {
-  const paths = [shotsBaselinePath, shotsCurrentPath, shotsDifferencePath];
+  const paths = [imagePathBaseline, imagePathCurrent, imagePathDifference];
 
   paths.forEach((path) => {
     if (!existsSync(path)) {
@@ -256,7 +237,7 @@ export const createShotsFolders = () => {
     }
   });
 
-  const ignoreFile = path.join(shotsPath, '.gitignore');
+  const ignoreFile = path.join(imagePathBase, '.gitignore');
 
   if (!existsSync(ignoreFile)) {
     writeFileSync(ignoreFile, 'current\ndifference\n');

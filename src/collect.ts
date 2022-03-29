@@ -3,12 +3,14 @@ import {
   getChanges,
   getEventData,
   getImageList,
-  imagePathCurrent,
-  imagePathDifference,
-  imagePathBaseline,
   log,
   prepareComparisonList,
 } from './utils';
+import {
+  imagePathCurrent,
+  imagePathDifference,
+  imagePathBaseline,
+} from './constants';
 
 export const collect = async () => {
   log('Collecting files');
