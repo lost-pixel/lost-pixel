@@ -265,3 +265,6 @@ export const createShotsFolders = () => {
     writeFileSync(ignoreFile, 'current\ndifference\n');
   }
 };
+
+export const sleep = (ms: number) =>
+  new Promise((resolve) => setTimeout(resolve, ms));

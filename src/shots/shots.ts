@@ -1,6 +1,6 @@
 import { Browser, firefox } from 'playwright';
 import { mapLimit } from 'async';
-import { log } from '../utils';
+import { log, sleep } from '../utils';
 import { shotConcurrency } from '../constants';
 import { waitForNetworkRequests } from './utils';
 
@@ -42,6 +42,8 @@ const takeScreenShot = async ({
   } catch (e) {
     logger(`Timeout while waiting for all network requests: ${shotItem.url}`);
   }
+
+  await sleep(1_000);
 
   await page.screenshot({
     path: shotItem.filePath,
