@@ -10,27 +10,7 @@ import {
   prepareComparisonList,
 } from './utils';
 
-const requiredEnvVars = [
-  'LOST_PIXEL_PROJECT_ID',
-  'CI_BUILD_ID',
-  'CI_BUILD_NUMBER',
-  'S3_END_POINT',
-  'S3_ACCESS_KEY',
-  'S3_SECRET_KEY',
-  'S3_BUCKET_NAME',
-  'REPOSITORY',
-  'COMMIT_REF',
-  'COMMIT_REF_NAME',
-  'COMMIT_HASH',
-];
-
-requiredEnvVars.forEach((envVar) => {
-  if (!process.env[envVar]) {
-    throw new Error(`Missing required env var: ${envVar}`);
-  }
-});
-
-const run = async () => {
+export const collect = async () => {
   log('Collecting files');
 
   const baseline = getImageList(imagePathBaseline);
@@ -38,9 +18,11 @@ const run = async () => {
   const difference = getImageList(imagePathDifference);
 
   if (baseline === null && current === null) {
-    throw new Error(
-      'No baseline or current images found. Check paths configuration.',
+    log(
+      'Error: No baseline or current images found. Check paths configuration.',
     );
+
+    process.exit(1);
   }
 
   log(`Found ${baseline?.length ?? 0} baseline images`);
@@ -95,5 +77,3 @@ const run = async () => {
     process.exit(1);
   }
 };
-
-run();

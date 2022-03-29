@@ -2,6 +2,7 @@ import path from 'path';
 import { firefox } from 'playwright';
 import { shotsCurrentPath } from '../constants';
 import { ShotItem } from '../shots/shots';
+import { log } from '../utils';
 
 export type Story = {
   id: string;
@@ -75,7 +76,8 @@ export const collectStories = async (url: string) => {
 
             res({ stories });
           } else {
-            throw new Error('Stories not found');
+            log('Error: Stories not found');
+            process.exit(1);
           }
         };
 

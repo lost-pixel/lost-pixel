@@ -88,9 +88,11 @@ export const sendToAPI = async ({
   );
 
   if (response.status !== 200) {
-    throw new Error(
-      `Failed to send to API. Status: ${response.status} ${response.statusText}`,
+    log(
+      `Error: Failed to send to API. Status: ${response.status} ${response.statusText}`,
     );
+
+    process.exit(1);
   }
 
   log('Successfully sent to API');
