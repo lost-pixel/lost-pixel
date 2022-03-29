@@ -5,7 +5,7 @@ import {
   getImageList,
   imagePathCurrent,
   imagePathDifference,
-  imagePathReference,
+  imagePathBaseline,
   log,
   prepareComparisonList,
 } from './utils';
@@ -33,22 +33,22 @@ requiredEnvVars.forEach((envVar) => {
 const run = async () => {
   log('Collecting files');
 
-  const reference = getImageList(imagePathReference);
+  const baseline = getImageList(imagePathBaseline);
   const current = getImageList(imagePathCurrent);
   const difference = getImageList(imagePathDifference);
 
-  if (reference === null && current === null) {
+  if (baseline === null && current === null) {
     throw new Error(
-      'No reference or current images found. Check paths configuration.',
+      'No baseline or current images found. Check paths configuration.',
     );
   }
 
-  log(`Found ${reference?.length ?? 0} reference images`);
+  log(`Found ${baseline?.length ?? 0} baseline images`);
   log(`Found ${current?.length ?? 0} current images`);
   log(`Found ${difference?.length ?? 0} difference images`);
 
   const files = {
-    reference: reference || [],
+    baseline: baseline || [],
     current: current || [],
     difference: difference || [],
   };

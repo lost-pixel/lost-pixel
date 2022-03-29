@@ -10,13 +10,10 @@ import {
 
 export const imagePathBase = process.env.IMAGE_PATH_BASE || '';
 
-export const relativeImagePathReference =
-  process.env.IMAGE_PATH_REFERENCE || '.lostpixel/reference/';
+export const relativeImagePathBaseline =
+  process.env.IMAGE_PATH_BASELINE || '.lostpixel/baseline/';
 
-export const imagePathReference = join(
-  imagePathBase,
-  relativeImagePathReference,
-);
+export const imagePathBaseline = join(imagePathBase, relativeImagePathBaseline);
 
 export const relativeImagePathCurrent =
   process.env.IMAGE_PATH_CURRENT || '.lostpixel/current/';
@@ -34,7 +31,7 @@ export const imagePathDifference = join(
 export const log = console.log;
 
 export type Files = {
-  reference: string[];
+  baseline: string[];
   current: string[];
   difference: string[];
 };
@@ -48,11 +45,11 @@ export type Changes = {
 export const getChanges = (files: Files): Changes => {
   return {
     difference: files.difference.sort(),
-    deletion: files.reference
+    deletion: files.baseline
       .filter((file) => !files.current.includes(file))
       .sort(),
     addition: files.current
-      .filter((file) => !files.reference.includes(file))
+      .filter((file) => !files.baseline.includes(file))
       .sort(),
   };
 };
@@ -140,7 +137,7 @@ export const prepareComparisonList = ({
     comparisonList.push({
       type,
       afterImageUrl: [baseUrl, afterFile].join('/'),
-      path: join(relativeImagePathReference, fileName),
+      path: join(relativeImagePathBaseline, fileName),
     });
 
     uploadList.push(
@@ -163,13 +160,13 @@ export const prepareComparisonList = ({
     comparisonList.push({
       type,
       beforeImageUrl: [baseUrl, beforeFile].join('/'),
-      path: join(relativeImagePathReference, fileName),
+      path: join(relativeImagePathBaseline, fileName),
     });
 
     uploadList.push(
       createUploadItem({
         uploadFileName: beforeFile,
-        path: imagePathReference,
+        path: imagePathBaseline,
         fileName,
         type,
       }),
@@ -196,13 +193,13 @@ export const prepareComparisonList = ({
       beforeImageUrl: [baseUrl, beforeFile].join('/'),
       afterImageUrl: [baseUrl, afterFile].join('/'),
       differenceImageUrl: [baseUrl, differenceFile].join('/'),
-      path: join(relativeImagePathReference, fileName),
+      path: join(relativeImagePathBaseline, fileName),
     });
 
     uploadList.push(
       createUploadItem({
         uploadFileName: beforeFile,
-        path: imagePathReference,
+        path: imagePathBaseline,
         fileName,
         type,
       }),
