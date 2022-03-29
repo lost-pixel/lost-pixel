@@ -1,10 +1,14 @@
+import { imagePathCurrent, imagePathDifference } from './constants';
 import { collectStories, generateShotItems } from './crawler/storybook';
 import { takeScreenShots } from './shots/shots';
-import { log } from './utils';
+import { log, removeFilesInFolder } from './utils';
 
 export const createShots = async () => {
   const storyBookUrl = process.env.STORYBOOK_PATH || './storybook-static';
   const collection = await collectStories(storyBookUrl);
+
+  removeFilesInFolder(imagePathCurrent);
+  removeFilesInFolder(imagePathDifference);
 
   if (!collection.stories) {
     log('Error: Stories not found');

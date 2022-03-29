@@ -1,4 +1,10 @@
-import { existsSync, mkdirSync, readdirSync, writeFileSync } from 'fs';
+import {
+  existsSync,
+  mkdirSync,
+  readdirSync,
+  unlinkSync,
+  writeFileSync,
+} from 'fs';
 import { UploadFile, WebhookEvent } from './upload';
 import path, { normalize, join } from 'path';
 import {
@@ -246,3 +252,13 @@ export const createShotsFolders = () => {
 
 export const sleep = (ms: number) =>
   new Promise((resolve) => setTimeout(resolve, ms));
+
+export const removeFilesInFolder = (path: string) => {
+  const files = readdirSync(path);
+  log(`Removing ${files.length} files from ${path}`);
+
+  files.forEach((file) => {
+    const filePath = join(path, file);
+    unlinkSync(filePath);
+  });
+};
