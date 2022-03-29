@@ -46,10 +46,9 @@ export const waitForNetworkRequests = ({
     }, waitForFirstRequest);
 
     const onRequest = (request: Request) => {
-      clearTimeout(firstRequestTimeoutId);
-      clearTimeout(lastRequestTimeoutId);
-
       if (!checkIgnoreUrls(request.url(), ignoreUrls)) {
+        clearTimeout(firstRequestTimeoutId);
+        clearTimeout(lastRequestTimeoutId);
         requestCounter++;
         requests.add(request);
         logger(`+ ${request.url()}`);
