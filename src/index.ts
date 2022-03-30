@@ -1,3 +1,4 @@
+import { checkDifferences } from './checkDifferences';
 import { collect } from './collect';
 import { createShots } from './createShots';
 import { log } from './utils';
@@ -25,7 +26,9 @@ requiredEnvVars.forEach((envVar) => {
 });
 
 (async () => {
-  await createShots();
+  const shotItems = await createShots();
+
+  await checkDifferences(shotItems);
 
   await collect();
 })();
