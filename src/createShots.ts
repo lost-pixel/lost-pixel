@@ -23,4 +23,6 @@ export const createShots = async () => {
   await takeScreenShots(shotItems);
 
   log('Screenshots done!');
+
+  return shotItems;
 };

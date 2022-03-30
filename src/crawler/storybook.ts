@@ -1,6 +1,10 @@
 import path from 'path';
 import { firefox } from 'playwright';
-import { imagePathCurrent } from '../constants';
+import {
+  imagePathBaseline,
+  imagePathCurrent,
+  imagePathDifference,
+} from '../constants';
 import { ShotItem } from '../shots/shots';
 import { log } from '../utils';
 
@@ -90,13 +94,6 @@ export const collectStories = async (url: string) => {
   return result;
 };
 
-const generateFilePath = (story: Story) => {
-  const fileName = `${story.id}.png`;
-  const filePath = path.join(imagePathCurrent, fileName);
-
-  return filePath;
-};
-
 export const generateShotItems = (
   baseUrl: string,
   stories: Story[],
@@ -106,12 +103,14 @@ export const generateShotItems = (
   const shotItems = stories
     .filter((story) => story.parameters?.lostpixel?.disable !== true)
     .map((story) => {
-      const filePath = generateFilePath(story);
+      const fileName = `${story.id}.png`;
 
       return {
         id: story.id,
         url: `${iframeUrl}?id=${story.id}&viewMode=story`,
-        filePath,
+        filePathBaseline: path.join(imagePathBaseline, fileName),
+        filePathCurrent: path.join(imagePathCurrent, fileName),
+        filePathDifference: path.join(imagePathDifference, fileName),
       };
     });
 

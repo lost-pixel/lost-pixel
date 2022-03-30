@@ -7,7 +7,9 @@ import { waitForNetworkRequests } from './utils';
 export type ShotItem = {
   id: string;
   url: string;
-  filePath: string;
+  filePathBaseline: string;
+  filePathCurrent: string;
+  filePathDifference: string;
 };
 
 const takeScreenShot = async ({
@@ -46,7 +48,7 @@ const takeScreenShot = async ({
   await sleep(1_000);
 
   await page.screenshot({
-    path: shotItem.filePath,
+    path: shotItem.filePathCurrent,
     fullPage: true,
     animations: 'disabled',
   });
@@ -74,7 +76,7 @@ export const takeScreenShots = async (shotItems: ShotItem[]) => {
       const elapsedTime = Number((endTime - startTime) / 1000).toFixed(3);
 
       logger(
-        `Screenshot of '${shotItem.id}' taken and saved to '${shotItem.filePath}' in ${elapsedTime}s`,
+        `Screenshot of '${shotItem.id}' taken and saved to '${shotItem.filePathCurrent}' in ${elapsedTime}s`,
       );
     },
   );
