@@ -1,33 +1,47 @@
+import { mapLimit } from 'async';
 import { existsSync } from 'fs';
 import { compareImages } from './compare/compare';
+import { shotConcurrency } from './constants';
 import { ShotItem } from './shots/shots';
 import { log } from './utils';
 
 export const checkDifferences = async (shotItems: ShotItem[]) => {
   log(`Comparing ${shotItems.length} screenshots`);
 
-  shotItems.forEach(async (shotItem) => {
-    log(`Comparing '${shotItem.id}'`);
+  const total = shotItems.length;
 
-    const currentImageExists = existsSync(shotItem.filePathCurrent);
+  await mapLimit<[number, ShotItem], void>(
+    shotItems.entries(),
+    shotConcurrency,
+    async (item: [number, ShotItem]) => {
+      const [index, shotItem] = item;
+      const logger = (message: string) =>
+        log(`[${index + 1}/${total}] ${message}`);
 
-    if (!currentImageExists) {
-      log(`Error: Missing current image: ${shotItem.filePathCurrent}`);
-      process.exit(1);
-    }
+      logger(`Comparing '${shotItem.id}'`);
 
-    const pixelDifference = await compareImages(
-      shotItem.filePathBaseline,
-      shotItem.filePathCurrent,
-      shotItem.filePathDifference,
-    );
+      const currentImageExists = existsSync(shotItem.filePathCurrent);
 
-    if (pixelDifference > 0) {
-      log(
-        `Difference of ${pixelDifference} pixels found. Difference image saved to: ${shotItem.filePathDifference}`,
+      if (!currentImageExists) {
+        logger(`Error: Missing current image: ${shotItem.filePathCurrent}`);
+        process.exit(1);
+      }
+
+      const pixelDifference = await compareImages(
+        shotItem.filePathBaseline,
+        shotItem.filePathCurrent,
+        shotItem.filePathDifference,
       );
-    } else {
-      log(`No difference found.`);
-    }
-  });
+
+      if (pixelDifference > 0) {
+        logger(
+          `Difference of ${pixelDifference} pixels found. Difference image saved to: ${shotItem.filePathDifference}`,
+        );
+      } else {
+        logger(`No difference found.`);
+      }
+    },
+  );
+
+  log('Comparison done!');
 };
