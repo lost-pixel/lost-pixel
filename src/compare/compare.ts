@@ -6,7 +6,7 @@ import { resizeImage } from './utils';
 export const compareImages = async (
   baselineShotPath: string,
   currentShotPath: string,
-  differenceShotPath: string,
+  differenceShotPath?: string,
 ): Promise<number> => {
   const baselineImageBuffer = readFileSync(baselineShotPath);
   const currentImageBuffer = readFileSync(currentShotPath);
@@ -45,7 +45,7 @@ export const compareImages = async (
     { threshold: 0 },
   );
 
-  if (pixelDifference > 0) {
+  if (pixelDifference > 0 && differenceShotPath) {
     writeFileSync(differenceShotPath, PNG.sync.write(differenceImage));
   }
 
