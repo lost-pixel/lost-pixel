@@ -1,7 +1,5 @@
 FROM node:16-alpine
 
-RUN apk add chromium
-
 WORKDIR /app
 
 COPY package.json .
@@ -13,6 +11,7 @@ COPY entrypoint.sh /entrypoint.sh
 
 RUN npm install
 RUN npm run build
+RUN npx playwright install firefox
 
 ENV NODE_ENV production
 
