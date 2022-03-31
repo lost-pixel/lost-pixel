@@ -9,7 +9,6 @@
     "build": "rimraf dist && tsc",
     "build-example-storybook": "rimraf examples/storybook-demo/storybook-static && cd examples/storybook-demo && npm run build-storybook",
     "dev": "ts-node -r ./loadEnv src/",
-    "try": "ts-node -r ./loadEnv src/try.ts",
     "start": "NODE_ENV=production node dist/index.js"
   },
   "repository": {
