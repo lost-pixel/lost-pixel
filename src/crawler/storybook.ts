@@ -50,18 +50,24 @@ export const getStoryBookUrl = (url: string) => {
 export const getIframeUrl = (url: string) =>
   url.endsWith('/') ? `${url}iframe.html` : `${url}/iframe.html`;
 
-export const collectStories = async (url: string) => {
+export const collectStories = async (
+  url: string,
+  isIframeUrl: boolean = false,
+) => {
   const browser = await firefox.launch();
   const page = await browser.newPage();
-  const iframeUrl = getIframeUrl(getStoryBookUrl(url));
+  const iframeUrl = isIframeUrl
+    ? getStoryBookUrl(url)
+    : getIframeUrl(getStoryBookUrl(url));
 
   try {
     await page.goto(iframeUrl);
 
     await page.waitForFunction(
       () => (window as WindowObject).__STORYBOOK_CLIENT_API__,
+      null,
       {
-        timeout: 30_000,
+        timeout: Number(process.env.FETCH_STORIES_TIMEOUT) || 30_000,
       },
     );
 
@@ -80,9 +86,6 @@ export const collectStories = async (url: string) => {
               }));
 
               res({ stories });
-            } else {
-              log('Error: Stories not found');
-              process.exit(1);
             }
           };
 
