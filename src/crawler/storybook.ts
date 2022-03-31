@@ -55,43 +55,48 @@ export const collectStories = async (url: string) => {
   const page = await browser.newPage();
   const iframeUrl = getIframeUrl(getStoryBookUrl(url));
 
-  await page.goto(iframeUrl);
+  try {
+    await page.goto(iframeUrl);
 
-  await page.waitForFunction(
-    () => (window as WindowObject).__STORYBOOK_CLIENT_API__,
-    {
-      timeout: 30_000,
-    },
-  );
+    await page.waitForFunction(
+      () => (window as WindowObject).__STORYBOOK_CLIENT_API__,
+      {
+        timeout: 30_000,
+      },
+    );
 
-  const result = await page.evaluate(
-    () =>
-      new Promise<CrawlerResult>((res) => {
-        const fetchStories = () => {
-          const { __STORYBOOK_CLIENT_API__: api } = window as WindowObject;
+    const result = await page.evaluate(
+      () =>
+        new Promise<CrawlerResult>((res) => {
+          const fetchStories = () => {
+            const { __STORYBOOK_CLIENT_API__: api } = window as WindowObject;
 
-          if (api.raw) {
-            const stories: Story[] = api.raw().map((item) => ({
-              id: item.id,
-              kind: item.kind,
-              story: item.story,
-              parameters: item.parameters,
-            }));
+            if (api.raw) {
+              const stories: Story[] = api.raw().map((item) => ({
+                id: item.id,
+                kind: item.kind,
+                story: item.story,
+                parameters: item.parameters,
+              }));
 
-            res({ stories });
-          } else {
-            log('Error: Stories not found');
-            process.exit(1);
-          }
-        };
+              res({ stories });
+            } else {
+              log('Error: Stories not found');
+              process.exit(1);
+            }
+          };
 
-        fetchStories();
-      }),
-  );
+          fetchStories();
+        }),
+    );
 
-  await browser.close();
+    await browser.close();
 
-  return result;
+    return result;
+  } catch (error) {
+    await browser.close();
+    throw error;
+  }
 };
 
 export const generateShotItems = (
