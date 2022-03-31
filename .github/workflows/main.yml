@@ -21,6 +21,9 @@ jobs:
           npm install
           npm -g install jest
 
+      - name: Build Example Storybook
+        run: npm run build-example-storybook
+
       - name: Test
         run: npm run test
 
