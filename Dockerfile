@@ -1,4 +1,4 @@
-FROM node:16-alpine
+FROM mcr.microsoft.com/playwright:v1.20.0-focal
 
 WORKDIR /app
 
@@ -11,7 +11,6 @@ COPY entrypoint.sh /entrypoint.sh
 
 RUN npm install
 RUN npm run build
-RUN npx playwright install firefox
 
 ENV NODE_ENV production
 
