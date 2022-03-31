@@ -1,4 +1,11 @@
+import { existsSync, mkdirSync } from 'fs';
 import { compareImages } from './compare';
+
+beforeAll(() => {
+  if (!existsSync('fixtures/test-results')) {
+    mkdirSync('fixtures/test-results', { recursive: true });
+  }
+});
 
 describe(compareImages, () => {
   it('should recognize identic images', async () => {

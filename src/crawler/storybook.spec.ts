@@ -77,5 +77,5 @@ describe(collectStories, () => {
     await expect(() =>
       collectStories(`${storyBookUrl}/index.html`, true),
     ).rejects.toThrow('Timeout 2000ms exceeded');
-  });
+  }, 10_000);
 });
