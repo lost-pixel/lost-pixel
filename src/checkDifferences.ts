@@ -20,6 +20,12 @@ export const checkDifferences = async (shotItems: ShotItem[]) => {
 
       logger(`Comparing '${shotItem.id}'`);
 
+      const baselineImageExists = existsSync(shotItem.filePathBaseline);
+
+      if (!baselineImageExists) {
+        logger('Baseline image missing. Will be treaded as addition.');
+        return;
+      }
       const currentImageExists = existsSync(shotItem.filePathCurrent);
 
       if (!currentImageExists) {
