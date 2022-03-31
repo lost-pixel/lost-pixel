@@ -7,7 +7,7 @@
     "test": "jest --detectOpenHandles",
     "test:watch": "jest --watch --detectOpenHandles",
     "build": "rimraf dist && tsc",
-    "build-example-storybook": "rimraf examples/storybook-demo/storybook-static && cd examples/storybook-demo && npm run build-storybook",
+    "build-example-storybook": "rimraf examples/storybook-demo/storybook-static && cd examples/storybook-demo && npm install && npm run build-storybook",
     "dev": "ts-node -r ./loadEnv src/",
     "start": "NODE_ENV=production node dist/index.js"
   },
