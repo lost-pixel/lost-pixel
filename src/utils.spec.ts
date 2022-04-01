@@ -127,16 +127,19 @@ describe(prepareComparisonList, () => {
           afterImageUrl: 'https://s3/c.after.png',
           type: 'ADDITION',
           path: '.lostpixel/baseline/c.png',
+          name: 'c.png',
         },
         {
           afterImageUrl: 'https://s3/d.after.png',
           type: 'ADDITION',
           path: '.lostpixel/baseline/d.png',
+          name: 'd.png',
         },
         {
           beforeImageUrl: 'https://s3/b.before.png',
           type: 'DELETION',
           path: '.lostpixel/baseline/b.png',
+          name: 'b.png',
         },
         {
           afterImageUrl: 'https://s3/a.after.png',
@@ -144,6 +147,7 @@ describe(prepareComparisonList, () => {
           differenceImageUrl: 'https://s3/a.difference.png',
           type: 'DIFFERENCE',
           path: '.lostpixel/baseline/a.png',
+          name: 'a.png',
         },
       ],
       [
