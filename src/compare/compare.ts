@@ -34,6 +34,7 @@ export const compareImages = async (
     baselineImage = resizeImage(baselineImage, maxWidth, maxHeight);
     currentImage = resizeImage(currentImage, maxWidth, maxHeight);
   }
+
   const differenceImage = new PNG({ width: maxWidth, height: maxHeight });
 
   const pixelDifference = pixelmatch(
