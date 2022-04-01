@@ -1,7 +1,7 @@
 import { checkDifferences } from './checkDifferences';
 import { collect } from './collect';
 import { createShots } from './createShots';
-import { log } from './utils';
+import { createShotsFolders, log } from './utils';
 
 const requiredEnvVars = [
   'LOST_PIXEL_PROJECT_ID',
@@ -26,9 +26,8 @@ requiredEnvVars.forEach((envVar) => {
 });
 
 (async () => {
+  createShotsFolders();
   const shotItems = await createShots();
-
   await checkDifferences(shotItems);
-
   await collect();
 })();
