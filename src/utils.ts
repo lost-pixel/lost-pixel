@@ -100,6 +100,7 @@ export type Comparison = {
   differenceImageUrl?: string;
   type: ComparisonType;
   path: string;
+  name: string;
 };
 
 type PrepareComparisonList = {
@@ -125,6 +126,7 @@ export const prepareComparisonList = ({
       type,
       afterImageUrl: [baseUrl, afterFile].join('/'),
       path: join(relativeImagePathBaseline, fileName),
+      name: fileName,
     });
 
     uploadList.push(
@@ -148,6 +150,7 @@ export const prepareComparisonList = ({
       type,
       beforeImageUrl: [baseUrl, beforeFile].join('/'),
       path: join(relativeImagePathBaseline, fileName),
+      name: fileName,
     });
 
     uploadList.push(
@@ -181,6 +184,7 @@ export const prepareComparisonList = ({
       afterImageUrl: [baseUrl, afterFile].join('/'),
       differenceImageUrl: [baseUrl, differenceFile].join('/'),
       path: join(relativeImagePathBaseline, fileName),
+      name: fileName,
     });
 
     uploadList.push(
