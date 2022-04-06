@@ -59,12 +59,22 @@ const defaultConfig: BaseConfig = {
 export let config: FullConfig;
 
 const checkConfig = () => {
+  const missingProps: typeof requiredConfigProps = [];
+
   requiredConfigProps.forEach((prop) => {
     if (!config[prop]) {
-      log(`Error: Missing required configuration property: ${prop}`);
-      process.exit(1);
+      missingProps.push(prop);
     }
   });
+
+  if (missingProps.length > 0) {
+    log(
+      `Error: Missing required configuration properties: ${missingProps.join(
+        ', ',
+      )}`,
+    );
+    process.exit(1);
+  }
 };
 
 const loadProjectConfig = (): CustomProjectConfig => {
