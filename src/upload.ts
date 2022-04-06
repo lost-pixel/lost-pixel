@@ -6,6 +6,7 @@ import {
   CheckSuiteRequestedEvent,
   CheckRunRerequestedEvent,
 } from '@octokit/webhooks-types';
+import { config } from './config';
 
 export type WebhookEvent =
   | PullRequestEvent
@@ -22,15 +23,13 @@ let minio: MinioClient;
 
 const setupMinio = () =>
   new MinioClient({
-    endPoint: process.env.S3_END_POINT || '--unknown--',
-    region: process.env.S3_REGION || undefined,
-    accessKey: process.env.S3_ACCESS_KEY || '--unknown--',
-    secretKey: process.env.S3_SECRET_KEY || '--unknown--',
-    sessionToken: process.env.S3_SESSION_TOKEN || undefined,
-    port: process.env.S3_END_POINT_PORT
-      ? Number(process.env.S3_END_POINT_PORT)
-      : 443,
-    useSSL: process.env.S3_END_POINT_SSL === '0' ? false : true,
+    endPoint: config.s3.endPoint,
+    region: config.s3.region || undefined,
+    accessKey: config.s3.accessKey,
+    secretKey: config.s3.secretKey,
+    sessionToken: config.s3.sessionToken || undefined,
+    port: config.s3.port ? Number(config.s3.port) : 443,
+    useSSL: config.s3.ssl,
   });
 
 export type UploadFile = {
@@ -52,7 +51,7 @@ export const uploadFile = async ({
 
   return new Promise((resolve, reject) => {
     minio.fPutObject(
-      process.env.S3_BUCKET_NAME || '--unknown--',
+      config.s3.bucketName,
       uploadPath,
       filePath,
       metaData,
@@ -76,23 +75,20 @@ export const sendToAPI = async ({
 }) => {
   log('Sending to API');
 
-  const [repoOwner, repoName] = process.env.REPOSITORY!.split('/');
+  const [repoOwner, repoName] = config.repository.split('/');
 
-  const response = await apiClient.post(
-    process.env.LOST_PIXEL_URL || 'https://app.lost-pixel.com/api/callback',
-    {
-      projectId: process.env.LOST_PIXEL_PROJECT_ID,
-      buildId: process.env.CI_BUILD_ID,
-      buildNumber: process.env.CI_BUILD_NUMBER,
-      branchRef: process.env.COMMIT_REF,
-      branchName: process.env.COMMIT_REF_NAME,
-      repoOwner,
-      repoName,
-      commit: process.env.COMMIT_HASH,
-      buildMeta: event,
-      comparisons,
-    },
-  );
+  const response = await apiClient.post(config.lostPixelUrl, {
+    projectId: config.lostPixelProjectId,
+    buildId: config.ciBuildId,
+    buildNumber: config.ciBuildNumber,
+    branchRef: config.commitRef,
+    branchName: config.commitRefName,
+    repoOwner,
+    repoName,
+    commit: config.commitHash,
+    buildMeta: event,
+    comparisons,
+  });
 
   if (response.status !== 200) {
     log(

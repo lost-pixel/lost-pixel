@@ -39,15 +39,15 @@ export const collect = async () => {
     log(`Preparing comparison list`);
 
     const s3BaseUrl =
-      process.env.S3_BASE_URL ||
-      `https://${process.env.S3_BUCKET_NAME}.${process.env.S3_END_POINT}`;
+      config.s3.baseUrl ||
+      `https://${config.s3.bucketName}.${config.s3.endPoint}`;
 
     const [comparisons, uploadList] = prepareComparisonList({
       changes,
       baseUrl: [
         s3BaseUrl,
-        process.env.LOST_PIXEL_PROJECT_ID,
-        process.env.CI_BUILD_ID,
+        config.lostPixelProjectId,
+        config.ciBuildNumber,
       ].join('/'),
     });
 
