@@ -129,6 +129,7 @@ export const generateShotItems = (
           config.imagePathDifference,
           fileNameWithExt,
         ),
+        browserConfig: config.configureBrowser?.(story),
       };
     });
 

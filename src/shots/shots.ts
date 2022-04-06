@@ -1,4 +1,4 @@
-import { Browser, firefox } from 'playwright';
+import { Browser, BrowserContextOptions, firefox } from 'playwright';
 import { mapLimit } from 'async';
 import { log, sleep } from '../utils';
 import { waitForNetworkRequests } from './utils';
@@ -10,6 +10,7 @@ export type ShotItem = {
   filePathBaseline: string;
   filePathCurrent: string;
   filePathDifference: string;
+  browserConfig?: BrowserContextOptions;
 };
 
 const takeScreenShot = async ({
@@ -21,7 +22,7 @@ const takeScreenShot = async ({
   shotItem: ShotItem;
   logger: typeof log;
 }) => {
-  const context = await browser.newContext();
+  const context = await browser.newContext(shotItem.browserConfig);
   const page = await context.newPage();
 
   await page.goto(shotItem.url);

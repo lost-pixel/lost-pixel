@@ -2,6 +2,7 @@ import { existsSync } from 'fs';
 import { log } from './utils';
 import get from 'lodash.get';
 import path from 'path';
+import { BrowserContextOptions } from 'playwright';
 
 type BaseConfig = {
   lostPixelUrl: string;
@@ -47,6 +48,12 @@ export type ProjectConfig = {
     story?: string;
     parameters?: Record<string, unknown>;
   }) => string;
+  configureBrowser?: (input: {
+    id?: string;
+    kind?: string;
+    story?: string;
+    parameters?: Record<string, unknown>;
+  }) => BrowserContextOptions;
 };
 
 const requiredConfigProps: Array<keyof FullConfig> = [
