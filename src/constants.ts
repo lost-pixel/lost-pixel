@@ -1,4 +1,6 @@
-import { join } from 'path';
+import path, { join } from 'path';
+
+export const configFileNameBase = path.join(process.cwd(), 'lostpixel.config');
 
 export const shotConcurrency = Number(process.env.SHOT_CONCURRENCY) || 5;
 

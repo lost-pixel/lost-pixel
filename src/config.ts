@@ -1,3 +1,6 @@
+import { existsSync } from 'fs';
+import { configFileNameBase } from './constants';
+
 type FullConfig = {
   lostPixelUrl: string;
   lostPixelProjectId: string;
@@ -7,16 +10,16 @@ type FullConfig = {
   commitRef: string;
   commitRefName: string;
   commitHash: string;
-  storybookPath: string;
+  storybookUrl: string;
   s3EndPoint: string;
-  s3EndPointPort: number;
+  s3EndPointPort?: number;
   s3EndPointSsl: boolean;
   s3Region: string;
   s3AccessKey: string;
   s3SecretKey: string;
-  s3SessionToken: string;
+  s3SessionToken?: string;
   s3BucketName: string;
-  s3BaseUrl: string;
+  s3BaseUrl?: string;
   imagePathBaseline: string;
   imagePathCurrent: string;
   imagePathDifference: string;
@@ -45,3 +48,22 @@ const defaultConfig: FullConfig = {
   imagePathDifference: '.lostpixel/difference/',
 };
 
+export let config: FullConfig;
+
+const loadProjectConfig = (): ProjectConfig => {
+  if (existsSync(`${configFileNameBase}.js`)) {
+    const projectConfig = require(`${configFileNameBase}.js`);
+    return projectConfig;
+  }
+
+  throw new Error("Couldn't find project config file 'lostpixel.config.js'");
+};
+
+export const configure = () => {
+  const projectConfig = loadProjectConfig();
+
+  config = {
+    ...defaultConfig,
+    ...projectConfig,
+  };
+};
