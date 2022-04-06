@@ -11,6 +11,9 @@
     "noImplicitAny": true,
     "skipLibCheck": true,
     "outDir": "dist",
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noImplicitReturns": true,
   },
   "include": ["src/**/*"],
   "exclude": ["node_modules", "dist/**/*" , "**/*.spec.ts"]
