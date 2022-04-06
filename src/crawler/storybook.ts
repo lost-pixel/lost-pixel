@@ -16,6 +16,9 @@ export type Story = {
     lostpixel?: {
       disable?: boolean;
     };
+    storyshots?: {
+      disable?: boolean;
+    };
   };
 };
 
@@ -113,6 +116,7 @@ export const generateShotItems = (
 
   const shotItems = stories
     .filter((story) => story.parameters?.lostpixel?.disable !== true)
+    .filter((story) => story.parameters?.storyshots?.disable !== true)
     .map((story) => {
       const fileName = `${generateFilename(story)}.png`;
 
