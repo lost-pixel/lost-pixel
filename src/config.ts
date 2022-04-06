@@ -41,6 +41,12 @@ export type ProjectConfig = {
     baseUrl?: string;
   };
   eventFilePath?: string;
+  imageFilenameGenerator?: (input: {
+    id?: string;
+    kind?: string;
+    story?: string;
+    parameters?: Record<string, unknown>;
+  }) => string;
 };
 
 const requiredConfigProps: Array<keyof FullConfig> = [

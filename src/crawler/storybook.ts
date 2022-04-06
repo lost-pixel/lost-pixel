@@ -114,14 +114,21 @@ export const generateShotItems = (
     .filter((story) => story.parameters?.lostpixel?.disable !== true)
     .filter((story) => story.parameters?.storyshots?.disable !== true)
     .map((story) => {
-      const fileName = `${generateFilename(story)}.png`;
+      const fileName = config.imageFilenameGenerator
+        ? config.imageFilenameGenerator(story)
+        : generateFilename(story);
+
+      const fileNameWithExt = `${fileName}.png`;
 
       return {
         id: story.id,
         url: `${iframeUrl}?id=${story.id}&viewMode=story`,
-        filePathBaseline: path.join(config.imagePathBaseline, fileName),
-        filePathCurrent: path.join(config.imagePathCurrent, fileName),
-        filePathDifference: path.join(config.imagePathDifference, fileName),
+        filePathBaseline: path.join(config.imagePathBaseline, fileNameWithExt),
+        filePathCurrent: path.join(config.imagePathCurrent, fileNameWithExt),
+        filePathDifference: path.join(
+          config.imagePathDifference,
+          fileNameWithExt,
+        ),
       };
     });
 
