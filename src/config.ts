@@ -121,6 +121,7 @@ const loadProjectConfig = (): CustomProjectConfig => {
 
       return imported.default || imported.config;
     } catch (error) {
+      console.error(error);
       console.error(
         `Please install "ts-node" to use a TypeScript configuration file`,
       );
