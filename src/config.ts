@@ -21,3 +21,27 @@ type FullConfig = {
   imagePathCurrent: string;
   imagePathDifference: string;
 };
+
+type ProjectConfig = Pick<FullConfig, 'lostPixelProjectId'>;
+
+const defaultConfig: FullConfig = {
+  lostPixelUrl: 'https://app.lost-pixel.com/api/callback',
+  lostPixelProjectId: '--unknown--',
+  ciBuildId: '--unknown--',
+  ciBuildNumber: '--unknown--',
+  repository: '--unknown--',
+  commitRef: '--unknown--',
+  commitRefName: '--unknown--',
+  commitHash: '--unknown--',
+  storybookUrl: 'storybook-static',
+  s3EndPoint: '--unknown--',
+  s3EndPointSsl: true,
+  s3Region: '--unknown--',
+  s3AccessKey: '--unknown--',
+  s3SecretKey: '--unknown--',
+  s3BucketName: '--unknown--',
+  imagePathBaseline: '.lostpixel/baseline/',
+  imagePathCurrent: '.lostpixel/current/',
+  imagePathDifference: '.lostpixel/difference/',
+};
+
