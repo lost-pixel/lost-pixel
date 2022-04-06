@@ -18,15 +18,17 @@ export type ProjectConfig = {
   commitRef: string;
   commitRefName: string;
   commitHash: string;
-  s3EndPoint: string;
-  s3EndPointPort?: number;
-  s3EndPointSsl: boolean;
-  s3Region: string;
-  s3AccessKey: string;
-  s3SecretKey: string;
-  s3SessionToken?: string;
-  s3BucketName: string;
-  s3BaseUrl?: string;
+  s3: {
+    endPoint: string;
+    port?: number;
+    ssl: boolean;
+    region: string;
+    accessKey: string;
+    secretKey: string;
+    sessionToken?: string;
+    bucketName: string;
+    baseUrl?: string;
+  };
 };
 
 const requiredConfigProps: Array<keyof FullConfig> = [
@@ -37,12 +39,7 @@ const requiredConfigProps: Array<keyof FullConfig> = [
   'commitRef',
   'commitRefName',
   'commitHash',
-  's3EndPoint',
-  's3EndPointSsl',
-  's3Region',
-  's3AccessKey',
-  's3SecretKey',
-  's3BucketName',
+  's3',
 ];
 
 export type FullConfig = BaseConfig & ProjectConfig;
