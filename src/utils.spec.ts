@@ -1,10 +1,6 @@
 import { join } from 'path';
 import { getChanges, extendFileName, prepareComparisonList } from './utils';
-import {
-  imagePathCurrent,
-  imagePathBaseline,
-  imagePathDifference,
-} from './constants';
+import { config } from './config';
 
 process.env.LOST_PIXEL_PROJECT_ID = 'lorem-ipsum';
 process.env.CI_BUILD_ID = '456';
@@ -152,61 +148,61 @@ describe(prepareComparisonList, () => {
       ],
       [
         {
-          filePath: join(imagePathCurrent, 'c.png'),
+          filePath: join(config.imagePathCurrent, 'c.png'),
           metaData: {
             'content-type': 'image/png',
             'x-amz-acl': 'public-read',
-            original: join(imagePathCurrent, 'c.png'),
+            original: join(config.imagePathCurrent, 'c.png'),
             type: 'ADDITION',
           },
           uploadPath: 'lorem-ipsum/456/c.after.png',
         },
         {
-          filePath: join(imagePathCurrent, 'd.png'),
+          filePath: join(config.imagePathCurrent, 'd.png'),
           metaData: {
             'content-type': 'image/png',
             'x-amz-acl': 'public-read',
-            original: join(imagePathCurrent, 'd.png'),
+            original: join(config.imagePathCurrent, 'd.png'),
             type: 'ADDITION',
           },
           uploadPath: 'lorem-ipsum/456/d.after.png',
         },
         {
-          filePath: join(imagePathBaseline, 'b.png'),
+          filePath: join(config.imagePathBaseline, 'b.png'),
           metaData: {
             'content-type': 'image/png',
             'x-amz-acl': 'public-read',
-            original: join(imagePathBaseline, 'b.png'),
+            original: join(config.imagePathBaseline, 'b.png'),
             type: 'DELETION',
           },
           uploadPath: 'lorem-ipsum/456/b.before.png',
         },
         {
-          filePath: join(imagePathBaseline, 'a.png'),
+          filePath: join(config.imagePathBaseline, 'a.png'),
           metaData: {
             'content-type': 'image/png',
             'x-amz-acl': 'public-read',
-            original: join(imagePathBaseline, 'a.png'),
+            original: join(config.imagePathBaseline, 'a.png'),
             type: 'DIFFERENCE',
           },
           uploadPath: 'lorem-ipsum/456/a.before.png',
         },
         {
-          filePath: join(imagePathCurrent, 'a.png'),
+          filePath: join(config.imagePathCurrent, 'a.png'),
           metaData: {
             'content-type': 'image/png',
             'x-amz-acl': 'public-read',
-            original: join(imagePathCurrent, 'a.png'),
+            original: join(config.imagePathCurrent, 'a.png'),
             type: 'DIFFERENCE',
           },
           uploadPath: 'lorem-ipsum/456/a.after.png',
         },
         {
-          filePath: join(imagePathDifference, 'a.png'),
+          filePath: join(config.imagePathDifference, 'a.png'),
           metaData: {
             'content-type': 'image/png',
             'x-amz-acl': 'public-read',
-            original: join(imagePathDifference, 'a.png'),
+            original: join(config.imagePathDifference, 'a.png'),
             type: 'DIFFERENCE',
           },
           uploadPath: 'lorem-ipsum/456/a.difference.png',

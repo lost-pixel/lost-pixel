@@ -1,12 +1,8 @@
 import path from 'path';
 import { firefox } from 'playwright';
-import {
-  imagePathBaseline,
-  imagePathCurrent,
-  imagePathDifference,
-} from '../constants';
 import { ShotItem } from '../shots/shots';
 import kebabCase from 'lodash.kebabcase';
+import { config } from '../config';
 
 export type Story = {
   id: string;
@@ -123,9 +119,9 @@ export const generateShotItems = (
       return {
         id: story.id,
         url: `${iframeUrl}?id=${story.id}&viewMode=story`,
-        filePathBaseline: path.join(imagePathBaseline, fileName),
-        filePathCurrent: path.join(imagePathCurrent, fileName),
-        filePathDifference: path.join(imagePathDifference, fileName),
+        filePathBaseline: path.join(config.imagePathBaseline, fileName),
+        filePathCurrent: path.join(config.imagePathCurrent, fileName),
+        filePathDifference: path.join(config.imagePathDifference, fileName),
       };
     });
 

@@ -6,14 +6,8 @@ import {
   writeFileSync,
 } from 'fs';
 import { UploadFile, WebhookEvent } from './upload';
-import path, { normalize, join } from 'path';
+import { normalize, join } from 'path';
 import { config } from './config';
-import {
-  imagePathBaseline,
-  imagePathCurrent,
-  imagePathDifference,
-  relativeImagePathBaseline,
-} from './constants';
 
 export const log = console.log;
 
@@ -125,14 +119,14 @@ export const prepareComparisonList = ({
     comparisonList.push({
       type,
       afterImageUrl: [baseUrl, afterFile].join('/'),
-      path: join(relativeImagePathBaseline, fileName),
+      path: join(config.imagePathBaseline, fileName),
       name: fileName,
     });
 
     uploadList.push(
       createUploadItem({
         uploadFileName: afterFile,
-        path: imagePathCurrent,
+        path: config.imagePathCurrent,
         fileName,
         type,
       }),
@@ -149,14 +143,14 @@ export const prepareComparisonList = ({
     comparisonList.push({
       type,
       beforeImageUrl: [baseUrl, beforeFile].join('/'),
-      path: join(relativeImagePathBaseline, fileName),
+      path: join(config.imagePathBaseline, fileName),
       name: fileName,
     });
 
     uploadList.push(
       createUploadItem({
         uploadFileName: beforeFile,
-        path: imagePathBaseline,
+        path: config.imagePathBaseline,
         fileName,
         type,
       }),
@@ -183,14 +177,14 @@ export const prepareComparisonList = ({
       beforeImageUrl: [baseUrl, beforeFile].join('/'),
       afterImageUrl: [baseUrl, afterFile].join('/'),
       differenceImageUrl: [baseUrl, differenceFile].join('/'),
-      path: join(relativeImagePathBaseline, fileName),
+      path: join(config.imagePathBaseline, fileName),
       name: fileName,
     });
 
     uploadList.push(
       createUploadItem({
         uploadFileName: beforeFile,
-        path: imagePathBaseline,
+        path: config.imagePathBaseline,
         fileName,
         type,
       }),
@@ -199,7 +193,7 @@ export const prepareComparisonList = ({
     uploadList.push(
       createUploadItem({
         uploadFileName: afterFile,
-        path: imagePathCurrent,
+        path: config.imagePathCurrent,
         fileName,
         type,
       }),
@@ -208,7 +202,7 @@ export const prepareComparisonList = ({
     uploadList.push(
       createUploadItem({
         uploadFileName: differenceFile,
-        path: imagePathDifference,
+        path: config.imagePathDifference,
         fileName,
         type,
       }),
@@ -239,7 +233,11 @@ export const getEventData = (path: string): WebhookEvent | undefined => {
 };
 
 export const createShotsFolders = () => {
-  const paths = [imagePathBaseline, imagePathCurrent, imagePathDifference];
+  const paths = [
+    config.imagePathBaseline,
+    config.imagePathCurrent,
+    config.imagePathDifference,
+  ];
 
   paths.forEach((path) => {
     if (!existsSync(path)) {
@@ -247,7 +245,9 @@ export const createShotsFolders = () => {
     }
   });
 
-  const ignoreFile = path.join(config.imagePathRoot, '.gitignore');
+  const ignoreFile = normalize(
+    join(config.imagePathBaseline, '..', '.gitignore'),
+  );
 
   if (!existsSync(ignoreFile)) {
     writeFileSync(ignoreFile, 'current\ndifference\n');

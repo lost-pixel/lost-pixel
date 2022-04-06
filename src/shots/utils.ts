@@ -1,4 +1,3 @@
-import { url } from 'inspector';
 import { Page, Request } from 'playwright';
 import { log } from '../utils';
 

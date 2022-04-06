@@ -6,18 +6,14 @@ import {
   log,
   prepareComparisonList,
 } from './utils';
-import {
-  imagePathCurrent,
-  imagePathDifference,
-  imagePathBaseline,
-} from './constants';
+import { config } from './config';
 
 export const collect = async () => {
   log('Collecting files');
 
-  const baseline = getImageList(imagePathBaseline);
-  const current = getImageList(imagePathCurrent);
-  const difference = getImageList(imagePathDifference);
+  const baseline = getImageList(config.imagePathBaseline);
+  const current = getImageList(config.imagePathCurrent);
+  const difference = getImageList(config.imagePathDifference);
 
   if (baseline === null && current === null) {
     log(
