@@ -1,8 +1,8 @@
 import { Browser, firefox } from 'playwright';
 import { mapLimit } from 'async';
 import { log, sleep } from '../utils';
-import { shotConcurrency } from '../constants';
 import { waitForNetworkRequests } from './utils';
+import { config } from '../config';
 
 export type ShotItem = {
   id: string;
@@ -62,7 +62,7 @@ export const takeScreenShots = async (shotItems: ShotItem[]) => {
 
   await mapLimit<[number, ShotItem], void>(
     shotItems.entries(),
-    shotConcurrency,
+    config.shotConcurrency,
     async (item: [number, ShotItem]) => {
       const [index, shotItem] = item;
       const logger = (message: string, ...rest: unknown[]) =>

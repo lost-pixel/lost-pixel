@@ -1,9 +1,9 @@
 import { mapLimit } from 'async';
 import { existsSync } from 'fs';
 import { compareImages } from './compare/compare';
-import { shotConcurrency } from './constants';
 import { ShotItem } from './shots/shots';
 import { log } from './utils';
+import { config } from './config';
 
 export const checkDifferences = async (shotItems: ShotItem[]) => {
   log(`Comparing ${shotItems.length} screenshots`);
@@ -12,7 +12,7 @@ export const checkDifferences = async (shotItems: ShotItem[]) => {
 
   await mapLimit<[number, ShotItem], void>(
     shotItems.entries(),
-    shotConcurrency,
+    config.shotConcurrency,
     async (item: [number, ShotItem]) => {
       const [index, shotItem] = item;
       const logger = (message: string) =>
