@@ -6,7 +6,7 @@ import {
   imagePathDifference,
 } from '../constants';
 import { ShotItem } from '../shots/shots';
-import { log } from '../utils';
+import kebabCase from 'lodash.kebabcase';
 
 export type Story = {
   id: string;
@@ -102,6 +102,9 @@ export const collectStories = async (
   }
 };
 
+const generateFilename = (story: Story) =>
+  [story.kind, story.story].map(kebabCase).join('--');
+
 export const generateShotItems = (
   baseUrl: string,
   stories: Story[],
@@ -111,7 +114,7 @@ export const generateShotItems = (
   const shotItems = stories
     .filter((story) => story.parameters?.lostpixel?.disable !== true)
     .map((story) => {
-      const fileName = `${story.id}.png`;
+      const fileName = `${generateFilename(story)}.png`;
 
       return {
         id: story.id,
