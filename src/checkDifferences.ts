@@ -12,7 +12,7 @@ export const checkDifferences = async (shotItems: ShotItem[]) => {
 
   await mapLimit<[number, ShotItem], void>(
     shotItems.entries(),
-    config.shotConcurrency,
+    config.compareConcurrency,
     async (item: [number, ShotItem]) => {
       const [index, shotItem] = item;
       const logger = (message: string) =>

@@ -10,6 +10,7 @@ type BaseConfig = {
   imagePathCurrent: string;
   imagePathDifference: string;
   shotConcurrency: number;
+  compareConcurrency: number;
 };
 
 export type ProjectConfig = {
@@ -61,6 +62,7 @@ const defaultConfig: BaseConfig = {
   imagePathCurrent: '.lostpixel/current/',
   imagePathDifference: '.lostpixel/difference/',
   shotConcurrency: 5,
+  compareConcurrency: 10,
 };
 
 export let config: FullConfig;
