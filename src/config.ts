@@ -91,6 +91,18 @@ const loadProjectConfig = (): CustomProjectConfig => {
   if (existsSync(`${configFileNameBase}.js`)) {
     const projectConfig = require(`${configFileNameBase}.js`);
     return projectConfig;
+  } else if (existsSync(`${configFileNameBase}.ts`)) {
+    try {
+      require('ts-node/register');
+      const imported = require(`${configFileNameBase}.ts`);
+
+      return imported.default || imported.config;
+    } catch (error) {
+      console.error(
+        `Please install "ts-node" to use a TypeScript configuration file`,
+      );
+      process.exit(1);
+    }
   }
 
   throw new Error("Couldn't find project config file 'lostpixel.config.js'");
