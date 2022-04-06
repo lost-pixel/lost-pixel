@@ -74,8 +74,8 @@ const createUploadItem = ({
 
   return {
     uploadPath: join(
-      process.env.LOST_PIXEL_PROJECT_ID || 'none',
-      process.env.CI_BUILD_ID || '1',
+      config.lostPixelProjectId,
+      config.ciBuildId,
       uploadFileName,
     ),
     filePath,
