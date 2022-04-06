@@ -1,5 +1,6 @@
 import { existsSync } from 'fs';
 import { configFileNameBase } from './constants';
+import { log } from './utils';
 
 type BaseConfig = {
   lostPixelUrl: string;
@@ -28,6 +29,22 @@ export type ProjectConfig = {
   s3BaseUrl?: string;
 };
 
+const requiredConfigProps: Array<keyof FullConfig> = [
+  'lostPixelProjectId',
+  'ciBuildId',
+  'ciBuildNumber',
+  'repository',
+  'commitRef',
+  'commitRefName',
+  'commitHash',
+  's3EndPoint',
+  's3EndPointSsl',
+  's3Region',
+  's3AccessKey',
+  's3SecretKey',
+  's3BucketName',
+];
+
 export type FullConfig = BaseConfig & ProjectConfig;
 export type CustomProjectConfig = Partial<BaseConfig> & ProjectConfig;
 
@@ -40,6 +57,15 @@ const defaultConfig: BaseConfig = {
 };
 
 export let config: FullConfig;
+
+const checkConfig = () => {
+  requiredConfigProps.forEach((prop) => {
+    if (!config[prop]) {
+      log(`Error: Missing required configuration property: ${prop}`);
+      process.exit(1);
+    }
+  });
+};
 
 const loadProjectConfig = (): CustomProjectConfig => {
   if (existsSync(`${configFileNameBase}.js`)) {
@@ -57,4 +83,6 @@ export const configure = () => {
     ...defaultConfig,
     ...projectConfig,
   };
+
+  checkConfig();
 };
