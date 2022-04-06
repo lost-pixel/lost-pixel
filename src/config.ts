@@ -1,6 +1,7 @@
 import { existsSync } from 'fs';
 import { configFileNameBase } from './constants';
 import { log } from './utils';
+import get from 'lodash.get';
 
 type BaseConfig = {
   lostPixelUrl: string;
@@ -21,8 +22,8 @@ export type ProjectConfig = {
   s3: {
     endPoint: string;
     port?: number;
-    ssl: boolean;
-    region: string;
+    ssl?: boolean;
+    region?: string;
     accessKey: string;
     secretKey: string;
     sessionToken?: string;
@@ -42,6 +43,13 @@ const requiredConfigProps: Array<keyof FullConfig> = [
   's3',
 ];
 
+const requiredS3ConfigProps: Array<keyof FullConfig['s3']> = [
+  'endPoint',
+  'accessKey',
+  'secretKey',
+  'bucketName',
+];
+
 export type FullConfig = BaseConfig & ProjectConfig;
 export type CustomProjectConfig = Partial<BaseConfig> & ProjectConfig;
 
@@ -56,10 +64,15 @@ const defaultConfig: BaseConfig = {
 export let config: FullConfig;
 
 const checkConfig = () => {
-  const missingProps: typeof requiredConfigProps = [];
+  const missingProps: string[] = [];
 
-  requiredConfigProps.forEach((prop) => {
-    if (!config[prop]) {
+  const requiredProps = [
+    ...requiredConfigProps,
+    ...requiredS3ConfigProps.map((prop) => `s3.${prop}`),
+  ];
+
+  requiredProps.forEach((prop) => {
+    if (!get(config, prop)) {
       missingProps.push(prop);
     }
   });
