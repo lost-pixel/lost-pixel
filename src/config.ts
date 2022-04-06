@@ -1,7 +1,7 @@
 import { existsSync } from 'fs';
 import { configFileNameBase } from './constants';
 
-type FullConfig = {
+export type FullConfig = {
   lostPixelUrl: string;
   lostPixelProjectId: string;
   ciBuildId: string;
