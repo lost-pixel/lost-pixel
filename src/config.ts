@@ -32,6 +32,7 @@ export type ProjectConfig = {
     bucketName: string;
     baseUrl?: string;
   };
+  eventFilePath?: string;
 };
 
 const requiredConfigProps: Array<keyof FullConfig> = [

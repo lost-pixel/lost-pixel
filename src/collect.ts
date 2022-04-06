@@ -53,8 +53,8 @@ export const collect = async () => {
 
     await sendToAPI({
       comparisons,
-      event: process.env.EVENT_PATH
-        ? getEventData(process.env.EVENT_PATH)
+      event: config.eventFilePath
+        ? getEventData(config.eventFilePath)
         : undefined,
     });
 
