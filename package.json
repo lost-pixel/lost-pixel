@@ -8,7 +8,7 @@
     "test:watch": "jest --watch --detectOpenHandles",
     "build": "rimraf dist && tsc",
     "build-example-storybook": "rimraf examples/storybook-demo/storybook-static && cd examples/storybook-demo && npm install && npm run build-storybook",
-    "dev": "ts-node -r ./loadEnv src/",
+    "dev": "ts-node src/",
     "start": "NODE_ENV=production node dist/index.js"
   },
   "repository": {
@@ -25,7 +25,6 @@
   "dependencies": {
     "async": "^3.2.3",
     "axios": "^0.24.0",
-    "dotenv": "^10.0.0",
     "lodash.get": "^4.4.2",
     "lodash.kebabcase": "^4.1.1",
     "minio": "^7.0.25",
