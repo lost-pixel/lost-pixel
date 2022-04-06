@@ -12,9 +12,9 @@ type BaseConfig = {
   shotConcurrency: number;
   compareConcurrency: number;
   timeouts: {
-    fetchStories: number;
-    loadState: number;
-    networkRequests: number;
+    fetchStories?: number;
+    loadState?: number;
+    networkRequests?: number;
   };
   waitBeforeScreenshot: number;
   waitForFirstRequest: number;
@@ -131,7 +131,16 @@ const loadProjectConfig = (): CustomProjectConfig => {
   throw new Error("Couldn't find project config file 'lostpixel.config.js'");
 };
 
-export const configure = () => {
+export const configure = (customProjectConfig?: CustomProjectConfig) => {
+  if (customProjectConfig) {
+    config = {
+      ...defaultConfig,
+      ...customProjectConfig,
+    };
+
+    return;
+  }
+
   const projectConfig = loadProjectConfig();
 
   config = {

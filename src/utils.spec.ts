@@ -1,9 +1,15 @@
 import { join } from 'path';
 import { getChanges, extendFileName, prepareComparisonList } from './utils';
-import { config } from './config';
+import { config, configure } from './config';
+import { defaultTestConfig } from './testUtils';
 
-process.env.LOST_PIXEL_PROJECT_ID = 'lorem-ipsum';
-process.env.CI_BUILD_ID = '456';
+beforeAll(() => {
+  configure({
+    ...defaultTestConfig,
+    lostPixelProjectId: 'lorem-ipsum',
+    ciBuildId: '456',
+  });
+});
 
 describe(getChanges, () => {
   it('should reflect no difference', () => {

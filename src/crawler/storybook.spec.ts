@@ -1,11 +1,20 @@
 import { createShotsFolders } from '../utils';
 import { collectStories, getIframeUrl, getStoryBookUrl } from './storybook';
+import { configure } from '../config';
+import { defaultTestConfig } from '../testUtils';
 
 const storyBookUrl = getStoryBookUrl(
   'examples/storybook-demo/storybook-static',
 );
 
 beforeAll(async () => {
+  configure({
+    ...defaultTestConfig,
+    timeouts: {
+      fetchStories: 2_000,
+    },
+  });
+
   createShotsFolders();
   process.env.FETCH_STORIES_TIMEOUT = '2000';
 });
