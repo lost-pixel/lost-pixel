@@ -15,6 +15,10 @@ export type Story = {
     storyshots?: {
       disable?: boolean;
     };
+    viewport?: {
+      width?: number;
+      height?: number;
+    };
   };
 };
 
@@ -104,6 +108,25 @@ export const collectStories = async (
 const generateFilename = (story: Story) =>
   [story.kind, story.story].map(kebabCase).join('--');
 
+const generateBrowserConfig = (story: Story) => {
+  const browserConfig = config.configureBrowser?.(story);
+
+  if (story.parameters?.viewport) {
+    if (browserConfig) {
+      browserConfig.viewport = browserConfig.viewport || {
+        width: 1280,
+        height: 720,
+      };
+      browserConfig.viewport = {
+        ...browserConfig.viewport,
+        ...story.parameters.viewport,
+      };
+    }
+  }
+
+  return browserConfig;
+};
+
 export const generateShotItems = (
   baseUrl: string,
   stories: Story[],
@@ -129,7 +152,7 @@ export const generateShotItems = (
           config.imagePathDifference,
           fileNameWithExt,
         ),
-        browserConfig: config.configureBrowser?.(story),
+        browserConfig: generateBrowserConfig(story),
       };
     });
 
