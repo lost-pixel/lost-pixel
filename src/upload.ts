@@ -18,17 +18,20 @@ export const apiClient = axios.create({
   },
 });
 
-const minio = new MinioClient({
-  endPoint: process.env.S3_END_POINT || '--unknown--',
-  region: process.env.S3_REGION || undefined,
-  accessKey: process.env.S3_ACCESS_KEY || '--unknown--',
-  secretKey: process.env.S3_SECRET_KEY || '--unknown--',
-  sessionToken: process.env.S3_SESSION_TOKEN || undefined,
-  port: process.env.S3_END_POINT_PORT
-    ? Number(process.env.S3_END_POINT_PORT)
-    : 443,
-  useSSL: process.env.S3_END_POINT_SSL === '0' ? false : true,
-});
+let minio: MinioClient;
+
+const setupMinio = () =>
+  new MinioClient({
+    endPoint: process.env.S3_END_POINT || '--unknown--',
+    region: process.env.S3_REGION || undefined,
+    accessKey: process.env.S3_ACCESS_KEY || '--unknown--',
+    secretKey: process.env.S3_SECRET_KEY || '--unknown--',
+    sessionToken: process.env.S3_SESSION_TOKEN || undefined,
+    port: process.env.S3_END_POINT_PORT
+      ? Number(process.env.S3_END_POINT_PORT)
+      : 443,
+    useSSL: process.env.S3_END_POINT_SSL === '0' ? false : true,
+  });
 
 export type UploadFile = {
   uploadPath: string;
@@ -42,6 +45,10 @@ export const uploadFile = async ({
   metaData,
 }: UploadFile) => {
   log(`Uploading '${filePath}' to '${uploadPath}'`);
+
+  if (!minio) {
+    minio = setupMinio();
+  }
 
   return new Promise((resolve, reject) => {
     minio.fPutObject(
