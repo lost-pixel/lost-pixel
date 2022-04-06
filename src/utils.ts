@@ -7,8 +7,8 @@ import {
 } from 'fs';
 import { UploadFile, WebhookEvent } from './upload';
 import path, { normalize, join } from 'path';
+import { config } from './config';
 import {
-  imagePathBase,
   imagePathBaseline,
   imagePathCurrent,
   imagePathDifference,
@@ -247,7 +247,7 @@ export const createShotsFolders = () => {
     }
   });
 
-  const ignoreFile = path.join(imagePathBase, '.gitignore');
+  const ignoreFile = path.join(config.imagePathRoot, '.gitignore');
 
   if (!existsSync(ignoreFile)) {
     writeFileSync(ignoreFile, 'current\ndifference\n');

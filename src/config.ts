@@ -1,11 +1,12 @@
 import { existsSync } from 'fs';
-import { configFileNameBase } from './constants';
 import { log } from './utils';
 import get from 'lodash.get';
+import path from 'path';
 
 type BaseConfig = {
   lostPixelUrl: string;
   storybookUrl: string;
+  imagePathRoot: string;
   imagePathBaseline: string;
   imagePathCurrent: string;
   imagePathDifference: string;
@@ -56,6 +57,7 @@ export type CustomProjectConfig = Partial<BaseConfig> & ProjectConfig;
 const defaultConfig: BaseConfig = {
   lostPixelUrl: 'https://app.lost-pixel.com/api/callback',
   storybookUrl: 'storybook-static',
+  imagePathRoot: '',
   imagePathBaseline: '.lostpixel/baseline/',
   imagePathCurrent: '.lostpixel/current/',
   imagePathDifference: '.lostpixel/difference/',
@@ -86,6 +88,8 @@ const checkConfig = () => {
     process.exit(1);
   }
 };
+
+const configFileNameBase = path.join(process.cwd(), 'lostpixel.config');
 
 const loadProjectConfig = (): CustomProjectConfig => {
   if (existsSync(`${configFileNameBase}.js`)) {
