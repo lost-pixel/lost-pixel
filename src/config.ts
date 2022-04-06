@@ -1,8 +1,15 @@
 import { existsSync } from 'fs';
 import { configFileNameBase } from './constants';
 
-export type FullConfig = {
+type BaseConfig = {
   lostPixelUrl: string;
+  storybookUrl: string;
+  imagePathBaseline: string;
+  imagePathCurrent: string;
+  imagePathDifference: string;
+};
+
+export type ProjectConfig = {
   lostPixelProjectId: string;
   ciBuildId: string;
   ciBuildNumber: string;
@@ -10,7 +17,6 @@ export type FullConfig = {
   commitRef: string;
   commitRefName: string;
   commitHash: string;
-  storybookUrl: string;
   s3EndPoint: string;
   s3EndPointPort?: number;
   s3EndPointSsl: boolean;
@@ -20,29 +26,14 @@ export type FullConfig = {
   s3SessionToken?: string;
   s3BucketName: string;
   s3BaseUrl?: string;
-  imagePathBaseline: string;
-  imagePathCurrent: string;
-  imagePathDifference: string;
 };
 
-type ProjectConfig = Pick<FullConfig, 'lostPixelProjectId'>;
+export type FullConfig = BaseConfig & ProjectConfig;
+export type CustomProjectConfig = Partial<BaseConfig> & ProjectConfig;
 
-const defaultConfig: FullConfig = {
+const defaultConfig: BaseConfig = {
   lostPixelUrl: 'https://app.lost-pixel.com/api/callback',
-  lostPixelProjectId: '--unknown--',
-  ciBuildId: '--unknown--',
-  ciBuildNumber: '--unknown--',
-  repository: '--unknown--',
-  commitRef: '--unknown--',
-  commitRefName: '--unknown--',
-  commitHash: '--unknown--',
   storybookUrl: 'storybook-static',
-  s3EndPoint: '--unknown--',
-  s3EndPointSsl: true,
-  s3Region: '--unknown--',
-  s3AccessKey: '--unknown--',
-  s3SecretKey: '--unknown--',
-  s3BucketName: '--unknown--',
   imagePathBaseline: '.lostpixel/baseline/',
   imagePathCurrent: '.lostpixel/current/',
   imagePathDifference: '.lostpixel/difference/',
@@ -50,7 +41,7 @@ const defaultConfig: FullConfig = {
 
 export let config: FullConfig;
 
-const loadProjectConfig = (): ProjectConfig => {
+const loadProjectConfig = (): CustomProjectConfig => {
   if (existsSync(`${configFileNameBase}.js`)) {
     const projectConfig = require(`${configFileNameBase}.js`);
     return projectConfig;
