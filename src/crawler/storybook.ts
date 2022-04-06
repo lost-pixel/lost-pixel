@@ -66,7 +66,7 @@ export const collectStories = async (
       () => (window as WindowObject).__STORYBOOK_CLIENT_API__,
       null,
       {
-        timeout: Number(process.env.FETCH_STORIES_TIMEOUT) || 30_000,
+        timeout: config.timeouts.fetchStories,
       },
     );
 

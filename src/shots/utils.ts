@@ -1,4 +1,5 @@
 import { Page, Request } from 'playwright';
+import { config } from '../config';
 import { log } from '../utils';
 
 const checkIgnoreUrls = (url: string, ignoreUrls: string[]) => {
@@ -14,9 +15,9 @@ const checkIgnoreUrls = (url: string, ignoreUrls: string[]) => {
 export const waitForNetworkRequests = ({
   page,
   logger,
-  timeout = 30_000,
-  waitForFirstRequest = 1_000,
-  waitForLastRequest = 1_000,
+  timeout = config.timeouts.networkRequests,
+  waitForFirstRequest = config.waitForFirstRequest,
+  waitForLastRequest = config.waitForLastRequest,
   ignoreUrls = [],
 }: {
   page: Page;

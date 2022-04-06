@@ -28,7 +28,7 @@ const takeScreenShot = async ({
 
   try {
     await page.waitForLoadState('load', {
-      timeout: 30_000,
+      timeout: config.timeouts.loadState,
     });
   } catch (e) {
     logger(`Timeout while waiting for page load state: ${shotItem.url}`);
@@ -37,7 +37,6 @@ const takeScreenShot = async ({
   try {
     await waitForNetworkRequests({
       page,
-      timeout: 30_000,
       logger,
       ignoreUrls: ['/__webpack_hmr'],
     });
@@ -45,7 +44,7 @@ const takeScreenShot = async ({
     logger(`Timeout while waiting for all network requests: ${shotItem.url}`);
   }
 
-  await sleep(1_000);
+  await sleep(config.waitBeforeScreenshot);
 
   await page.screenshot({
     path: shotItem.filePathCurrent,

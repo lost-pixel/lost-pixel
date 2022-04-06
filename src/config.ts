@@ -11,6 +11,14 @@ type BaseConfig = {
   imagePathDifference: string;
   shotConcurrency: number;
   compareConcurrency: number;
+  timeouts: {
+    fetchStories: number;
+    loadState: number;
+    networkRequests: number;
+  };
+  waitBeforeScreenshot: number;
+  waitForFirstRequest: number;
+  waitForLastRequest: number;
 };
 
 export type ProjectConfig = {
@@ -64,6 +72,14 @@ const defaultConfig: BaseConfig = {
   imagePathDifference: '.lostpixel/difference/',
   shotConcurrency: 5,
   compareConcurrency: 10,
+  timeouts: {
+    fetchStories: 30_000,
+    loadState: 30_000,
+    networkRequests: 30_000,
+  },
+  waitBeforeScreenshot: 1_000,
+  waitForFirstRequest: 1_000,
+  waitForLastRequest: 1_000,
 };
 
 export let config: FullConfig;
