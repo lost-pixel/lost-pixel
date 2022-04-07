@@ -45,6 +45,10 @@ const takeScreenShot = async ({
     logger(`Timeout while waiting for all network requests: ${shotItem.url}`);
   }
 
+  if (config.beforeScreenshot) {
+    await config.beforeScreenshot(page, { id: shotItem.id });
+  }
+
   await sleep(config.waitBeforeScreenshot);
 
   await page.screenshot({

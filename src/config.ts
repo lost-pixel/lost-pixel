@@ -2,7 +2,7 @@ import { existsSync } from 'fs';
 import { log } from './utils';
 import get from 'lodash.get';
 import path from 'path';
-import { BrowserContextOptions } from 'playwright';
+import { BrowserContextOptions, Page } from 'playwright';
 
 type BaseConfig = {
   lostPixelUrl: string;
@@ -52,6 +52,7 @@ export type ProjectConfig = {
   filterStory?: (input: StoryLike) => boolean;
   imageFilenameGenerator?: (input: StoryLike) => string;
   configureBrowser?: (input: StoryLike) => BrowserContextOptions;
+  beforeScreenshot?: (page: Page, input: { id: string }) => Promise<void>;
 };
 
 const requiredConfigProps: Array<keyof FullConfig> = [
