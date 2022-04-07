@@ -59,12 +59,16 @@ export const waitForNetworkRequests = ({
       clearTimeout(lastRequestTimeoutId);
 
       if (!checkIgnoreUrls(request.url(), ignoreUrls)) {
+        const failure = request.failure();
         const response = await request.response();
+
         requestCounter--;
         requests.delete(request);
-        logger(
-          `- ${request.url()} [${response?.status()} ${response?.statusText()}]`,
-        );
+
+        const statusText = failure
+          ? failure.errorText
+          : `${response?.status()} ${response?.statusText()}`;
+        logger(`- ${request.url()} [${statusText}]`);
       }
 
       lastRequestTimeoutId = setTimeout(() => {
