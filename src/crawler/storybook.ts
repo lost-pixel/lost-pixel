@@ -136,6 +136,7 @@ export const generateShotItems = (
   const shotItems = stories
     .filter((story) => story.parameters?.lostpixel?.disable !== true)
     .filter((story) => story.parameters?.storyshots?.disable !== true)
+    .filter((story) => (config.filterStory ? config.filterStory(story) : true))
     .map((story) => {
       const fileName = config.imageFilenameGenerator
         ? config.imageFilenameGenerator(story)

@@ -49,6 +49,7 @@ export type ProjectConfig = {
     baseUrl?: string;
   };
   eventFilePath?: string;
+  filterStory?: (input: StoryLike) => boolean;
   imageFilenameGenerator?: (input: StoryLike) => string;
   configureBrowser?: (input: StoryLike) => BrowserContextOptions;
 };
