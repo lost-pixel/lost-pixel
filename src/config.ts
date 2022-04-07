@@ -22,6 +22,13 @@ type BaseConfig = {
   waitForLastRequest: number;
 };
 
+type StoryLike = {
+  id?: string;
+  kind?: string;
+  story?: string;
+  parameters?: Record<string, unknown>;
+};
+
 export type ProjectConfig = {
   lostPixelProjectId: string;
   ciBuildId: string;
@@ -42,18 +49,8 @@ export type ProjectConfig = {
     baseUrl?: string;
   };
   eventFilePath?: string;
-  imageFilenameGenerator?: (input: {
-    id?: string;
-    kind?: string;
-    story?: string;
-    parameters?: Record<string, unknown>;
-  }) => string;
-  configureBrowser?: (input: {
-    id?: string;
-    kind?: string;
-    story?: string;
-    parameters?: Record<string, unknown>;
-  }) => BrowserContextOptions;
+  imageFilenameGenerator?: (input: StoryLike) => string;
+  configureBrowser?: (input: StoryLike) => BrowserContextOptions;
 };
 
 const requiredConfigProps: Array<keyof FullConfig> = [
