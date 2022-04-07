@@ -55,13 +55,16 @@ export const waitForNetworkRequests = ({
       }
     };
 
-    const onRequestFinished = (request: Request) => {
+    const onRequestFinished = async (request: Request) => {
       clearTimeout(lastRequestTimeoutId);
 
       if (!checkIgnoreUrls(request.url(), ignoreUrls)) {
+        const response = await request.response();
         requestCounter--;
         requests.delete(request);
-        logger(`- ${request.url()}`);
+        logger(
+          `- ${request.url()} [${response?.status()} ${response?.statusText()}]`,
+        );
       }
 
       lastRequestTimeoutId = setTimeout(() => {
