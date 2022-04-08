@@ -1,5 +1,5 @@
 import { existsSync } from 'fs';
-import { log } from './utils';
+import { loadTSProjectConfigFile, log } from './utils';
 import get from 'lodash.get';
 import path from 'path';
 import { BrowserContextOptions, Page } from 'playwright';
@@ -122,21 +122,19 @@ const checkConfig = () => {
 
 const configFileNameBase = path.join(process.cwd(), 'lostpixel.config');
 
-const loadProjectConfig = (): CustomProjectConfig => {
+const loadProjectConfig = async (): Promise<CustomProjectConfig> => {
   if (existsSync(`${configFileNameBase}.js`)) {
     const projectConfig = require(`${configFileNameBase}.js`);
     return projectConfig;
   } else if (existsSync(`${configFileNameBase}.ts`)) {
     try {
-      require('ts-node/register');
-      const imported = require(`${configFileNameBase}.ts`);
-
-      return imported.default || imported.config;
+      const imported = (await loadTSProjectConfigFile(
+        `${configFileNameBase}.ts`,
+      )) as CustomProjectConfig;
+      return imported;
     } catch (error) {
-      console.error(error);
-      console.error(
-        `Please install "ts-node" to use a TypeScript configuration file`,
-      );
+      log(error);
+      log('Failed to load TypeScript configuration file');
       process.exit(1);
     }
   }
@@ -144,7 +142,7 @@ const loadProjectConfig = (): CustomProjectConfig => {
   throw new Error("Couldn't find project config file 'lostpixel.config.js'");
 };
 
-export const configure = (customProjectConfig?: CustomProjectConfig) => {
+export const configure = async (customProjectConfig?: CustomProjectConfig) => {
   if (customProjectConfig) {
     config = {
       ...defaultConfig,
@@ -154,7 +152,7 @@ export const configure = (customProjectConfig?: CustomProjectConfig) => {
     return;
   }
 
-  const projectConfig = loadProjectConfig();
+  const projectConfig = await loadProjectConfig();
 
   config = {
     ...defaultConfig,

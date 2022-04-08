@@ -5,7 +5,7 @@ import { createShotsFolders } from './utils';
 import { configure } from './config';
 
 (async () => {
-  configure();
+  await configure();
   createShotsFolders();
   const shotItems = await createShots();
   await checkDifferences(shotItems);

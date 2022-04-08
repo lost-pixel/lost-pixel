@@ -8,6 +8,7 @@ import {
 import { UploadFile, WebhookEvent } from './upload';
 import { normalize, join } from 'path';
 import { config } from './config';
+import { Service } from 'ts-node';
 
 export const log = console.log;
 
@@ -265,4 +266,40 @@ export const removeFilesInFolder = (path: string) => {
     const filePath = join(path, file);
     unlinkSync(filePath);
   });
+};
+
+let tsNodeService: Service;
+
+export const setupTsNode = async (): Promise<Service> => {
+  if (tsNodeService) {
+    return tsNodeService;
+  }
+
+  try {
+    const tsNode = await import('ts-node');
+
+    tsNodeService = tsNode.register({
+      transpileOnly: true,
+    });
+
+    return tsNodeService;
+  } catch (error: any) {
+    if (error.code === 'ERR_MODULE_NOT_FOUND') {
+      log(`Please install "ts-node" to use a TypeScript configuration file`);
+      process.exit(1);
+    }
+
+    throw error;
+  }
+};
+
+export const loadTSProjectConfigFile = async (
+  configFilepath: string,
+): Promise<unknown> => {
+  await setupTsNode();
+  tsNodeService.enabled(true);
+  const imported = require(configFilepath);
+  tsNodeService.enabled(false);
+
+  return imported.default || imported.config;
 };
