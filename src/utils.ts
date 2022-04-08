@@ -306,7 +306,6 @@ export const loadTSProjectConfigFile = async (
 };
 
 export const getBrowser = (): BrowserType => {
-  console.log('using ' + config.browser);
   switch (config.browser) {
     case 'chromium':
       return chromium;
