@@ -5,6 +5,7 @@ import path from 'path';
 import { BrowserContextOptions, Page } from 'playwright';
 
 type BaseConfig = {
+  browser: 'chromium' | 'firefox' | 'webkit';
   lostPixelUrl: string;
   storybookUrl: string;
   imagePathBaseline: string;
@@ -77,6 +78,7 @@ export type FullConfig = BaseConfig & ProjectConfig;
 export type CustomProjectConfig = Partial<BaseConfig> & ProjectConfig;
 
 const defaultConfig: BaseConfig = {
+  browser: 'chromium',
   lostPixelUrl: 'https://app.lost-pixel.com/api/callback',
   storybookUrl: 'storybook-static',
   imagePathBaseline: '.lostpixel/baseline/',

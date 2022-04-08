@@ -9,6 +9,7 @@ import { UploadFile, WebhookEvent } from './upload';
 import { normalize, join } from 'path';
 import { config } from './config';
 import { Service } from 'ts-node';
+import { BrowserType, chromium, firefox, webkit } from 'playwright';
 
 export const log = console.log;
 
@@ -302,4 +303,16 @@ export const loadTSProjectConfigFile = async (
   tsNodeService.enabled(false);
 
   return imported.default || imported.config;
+};
+
+export const getBrowser = (): BrowserType => {
+  console.log('using ' + config.browser);
+  switch (config.browser) {
+    case 'chromium':
+      return chromium;
+    case 'firefox':
+      return firefox;
+    case 'webkit':
+      return webkit;
+  }
 };

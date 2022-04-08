@@ -1,8 +1,8 @@
 import path from 'path';
-import { firefox } from 'playwright';
 import { ShotItem } from '../shots/shots';
 import kebabCase from 'lodash.kebabcase';
 import { config } from '../config';
+import { getBrowser } from '../utils';
 
 export type Story = {
   id: string;
@@ -57,7 +57,7 @@ export const collectStories = async (
   url: string,
   isIframeUrl: boolean = false,
 ) => {
-  const browser = await firefox.launch();
+  const browser = await getBrowser().launch();
   const page = await browser.newPage();
   const iframeUrl = isIframeUrl
     ? getStoryBookUrl(url)

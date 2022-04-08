@@ -1,6 +1,6 @@
-import { Browser, BrowserContextOptions, firefox } from 'playwright';
+import { Browser, BrowserContextOptions } from 'playwright';
 import { mapLimit } from 'async';
-import { log, sleep } from '../utils';
+import { getBrowser, log, sleep } from '../utils';
 import { waitForNetworkRequests } from './utils';
 import { config } from '../config';
 
@@ -61,7 +61,7 @@ const takeScreenShot = async ({
 };
 
 export const takeScreenShots = async (shotItems: ShotItem[]) => {
-  const browser = await firefox.launch();
+  const browser = await getBrowser().launch();
   const total = shotItems.length;
 
   await mapLimit<[number, ShotItem], void>(
