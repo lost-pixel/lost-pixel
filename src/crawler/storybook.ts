@@ -76,7 +76,7 @@ export const collectStories = async (
 
     const result = await page.evaluate(
       () =>
-        new Promise<CrawlerResult>((res) => {
+        new Promise<CrawlerResult>((resolve) => {
           const fetchStories = () => {
             const { __STORYBOOK_CLIENT_API__: api } = window as WindowObject;
 
@@ -85,11 +85,17 @@ export const collectStories = async (
                 id: item.id,
                 kind: item.kind,
                 story: item.story,
-                parameters: item.parameters,
+                parameters: {
+                  lostpixel: item.parameters?.lostpixel,
+                  storyshots: item.parameters?.storyshots,
+                  viewport: item.parameters?.viewport,
+                },
               }));
 
-              res({ stories });
+              return resolve({ stories });
             }
+
+            resolve({ stories: [] });
           };
 
           fetchStories();
