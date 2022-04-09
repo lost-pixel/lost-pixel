@@ -2,14 +2,34 @@
   "name": "lost-pixel-action",
   "version": "1.0.0",
   "description": "GitHub Action for Lost Pixel integration",
-  "main": "index.js",
+  "main": "dist/",
+  "bin": {
+    "lost-pixel": "./dist/bin.js"
+  },
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "test": "jest --detectOpenHandles",
     "test:watch": "jest --watch --detectOpenHandles",
     "build": "rimraf dist && tsc",
     "build-example-storybook": "rimraf examples/storybook-demo/storybook-static && cd examples/storybook-demo && npm install && npm run build-storybook",
+    "lint": "tsc --noEmit && eslint '*/**/*.ts'",
+    "lint-fix": "tsc --noEmit && eslint '*/**/*.ts' --fix",
+    "lint-staged": "lint-staged",
+    "prepare": "husky install",
     "dev": "ts-node src/",
     "start": "NODE_ENV=production node dist/index.js"
+  },
+  "lint-staged": {
+    "*.{js,ts}": [
+      "./node_modules/eslint/bin/eslint.js"
+    ]
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
   },
   "repository": {
     "type": "git",
@@ -42,7 +62,10 @@
     "@types/node": "17.0.4",
     "@types/pixelmatch": "^5.2.4",
     "@types/pngjs": "^6.0.1",
+    "eslint": "^8.13.0",
+    "husky": "^7.0.4",
     "jest": "27.4.5",
+    "lint-staged": "^12.3.7",
     "rimraf": "3.0.2",
     "ts-jest": "27.1.2",
     "ts-node": "10.4.0",
