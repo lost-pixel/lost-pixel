@@ -1,0 +1,11 @@
+{
+  "plugins": ["@typescript-eslint"],
+  "extends": ["plugin:@typescript-eslint/recommended", "prettier"],
+  "rules": {
+    "@typescript-eslint/no-unused-vars": "error",
+    "@typescript-eslint/no-explicit-any": "error",
+    "prefer-const": "error",
+    "@typescript-eslint/no-var-requires": "off",
+    "no-console": "error"
+  }
+}
