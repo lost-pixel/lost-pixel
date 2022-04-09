@@ -18,8 +18,8 @@
     "lint-fix": "tsc --noEmit && eslint '*/**/*.ts' --fix",
     "lint-staged": "lint-staged",
     "prepare": "husky install",
-    "dev": "ts-node src/",
-    "start": "NODE_ENV=production node dist/index.js"
+    "dev": "ts-node src/runner",
+    "start": "NODE_ENV=production node dist/runner.js"
   },
   "lint-staged": {
     "*.{js,ts}": [
