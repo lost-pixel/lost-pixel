@@ -29,7 +29,7 @@ export const waitForNetworkRequests = ({
 }) =>
   new Promise((resolve, reject) => {
     let requestCounter = 0;
-    let requests = new Set<Request>();
+    const requests = new Set<Request>();
     let lastRequestTimeoutId: NodeJS.Timeout;
 
     const timeoutId = setTimeout(() => {

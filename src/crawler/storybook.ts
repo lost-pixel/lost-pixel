@@ -53,10 +53,7 @@ export const getStoryBookUrl = (url: string) => {
 export const getIframeUrl = (url: string) =>
   url.endsWith('/') ? `${url}iframe.html` : `${url}/iframe.html`;
 
-export const collectStories = async (
-  url: string,
-  isIframeUrl: boolean = false,
-) => {
+export const collectStories = async (url: string, isIframeUrl = false) => {
   const browser = await getBrowser().launch();
   const page = await browser.newPage();
   const iframeUrl = isIframeUrl
@@ -86,7 +83,7 @@ export const collectStories = async (
             }
 
             if (Array.isArray(parameters)) {
-              // @ts-ignore
+              // @ts-expect-error FIXME
               return parameters.map((value) =>
                 parseParameters(value, level + 1),
               );
@@ -102,9 +99,9 @@ export const collectStories = async (
             ) {
               return parameters;
             } else if (typeof parameters === 'object' && parameters !== null) {
-              // @ts-ignore
+              // @ts-expect-error FIXME
               return Object.keys(parameters).reduce((acc, key: keyof T) => {
-                // @ts-ignore
+                // @ts-expect-error FIXME
                 acc[key] = parseParameters(parameters[key], level + 1);
                 return acc;
               }, {} as T);

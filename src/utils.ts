@@ -11,6 +11,7 @@ import { config } from './config';
 import { Service } from 'ts-node';
 import { BrowserType, chromium, firefox, webkit } from 'playwright';
 
+// eslint-disable-next-line no-console
 export const log = console.log;
 
 export type Files = {
@@ -284,7 +285,8 @@ export const setupTsNode = async (): Promise<Service> => {
     });
 
     return tsNodeService;
-  } catch (error: any) {
+  } catch (error) {
+    // @ts-expect-error Error type definition is missing 'code'
     if (error.code === 'ERR_MODULE_NOT_FOUND') {
       log(`Please install "ts-node" to use a TypeScript configuration file`);
       process.exit(1);
