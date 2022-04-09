@@ -289,7 +289,8 @@ export const setupTsNode = async (): Promise<Service> => {
     // @ts-expect-error Error type definition is missing 'code'
     if (['ERR_MODULE_NOT_FOUND', 'MODULE_NOT_FOUND'].includes(error.code)) {
       log(`Please install "ts-node" to use a TypeScript configuration file`);
-      log(error);
+      // @ts-expect-error Error type definition is missing 'message'
+      log(error.message);
       process.exit(1);
     }
 
