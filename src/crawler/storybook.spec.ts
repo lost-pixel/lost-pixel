@@ -67,19 +67,19 @@ describe(collectStories, () => {
   it('should fail when using invalid path to StoryBook', async () => {
     await expect(() =>
       collectStories('this/path/does/not/exist'),
-    ).rejects.toThrow('NS_ERROR_FILE_NOT_FOUND');
+    ).rejects.toThrow('ERR_FILE_NOT_FOUND');
   });
 
   it('should fail when using invalid URL to StoryBook', async () => {
     await expect(() =>
       collectStories('http://localhost:99999'),
-    ).rejects.toThrow('Invalid url');
+    ).rejects.toThrow('invalid URL');
   });
 
   it('should timeout when using invalid URL to StoryBook', async () => {
     await expect(() =>
       collectStories(`${storyBookUrl}/nothing/here`),
-    ).rejects.toThrow('NS_ERROR_FILE_NOT_FOUND');
+    ).rejects.toThrow('ERR_FILE_NOT_FOUND');
   });
 
   it('should fail if no stories found', async () => {
