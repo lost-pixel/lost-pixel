@@ -34,7 +34,7 @@ jobs:
         run: npm run test
 
       - name: Build
-        run: npm run clean && npm run build
+        run: npm run build
 
       - name: Create .npmrc
         run: echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" >> ~/.npmrc
