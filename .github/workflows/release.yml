@@ -60,7 +60,7 @@ jobs:
                 fields: [
                   {
                     title: 'NPM Release',
-                    value: github.ref,
+                    value: process.env.GITHUB_REF,
                     short: true
                   },
                   {
