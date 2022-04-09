@@ -77,6 +77,42 @@ export const collectStories = async (
     const result = await page.evaluate(
       () =>
         new Promise<CrawlerResult>((resolve) => {
+          const parseParameters = <T>(
+            parameters: T,
+            level = 0,
+          ): T | 'UNSUPPORTED_DEPTH' | 'UNSUPPORTED_TYPE' => {
+            if (level > 10) {
+              return 'UNSUPPORTED_DEPTH';
+            }
+
+            if (Array.isArray(parameters)) {
+              // @ts-ignore
+              return parameters.map((value) =>
+                parseParameters(value, level + 1),
+              );
+            } else if (
+              typeof parameters === 'string' ||
+              typeof parameters === 'number' ||
+              typeof parameters === 'boolean' ||
+              typeof parameters === 'undefined' ||
+              typeof parameters === 'function' ||
+              parameters instanceof RegExp ||
+              parameters instanceof Date ||
+              parameters === null
+            ) {
+              return parameters;
+            } else if (typeof parameters === 'object' && parameters !== null) {
+              // @ts-ignore
+              return Object.keys(parameters).reduce((acc, key: keyof T) => {
+                // @ts-ignore
+                acc[key] = parseParameters(parameters[key], level + 1);
+                return acc;
+              }, {} as T);
+            } else {
+              return 'UNSUPPORTED_TYPE';
+            }
+          };
+
           const fetchStories = () => {
             const { __STORYBOOK_CLIENT_API__: api } = window as WindowObject;
 
@@ -85,11 +121,9 @@ export const collectStories = async (
                 id: item.id,
                 kind: item.kind,
                 story: item.story,
-                parameters: {
-                  lostpixel: item.parameters?.lostpixel,
-                  storyshots: item.parameters?.storyshots,
-                  viewport: item.parameters?.viewport,
-                },
+                parameters: parseParameters(
+                  item.parameters as Record<string, unknown>,
+                ) as Story['parameters'],
               }));
 
               return resolve({ stories });
