@@ -4,6 +4,7 @@
     "target": "es2017",
     "module": "commonjs",
     "moduleResolution": "node",
+    "declaration": true,
     "resolveJsonModule": true,
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
