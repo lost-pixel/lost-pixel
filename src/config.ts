@@ -5,21 +5,36 @@ import path from 'path';
 import { BrowserContextOptions, Page } from 'playwright';
 
 type BaseConfig = {
+  // Browser to use: chromium, firefox, or webkit
   browser: 'chromium' | 'firefox' | 'webkit';
+  // URL of the Lost Pixel API endpoint (default: https://app.lost-pixel.com/api/callback)
   lostPixelUrl: string;
+  // URL of the Storybook instance or local folder
   storybookUrl: string;
+  // Path to the baseline image folder
   imagePathBaseline: string;
+  // Path to the current image folder
   imagePathCurrent: string;
+  // Path to the difference image folder
   imagePathDifference: string;
+  // Number of concurrent shots to take
   shotConcurrency: number;
+  // Number of concurrent screenshots to compare
   compareConcurrency: number;
+  // Timeouts for various stages of the test
   timeouts: {
+    // Timeout for fetching stories from Storybook
     fetchStories?: number;
+    // Timeout for loading the state of the page
     loadState?: number;
+    // Timeout for waiting for network requests to finish
     networkRequests?: number;
   };
+  // Time to wait before taking a screenshot
   waitBeforeScreenshot: number;
+  // Time to wait for the first network request to start
   waitForFirstRequest: number;
+  // Time to wait for the last network request to start
   waitForLastRequest: number;
 };
 
@@ -31,28 +46,50 @@ type StoryLike = {
 };
 
 export type ProjectConfig = {
+  // Project ID
   lostPixelProjectId: string;
+  // CI build ID
   ciBuildId: string;
+  // CI build number
   ciBuildNumber: string;
+  // Git repository name (e.g. 'lost-pixel/lost-pixel-storybook')
   repository: string;
+  // Git branch name (e.g. 'main')
   commitRef: string;
+  // Git branch name (e.g. 'main')
   commitRefName: string;
+  // Git commit SHA (e.g. 'b9b8b9b9b9b9b9b9b9b9b9b9b9b9b9b9b9b9b9b9')
   commitHash: string;
+  // S3 configuration
   s3: {
+    // S3 endpoint
     endPoint: string;
+    // S3 server port number
     port?: number;
+    // use SSL
     ssl?: boolean;
+    // S3 region
     region?: string;
+    // S3 access key
     accessKey: string;
+    // S3 secret key
     secretKey: string;
+    // S3 session token
     sessionToken?: string;
+    // S3 bucket name
     bucketName: string;
+    // S3 base URL
     baseUrl?: string;
   };
+  // File path to event.json file
   eventFilePath?: string;
+  // Global story filter
   filterStory?: (input: StoryLike) => boolean;
+  // File name generator for images
   imageFilenameGenerator?: (input: StoryLike) => string;
+  // Configure browser context options
   configureBrowser?: (input: StoryLike) => BrowserContextOptions;
+  // Configure page before screenshot
   beforeScreenshot?: (page: Page, input: { id: string }) => Promise<void>;
 };
 
