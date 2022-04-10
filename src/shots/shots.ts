@@ -74,9 +74,9 @@ export const takeScreenShots = async (shotItems: ShotItem[]) => {
 
       logger(`Taking screenshot of '${shotItem.id}'`);
 
-      const startTime = performance.now();
+      const startTime = new Date().getTime();
       await takeScreenShot({ browser, shotItem, logger });
-      const endTime = performance.now();
+      const endTime = new Date().getTime();
       const elapsedTime = Number((endTime - startTime) / 1000).toFixed(3);
 
       logger(
