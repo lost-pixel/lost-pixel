@@ -3,9 +3,7 @@
   "version": "1.0.9",
   "description": "GitHub Action for Lost Pixel integration",
   "main": "dist/",
-  "bin": {
-    "lost-pixel": "./dist/bin.js"
-  },
+  "bin": "./dist/bin.js",
   "files": [
     "dist"
   ],
