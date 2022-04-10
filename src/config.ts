@@ -159,7 +159,10 @@ const checkConfig = () => {
   }
 };
 
-const configFileNameBase = path.join(process.cwd(), 'lostpixel.config');
+const configFileNameBase = path.join(
+  process.env.LOST_PIXEL_CONFIG_DIR || process.cwd(),
+  'lostpixel.config',
+);
 
 const loadProjectConfig = async (): Promise<CustomProjectConfig> => {
   if (existsSync(`${configFileNameBase}.js`)) {
