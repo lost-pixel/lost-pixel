@@ -85,6 +85,7 @@ jobs:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
           tags: "${{ env.RELEASE_VERSION }},latest"
+          tag_semver: true
           buildoptions: '--compress --force-rm'
 
       - name: Slack Notification
