@@ -46,7 +46,7 @@
     "axios": "^0.24.0",
     "lodash.get": "^4.4.2",
     "lodash.kebabcase": "^4.1.1",
-    "minio": "^7.0.25",
+    "minio": "^7.0.26",
     "pixelmatch": "^5.2.1",
     "playwright": "^1.20.1",
     "pngjs": "^6.0.0",
