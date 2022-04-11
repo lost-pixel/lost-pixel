@@ -10,12 +10,6 @@ jobs:
 
     steps:
 
-      - name: Debug
-        run: echo "latest,${{ github.event.release.tag_name }}"
-
-      - name: Setup tmate session
-        uses: mxschmitt/action-tmate@v3
-
       - name: Checkout
         uses: actions/checkout@v2
 
