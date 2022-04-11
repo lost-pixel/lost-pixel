@@ -81,7 +81,7 @@ jobs:
           name: lostpixel/lost-pixel-action
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
-          tags: "latest,${{ env.STATE_RELEASE_VERSION }}"
+          tags: "latest,${{ github.event.release.tag_name }}"
           buildoptions: '--compress --force-rm'
 
       - name: Slack Notification
