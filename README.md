@@ -13,10 +13,4 @@ Example workflow for a project called `your-project-name` using an S3 bucket on 
 ```
 - name: Lost Pixel
   uses: lost-pixel/lost-pixel-action@v1beta
-  with:
-    LOST_PIXEL_PROJECT_ID: ${{ secrets.LOST_PIXEL_PROJECT_ID }}
-    S3_END_POINT: 'fra1.digitaloceanspaces.com'
-    S3_ACCESS_KEY: ${{ secrets.S3_ACCESS_KEY }}
-    S3_SECRET_KEY: ${{ secrets.S3_SECRET_KEY }}
-    S3_BUCKET_NAME: 'your-project-name'
 ```
