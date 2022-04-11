@@ -72,19 +72,14 @@ jobs:
               }]
             }
 
-      - name: Set Docker tag
-        run: echo RELEASE_VERSION=$(echo ${GITHUB_RUN_NUMBER}-${GITHUB_SHA:0:8}) >> $GITHUB_ENV
-
-      - name: Display Docker tag
-        run: echo "${{ env.RELEASE_VERSION }}"
-
       - name: Publish to Registry
-        uses: elgohr/Publish-Docker-Github-Action@191af57e15535d28b83589e3b5f0c31e76aa8733
+        pre: echo ::save-state name=RELEASE_VERSION::$(echo ${GITHUB_REF:10})
+        uses: elgohr/Publish-Docker-Github-Action@47433670daec88d900599790a6fadbf5291a835b
         with:
           name: lostpixel/lost-pixel-action
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
-          tags: "${{ env.RELEASE_VERSION }},latest,${{ env.GITHUB_REF_NAME }}"
+          tags: "latest,${{ env.STATE_RELEASE_VERSION }}"
           buildoptions: '--compress --force-rm'
 
       - name: Slack Notification
