@@ -75,7 +75,6 @@ jobs:
             }
 
       - name: Publish to Registry
-        pre: echo ::save-state name=RELEASE_VERSION::$(echo ${GITHUB_REF:10})
         uses: elgohr/Publish-Docker-Github-Action@47433670daec88d900599790a6fadbf5291a835b
         with:
           name: lostpixel/lost-pixel-action
