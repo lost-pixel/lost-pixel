@@ -165,6 +165,11 @@ const configFileNameBase = path.join(
 );
 
 const loadProjectConfig = async (): Promise<CustomProjectConfig> => {
+  log('Loading project configuration...');
+  log('Current working directory:', process.cwd());
+  log('Defined configuration directory:', process.env.LOST_PIXEL_CONFIG_DIR);
+  log('Looking for configuration file:', `${configFileNameBase}.(js|ts)`);
+
   if (existsSync(`${configFileNameBase}.js`)) {
     const projectConfig = require(`${configFileNameBase}.js`);
     return projectConfig;
