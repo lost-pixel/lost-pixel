@@ -58,6 +58,12 @@ const takeScreenShot = async ({
   });
 
   await context.close();
+
+  const videoPath = await page.video()?.path();
+
+  if (videoPath) {
+    logger(`Video of '${shotItem.id}' recorded and saved to '${videoPath}`);
+  }
 };
 
 export const takeScreenShots = async (shotItems: ShotItem[]) => {
