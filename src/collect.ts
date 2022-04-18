@@ -44,11 +44,9 @@ export const collect = async () => {
 
     const [comparisons, uploadList] = prepareComparisonList({
       changes,
-      baseUrl: [
-        s3BaseUrl,
-        config.lostPixelProjectId,
-        config.ciBuildNumber,
-      ].join('/'),
+      baseUrl: [s3BaseUrl, config.lostPixelProjectId, config.ciBuildId].join(
+        '/',
+      ),
     });
 
     await sendToAPI({
