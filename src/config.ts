@@ -54,7 +54,7 @@ export type ProjectConfig = {
   ciBuildNumber: string;
   // Git repository name (e.g. 'lost-pixel/lost-pixel-storybook')
   repository: string;
-  // Git branch name (e.g. 'main')
+  // Git branch name (e.g. 'refs/heads/main')
   commitRef: string;
   // Git branch name (e.g. 'main')
   commitRefName: string;
