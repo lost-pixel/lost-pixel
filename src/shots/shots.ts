@@ -3,6 +3,7 @@ import { mapLimit } from 'async';
 import { getBrowser, log, sleep } from '../utils';
 import { waitForNetworkRequests } from './utils';
 import { config } from '../config';
+import path from 'path';
 
 export type ShotItem = {
   id: string;
@@ -62,7 +63,13 @@ const takeScreenShot = async ({
   const videoPath = await page.video()?.path();
 
   if (videoPath) {
-    logger(`Video of '${shotItem.id}' recorded and saved to '${videoPath}`);
+    const dirname = path.dirname(videoPath);
+    const ext = videoPath.split('.').pop();
+    const newVideoPath = `${dirname}/${shotItem.id}.${ext}`;
+    await page.video()?.saveAs(newVideoPath);
+    await page.video()?.delete();
+
+    logger(`Video of '${shotItem.id}' recorded and saved to '${newVideoPath}`);
   }
 };
 
