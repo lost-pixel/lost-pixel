@@ -3,6 +3,20 @@ import pixelmatch from 'pixelmatch';
 import { PNG } from 'pngjs';
 import { resizeImage } from './utils';
 
+export const checkThreshold = (
+  threshold: number,
+  pixelsTotal: number,
+  pixelDifference: number,
+) => {
+  // treat theshold as percentage
+  if (threshold < 1) {
+    return pixelDifference <= pixelsTotal * threshold;
+  }
+
+  // treat threshold as absolute value
+  return pixelDifference <= threshold;
+};
+
 export const compareImages = async (
   baselineShotPath: string,
   currentShotPath: string,

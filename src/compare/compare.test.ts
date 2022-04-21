@@ -1,10 +1,29 @@
 import { existsSync, mkdirSync } from 'fs';
-import { compareImages } from './compare';
+import { checkThreshold, compareImages } from './compare';
 
 beforeAll(() => {
   if (!existsSync('fixtures/test-results')) {
     mkdirSync('fixtures/test-results', { recursive: true });
   }
+});
+
+describe(checkThreshold, () => {
+  it('should check if changes are within threshold', async () => {
+    expect(checkThreshold(0, 100, 0)).toBe(true);
+    expect(checkThreshold(0, 100, 1)).toBe(false);
+
+    expect(checkThreshold(0.1, 100, 0)).toBe(true);
+    expect(checkThreshold(0.1, 100, 10)).toBe(true);
+    expect(checkThreshold(0.1, 100, 11)).toBe(false);
+
+    expect(checkThreshold(1, 100, 0)).toBe(true);
+    expect(checkThreshold(1, 100, 1)).toBe(true);
+    expect(checkThreshold(1, 100, 2)).toBe(false);
+
+    expect(checkThreshold(123, 10_000, 0)).toBe(true);
+    expect(checkThreshold(123, 10_000, 123)).toBe(true);
+    expect(checkThreshold(123, 10_000, 124)).toBe(false);
+  });
 });
 
 describe(compareImages, () => {
