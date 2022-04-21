@@ -34,7 +34,7 @@ export const checkDifferences = async (shotItems: ShotItem[]) => {
       }
 
       const { pixelDifference, isWithinThreshold } = await compareImages(
-        0,
+        shotItem.pixelDifferenceThreshold,
         shotItem.filePathBaseline,
         shotItem.filePathCurrent,
         shotItem.filePathDifference,
