@@ -102,4 +102,33 @@ describe(compareImages, () => {
       isWithinThreshold: true,
     });
   }, 12000);
+
+  it('should accept differences in images within a given threshold', async () => {
+    const result1 = await compareImages(
+      0.4,
+      'fixtures/baseline/banner.png',
+      'fixtures/current/banner1.png',
+      'fixtures/test-results/banner1.png',
+    );
+    expect(result1.isWithinThreshold).toBe(true);
+    expect(result1.pixelDifference).toBeGreaterThan(50_000);
+
+    const result2 = await compareImages(
+      400_000,
+      'fixtures/baseline/banner.png',
+      'fixtures/current/banner2.png',
+      'fixtures/test-results/banner2.png',
+    );
+    expect(result2.isWithinThreshold).toBe(true);
+    expect(result2.pixelDifference).toBeGreaterThan(350_000);
+
+    const result3 = await compareImages(
+      50_000,
+      'fixtures/baseline/banner.png',
+      'fixtures/current/banner3.png',
+      'fixtures/test-results/banner3.png',
+    );
+    expect(result3.isWithinThreshold).toBe(true);
+    expect(result3.pixelDifference).toBeGreaterThan(40_000);
+  }, 12000);
 });
