@@ -4,21 +4,24 @@ import kebabCase from 'lodash.kebabcase';
 import { config } from '../config';
 import { getBrowser } from '../utils';
 
+export type StoryParameters = {
+  lostpixel?: {
+    disable?: boolean;
+    threshold?: number;
+  };
+  viewport?: {
+    width?: number;
+    height?: number;
+  };
+};
+
 export type Story = {
   id: string;
   kind: string;
   story: string;
-  parameters?: {
-    lostpixel?: {
-      disable?: boolean;
-      threshold?: number;
-    };
+  parameters?: StoryParameters & {
     storyshots?: {
       disable?: boolean;
-    };
-    viewport?: {
-      width?: number;
-      height?: number;
     };
   };
 };
