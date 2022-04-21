@@ -30,57 +30,76 @@ describe(compareImages, () => {
   it('should recognize identic images', async () => {
     expect(
       await compareImages(
+        0,
         'fixtures/baseline/banner.png',
         'fixtures/baseline/banner.png',
         'fixtures/difference/banner.png',
       ),
-    ).toBe(0);
+    ).toStrictEqual({
+      pixelDifference: 0,
+      isWithinThreshold: true,
+    });
   });
 
   it('should recoginze differences in images', async () => {
-    expect(
-      await compareImages(
-        'fixtures/baseline/banner.png',
-        'fixtures/current/banner1.png',
-        'fixtures/test-results/banner1.png',
-      ),
-    ).toBeGreaterThan(0);
+    const result1 = await compareImages(
+      0,
+      'fixtures/baseline/banner.png',
+      'fixtures/current/banner1.png',
+      'fixtures/test-results/banner1.png',
+    );
+    expect(result1.isWithinThreshold).toBe(false);
+    expect(result1.pixelDifference).toBeGreaterThan(50_000);
 
     expect(
       await compareImages(
+        0,
         'fixtures/difference/banner1.png',
         'fixtures/test-results/banner1.png',
       ),
-    ).toBe(0);
+    ).toStrictEqual({
+      pixelDifference: 0,
+      isWithinThreshold: true,
+    });
+
+    const result2 = await compareImages(
+      0,
+      'fixtures/baseline/banner.png',
+      'fixtures/current/banner2.png',
+      'fixtures/test-results/banner2.png',
+    );
+    expect(result2.isWithinThreshold).toBe(false);
+    expect(result2.pixelDifference).toBeGreaterThan(350_000);
 
     expect(
       await compareImages(
-        'fixtures/baseline/banner.png',
-        'fixtures/current/banner2.png',
-        'fixtures/test-results/banner2.png',
-      ),
-    ).toBeGreaterThan(0);
-
-    expect(
-      await compareImages(
+        0,
         'fixtures/difference/banner2.png',
         'fixtures/test-results/banner2.png',
       ),
-    ).toBe(0);
+    ).toStrictEqual({
+      pixelDifference: 0,
+      isWithinThreshold: true,
+    });
+
+    const result3 = await compareImages(
+      0,
+      'fixtures/baseline/banner.png',
+      'fixtures/current/banner3.png',
+      'fixtures/test-results/banner3.png',
+    );
+    expect(result3.isWithinThreshold).toBe(false);
+    expect(result3.pixelDifference).toBeGreaterThan(40_000);
 
     expect(
       await compareImages(
-        'fixtures/baseline/banner.png',
-        'fixtures/current/banner3.png',
-        'fixtures/test-results/banner3.png',
-      ),
-    ).toBeGreaterThan(0);
-
-    expect(
-      await compareImages(
+        0,
         'fixtures/difference/banner3.png',
         'fixtures/test-results/banner3.png',
       ),
-    ).toBe(0);
+    ).toStrictEqual({
+      pixelDifference: 0,
+      isWithinThreshold: true,
+    });
   }, 12000);
 });
