@@ -38,7 +38,7 @@ type BaseConfig = {
   waitForLastRequest: number;
 
   // Threshold for the difference between the baseline and current image
-  pixelDifferenceThreshold: number;
+  threshold: number;
 };
 
 type StoryLike = {
@@ -134,7 +134,7 @@ const defaultConfig: BaseConfig = {
   waitBeforeScreenshot: 1_000,
   waitForFirstRequest: 1_000,
   waitForLastRequest: 1_000,
-  pixelDifferenceThreshold: 0,
+  threshold: 0,
 };
 
 export let config: FullConfig;

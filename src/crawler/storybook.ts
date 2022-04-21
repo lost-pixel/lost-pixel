@@ -11,7 +11,7 @@ export type Story = {
   parameters?: {
     lostpixel?: {
       disable?: boolean;
-      pixelDifferenceThreshold?: number;
+      threshold?: number;
     };
     storyshots?: {
       disable?: boolean;
@@ -192,9 +192,7 @@ export const generateShotItems = (
           fileNameWithExt,
         ),
         browserConfig: generateBrowserConfig(story),
-        pixelDifferenceThreshold:
-          story.parameters?.lostpixel?.pixelDifferenceThreshold ??
-          config.pixelDifferenceThreshold,
+        threshold: story.parameters?.lostpixel?.threshold ?? config.threshold,
       };
     });
 

@@ -12,7 +12,7 @@ export type ShotItem = {
   filePathCurrent: string;
   filePathDifference: string;
   browserConfig?: BrowserContextOptions;
-  pixelDifferenceThreshold: number;
+  threshold: number;
 };
 
 const takeScreenShot = async ({
