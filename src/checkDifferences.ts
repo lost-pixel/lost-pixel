@@ -29,8 +29,9 @@ export const checkDifferences = async (shotItems: ShotItem[]) => {
       const currentImageExists = existsSync(shotItem.filePathCurrent);
 
       if (!currentImageExists) {
-        logger(`Error: Missing current image: ${shotItem.filePathCurrent}`);
-        process.exit(1);
+        throw new Error(
+          `Error: Missing current image: ${shotItem.filePathCurrent}`,
+        );
       }
 
       const { pixelDifference, pixelDifferencePercentage, isWithinThreshold } =

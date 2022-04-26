@@ -16,11 +16,9 @@ export const collect = async () => {
   const difference = getImageList(config.imagePathDifference);
 
   if (baseline === null && current === null) {
-    log(
+    throw new Error(
       'Error: No baseline or current images found. Check paths configuration.',
     );
-
-    process.exit(1);
   }
 
   log(`Found ${baseline?.length ?? 0} baseline images`);
@@ -33,43 +31,31 @@ export const collect = async () => {
     difference: difference || [],
   };
 
-  try {
-    const changes = getChanges(files);
+  const changes = getChanges(files);
 
-    log(`Preparing comparison list`);
+  log(`Preparing comparison list`);
 
-    const s3BaseUrl =
-      config.s3.baseUrl ||
-      `https://${config.s3.bucketName}.${config.s3.endPoint}`;
+  const s3BaseUrl =
+    config.s3.baseUrl ||
+    `https://${config.s3.bucketName}.${config.s3.endPoint}`;
 
-    const [comparisons, uploadList] = prepareComparisonList({
-      changes,
-      baseUrl: [s3BaseUrl, config.lostPixelProjectId, config.ciBuildId].join(
-        '/',
-      ),
-    });
+  const [comparisons, uploadList] = prepareComparisonList({
+    changes,
+    baseUrl: [s3BaseUrl, config.lostPixelProjectId, config.ciBuildId].join('/'),
+  });
 
-    await sendToAPI({
-      comparisons,
-      event: config.eventFilePath
-        ? getEventData(config.eventFilePath)
-        : undefined,
-    });
+  await sendToAPI({
+    comparisons,
+    event: config.eventFilePath
+      ? getEventData(config.eventFilePath)
+      : undefined,
+  });
 
-    log(`Uploading ${uploadList.length} files`);
+  log(`Uploading ${uploadList.length} files`);
 
-    const uploadPromises = uploadList.map(uploadFile);
+  const uploadPromises = uploadList.map(uploadFile);
 
-    await Promise.all(uploadPromises);
+  await Promise.all(uploadPromises);
 
-    log(JSON.stringify(comparisons, null, 2));
-  } catch (error) {
-    if (error instanceof Error) {
-      log(error.message);
-    } else {
-      log(error);
-    }
-
-    process.exit(1);
-  }
+  log(JSON.stringify(comparisons, null, 2));
 };

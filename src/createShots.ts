@@ -10,8 +10,7 @@ export const createShots = async () => {
   removeFilesInFolder(config.imagePathDifference);
 
   if (!collection?.stories || collection.stories.length === 0) {
-    log('Error: Stories not found');
-    process.exit(1);
+    throw new Error('Error: Stories not found');
   }
 
   log(`Found ${collection.stories.length} stories`);
