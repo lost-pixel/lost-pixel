@@ -1,5 +1,5 @@
 import { Client as MinioClient, ItemBucketMetadata } from 'minio';
-import { Comparison, log } from './utils';
+import { Comparison, log, logMemory } from './utils';
 import axios from 'axios';
 import {
   PullRequestEvent,
@@ -88,6 +88,7 @@ export const sendToAPI = async ({
     commit: config.commitHash,
     buildMeta: event,
     comparisons,
+    log: logMemory,
   });
 
   if (response.status !== 200) {
