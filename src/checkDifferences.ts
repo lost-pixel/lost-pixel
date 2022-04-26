@@ -33,21 +33,24 @@ export const checkDifferences = async (shotItems: ShotItem[]) => {
         process.exit(1);
       }
 
-      const { pixelDifference, isWithinThreshold } = await compareImages(
-        shotItem.threshold,
-        shotItem.filePathBaseline,
-        shotItem.filePathCurrent,
-        shotItem.filePathDifference,
-      );
+      const { pixelDifference, pixelDifferencePercentage, isWithinThreshold } =
+        await compareImages(
+          shotItem.threshold,
+          shotItem.filePathBaseline,
+          shotItem.filePathCurrent,
+          shotItem.filePathDifference,
+        );
 
       if (pixelDifference > 0) {
+        const percentage = (pixelDifferencePercentage * 100).toFixed(1);
+
         if (isWithinThreshold) {
           logger(
-            `Difference of ${pixelDifference} pixels found but within threshold.`,
+            `Difference of ${pixelDifference} pixels (${percentage}%) found but within threshold.`,
           );
         } else {
           logger(
-            `Difference of ${pixelDifference} pixels found. Difference image saved to: ${shotItem.filePathDifference}`,
+            `Difference of ${pixelDifference} pixels (${percentage}%) found. Difference image saved to: ${shotItem.filePathDifference}`,
           );
         }
       } else {

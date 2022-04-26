@@ -24,6 +24,7 @@ export const compareImages = async (
   differenceShotPath?: string,
 ): Promise<{
   pixelDifference: number;
+  pixelDifferencePercentage: number;
   isWithinThreshold: boolean;
 }> => {
   const baselineImageBuffer = readFileSync(baselineShotPath);
@@ -32,6 +33,7 @@ export const compareImages = async (
   if (baselineImageBuffer.equals(currentImageBuffer)) {
     return {
       pixelDifference: 0,
+      pixelDifferencePercentage: 0,
       isWithinThreshold: true,
     };
   }
@@ -67,9 +69,9 @@ export const compareImages = async (
     { threshold: 0 },
   );
 
-  if (pixelDifference > 0 && differenceShotPath) {
-    const pixelsTotal = baselineImage.width * baselineImage.height;
+  const pixelsTotal = baselineImage.width * baselineImage.height;
 
+  if (pixelDifference > 0 && differenceShotPath) {
     const isWithinThreshold = checkThreshold(
       threshold,
       pixelsTotal,
@@ -82,12 +84,14 @@ export const compareImages = async (
 
     return {
       pixelDifference,
+      pixelDifferencePercentage: pixelDifference / pixelsTotal,
       isWithinThreshold,
     };
   }
 
   return {
     pixelDifference,
+    pixelDifferencePercentage: pixelDifference / pixelsTotal,
     isWithinThreshold: true,
   };
 };
