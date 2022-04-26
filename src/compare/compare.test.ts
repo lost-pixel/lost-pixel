@@ -37,6 +37,7 @@ describe(compareImages, () => {
       ),
     ).toStrictEqual({
       pixelDifference: 0,
+      pixelDifferencePercentage: 0,
       isWithinThreshold: true,
     });
   });
@@ -59,6 +60,7 @@ describe(compareImages, () => {
       ),
     ).toStrictEqual({
       pixelDifference: 0,
+      pixelDifferencePercentage: 0,
       isWithinThreshold: true,
     });
 
@@ -79,6 +81,7 @@ describe(compareImages, () => {
       ),
     ).toStrictEqual({
       pixelDifference: 0,
+      pixelDifferencePercentage: 0,
       isWithinThreshold: true,
     });
 
@@ -99,6 +102,7 @@ describe(compareImages, () => {
       ),
     ).toStrictEqual({
       pixelDifference: 0,
+      pixelDifferencePercentage: 0,
       isWithinThreshold: true,
     });
   }, 12000);
