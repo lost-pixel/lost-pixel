@@ -22,7 +22,7 @@ const takeScreenShot = async ({
 }: {
   browser: Browser;
   shotItem: ShotItem;
-  logger: typeof log;
+  logger: (message: string, ...rest: unknown[]) => void;
 }) => {
   const context = await browser.newContext(shotItem.browserConfig);
   const page = await context.newPage();
