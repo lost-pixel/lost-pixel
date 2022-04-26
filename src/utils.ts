@@ -11,8 +11,18 @@ import { config } from './config';
 import { Service } from 'ts-node';
 import { BrowserType, chromium, firefox, webkit } from 'playwright';
 
-// eslint-disable-next-line no-console
-export const log = console.log;
+type LogMemory = Array<{
+  timestamp: Date;
+  content: unknown[];
+}>;
+
+export const logMemory: LogMemory = [];
+
+export const log = (...content: unknown[]) => {
+  logMemory.push({ timestamp: new Date(), content });
+  // eslint-disable-next-line no-console
+  console.log(...content);
+};
 
 export type Files = {
   baseline: string[];
