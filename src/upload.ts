@@ -79,25 +79,37 @@ export const sendToAPI = async ({
 
   const [repoOwner, repoName] = config.repository.split('/');
 
-  const response = await apiClient.post(config.lostPixelUrl, {
-    projectId: config.lostPixelProjectId,
-    buildId: config.ciBuildId,
-    buildNumber: config.ciBuildNumber,
-    branchRef: config.commitRef,
-    branchName: config.commitRefName,
-    repoOwner,
-    repoName,
-    commit: config.commitHash,
-    buildMeta: event,
-    comparisons: comparisons || [],
-    success,
-    log: logMemory,
-  });
+  try {
+    const response = await apiClient.post(config.lostPixelUrl, {
+      projectId: config.lostPixelProjectId,
+      buildId: config.ciBuildId,
+      buildNumber: config.ciBuildNumber,
+      branchRef: config.commitRef,
+      branchName: config.commitRefName,
+      repoOwner,
+      repoName,
+      commit: config.commitHash,
+      buildMeta: event,
+      comparisons: comparisons || [],
+      success,
+      log: logMemory,
+    });
 
-  if (response.status !== 200) {
-    log(
-      `Error: Failed to send to API. Status: ${response.status} ${response.statusText}`,
-    );
+    if (response.status !== 200) {
+      log(
+        `Error: Failed to send to API. Status: ${response.status} ${response.statusText}`,
+      );
+
+      process.exit(1);
+    }
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      log('API response: ', error.response?.data || error.message);
+    } else if (error instanceof Error) {
+      log(error.message);
+    } else {
+      log(error);
+    }
 
     process.exit(1);
   }
