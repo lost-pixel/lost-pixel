@@ -1,8 +1,9 @@
 import { checkDifferences } from './checkDifferences';
 import { collect } from './collect';
 import { createShots } from './createShots';
-import { createShotsFolders, log } from './utils';
-import { configure } from './config';
+import { createShotsFolders, getEventData, log } from './utils';
+import { config, configure } from './config';
+import { sendToAPI } from './upload';
 
 (async () => {
   await configure();
@@ -10,13 +11,24 @@ import { configure } from './config';
     createShotsFolders();
     const shotItems = await createShots();
     await checkDifferences(shotItems);
-    await collect();
+    const comparisons = await collect();
+
+    await sendToAPI({
+      success: true,
+      comparisons,
+      event: getEventData(config.eventFilePath),
+    });
   } catch (error) {
     if (error instanceof Error) {
       log(error.message);
     } else {
       log(error);
     }
+
+    await sendToAPI({
+      success: false,
+      event: getEventData(config.eventFilePath),
+    });
 
     process.exit(1);
   }

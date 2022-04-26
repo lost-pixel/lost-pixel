@@ -67,10 +67,12 @@ export const uploadFile = async ({
 };
 
 export const sendToAPI = async ({
+  success,
   comparisons,
   event,
 }: {
-  comparisons: Comparison[];
+  success: boolean;
+  comparisons?: Comparison[];
   event?: WebhookEvent;
 }) => {
   log('Sending to API');
@@ -87,7 +89,8 @@ export const sendToAPI = async ({
     repoName,
     commit: config.commitHash,
     buildMeta: event,
-    comparisons,
+    comparisons: comparisons || [],
+    success,
     log: logMemory,
   });
 

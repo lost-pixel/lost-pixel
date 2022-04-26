@@ -1,11 +1,5 @@
-import { sendToAPI, uploadFile } from './upload';
-import {
-  getChanges,
-  getEventData,
-  getImageList,
-  log,
-  prepareComparisonList,
-} from './utils';
+import { uploadFile } from './upload';
+import { getChanges, getImageList, log, prepareComparisonList } from './utils';
 import { config } from './config';
 
 export const collect = async () => {
@@ -44,13 +38,6 @@ export const collect = async () => {
     baseUrl: [s3BaseUrl, config.lostPixelProjectId, config.ciBuildId].join('/'),
   });
 
-  await sendToAPI({
-    comparisons,
-    event: config.eventFilePath
-      ? getEventData(config.eventFilePath)
-      : undefined,
-  });
-
   log(`Uploading ${uploadList.length} files`);
 
   const uploadPromises = uploadList.map(uploadFile);
@@ -58,4 +45,6 @@ export const collect = async () => {
   await Promise.all(uploadPromises);
 
   log(JSON.stringify(comparisons, null, 2));
+
+  return comparisons;
 };
