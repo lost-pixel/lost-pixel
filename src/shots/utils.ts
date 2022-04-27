@@ -93,26 +93,34 @@ export const waitForNetworkRequests = ({
   });
 
 export const resizeViewportToFullscreen = async ({ page }: { page: Page }) => {
-  const height = await page.evaluate(
+  const viewport = await page.evaluate(
     () =>
-      new Promise<number>((resolve) => {
+      new Promise<{ height: number; width: number }>((resolve) => {
         const body = document.body;
         const html = document.documentElement;
 
-        resolve(
-          Math.max(
-            body.scrollHeight,
-            body.offsetHeight,
-            html.clientHeight,
-            html.scrollHeight,
-            html.offsetHeight,
-          ),
+        const height = Math.max(
+          body.scrollHeight,
+          body.offsetHeight,
+          html.clientHeight,
+          html.scrollHeight,
+          html.offsetHeight,
         );
+
+        const width = Math.max(
+          body.scrollWidth,
+          body.offsetWidth,
+          html.clientWidth,
+          html.scrollWidth,
+          html.offsetWidth,
+        );
+
+        resolve({ height, width });
       }),
   );
 
   await page.setViewportSize({
-    width: page.viewportSize()?.width || 800,
-    height,
+    width: Math.max(page.viewportSize()?.width || 800, viewport.width),
+    height: viewport.height,
   });
 };
