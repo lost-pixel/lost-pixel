@@ -1,7 +1,7 @@
 import { Browser, BrowserContextOptions } from 'playwright';
 import { mapLimit } from 'async';
 import { getBrowser, log, sleep } from '../utils';
-import { waitForNetworkRequests } from './utils';
+import { resizeViewportToFullscreen, waitForNetworkRequests } from './utils';
 import { config } from '../config';
 import path from 'path';
 
@@ -51,11 +51,20 @@ const takeScreenShot = async ({
     await config.beforeScreenshot(page, { id: shotItem.id });
   }
 
+  let fullScreenMode = true;
+
+  try {
+    await resizeViewportToFullscreen({ page });
+    fullScreenMode = false;
+  } catch (error) {
+    log(`Could not resize viewport to fullscreen: ${shotItem.id}`);
+  }
+
   await sleep(config.waitBeforeScreenshot);
 
   await page.screenshot({
     path: shotItem.filePathCurrent,
-    fullPage: true,
+    fullPage: fullScreenMode,
     animations: 'disabled',
   });
 

@@ -91,3 +91,28 @@ export const waitForNetworkRequests = ({
     page.on('requestfinished', onRequestFinished);
     page.on('requestfailed', onRequestFinished);
   });
+
+export const resizeViewportToFullscreen = async ({ page }: { page: Page }) => {
+  const height = await page.evaluate(
+    () =>
+      new Promise<number>((resolve) => {
+        const body = document.body;
+        const html = document.documentElement;
+
+        resolve(
+          Math.max(
+            body.scrollHeight,
+            body.offsetHeight,
+            html.clientHeight,
+            html.scrollHeight,
+            html.offsetHeight,
+          ),
+        );
+      }),
+  );
+
+  await page.setViewportSize({
+    width: page.viewportSize()?.width || 800,
+    height,
+  });
+};
