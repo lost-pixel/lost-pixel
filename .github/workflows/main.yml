@@ -7,6 +7,10 @@ jobs:
     name: Lost Pixel
 
     steps:
+      - name: Logging
+        run: |
+          echo "${{toJSON(github.event)}}"
+
       - name: Checkout
         uses: actions/checkout@v2
 
