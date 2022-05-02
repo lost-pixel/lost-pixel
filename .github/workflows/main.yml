@@ -7,9 +7,6 @@ jobs:
     name: Lost Pixel
 
     steps:
-      - name: Logging
-        run: |
-          echo "${{join(github.event.commits.message, '\n- ')}}"
 
       - name: Checkout
         uses: actions/checkout@v2
