@@ -43,7 +43,7 @@ export const checkDifferences = async (shotItems: ShotItem[]) => {
         );
 
       if (pixelDifference > 0) {
-        const percentage = (pixelDifferencePercentage * 100).toFixed(1);
+        const percentage = (pixelDifferencePercentage * 100).toFixed(2);
 
         if (isWithinThreshold) {
           logger(
