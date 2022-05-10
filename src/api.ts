@@ -1,16 +1,8 @@
 import { log } from './utils';
 import axios from 'axios';
-import {
-  PullRequestEvent,
-  CheckSuiteRequestedEvent,
-  CheckRunRerequestedEvent,
-} from '@octokit/webhooks-types';
 import { config } from './config';
 
-export type WebhookEvent =
-  | PullRequestEvent
-  | CheckSuiteRequestedEvent
-  | CheckRunRerequestedEvent;
+type ApiAction = 'init' | 'result';
 
 export const apiClient = axios.create({
   headers: {
@@ -18,15 +10,21 @@ export const apiClient = axios.create({
   },
 });
 
-export const sendToAPI = async (requestName: string, payload: unknown) => {
-  log(`Sending to API [${requestName}]`);
+export const sendToAPI = async (
+  action: ApiAction,
+  payload: Record<string, unknown>,
+) => {
+  log(`Sending to API [${action}]`);
 
   try {
-    const response = await apiClient.post(config.lostPixelUrl, payload);
+    const response = await apiClient.post(config.lostPixelUrl, {
+      ...payload,
+      action,
+    });
 
     if (response.status !== 200) {
       log(
-        `Error: Failed to send to API [${requestName}]. Status: ${response.status} ${response.statusText}`,
+        `Error: Failed to send to API [${action}]. Status: ${response.status} ${response.statusText}`,
       );
 
       process.exit(1);
@@ -43,5 +41,5 @@ export const sendToAPI = async (requestName: string, payload: unknown) => {
     process.exit(1);
   }
 
-  log(`Successfully sent to API [${requestName}]`);
+  log(`Successfully sent to API [${action}]`);
 };
