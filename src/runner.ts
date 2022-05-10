@@ -3,7 +3,7 @@ import { collect } from './collect';
 import { createShots } from './createShots';
 import { createShotsFolders, getEventData, log } from './utils';
 import { config, configure } from './config';
-import { sendToAPI } from './upload';
+import { sendResultToAPI } from './upload';
 
 (async () => {
   await configure();
@@ -13,7 +13,7 @@ import { sendToAPI } from './upload';
     await checkDifferences(shotItems);
     const comparisons = await collect();
 
-    await sendToAPI({
+    await sendResultToAPI({
       success: true,
       comparisons,
       event: getEventData(config.eventFilePath),
@@ -25,7 +25,7 @@ import { sendToAPI } from './upload';
       log(error);
     }
 
-    await sendToAPI({
+    await sendResultToAPI({
       success: false,
       event: getEventData(config.eventFilePath),
     });

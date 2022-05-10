@@ -7,6 +7,7 @@ import {
   CheckRunRerequestedEvent,
 } from '@octokit/webhooks-types';
 import { config } from './config';
+import { sendToAPI } from './api';
 
 export type WebhookEvent =
   | PullRequestEvent
@@ -66,7 +67,7 @@ export const uploadFile = async ({
   });
 };
 
-export const sendToAPI = async ({
+export const sendResultToAPI = async ({
   success,
   comparisons,
   event,
@@ -79,40 +80,18 @@ export const sendToAPI = async ({
 
   const [repoOwner, repoName] = config.repository.split('/');
 
-  try {
-    const response = await apiClient.post(config.lostPixelUrl, {
-      projectId: config.lostPixelProjectId,
-      buildId: config.ciBuildId,
-      buildNumber: config.ciBuildNumber,
-      branchRef: config.commitRef,
-      branchName: config.commitRefName,
-      repoOwner,
-      repoName,
-      commit: config.commitHash,
-      buildMeta: event,
-      comparisons: comparisons || [],
-      success,
-      log: logMemory,
-    });
-
-    if (response.status !== 200) {
-      log(
-        `Error: Failed to send to API. Status: ${response.status} ${response.statusText}`,
-      );
-
-      process.exit(1);
-    }
-  } catch (error) {
-    if (axios.isAxiosError(error)) {
-      log('API response: ', error.response?.data || error.message);
-    } else if (error instanceof Error) {
-      log(error.message);
-    } else {
-      log(error);
-    }
-
-    process.exit(1);
-  }
-
-  log('Successfully sent to API');
+  return sendToAPI('result', {
+    projectId: config.lostPixelProjectId,
+    buildId: config.ciBuildId,
+    buildNumber: config.ciBuildNumber,
+    branchRef: config.commitRef,
+    branchName: config.commitRefName,
+    repoOwner,
+    repoName,
+    commit: config.commitHash,
+    buildMeta: event,
+    comparisons: comparisons || [],
+    success,
+    log: logMemory,
+  });
 };
