@@ -4,10 +4,15 @@ import { createShots } from './createShots';
 import { createShotsFolders, getEventData, log } from './utils';
 import { config, configure } from './config';
 import { sendResultToAPI } from './upload';
+import { sendInitToAPI } from './sendInit';
 
 (async () => {
   await configure();
   try {
+    if (config.setPendingStatusCheck) {
+      await sendInitToAPI();
+    }
+
     createShotsFolders();
     const shotItems = await createShots();
     await checkDifferences(shotItems);
