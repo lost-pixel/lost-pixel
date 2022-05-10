@@ -1,6 +1,5 @@
 import { Client as MinioClient, ItemBucketMetadata } from 'minio';
 import { Comparison, log, logMemory } from './utils';
-import axios from 'axios';
 import {
   PullRequestEvent,
   CheckSuiteRequestedEvent,
@@ -13,12 +12,6 @@ export type WebhookEvent =
   | PullRequestEvent
   | CheckSuiteRequestedEvent
   | CheckRunRerequestedEvent;
-
-export const apiClient = axios.create({
-  headers: {
-    'Content-type': 'application/json',
-  },
-});
 
 let minio: MinioClient;
 
@@ -76,8 +69,6 @@ export const sendResultToAPI = async ({
   comparisons?: Comparison[];
   event?: WebhookEvent;
 }) => {
-  log('Sending to API');
-
   const [repoOwner, repoName] = config.repository.split('/');
 
   return sendToAPI('result', {
