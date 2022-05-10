@@ -12,7 +12,13 @@ export const apiClient = axios.create({
 
 export const sendToAPI = async (
   action: ApiAction,
-  payload: Record<string, unknown>,
+  payload: {
+    projectId: string;
+    branchName: string;
+    repoOwner: string;
+    repoName: string;
+    commit: string;
+  } & Record<string, unknown>,
 ) => {
   log(`Sending to API [${action}]`);
 
