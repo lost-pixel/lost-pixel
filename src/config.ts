@@ -103,6 +103,14 @@ type BaseConfig = {
    * @default 0
    */
   threshold: number;
+
+  /**
+   * Whether to set the GitHub status check on process start or not
+   *
+   * Setting this option to `true` makes only sense if the repository settings have pending status checks disabled
+   * @default 'false'
+   */
+  setPendingStatusCheck: boolean;
 };
 
 type StoryLike = {
@@ -263,6 +271,7 @@ const defaultConfig: BaseConfig = {
   waitForFirstRequest: 1_000,
   waitForLastRequest: 1_000,
   threshold: 0,
+  setPendingStatusCheck: false,
 };
 
 export let config: FullConfig;
