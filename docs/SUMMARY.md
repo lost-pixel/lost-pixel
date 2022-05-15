@@ -1,8 +1,9 @@
 # Table of contents
 
-* [Getting started](README.md)
-* [Guides](guides/README.md)
-  * [Managed version](guides/managed-version.md)
-  * [Self-hosted version](guides/self-hosted-version.md)
-* [Contributing](contributing.md)
-* [FAQ](faq.md)
+* [What is Lost Pixel?](README.md)
+
+## Setup
+
+* [Project Configuration](setup/project-configuration.md)
+* [Integrating With GitHub Actions](setup/integrating-with-github-actions.md)
+* [Monorepo Setup](setup/monorepo-setup.md)
