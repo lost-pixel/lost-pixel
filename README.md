@@ -30,6 +30,6 @@
 
 ## Contributing
 
-**Lost Pixel** is open source in it's heart and welcomes any external contribution. You can refer to CONTRIBUTING.md to get going with the project locally in couple of minutes.
+**Lost Pixel** is open source in it's heart and welcomes any external contribution. You can refer to [CONTRIBUTING.md](https://github.com/lost-pixel/lost-pixel-action/blob/main/CONTRIBUTING.md) to get going with the project locally in couple of minutes.
 
 
