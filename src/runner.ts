@@ -8,9 +8,8 @@ import { sendInitToAPI } from './sendInit';
 
 (async () => {
   await configure();
-  const isGenerateOnlyMode = config.generateOnly;
   try {
-    if (config.setPendingStatusCheck && !isGenerateOnlyMode) {
+    if (config.setPendingStatusCheck && config.generateOnly) {
       await sendInitToAPI();
     }
     if (isUpdateMode()) {
@@ -38,7 +37,7 @@ import { sendInitToAPI } from './sendInit';
       log(error);
     }
 
-    if (!isGenerateOnlyMode) {
+    if (!config.generateOnly) {
       await sendResultToAPI({
         success: false,
         event: getEventData(config.eventFilePath),
