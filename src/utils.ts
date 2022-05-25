@@ -10,6 +10,8 @@ import { normalize, join } from 'path';
 import { config } from './config';
 import { Service } from 'ts-node';
 import { BrowserType, chromium, firefox, webkit } from 'playwright';
+import yargs from 'yargs';
+import { hideBin } from 'yargs/helpers';
 
 type LogMemory = Array<{
   timestamp: Date;
@@ -17,6 +19,11 @@ type LogMemory = Array<{
 }>;
 
 export const logMemory: LogMemory = [];
+
+export const isUpdateMode = (): boolean => {
+  const args = yargs(hideBin(process.argv)).parse();
+  return args._.includes('update') || args.m === 'update';
+};
 
 export const log = (...content: unknown[]) => {
   logMemory.push({ timestamp: new Date(), content });

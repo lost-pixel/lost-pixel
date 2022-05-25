@@ -8,7 +8,6 @@ export const createShots = async () => {
 
   removeFilesInFolder(config.imagePathCurrent);
   removeFilesInFolder(config.imagePathDifference);
-
   if (!collection?.stories || collection.stories.length === 0) {
     throw new Error('Error: Stories not found');
   }
