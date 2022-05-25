@@ -157,7 +157,7 @@ export type ProjectConfig = {
   commitHash: string;
 
   /**
-   * Git commit SHA (e.g. 'b9b8b9b9b9b9b9b9b9b9b9b9b9b9b9b9b9b9b9b9')
+   * Flag that decides if images should be uploaded to S3 bucket or just generated (non-SaaS self-hosted mode)
    */
   generateOnly: boolean;
 
