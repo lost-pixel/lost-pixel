@@ -1,14 +1,16 @@
 import { config } from './config';
 import { collectStories, generateShotItems } from './crawler/storybook';
 import { takeScreenShots } from './shots/shots';
-import { log, removeFilesInFolder } from './utils';
+import { log, removeFilesInFolder, isUpdateMode } from './utils';
 
 export const createShots = async () => {
   const collection = await collectStories(config.storybookUrl);
 
   removeFilesInFolder(config.imagePathCurrent);
   removeFilesInFolder(config.imagePathDifference);
-
+  if (isUpdateMode()) {
+    removeFilesInFolder(config.imagePathBaseline);
+  }
   if (!collection?.stories || collection.stories.length === 0) {
     throw new Error('Error: Stories not found');
   }

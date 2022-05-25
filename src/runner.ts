@@ -1,7 +1,7 @@
 import { checkDifferences } from './checkDifferences';
 import { collect } from './collect';
 import { createShots } from './createShots';
-import { createShotsFolders, getEventData, log } from './utils';
+import { createShotsFolders, getEventData, log, isUpdateMode } from './utils';
 import { config, configure } from './config';
 import { sendResultToAPI } from './upload';
 import { sendInitToAPI } from './sendInit';
@@ -12,6 +12,11 @@ import { sendInitToAPI } from './sendInit';
   try {
     if (config.setPendingStatusCheck && !isGenerateOnlyMode) {
       await sendInitToAPI();
+    }
+    if (isUpdateMode()) {
+      log(
+        'Running lost-pixel in update mode. Baseline screenshots will be updated',
+      );
     }
 
     createShotsFolders();
