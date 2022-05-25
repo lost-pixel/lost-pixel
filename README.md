@@ -14,21 +14,22 @@
 
 ## What is Lost Pixel?
 
-Lost Pixel is your hassle-free way of running on-demand visual regression tests. Run visual regression tests on your Storybook stories and conveniently compare and approve visual differences using a UI.
+**Lost Pixel** is an open source visual regression testing tool. Run visual regression tests on your **Storybook** stories and conveniently compare and approve visual differences using a UI.
+
+**Lost Pixel** consists of two products:
+
+- **lost-pixel-action** (*open BETA*) - the core engine driving the visual regression test runs. It could be used standalone and the main use-cases are outlined in the docs
+- **lost-pixel-platform** (*closed BETA*) -  the UI and CI helpers that allow you to use lost-pixel's managed version. Configure it just once and enjoy hassle free visual regression tests integrated into your favorite pipeline.
 
 <div align='center'><video src='https://user-images.githubusercontent.com/29632358/168114749-44a9244a-bcd8-42a6-b783-905c9f144f04.mp4' /></div>
 
 ## Setup
 
-The integration is done by adding this action to your workflow file.
+- open-source edition 
+- managed application
 
-### Using You Own Lost Pixel Server
+## Contributing
 
-Example workflow for a project called `your-project-name` using an S3 bucket on Digital Ocean.
-
-```
-- name: Lost Pixel
-  uses: lost-pixel/lost-pixel-action@v1beta
-```
+**Lost Pixel** is open source in it's heart and welcomes any external contribution. You can refer to CONTRIBUTING.md to get going with the project locally in couple of minutes.
 
 
