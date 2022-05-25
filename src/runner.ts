@@ -1,7 +1,15 @@
+import fse from 'fs-extra';
+
 import { checkDifferences } from './checkDifferences';
 import { collect } from './collect';
 import { createShots } from './createShots';
-import { createShotsFolders, getEventData, log, isUpdateMode } from './utils';
+import {
+  createShotsFolders,
+  getEventData,
+  log,
+  isUpdateMode,
+  removeFilesInFolder,
+} from './utils';
 import { config, configure } from './config';
 import { sendResultToAPI } from './upload';
 import { sendInitToAPI } from './sendInit';
@@ -21,6 +29,11 @@ import { sendInitToAPI } from './sendInit';
     createShotsFolders();
     const shotItems = await createShots();
     await checkDifferences(shotItems);
+
+    if (isUpdateMode()) {
+      removeFilesInFolder(config.imagePathBaseline);
+      fse.copySync(config.imagePathCurrent, config.imagePathBaseline);
+    }
 
     if (!config.generateOnly) {
       const comparisons = await collect();

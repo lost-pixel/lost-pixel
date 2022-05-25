@@ -44,6 +44,7 @@
   "dependencies": {
     "async": "^3.2.3",
     "axios": "^0.26.1",
+    "fs-extra": "^10.1.0",
     "lodash.get": "^4.4.2",
     "lodash.kebabcase": "^4.1.1",
     "minio": "^7.0.26",
@@ -56,6 +57,7 @@
   "devDependencies": {
     "@octokit/webhooks-types": "^5.2.0",
     "@types/async": "^3.2.12",
+    "@types/fs-extra": "^9.0.13",
     "@types/jest": "27.0.3",
     "@types/lodash.get": "^4.4.6",
     "@types/lodash.kebabcase": "^4.1.6",

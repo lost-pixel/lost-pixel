@@ -1,6 +1,6 @@
 import { Browser, BrowserContextOptions } from 'playwright';
 import { mapLimit } from 'async';
-import { getBrowser, isUpdateMode, log, sleep } from '../utils';
+import { getBrowser, log, sleep } from '../utils';
 import { resizeViewportToFullscreen, waitForNetworkRequests } from './utils';
 import { config } from '../config';
 import path from 'path';
@@ -67,13 +67,6 @@ const takeScreenShot = async ({
     fullPage: fullScreenMode,
     animations: 'disabled',
   });
-  if (isUpdateMode()) {
-    await page.screenshot({
-      path: shotItem.filePathBaseline,
-      fullPage: fullScreenMode,
-      animations: 'disabled',
-    });
-  }
 
   await context.close();
 
