@@ -157,6 +157,11 @@ export type ProjectConfig = {
   commitHash: string;
 
   /**
+   * Git commit SHA (e.g. 'b9b8b9b9b9b9b9b9b9b9b9b9b9b9b9b9b9b9b9b9')
+   */
+  generateOnly: boolean;
+
+  /**
    * S3 configuration
    */
   s3: {

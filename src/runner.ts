@@ -8,21 +8,24 @@ import { sendInitToAPI } from './sendInit';
 
 (async () => {
   await configure();
+  const isGenerateOnlyMode = config.generateOnly;
   try {
-    if (config.setPendingStatusCheck) {
+    if (config.setPendingStatusCheck && !isGenerateOnlyMode) {
       await sendInitToAPI();
     }
 
     createShotsFolders();
     const shotItems = await createShots();
     await checkDifferences(shotItems);
-    const comparisons = await collect();
 
-    await sendResultToAPI({
-      success: true,
-      comparisons,
-      event: getEventData(config.eventFilePath),
-    });
+    if (!config.generateOnly) {
+      const comparisons = await collect();
+      await sendResultToAPI({
+        success: true,
+        comparisons,
+        event: getEventData(config.eventFilePath),
+      });
+    }
   } catch (error) {
     if (error instanceof Error) {
       log(error.message);
@@ -30,10 +33,12 @@ import { sendInitToAPI } from './sendInit';
       log(error);
     }
 
-    await sendResultToAPI({
-      success: false,
-      event: getEventData(config.eventFilePath),
-    });
+    if (!isGenerateOnlyMode) {
+      await sendResultToAPI({
+        success: false,
+        event: getEventData(config.eventFilePath),
+      });
+    }
 
     process.exit(1);
   }
