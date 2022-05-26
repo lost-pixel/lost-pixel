@@ -1,4 +1,7 @@
-module.exports = {
+//@ts-expect-error run `npm install lost-pixel-action -D` and safely remove this line
+import { CustomProjectConfig } from 'lost-pixel-action';
+
+export const config: CustomProjectConfig = {
   storybookUrl: 'examples/storybook-build/storybook-static',
   generateOnly: true,
   shotConcurrency: 10,
