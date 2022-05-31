@@ -28,7 +28,12 @@ import { sendInitToAPI } from './sendInit';
 
     createShotsFolders();
     const shotItems = await createShots();
-    await checkDifferences(shotItems);
+    const { differenceCount } = await checkDifferences(shotItems);
+
+    if (config.failOnDifference) {
+      log(`Exiting process with ${differenceCount} found differences`);
+      process.exit(1);
+    }
 
     if (isUpdateMode()) {
       removeFilesInFolder(config.imagePathBaseline);
