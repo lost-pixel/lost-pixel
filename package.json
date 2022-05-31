@@ -5,7 +5,9 @@
   "main": "dist/",
   "bin": "dist/bin.js",
   "files": [
-    "dist"
+    "dist",
+    "./example.lostpixel.config.js",
+    "./example.lostpixel.config.ts"
   ],
   "scripts": {
     "test": "jest --detectOpenHandles",
