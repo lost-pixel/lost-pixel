@@ -30,7 +30,7 @@ import { sendInitToAPI } from './sendInit';
     const shotItems = await createShots();
     const { differenceCount } = await checkDifferences(shotItems);
 
-    if (config.shouldFailOnDifferenceFound) {
+    if (config.failOnDifference) {
       log(`Exiting process with ${differenceCount} found differences`);
       process.exit(1);
     }

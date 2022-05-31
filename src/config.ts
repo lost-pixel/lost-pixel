@@ -164,7 +164,7 @@ export type ProjectConfig = {
   /**
    * Flag that decides if images should be uploaded to S3 bucket or just generated (non-SaaS self-hosted mode)
    */
-  shouldFailOnDifferenceFound?: boolean;
+  failOnDifference?: boolean;
 
   /**
    * S3 configuration
