@@ -9,6 +9,7 @@ export const checkDifferences = async (shotItems: ShotItem[]) => {
   log(`Comparing ${shotItems.length} screenshots`);
 
   const total = shotItems.length;
+  let differenceCount = 0;
 
   await mapLimit<[number, ShotItem], void>(
     shotItems.entries(),
@@ -50,6 +51,7 @@ export const checkDifferences = async (shotItems: ShotItem[]) => {
             `Difference of ${pixelDifference} pixels (${percentage}%) found but within threshold.`,
           );
         } else {
+          differenceCount++;
           logger(
             `Difference of ${pixelDifference} pixels (${percentage}%) found. Difference image saved to: ${shotItem.filePathDifference}`,
           );
@@ -61,4 +63,5 @@ export const checkDifferences = async (shotItems: ShotItem[]) => {
   );
 
   log('Comparison done!');
+  return { differenceCount };
 };
