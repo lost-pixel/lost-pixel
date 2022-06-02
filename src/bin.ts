@@ -13,10 +13,15 @@ const commandArgs = args._ as CommandArgs;
 
 if (commandArgs.includes('init-js')) {
   log('Initializing javascript lost-pixel config');
-  log(__dirname, process.cwd());
 
   fs.copy(
-    path.join(__dirname, '../config-templates/example.lostpixel.config.js'),
+    path.join(
+      __dirname,
+      '..',
+      '..',
+      'config-templates',
+      'example.lostpixel.config.js',
+    ),
     path.join(process.cwd(), '../lostpixel.config.js'),
   );
   log('✅ Config successfully initialized');
@@ -26,7 +31,12 @@ if (commandArgs.includes('init-js')) {
 
   // replace local type resolution with module resolution
   const file = fs.readFileSync(
-    path.join(__dirname, '../config-templates/example.lostpixel.config.ts'),
+    path.join(
+      __dirname,
+      '..',
+      'config-templates',
+      'example.lostpixel.config.ts',
+    ),
   );
   const modifiedFile = file
     .toString()
