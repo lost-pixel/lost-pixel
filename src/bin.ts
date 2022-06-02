@@ -13,6 +13,7 @@ const commandArgs = args._ as CommandArgs;
 
 if (commandArgs.includes('init-js')) {
   log('Initializing javascript lost-pixel config');
+  log(__dirname, process.cwd());
 
   fs.copy(
     path.join(__dirname, '../config-templates/example.lostpixel.config.js'),
@@ -21,6 +22,7 @@ if (commandArgs.includes('init-js')) {
   log('✅ Config successfully initialized');
 } else if (commandArgs.includes('init-ts')) {
   log('Initializing typescript lost-pixel config');
+  log(__dirname, process.cwd());
 
   // replace local type resolution with module resolution
   const file = fs.readFileSync(
