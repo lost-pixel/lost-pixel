@@ -13,16 +13,6 @@ const commandArgs = args._ as CommandArgs;
 
 if (commandArgs.includes('init-js')) {
   log('Initializing javascript lost-pixel config');
-  log(__dirname, process.cwd());
-  log(
-    path.join(
-      __dirname,
-      '..',
-      'config-templates',
-      'example.lostpixel.config.js',
-    ),
-  );
-  log(path.join(process.cwd(), '../lostpixel.config.js'));
 
   fs.copy(
     path.join(
@@ -31,21 +21,11 @@ if (commandArgs.includes('init-js')) {
       'config-templates',
       'example.lostpixel.config.js',
     ),
-    path.join(process.cwd(), '../lostpixel.config.js'),
+    path.join(process.cwd(), './lostpixel.config.js'),
   );
   log('✅ Config successfully initialized');
 } else if (commandArgs.includes('init-ts')) {
   log('Initializing typescript lost-pixel config');
-  log(__dirname, process.cwd());
-  log(path.join(process.cwd(), '../lostpixel.config.ts'));
-  log(
-    path.join(
-      __dirname,
-      '..',
-      'config-templates',
-      'example.lostpixel.config.ts',
-    ),
-  );
 
   // replace local type resolution with module resolution
   const file = fs.readFileSync(
@@ -61,7 +41,7 @@ if (commandArgs.includes('init-js')) {
     .replace('./src/config', 'lost-pixel-action');
 
   fs.writeFileSync(
-    path.join(process.cwd(), '../lostpixel.config.ts'),
+    path.join(process.cwd(), './lostpixel.config.ts'),
     modifiedFile,
   );
   log('✅ Config successfully initialized');
