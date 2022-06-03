@@ -1,4 +1,4 @@
-# What is Lost Pixel?
+# 🖼 What is Lost Pixel?
 
 Lost Pixel is a tool to run visual regression tests on your software project.
 
