@@ -1,6 +1,6 @@
 ## Contributing to Lost Pixel
 
-Before jumping into a PR be sure to search [existing PRs](https://github.com/lost-pixel/lost-pixel-action/pulls) or [issues](https://github.com/lost-pixel/lost-pixel-action/issues) for an open or closed item that relates to your submission.
+Before jumping into a PR be sure to search [existing PRs](https://github.com/lost-pixel/lost-pixel/pulls) or [issues](https://github.com/lost-pixel/lost-pixel/issues) for an open or closed item that relates to your submission.
 
 ## Developing
 
@@ -15,7 +15,7 @@ To develop locally:
    [clone](https://help.github.com/articles/cloning-a-repository/) it to your local device.
 
    ```sh
-   git clone https://github.com/lost-pixel/lost-pixel-action.git
+   git clone https://github.com/lost-pixel/lost-pixel.git
    ```
 
 2. Create a new branch:
@@ -26,7 +26,7 @@ To develop locally:
    ```
    npm install
    ```
-4. Build storybook to execute lost-pixel-action against 
+4. Build storybook to execute lost-pixel against 
     ```
     npm run build-example-storybook
     ```

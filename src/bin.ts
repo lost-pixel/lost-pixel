@@ -36,9 +36,7 @@ if (commandArgs.includes('init-js')) {
       'example.lostpixel.config.ts',
     ),
   );
-  const modifiedFile = file
-    .toString()
-    .replace('../src/config', 'lost-pixel-action');
+  const modifiedFile = file.toString().replace('../src/config', 'lost-pixel');
 
   fs.writeFileSync(
     path.join(process.cwd(), './lostpixel.config.ts'),

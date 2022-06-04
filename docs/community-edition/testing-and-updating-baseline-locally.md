@@ -2,7 +2,7 @@
 
 In `open source edition` of Lost Pixel **** the updates of baselines are happening on the machines of developers. If you have failing visual regression tests ❌ with an **intended** change in visual appearance of your components/pages after the code modifications you will need to run Lost Pixel **** update locally and commit new baselines to git repository:\
 \
-`npx lost-pixel-action update`
+`npx lost-pixel update`
 
 {% hint style="warning" %}
 Open Source edition of Lost Pixel is aimed at giving you building blocks for creating your own visual regression testing pipelines with some limitations
