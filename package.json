@@ -1,5 +1,5 @@
 {
-  "name": "lost-pixel-action",
+  "name": "lost-pixel",
   "version": "1.10.1",
   "description": "GitHub Action for Lost Pixel integration",
   "main": "dist/",
@@ -33,15 +33,15 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/chriskalmar/lost-pixel-action.git"
+    "url": "git+https://github.com/lost-pixel/lost-pixel.git"
   },
   "keywords": [],
   "author": "Chris Kalmar",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/chriskalmar/lost-pixel-action/issues"
+    "url": "https://github.com/lost-pixel/lost-pixel/issues"
   },
-  "homepage": "https://github.com/chriskalmar/lost-pixel-action#readme",
+  "homepage": "https://github.com/lost-pixel/lost-pixel#readme",
   "dependencies": {
     "async": "^3.2.3",
     "axios": "^0.26.1",

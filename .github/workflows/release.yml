@@ -75,7 +75,7 @@ jobs:
       - name: Publish to Registry
         uses: elgohr/Publish-Docker-Github-Action@47433670daec88d900599790a6fadbf5291a835b
         with:
-          name: lostpixel/lost-pixel-action
+          name: lostpixel/lost-pixel
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
           tags: "latest,${{ github.event.release.tag_name }}"
