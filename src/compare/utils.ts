@@ -14,6 +14,7 @@ export const resizeImage = (
 
   for (let x = 0; x < width; x++) {
     for (let y = 0; y < height; y++) {
+      // eslint-disable-next-line no-bitwise
       const index = ((width * y + x) << 2) + 3;
       newImage.data[index] = 64;
     }

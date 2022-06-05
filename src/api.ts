@@ -1,5 +1,5 @@
-import { log } from './utils';
 import axios from 'axios';
+import { log } from './utils';
 import { config } from './config';
 
 type ApiAction = 'init' | 'result';
@@ -35,7 +35,7 @@ export const sendToAPI = async (
 
       process.exit(1);
     }
-  } catch (error) {
+  } catch (error: unknown) {
     if (axios.isAxiosError(error)) {
       log('API response: ', error.response?.data || error.message);
     } else if (error instanceof Error) {

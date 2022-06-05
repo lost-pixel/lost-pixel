@@ -1,10 +1,10 @@
 #!/usr/bin/env node
 
-import { log } from './utils';
+import path from 'node:path';
 import yargs from 'yargs';
 import { hideBin } from 'yargs/helpers';
 import fs from 'fs-extra';
-import path from 'path';
+import { log } from './utils';
 
 type CommandArgs = ['init-js', 'init-ts'];
 
@@ -27,7 +27,7 @@ if (commandArgs.includes('init-js')) {
 } else if (commandArgs.includes('init-ts')) {
   log('Initializing typescript lost-pixel config');
 
-  // replace local type resolution with module resolution
+  // Replace local type resolution with module resolution
   const file = fs.readFileSync(
     path.join(
       __dirname,

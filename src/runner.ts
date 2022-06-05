@@ -20,6 +20,7 @@ import { sendInitToAPI } from './sendInit';
     if (config.setPendingStatusCheck && config.generateOnly) {
       await sendInitToAPI();
     }
+
     if (isUpdateMode()) {
       log(
         'Running lost-pixel in update mode. Baseline screenshots will be updated',
@@ -48,7 +49,7 @@ import { sendInitToAPI } from './sendInit';
         event: getEventData(config.eventFilePath),
       });
     }
-  } catch (error) {
+  } catch (error: unknown) {
     if (error instanceof Error) {
       log(error.message);
     } else {
