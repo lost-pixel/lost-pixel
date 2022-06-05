@@ -14,7 +14,7 @@ import { config, configure } from './config';
 import { sendResultToAPI } from './upload';
 import { sendInitToAPI } from './sendInit';
 
-(async () => {
+export const runner = async () => {
   await configure();
   try {
     if (config.setPendingStatusCheck && config.generateOnly) {
@@ -65,4 +65,4 @@ import { sendInitToAPI } from './sendInit';
 
     process.exit(1);
   }
-})();
+};
