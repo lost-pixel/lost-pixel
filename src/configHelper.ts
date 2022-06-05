@@ -34,8 +34,10 @@ export const loadTSProjectConfigFile = async (
 ): Promise<unknown> => {
   await setupTsNode();
   tsNodeService.enabled(true);
-  const imported = require(configFilepath);
+
+  // eslint-disable-next-line @typescript-eslint/no-require-imports, @typescript-eslint/no-var-requires, @typescript-eslint/no-unsafe-assignment
+  const imported: Record<string, unknown> = require(configFilepath);
   tsNodeService.enabled(false);
 
-  return imported.default || imported.config;
+  return imported?.default ?? imported?.config;
 };
