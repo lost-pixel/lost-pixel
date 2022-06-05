@@ -186,18 +186,12 @@ export const prepareComparisonList = ({
         fileName,
         type,
       }),
-    );
-
-    uploadList.push(
       createUploadItem({
         uploadFileName: afterFile,
         path: config.imagePathCurrent,
         fileName,
         type,
       }),
-    );
-
-    uploadList.push(
       createUploadItem({
         uploadFileName: differenceFile,
         path: config.imagePathDifference,
@@ -227,6 +221,7 @@ export const getEventData = (path?: string): WebhookEvent | undefined => {
   }
 
   try {
+    // eslint-disable-next-line @typescript-eslint/no-require-imports, @typescript-eslint/no-unsafe-return
     return require(path);
   } catch (error: unknown) {
     log(error);
@@ -257,7 +252,9 @@ export const createShotsFolders = () => {
 };
 
 export const sleep = async (ms: number) =>
-  new Promise((resolve) => setTimeout(resolve, ms));
+  new Promise((resolve) => {
+    setTimeout(resolve, ms);
+  });
 
 export const removeFilesInFolder = (path: string) => {
   const files = readdirSync(path);
