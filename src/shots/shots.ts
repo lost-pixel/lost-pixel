@@ -1,7 +1,8 @@
 import path from 'node:path';
 import { Browser, BrowserContextOptions } from 'playwright';
 import { mapLimit } from 'async';
-import { getBrowser, log, sleep } from '../utils';
+import { log } from '../log';
+import { getBrowser, sleep } from '../utils';
 import { config } from '../config';
 import { resizeViewportToFullscreen, waitForNetworkRequests } from './utils';
 

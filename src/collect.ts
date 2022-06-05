@@ -1,6 +1,7 @@
 import { uploadFile } from './upload';
-import { getChanges, getImageList, log, prepareComparisonList } from './utils';
+import { getChanges, getImageList, prepareComparisonList } from './utils';
 import { config } from './config';
+import { log } from './log';
 
 export const collect = async () => {
   log('Collecting files');

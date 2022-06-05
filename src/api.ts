@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { log } from './utils';
+import { log } from './log';
 import { config } from './config';
 
 type ApiAction = 'init' | 'result';

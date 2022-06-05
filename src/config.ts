@@ -2,7 +2,8 @@ import { existsSync } from 'node:fs';
 import path from 'node:path';
 import get from 'lodash.get';
 import { BrowserContextOptions, Page } from 'playwright';
-import { loadTSProjectConfigFile, log } from './utils';
+import { loadTSProjectConfigFile } from './configHelper';
+import { log } from './log';
 
 type BaseConfig = {
   /**

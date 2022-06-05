@@ -4,7 +4,8 @@ import {
   CheckSuiteRequestedEvent,
   CheckRunRerequestedEvent,
 } from '@octokit/webhooks-types';
-import { Comparison, log, logMemory } from './utils';
+import { Comparison } from './utils';
+import { log, logMemory } from './log';
 import { config } from './config';
 import { sendToAPI } from './api';
 

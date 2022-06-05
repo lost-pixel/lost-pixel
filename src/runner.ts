@@ -6,13 +6,13 @@ import { createShots } from './createShots';
 import {
   createShotsFolders,
   getEventData,
-  log,
   isUpdateMode,
   removeFilesInFolder,
 } from './utils';
 import { config, configure } from './config';
 import { sendResultToAPI } from './upload';
 import { sendInitToAPI } from './sendInit';
+import { log } from './log';
 
 export const runner = async () => {
   await configure();

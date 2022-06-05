@@ -12,23 +12,11 @@ import { Service } from 'ts-node';
 import { BrowserType, chromium, firefox, webkit } from 'playwright';
 import yargs from 'yargs';
 import { hideBin } from 'yargs/helpers';
-
-type LogMemory = Array<{
-  timestamp: Date;
-  content: unknown[];
-}>;
-
-export const logMemory: LogMemory = [];
+import { log } from './log';
 
 export const isUpdateMode = (): boolean => {
   const args = yargs(hideBin(process.argv)).parse();
   return args._.includes('update') || args.m === 'update';
-};
-
-export const log = (...content: unknown[]) => {
-  logMemory.push({ timestamp: new Date(), content });
-  // eslint-disable-next-line no-console
-  console.log(...content);
 };
 
 export type Files = {
@@ -285,49 +273,10 @@ export const removeFilesInFolder = (path: string) => {
   const files = readdirSync(path);
   log(`Removing ${files.length} files from ${path}`);
 
-  files.forEach((file) => {
+  for (const file of files) {
     const filePath = join(path, file);
     unlinkSync(filePath);
-  });
-};
-
-let tsNodeService: Service;
-
-export const setupTsNode = async (): Promise<Service> => {
-  if (tsNodeService) {
-    return tsNodeService;
   }
-
-  try {
-    const tsNode = await import('ts-node');
-
-    tsNodeService = tsNode.register({
-      transpileOnly: true,
-    });
-
-    return tsNodeService;
-  } catch (error) {
-    // @ts-expect-error Error type definition is missing 'code'
-    if (['ERR_MODULE_NOT_FOUND', 'MODULE_NOT_FOUND'].includes(error.code)) {
-      log(`Please install "ts-node" to use a TypeScript configuration file`);
-      // @ts-expect-error Error type definition is missing 'message'
-      log(error.message);
-      process.exit(1);
-    }
-
-    throw error;
-  }
-};
-
-export const loadTSProjectConfigFile = async (
-  configFilepath: string,
-): Promise<unknown> => {
-  await setupTsNode();
-  tsNodeService.enabled(true);
-  const imported = require(configFilepath);
-  tsNodeService.enabled(false);
-
-  return imported.default || imported.config;
 };
 
 export const getBrowser = (): BrowserType => {

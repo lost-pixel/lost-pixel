@@ -1,7 +1,8 @@
 import { config } from './config';
 import { collectStories, generateShotItems } from './crawler/storybook';
+import { log } from './log';
 import { takeScreenShots } from './shots/shots';
-import { log, removeFilesInFolder } from './utils';
+import { removeFilesInFolder } from './utils';
 
 export const createShots = async () => {
   const collection = await collectStories(config.storybookUrl);
