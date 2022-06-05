@@ -1,18 +1,8 @@
-import { Client as MinioClient, ItemBucketMetadata } from 'minio';
-import {
-  PullRequestEvent,
-  CheckSuiteRequestedEvent,
-  CheckRunRerequestedEvent,
-} from '@octokit/webhooks-types';
-import { Comparison } from './utils';
+import { Client as MinioClient } from 'minio';
 import { log, logMemory } from './log';
 import { config } from './config';
 import { sendToAPI } from './api';
-
-export type WebhookEvent =
-  | PullRequestEvent
-  | CheckSuiteRequestedEvent
-  | CheckRunRerequestedEvent;
+import { Comparison, UploadFile, WebhookEvent } from './types';
 
 let minio: MinioClient;
 
@@ -26,12 +16,6 @@ const setupMinio = () =>
     port: config.s3.port ? Number(config.s3.port) : 443,
     useSSL: config.s3.ssl,
   });
-
-export type UploadFile = {
-  uploadPath: string;
-  filePath: string;
-  metaData: ItemBucketMetadata;
-};
 
 export const uploadFile = async ({
   uploadPath,

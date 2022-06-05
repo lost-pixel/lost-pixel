@@ -4,15 +4,14 @@ import {
   readdirSync,
   unlinkSync,
   writeFileSync,
-} from 'fs';
-import { UploadFile, WebhookEvent } from './upload';
-import { normalize, join } from 'path';
-import { config } from './config';
-import { Service } from 'ts-node';
+} from 'node:fs';
+import { normalize, join } from 'node:path';
 import { BrowserType, chromium, firefox, webkit } from 'playwright';
 import yargs from 'yargs';
 import { hideBin } from 'yargs/helpers';
+import { config } from './config';
 import { log } from './log';
+import { Comparison, ComparisonType, UploadFile, WebhookEvent } from './types';
 
 export const isUpdateMode = (): boolean => {
   const args = yargs(hideBin(process.argv)).parse();
@@ -54,7 +53,9 @@ export const extendFileName = ({ fileName, extension }: ExtendFileName) => {
 
   if (parts.length === 1) {
     return `${extension}.${parts[0]}`;
-  } else if (parts.length === 0) {
+  }
+
+  if (parts.length === 0) {
     return extension;
   }
 
@@ -62,8 +63,6 @@ export const extendFileName = ({ fileName, extension }: ExtendFileName) => {
 
   return parts.join('.');
 };
-
-type ComparisonType = 'ADDITION' | 'DELETION' | 'DIFFERENCE';
 
 type CreateUploadItem = {
   uploadFileName: string;
@@ -96,15 +95,6 @@ const createUploadItem = ({
   };
 };
 
-export type Comparison = {
-  beforeImageUrl?: string;
-  afterImageUrl?: string;
-  differenceImageUrl?: string;
-  type: ComparisonType;
-  path: string;
-  name: string;
-};
-
 type PrepareComparisonList = {
   changes: Changes;
   baseUrl: string;
@@ -117,7 +107,7 @@ export const prepareComparisonList = ({
   const comparisonList: Comparison[] = [];
   const uploadList: UploadFile[] = [];
 
-  changes.addition.forEach((fileName) => {
+  for (const fileName of changes.addition) {
     const afterFile = extendFileName({
       fileName,
       extension: 'after',
@@ -139,9 +129,9 @@ export const prepareComparisonList = ({
         type,
       }),
     );
-  });
+  }
 
-  changes.deletion.forEach((fileName) => {
+  for (const fileName of changes.deletion) {
     const beforeFile = extendFileName({
       fileName,
       extension: 'before',
@@ -163,9 +153,9 @@ export const prepareComparisonList = ({
         type,
       }),
     );
-  });
+  }
 
-  changes.difference.forEach((fileName) => {
+  for (const fileName of changes.difference) {
     const beforeFile = extendFileName({
       fileName,
       extension: 'before',
@@ -215,19 +205,19 @@ export const prepareComparisonList = ({
         type,
       }),
     );
-  });
+  }
 
   return [comparisonList, uploadList];
 };
 
-export const getImageList = (path: string): string[] | null => {
+export const getImageList = (path: string): string[] | undefined => {
   try {
     const files = readdirSync(path);
 
     return files.filter((name) => name.endsWith('.png'));
-  } catch (error) {
+  } catch (error: unknown) {
     log(error);
-    return null;
+    return undefined;
   }
 };
 
@@ -238,7 +228,7 @@ export const getEventData = (path?: string): WebhookEvent | undefined => {
 
   try {
     return require(path);
-  } catch (error) {
+  } catch (error: unknown) {
     log(error);
     return undefined;
   }
@@ -251,11 +241,11 @@ export const createShotsFolders = () => {
     config.imagePathDifference,
   ];
 
-  paths.forEach((path) => {
+  for (const path of paths) {
     if (!existsSync(path)) {
       mkdirSync(path, { recursive: true });
     }
-  });
+  }
 
   const ignoreFile = normalize(
     join(config.imagePathBaseline, '..', '.gitignore'),
@@ -266,7 +256,7 @@ export const createShotsFolders = () => {
   }
 };
 
-export const sleep = (ms: number) =>
+export const sleep = async (ms: number) =>
   new Promise((resolve) => setTimeout(resolve, ms));
 
 export const removeFilesInFolder = (path: string) => {
@@ -287,5 +277,7 @@ export const getBrowser = (): BrowserType => {
       return firefox;
     case 'webkit':
       return webkit;
+    default:
+      return chromium;
   }
 };
