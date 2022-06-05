@@ -1,6 +1,6 @@
-import path from 'path';
-import { ShotItem } from '../shots/shots';
+import path from 'node:path';
 import kebabCase from 'lodash.kebabcase';
+import { ShotItem } from '../shots/shots';
 import { config } from '../config';
 import { getBrowser } from '../utils';
 
@@ -35,7 +35,7 @@ type WindowObject = typeof window & {
 };
 
 type CrawlerResult = {
-  stories: Story[] | null;
+  stories: Story[] | undefined;
 };
 
 export const getStoryBookUrl = (url: string) => {
@@ -76,7 +76,7 @@ export const collectStories = async (url: string, isIframeUrl = false) => {
     );
 
     const result = await page.evaluate(
-      () =>
+      async () =>
         new Promise<CrawlerResult>((resolve) => {
           const parseParameters = <T>(
             parameters: T,
@@ -91,7 +91,9 @@ export const collectStories = async (url: string, isIframeUrl = false) => {
               return parameters.map((value) =>
                 parseParameters(value, level + 1),
               );
-            } else if (
+            }
+
+            if (
               typeof parameters === 'string' ||
               typeof parameters === 'number' ||
               typeof parameters === 'boolean' ||
@@ -102,16 +104,19 @@ export const collectStories = async (url: string, isIframeUrl = false) => {
               parameters === null
             ) {
               return parameters;
-            } else if (typeof parameters === 'object' && parameters !== null) {
-              // @ts-expect-error FIXME
-              return Object.keys(parameters).reduce((acc, key: keyof T) => {
+            }
+
+            if (typeof parameters === 'object' && parameters !== null) {
+              /// @ts-expect-error FIXME
+              // eslint-disable-next-line unicorn/no-array-reduce
+              return Object.keys(parameters).reduce<T>((acc, key: keyof T) => {
                 // @ts-expect-error FIXME
                 acc[key] = parseParameters(parameters[key], level + 1);
                 return acc;
-              }, {} as T);
-            } else {
-              return 'UNSUPPORTED_TYPE';
+              }, {});
             }
+
+            return 'UNSUPPORTED_TYPE';
           };
 
           const fetchStories = () => {
@@ -127,7 +132,8 @@ export const collectStories = async (url: string, isIframeUrl = false) => {
                 ) as Story['parameters'],
               }));
 
-              return resolve({ stories });
+              resolve({ stories });
+              return;
             }
 
             resolve({ stories: [] });
@@ -140,29 +146,27 @@ export const collectStories = async (url: string, isIframeUrl = false) => {
     await browser.close();
 
     return result;
-  } catch (error) {
+  } catch (error: unknown) {
     await browser.close();
     throw error;
   }
 };
 
 const generateFilename = (story: Story) =>
-  [story.kind, story.story].map(kebabCase).join('--');
+  [story.kind, story.story].map((value) => kebabCase(value)).join('--');
 
 const generateBrowserConfig = (story: Story) => {
   const browserConfig = config.configureBrowser?.(story);
 
-  if (story.parameters?.viewport) {
-    if (browserConfig) {
-      browserConfig.viewport = browserConfig.viewport || {
-        width: 1280,
-        height: 720,
-      };
-      browserConfig.viewport = {
-        ...browserConfig.viewport,
-        ...story.parameters.viewport,
-      };
-    }
+  if (story.parameters?.viewport && browserConfig) {
+    browserConfig.viewport = browserConfig.viewport ?? {
+      width: 1280,
+      height: 720,
+    };
+    browserConfig.viewport = {
+      ...browserConfig.viewport,
+      ...story.parameters.viewport,
+    };
   }
 
   return browserConfig;
