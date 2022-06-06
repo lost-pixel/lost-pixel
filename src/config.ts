@@ -342,7 +342,8 @@ const loadProjectConfig = async (): Promise<CustomProjectConfig> => {
     }
   }
 
-  throw new Error("Couldn't find project config file 'lostpixel.config.js'");
+  log("Couldn't find project config file 'lostpixel.config.js'");
+  process.exit(1);
 };
 
 export const configure = async (customProjectConfig?: CustomProjectConfig) => {
