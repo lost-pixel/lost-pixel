@@ -6,20 +6,21 @@ import { createShots } from './createShots';
 import {
   createShotsFolders,
   getEventData,
-  log,
   isUpdateMode,
   removeFilesInFolder,
 } from './utils';
 import { config, configure } from './config';
 import { sendResultToAPI } from './upload';
 import { sendInitToAPI } from './sendInit';
+import { log } from './log';
 
-(async () => {
+export const runner = async () => {
   await configure();
   try {
     if (config.setPendingStatusCheck && config.generateOnly) {
       await sendInitToAPI();
     }
+
     if (isUpdateMode()) {
       log(
         'Running lost-pixel in update mode. Baseline screenshots will be updated',
@@ -48,7 +49,7 @@ import { sendInitToAPI } from './sendInit';
         event: getEventData(config.eventFilePath),
       });
     }
-  } catch (error) {
+  } catch (error: unknown) {
     if (error instanceof Error) {
       log(error.message);
     } else {
@@ -64,4 +65,4 @@ import { sendInitToAPI } from './sendInit';
 
     process.exit(1);
   }
-})();
+};

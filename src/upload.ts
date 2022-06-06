@@ -1,36 +1,21 @@
-import { Client as MinioClient, ItemBucketMetadata } from 'minio';
-import { Comparison, log, logMemory } from './utils';
-import {
-  PullRequestEvent,
-  CheckSuiteRequestedEvent,
-  CheckRunRerequestedEvent,
-} from '@octokit/webhooks-types';
+import { Client as MinioClient } from 'minio';
+import { log, logMemory } from './log';
 import { config } from './config';
 import { sendToAPI } from './api';
-
-export type WebhookEvent =
-  | PullRequestEvent
-  | CheckSuiteRequestedEvent
-  | CheckRunRerequestedEvent;
+import { Comparison, UploadFile, WebhookEvent } from './types';
 
 let minio: MinioClient;
 
 const setupMinio = () =>
   new MinioClient({
     endPoint: config.s3.endPoint,
-    region: config.s3.region || undefined,
+    region: config.s3.region ?? undefined,
     accessKey: config.s3.accessKey,
     secretKey: config.s3.secretKey,
-    sessionToken: config.s3.sessionToken || undefined,
+    sessionToken: config.s3.sessionToken ?? undefined,
     port: config.s3.port ? Number(config.s3.port) : 443,
     useSSL: config.s3.ssl,
   });
-
-export type UploadFile = {
-  uploadPath: string;
-  filePath: string;
-  metaData: ItemBucketMetadata;
-};
 
 export const uploadFile = async ({
   uploadPath,
@@ -49,11 +34,11 @@ export const uploadFile = async ({
       uploadPath,
       filePath,
       metaData,
-      (err, objInfo) => {
-        if (err) {
-          reject(err);
+      (error, objectInfo) => {
+        if (error) {
+          reject(error);
         } else {
-          resolve(objInfo);
+          resolve(objectInfo);
         }
       },
     );
@@ -81,7 +66,7 @@ export const sendResultToAPI = async ({
     repoName,
     commit: config.commitHash,
     buildMeta: event,
-    comparisons: comparisons || [],
+    comparisons: comparisons ?? [],
     success,
     log: logMemory,
   });

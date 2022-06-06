@@ -1,9 +1,10 @@
+import path from 'node:path';
 import { Browser, BrowserContextOptions } from 'playwright';
 import { mapLimit } from 'async';
-import { getBrowser, log, sleep } from '../utils';
-import { resizeViewportToFullscreen, waitForNetworkRequests } from './utils';
+import { log } from '../log';
+import { getBrowser, sleep } from '../utils';
 import { config } from '../config';
-import path from 'path';
+import { resizeViewportToFullscreen, waitForNetworkRequests } from './utils';
 
 export type ShotItem = {
   id: string;
@@ -33,7 +34,7 @@ const takeScreenShot = async ({
     await page.waitForLoadState('load', {
       timeout: config.timeouts.loadState,
     });
-  } catch (e) {
+  } catch {
     logger(`Timeout while waiting for page load state: ${shotItem.url}`);
   }
 
@@ -43,7 +44,7 @@ const takeScreenShot = async ({
       logger,
       ignoreUrls: ['/__webpack_hmr'],
     });
-  } catch (e) {
+  } catch {
     logger(`Timeout while waiting for all network requests: ${shotItem.url}`);
   }
 
@@ -56,7 +57,7 @@ const takeScreenShot = async ({
   try {
     await resizeViewportToFullscreen({ page });
     fullScreenMode = false;
-  } catch (error) {
+  } catch {
     log(`Could not resize viewport to fullscreen: ${shotItem.id}`);
   }
 
@@ -74,7 +75,7 @@ const takeScreenShot = async ({
 
   if (videoPath) {
     const dirname = path.dirname(videoPath);
-    const ext = videoPath.split('.').pop();
+    const ext = videoPath.split('.').pop() ?? 'webm';
     const newVideoPath = `${dirname}/${shotItem.id}.${ext}`;
     await page.video()?.saveAs(newVideoPath);
     await page.video()?.delete();
@@ -92,14 +93,15 @@ export const takeScreenShots = async (shotItems: ShotItem[]) => {
     config.shotConcurrency,
     async (item: [number, ShotItem]) => {
       const [index, shotItem] = item;
-      const logger = (message: string, ...rest: unknown[]) =>
+      const logger = (message: string, ...rest: unknown[]) => {
         log(`[${index + 1}/${total}] ${message}`, ...rest);
+      };
 
       logger(`Taking screenshot of '${shotItem.id}'`);
 
-      const startTime = new Date().getTime();
+      const startTime = Date.now();
       await takeScreenShot({ browser, shotItem, logger });
-      const endTime = new Date().getTime();
+      const endTime = Date.now();
       const elapsedTime = Number((endTime - startTime) / 1000).toFixed(3);
 
       logger(

@@ -1,8 +1,9 @@
-import { existsSync } from 'fs';
-import { loadTSProjectConfigFile, log } from './utils';
+import { existsSync } from 'node:fs';
+import path from 'node:path';
 import get from 'lodash.get';
-import path from 'path';
 import { BrowserContextOptions, Page } from 'playwright';
+import { loadTSProjectConfigFile } from './configHelper';
+import { log } from './log';
 
 type BaseConfig = {
   /**
@@ -181,7 +182,7 @@ export type ProjectConfig = {
     port?: number;
 
     /**
-     * use SSL
+     * Use SSL
      */
     ssl?: boolean;
 
@@ -277,9 +278,9 @@ const defaultConfig: BaseConfig = {
     loadState: 30_000,
     networkRequests: 30_000,
   },
-  waitBeforeScreenshot: 1_000,
-  waitForFirstRequest: 1_000,
-  waitForLastRequest: 1_000,
+  waitBeforeScreenshot: 1000,
+  waitForFirstRequest: 1000,
+  waitForLastRequest: 1000,
   threshold: 0,
   setPendingStatusCheck: false,
 };
@@ -294,11 +295,11 @@ const checkConfig = () => {
     ...requiredS3ConfigProps.map((prop) => `s3.${prop}`),
   ];
 
-  requiredProps.forEach((prop) => {
+  for (const prop of requiredProps) {
     if (!get(config, prop)) {
       missingProps.push(prop);
     }
-  });
+  }
 
   if (missingProps.length > 0) {
     log(
@@ -311,7 +312,7 @@ const checkConfig = () => {
 };
 
 const configFileNameBase = path.join(
-  process.env.LOST_PIXEL_CONFIG_DIR || process.cwd(),
+  process.env.LOST_PIXEL_CONFIG_DIR ?? process.cwd(),
   'lostpixel.config',
 );
 
@@ -322,15 +323,19 @@ const loadProjectConfig = async (): Promise<CustomProjectConfig> => {
   log('Looking for configuration file:', `${configFileNameBase}.(js|ts)`);
 
   if (existsSync(`${configFileNameBase}.js`)) {
-    const projectConfig = require(`${configFileNameBase}.js`);
+    const projectConfig =
+      // eslint-disable-next-line @typescript-eslint/no-require-imports, @typescript-eslint/no-var-requires
+      require(`${configFileNameBase}.js`) as CustomProjectConfig;
     return projectConfig;
-  } else if (existsSync(`${configFileNameBase}.ts`)) {
+  }
+
+  if (existsSync(`${configFileNameBase}.ts`)) {
     try {
       const imported = (await loadTSProjectConfigFile(
         `${configFileNameBase}.ts`,
       )) as CustomProjectConfig;
       return imported;
-    } catch (error) {
+    } catch (error: unknown) {
       log(error);
       log('Failed to load TypeScript configuration file');
       process.exit(1);

@@ -13,7 +13,7 @@
     "test:watch": "jest --watch --detectOpenHandles",
     "build": "rimraf dist && tsc",
     "build-example-storybook": "rimraf examples/storybook-demo/storybook-static && cd examples/storybook-demo && npm install && npm run build-storybook",
-    "lint": "tsc --noEmit && eslint '*/**/*.ts'",
+    "lint": "xo && tsc --noEmit && eslint '*/**/*.ts'",
     "lint-fix": "tsc --noEmit && eslint '*/**/*.ts' --fix",
     "lint-staged": "lint-staged",
     "prepare": "husky install",
@@ -68,12 +68,27 @@
     "@typescript-eslint/eslint-plugin": "^5.18.0",
     "eslint": "^8.13.0",
     "eslint-config-prettier": "^8.5.0",
+    "eslint-plugin-unicorn": "^42.0.0",
     "husky": "^7.0.4",
     "jest": "27.4.5",
     "lint-staged": "^12.3.7",
     "prettier": "^2.6.2",
     "rimraf": "3.0.2",
     "ts-jest": "27.1.2",
-    "typescript": "4.5.4"
+    "typescript": "4.5.4",
+    "xo": "^0.49.0"
+  },
+  "xo": {
+    "prettier": true,
+    "rules": {
+      "@typescript-eslint/object-curly-spacing": "off",
+      "import/extensions": "off",
+      "unicorn/filename-case": "off",
+      "unicorn/no-process-exit": "off",
+      "node/prefer-global/process": "off",
+      "@typescript-eslint/naming-convention": "off",
+      "unicorn/prefer-module": "off",
+      "import/no-mutable-exports": "off"
+    }
   }
 }

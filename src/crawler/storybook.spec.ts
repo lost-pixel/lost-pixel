@@ -1,17 +1,17 @@
 import { createShotsFolders } from '../utils';
-import { collectStories, getIframeUrl, getStoryBookUrl } from './storybook';
 import { configure } from '../config';
 import { defaultTestConfig } from '../testUtils';
+import { collectStories, getIframeUrl, getStoryBookUrl } from './storybook';
 
 const storyBookUrl = getStoryBookUrl(
   'examples/storybook-demo/storybook-static',
 );
 
 beforeAll(async () => {
-  configure({
+  await configure({
     ...defaultTestConfig,
     timeouts: {
-      fetchStories: 2_000,
+      fetchStories: 2000,
     },
   });
 
@@ -65,25 +65,25 @@ describe(collectStories, () => {
   });
 
   it('should fail when using invalid path to StoryBook', async () => {
-    await expect(() =>
+    await expect(async () =>
       collectStories('this/path/does/not/exist'),
     ).rejects.toThrow('ERR_FILE_NOT_FOUND');
   });
 
   it('should fail when using invalid URL to StoryBook', async () => {
-    await expect(() =>
+    await expect(async () =>
       collectStories('http://localhost:99999'),
     ).rejects.toThrow('invalid URL');
   });
 
   it('should timeout when using invalid URL to StoryBook', async () => {
-    await expect(() =>
+    await expect(async () =>
       collectStories(`${storyBookUrl}/nothing/here`),
     ).rejects.toThrow('ERR_FILE_NOT_FOUND');
   });
 
   it('should fail if no stories found', async () => {
-    await expect(() =>
+    await expect(async () =>
       collectStories(`${storyBookUrl}/index.html`, true),
     ).rejects.toThrow('Timeout 2000ms exceeded');
   }, 10_000);

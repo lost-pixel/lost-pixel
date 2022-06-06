@@ -1,10 +1,10 @@
-import { join } from 'path';
+import { join } from 'node:path';
 import { getChanges, extendFileName, prepareComparisonList } from './utils';
 import { config, configure } from './config';
 import { defaultTestConfig } from './testUtils';
 
-beforeAll(() => {
-  configure({
+beforeAll(async () => {
+  await configure({
     ...defaultTestConfig,
     lostPixelProjectId: 'lorem-ipsum',
     ciBuildId: '456',

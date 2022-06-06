@@ -1,6 +1,7 @@
 import { uploadFile } from './upload';
-import { getChanges, getImageList, log, prepareComparisonList } from './utils';
+import { getChanges, getImageList, prepareComparisonList } from './utils';
 import { config } from './config';
+import { log } from './log';
 
 export const collect = async () => {
   log('Collecting files');
@@ -20,9 +21,9 @@ export const collect = async () => {
   log(`Found ${difference?.length ?? 0} difference images`);
 
   const files = {
-    baseline: baseline || [],
-    current: current || [],
-    difference: difference || [],
+    baseline: baseline ?? [],
+    current: current ?? [],
+    difference: difference ?? [],
   };
 
   const changes = getChanges(files);
@@ -30,7 +31,7 @@ export const collect = async () => {
   log(`Preparing comparison list`);
 
   const s3BaseUrl =
-    config.s3.baseUrl ||
+    config.s3.baseUrl ??
     `https://${config.s3.bucketName}.${config.s3.endPoint}`;
 
   const [comparisons, uploadList] = prepareComparisonList({
@@ -40,7 +41,14 @@ export const collect = async () => {
 
   log(`Uploading ${uploadList.length} files`);
 
-  const uploadPromises = uploadList.map(uploadFile);
+  const uploadPromises = uploadList.map(
+    async ({ uploadPath, filePath, metaData }) =>
+      uploadFile({
+        uploadPath,
+        filePath,
+        metaData,
+      }),
+  );
 
   await Promise.all(uploadPromises);
 

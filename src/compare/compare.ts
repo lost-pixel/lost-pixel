@@ -1,4 +1,4 @@
-import { readFileSync, writeFileSync } from 'fs';
+import { readFileSync, writeFileSync } from 'node:fs';
 import pixelmatch from 'pixelmatch';
 import { PNG } from 'pngjs';
 import { resizeImage } from './utils';
@@ -8,12 +8,12 @@ export const checkThreshold = (
   pixelsTotal: number,
   pixelDifference: number,
 ) => {
-  // treat theshold as percentage
+  // Treat theshold as percentage
   if (threshold < 1) {
     return pixelDifference <= pixelsTotal * threshold;
   }
 
-  // treat threshold as absolute value
+  // Treat threshold as absolute value
   return pixelDifference <= threshold;
 };
 
