@@ -86,7 +86,8 @@
       "unicorn/no-process-exit": "off",
       "node/prefer-global/process": "off",
       "@typescript-eslint/naming-convention": "off",
-      "unicorn/prefer-module": "off"
+      "unicorn/prefer-module": "off",
+      "import/no-mutable-exports": "off"
     }
   }
 }

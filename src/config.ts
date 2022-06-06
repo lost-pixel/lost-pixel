@@ -312,7 +312,7 @@ const checkConfig = () => {
 };
 
 const configFileNameBase = path.join(
-  process.env.LOST_PIXEL_CONFIG_DIR || process.cwd(),
+  process.env.LOST_PIXEL_CONFIG_DIR ?? process.cwd(),
   'lostpixel.config',
 );
 
@@ -323,7 +323,9 @@ const loadProjectConfig = async (): Promise<CustomProjectConfig> => {
   log('Looking for configuration file:', `${configFileNameBase}.(js|ts)`);
 
   if (existsSync(`${configFileNameBase}.js`)) {
-    const projectConfig = require(`${configFileNameBase}.js`);
+    const projectConfig =
+      // eslint-disable-next-line @typescript-eslint/no-require-imports, @typescript-eslint/no-var-requires
+      require(`${configFileNameBase}.js`) as CustomProjectConfig;
     return projectConfig;
   }
 
