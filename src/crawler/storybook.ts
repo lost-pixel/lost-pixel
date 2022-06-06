@@ -89,7 +89,7 @@ export const collectStories = async (url: string, isIframeUrl = false) => {
             if (Array.isArray(parameters)) {
               // @ts-expect-error FIXME
               return parameters.map((value) =>
-                parseParameters(value, level + 1),
+                parseParameters<unknown>(value, level + 1),
               );
             }
 
@@ -107,7 +107,7 @@ export const collectStories = async (url: string, isIframeUrl = false) => {
             }
 
             if (typeof parameters === 'object' && parameters !== null) {
-              /// @ts-expect-error FIXME
+              // @ts-expect-error FIXME
               // eslint-disable-next-line unicorn/no-array-reduce
               return Object.keys(parameters).reduce<T>((acc, key: keyof T) => {
                 // @ts-expect-error FIXME
