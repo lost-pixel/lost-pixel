@@ -77,6 +77,10 @@ const createUploadItem = ({
   fileName,
   type,
 }: CreateUploadItem): UploadFile => {
+  if (config.generateOnly) {
+    throw new Error("Can't create upload item when generateOnly is true");
+  }
+
   const filePath = normalize(join(path, fileName));
 
   return {
