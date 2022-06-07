@@ -243,7 +243,22 @@ export type ProjectConfig = {
   beforeScreenshot?: (page: Page, input: { id: string }) => Promise<void>;
 };
 
-const requiredConfigProps: Array<keyof FullConfig> = [
+type GenerateOnlyModeProjectConfig = Omit<
+  ProjectConfig,
+  | 'lostPixelProjectId'
+  | 'ciBuildId'
+  | 'ciBuildId'
+  | 'ciBuildNumber'
+  | 'repository'
+  | 'commitRef'
+  | 'commitRefName'
+  | 'commitHash'
+  | 's3'
+> & {
+  generateOnly: true;
+};
+
+const requiredConfigProps: Array<keyof ProjectConfig> = [
   'lostPixelProjectId',
   'ciBuildId',
   'ciBuildNumber',
@@ -254,31 +269,20 @@ const requiredConfigProps: Array<keyof FullConfig> = [
   's3',
 ];
 
-const requiredS3ConfigProps: Array<keyof FullConfig['s3']> = [
+const requiredS3ConfigProps: Array<keyof ProjectConfig['s3']> = [
   'endPoint',
   'accessKey',
   'secretKey',
   'bucketName',
 ];
 
-export type FullConfig = BaseConfig & ProjectConfig;
+export type FullConfig =
+  | (BaseConfig & ProjectConfig)
+  | (BaseConfig & GenerateOnlyModeProjectConfig);
+
 export type CustomProjectConfig =
-  | (Partial<BaseConfig> & ProjectConfig)
-  | (Partial<BaseConfig> &
-      Omit<
-        ProjectConfig,
-        | 'lostPixelProjectId'
-        | 'ciBuildId'
-        | 'ciBuildId'
-        | 'ciBuildNumber'
-        | 'repository'
-        | 'commitRef'
-        | 'commitRefName'
-        | 'commitHash'
-        | 's3'
-      > & {
-        generateOnly: true;
-      });
+  | (Partial<BaseConfig> & GenerateOnlyModeProjectConfig)
+  | (Partial<BaseConfig> & ProjectConfig);
 
 const defaultConfig: BaseConfig = {
   browser: 'chromium',
@@ -301,21 +305,13 @@ const defaultConfig: BaseConfig = {
   setPendingStatusCheck: false,
 };
 
-const defaultGenerateOnlyConfig: ProjectConfig = {
-  lostPixelProjectId: '---',
-  ciBuildId: process.env.GITHUB_RUN_ID ?? '1',
-  ciBuildNumber: process.env.GITHUB_RUN_NUMBER ?? '1',
-  repository: process.env.REPOSITORY ?? 'unknown/unknown',
-  commitRef: process.env.GITHUB_REF ?? 'main',
-  commitRefName: process.env.GITHUB_REF_NAME ?? 'main',
-  commitHash:
-    process.env.COMMIT_HASH ?? '0000000000000000000000000000000000000000',
-  s3: {
-    accessKey: '---',
-    secretKey: '---',
-    bucketName: '---',
-    endPoint: 'https://s3.amazonaws.com',
-  },
+const githubConfigDefaults: Partial<ProjectConfig> = {
+  ciBuildId: process.env.GITHUB_RUN_ID,
+  ciBuildNumber: process.env.GITHUB_RUN_NUMBER,
+  repository: process.env.REPOSITORY,
+  commitRef: process.env.GITHUB_REF,
+  commitRefName: process.env.GITHUB_REF_NAME,
+  commitHash: process.env.COMMIT_HASH,
 };
 
 export let config: FullConfig;
@@ -382,7 +378,6 @@ const loadProjectConfig = async (): Promise<CustomProjectConfig> => {
 export const configure = async (customProjectConfig?: CustomProjectConfig) => {
   if (customProjectConfig) {
     config = {
-      ...defaultGenerateOnlyConfig,
       ...defaultConfig,
       ...customProjectConfig,
     };
@@ -393,7 +388,7 @@ export const configure = async (customProjectConfig?: CustomProjectConfig) => {
   const projectConfig = await loadProjectConfig();
 
   config = {
-    ...defaultGenerateOnlyConfig,
+    ...(!projectConfig.generateOnly && { ...githubConfigDefaults }),
     ...defaultConfig,
     ...projectConfig,
   };
