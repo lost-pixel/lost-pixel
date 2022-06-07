@@ -6,29 +6,35 @@ import { Comparison, UploadFile, WebhookEvent } from './types';
 
 let minio: MinioClient;
 
-const setupMinio = () =>
-  new MinioClient({
-    endPoint: config.s3.endPoint,
-    region: config.s3.region ?? undefined,
-    accessKey: config.s3.accessKey,
-    secretKey: config.s3.secretKey,
-    sessionToken: config.s3.sessionToken ?? undefined,
-    port: config.s3.port ? Number(config.s3.port) : 443,
-    useSSL: config.s3.ssl,
-  });
-
 export const uploadFile = async ({
   uploadPath,
   filePath,
   metaData,
 }: UploadFile) => {
+  if (config.generateOnly) {
+    return;
+  }
+
   log(`Uploading '${filePath}' to '${uploadPath}'`);
 
   if (!minio) {
-    minio = setupMinio();
+    minio = new MinioClient({
+      endPoint: config.s3.endPoint,
+      region: config.s3.region ?? undefined,
+      accessKey: config.s3.accessKey,
+      secretKey: config.s3.secretKey,
+      sessionToken: config.s3.sessionToken ?? undefined,
+      port: config.s3.port ? Number(config.s3.port) : 443,
+      useSSL: config.s3.ssl,
+    });
   }
 
   return new Promise((resolve, reject) => {
+    if (config.generateOnly) {
+      reject(new Error('Generate only mode'));
+      return;
+    }
+
     minio.fPutObject(
       config.s3.bucketName,
       uploadPath,
@@ -54,6 +60,10 @@ export const sendResultToAPI = async ({
   comparisons?: Comparison[];
   event?: WebhookEvent;
 }) => {
+  if (config.generateOnly) {
+    return;
+  }
+
   const [repoOwner, repoName] = config.repository.split('/');
 
   return sendToAPI('result', {

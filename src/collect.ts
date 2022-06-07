@@ -4,6 +4,10 @@ import { config } from './config';
 import { log } from './log';
 
 export const collect = async () => {
+  if (config.generateOnly) {
+    return;
+  }
+
   log('Collecting files');
 
   const baseline = getImageList(config.imagePathBaseline);

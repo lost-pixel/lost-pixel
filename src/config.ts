@@ -243,7 +243,22 @@ export type ProjectConfig = {
   beforeScreenshot?: (page: Page, input: { id: string }) => Promise<void>;
 };
 
-const requiredConfigProps: Array<keyof FullConfig> = [
+type GenerateOnlyModeProjectConfig = Omit<
+  ProjectConfig,
+  | 'lostPixelProjectId'
+  | 'ciBuildId'
+  | 'ciBuildId'
+  | 'ciBuildNumber'
+  | 'repository'
+  | 'commitRef'
+  | 'commitRefName'
+  | 'commitHash'
+  | 's3'
+> & {
+  generateOnly: true;
+};
+
+const requiredConfigProps: Array<keyof ProjectConfig> = [
   'lostPixelProjectId',
   'ciBuildId',
   'ciBuildNumber',
@@ -254,15 +269,20 @@ const requiredConfigProps: Array<keyof FullConfig> = [
   's3',
 ];
 
-const requiredS3ConfigProps: Array<keyof FullConfig['s3']> = [
+const requiredS3ConfigProps: Array<keyof ProjectConfig['s3']> = [
   'endPoint',
   'accessKey',
   'secretKey',
   'bucketName',
 ];
 
-export type FullConfig = BaseConfig & ProjectConfig;
-export type CustomProjectConfig = Partial<BaseConfig> & ProjectConfig;
+export type FullConfig =
+  | (BaseConfig & ProjectConfig)
+  | (BaseConfig & GenerateOnlyModeProjectConfig);
+
+export type CustomProjectConfig =
+  | (Partial<BaseConfig> & GenerateOnlyModeProjectConfig)
+  | (Partial<BaseConfig> & ProjectConfig);
 
 const defaultConfig: BaseConfig = {
   browser: 'chromium',
@@ -283,6 +303,15 @@ const defaultConfig: BaseConfig = {
   waitForLastRequest: 1000,
   threshold: 0,
   setPendingStatusCheck: false,
+};
+
+const githubConfigDefaults: Partial<ProjectConfig> = {
+  ciBuildId: process.env.GITHUB_RUN_ID,
+  ciBuildNumber: process.env.GITHUB_RUN_NUMBER,
+  repository: process.env.REPOSITORY,
+  commitRef: process.env.GITHUB_REF,
+  commitRefName: process.env.GITHUB_REF_NAME,
+  commitHash: process.env.COMMIT_HASH,
 };
 
 export let config: FullConfig;
@@ -359,6 +388,7 @@ export const configure = async (customProjectConfig?: CustomProjectConfig) => {
   const projectConfig = await loadProjectConfig();
 
   config = {
+    ...(!projectConfig.generateOnly && { ...githubConfigDefaults }),
     ...defaultConfig,
     ...projectConfig,
   };
