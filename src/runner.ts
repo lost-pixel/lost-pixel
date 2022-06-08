@@ -22,6 +22,13 @@ export const runner = async () => {
     }
 
     if (isUpdateMode()) {
+      if (!config.generateOnly) {
+        log(
+          'Running lost-pixel in update mode requires the generateOnly option to be set to true',
+        );
+        process.exit(1);
+      }
+
       log(
         'Running lost-pixel in update mode. Baseline screenshots will be updated',
       );
