@@ -18,7 +18,7 @@
     "lint-staged": "lint-staged",
     "prepare": "husky install",
     "release": "np --no-publish",
-    "dev": "ts-node src/runner",
+    "dev": "ts-node src/bin",
     "start": "NODE_ENV=production node dist/runner.js"
   },
   "lint-staged": {
