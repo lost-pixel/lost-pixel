@@ -393,5 +393,7 @@ export const configure = async (customProjectConfig?: CustomProjectConfig) => {
     ...projectConfig,
   };
 
-  checkConfig();
+  if (!config.generateOnly) {
+    checkConfig();
+  }
 };
