@@ -10,6 +10,8 @@
   <a href="https://docs.lost-pixel.com">Documentation</a>
   <span>&nbsp;&nbsp;•&nbsp;&nbsp;</span>
   <a href="https://docs.lost-pixel.com/quickstart">Quickstart</a>
+  <span>&nbsp;&nbsp;•&nbsp;&nbsp;</span>
+  <a href="https://github.com/lost-pixel/lost-pixel-examples">Examples</a>
 </div>
 
 ## What is Lost Pixel?
