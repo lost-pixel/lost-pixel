@@ -13,3 +13,7 @@ To add visual regression testing to your project you need to cover two things:
 2. Add lost-pixel [configuration file](../setup/project-configuration.md)
 
 After writing your first stories you can adopt the visual regression testing by following _semi-manual_ workflow
+
+{% hint style="info" %}
+You can see some popular integrations in the [lost-pixel-examples](https://github.com/lost-pixel/lost-pixel-examples) directory
+{% endhint %}
