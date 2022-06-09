@@ -7,9 +7,9 @@
   <a href="https://github.com/lost-pixel/lost-pixel/blob/main/LICENSE"><img src="https://img.shields.io/github/license/lost-pixel/lost-pixel" /></a>
   <br />
   <br />
-  <a href="https://docs.lost-pixel.com">Documentation</a>
+  <a href="https://docs.lost-pixel.com/user-docs">Documentation</a>
   <span>&nbsp;&nbsp;•&nbsp;&nbsp;</span>
-  <a href="https://docs.lost-pixel.com/quickstart">Quickstart</a>
+  <a href="https://docs.lost-pixel.com/user-docs/community-edition/getting-started">Quickstart</a>
   <span>&nbsp;&nbsp;•&nbsp;&nbsp;</span>
   <a href="https://github.com/lost-pixel/lost-pixel-examples">Examples</a>
 </div>
