@@ -21,5 +21,5 @@
 
 ## 💡 Examples
 
-* [lost-pixel-example-next-js](https://github.com/lost-pixel/lost-pixel-examples/lost-pixel-example-next-js)
-* [lost-pixel-example-storybook](https://github.com/lost-pixel/lost-pixel-examples/lost-pixel-example-barebone)
+* [lost-pixel-example-next-js](https://github.com/lost-pixel/lost-pixel-examples/tree/main/lost-pixel-example-next-js)
+* [lost-pixel-example-storybook](https://github.com/lost-pixel/lost-pixel-examples/tree/main/lost-pixel-example-barebone)
