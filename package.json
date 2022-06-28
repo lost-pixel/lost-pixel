@@ -43,7 +43,7 @@
   },
   "homepage": "https://github.com/lost-pixel/lost-pixel#readme",
   "dependencies": {
-    "async": "^3.2.3",
+    "async": "^3.2.4",
     "axios": "^0.26.1",
     "fs-extra": "^10.1.0",
     "lodash.get": "^4.4.2",
