@@ -22,7 +22,13 @@ type BaseConfig = {
    * URL of the Storybook instance or local folder
    * @default 'storybook-static'
    */
-  storybookUrl: string;
+  storybookUrl?: string;
+
+  /**
+   * URL of the Storybook instance or local folder
+   * @default 'storybook-static'
+   */
+  pageUrls?: string[];
 
   /**
    * Path to the baseline image folder
@@ -287,7 +293,6 @@ export type CustomProjectConfig =
 const defaultConfig: BaseConfig = {
   browser: 'chromium',
   lostPixelUrl: 'https://app.lost-pixel.com/api/callback',
-  storybookUrl: 'storybook-static',
   imagePathBaseline: '.lostpixel/baseline/',
   imagePathCurrent: '.lostpixel/current/',
   imagePathDifference: '.lostpixel/difference/',
@@ -348,7 +353,10 @@ const configFileNameBase = path.join(
 const loadProjectConfig = async (): Promise<CustomProjectConfig> => {
   log('Loading project configuration...');
   log('Current working directory:', process.cwd());
-  log('Defined configuration directory:', process.env.LOST_PIXEL_CONFIG_DIR);
+  if (process.env.LOST_PIXEL_CONFIG_DIR) {
+    log('Defined configuration directory:', process.env.LOST_PIXEL_CONFIG_DIR);
+  }
+
   log('Looking for configuration file:', `${configFileNameBase}.(js|ts)`);
 
   if (existsSync(`${configFileNameBase}.js`)) {
