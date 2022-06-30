@@ -25,10 +25,14 @@ type BaseConfig = {
   storybookUrl?: string;
 
   /**
-   * URL of the Storybook instance or local folder
-   * @default 'storybook-static'
+   * Paths to take screenshots of
    */
-  pageUrls?: string[];
+  pagePaths?: string[];
+
+  /**
+   * URL of the running application
+   */
+  pageBaselineUrl?: string;
 
   /**
    * Path to the baseline image folder
