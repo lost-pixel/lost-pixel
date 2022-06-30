@@ -27,7 +27,7 @@ type BaseConfig = {
   /**
    * Paths to take screenshots of
    */
-  pagePaths?: string[];
+  pages?: PageScreenshotParameter[];
 
   /**
    * URL of the running application
@@ -122,6 +122,12 @@ type BaseConfig = {
    * @default 'false'
    */
   setPendingStatusCheck: boolean;
+};
+
+export type PageScreenshotParameter = {
+  id: string;
+  path: string;
+  name: string;
 };
 
 type StoryLike = {
@@ -398,6 +404,26 @@ export const configure = async (customProjectConfig?: CustomProjectConfig) => {
   }
 
   const projectConfig = await loadProjectConfig();
+
+  if (
+    projectConfig.storybookUrl &&
+    (projectConfig.pages || projectConfig.pageBaselineUrl)
+  ) {
+    log(
+      "Currently storybook & page screenshot modes can't be used together. Either set storybookUrl or pages & pageBaselineUrl",
+    );
+    process.exit(1);
+  }
+
+  if (
+    (projectConfig.pages && !projectConfig.pageBaselineUrl) ||
+    (!projectConfig.pages && projectConfig.pageBaselineUrl)
+  ) {
+    log(
+      'Page screenshot mode requires both pages & pageBaselineUrl config properties.',
+    );
+    process.exit(1);
+  }
 
   config = {
     ...(!projectConfig.generateOnly && { ...githubConfigDefaults }),

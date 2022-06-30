@@ -1,13 +1,16 @@
-import path from 'node:path';
 import { config } from './config';
-import { collectStories, generateShotItems } from './crawler/storybook';
+import {
+  collectStories,
+  generateStorybookShotItems,
+} from './crawler/storybook';
+import { generatePageShotItems } from './crawler/pageScreenshots';
 import { log } from './log';
 import { ShotItem, takeScreenShots } from './shots/shots';
 import { removeFilesInFolder } from './utils';
 
 export const createShots = async () => {
   const {
-    pagePaths,
+    pages,
     pageBaselineUrl,
     storybookUrl,
     imagePathCurrent,
@@ -26,7 +29,7 @@ export const createShots = async () => {
 
     log(`Found ${collection.stories.length} stories`);
 
-    shotItems = generateShotItems(storybookUrl, collection.stories);
+    shotItems = generateStorybookShotItems(storybookUrl, collection.stories);
     log(`Prepared ${shotItems.length} stories for screenshots`);
 
     await takeScreenShots(shotItems);
@@ -34,24 +37,8 @@ export const createShots = async () => {
     log('Screenshots done!');
   }
 
-  if (pagePaths && pageBaselineUrl) {
-    shotItems = pagePaths.map((pagePath) => {
-      return {
-        id: pagePath,
-        url: path.join(pageBaselineUrl, pagePath),
-        filePathBaseline: `${path.join(
-          config.imagePathBaseline,
-          pagePath,
-        )}.png`,
-        filePathCurrent: `${path.join(config.imagePathCurrent, pagePath)}.png`,
-        filePathDifference: `${path.join(
-          config.imagePathDifference,
-          pagePath,
-        )}.png`,
-        threshold: 0,
-      };
-    });
-
+  if (pages && pageBaselineUrl) {
+    shotItems = generatePageShotItems(pages, pageBaselineUrl);
     log(`Prepared ${shotItems.length} stories for screenshots`);
 
     await takeScreenShots(shotItems);
