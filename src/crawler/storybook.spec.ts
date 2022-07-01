@@ -4,7 +4,7 @@ import { defaultTestConfig } from '../testUtils';
 import { collectStories, getIframeUrl, getStoryBookUrl } from './storybook';
 
 const storyBookUrl = getStoryBookUrl(
-  'examples/storybook-demo/storybook-static',
+  'examples/examples/lost-pixel-example-barebone/storybook-static',
 );
 
 beforeAll(async () => {
