@@ -1,7 +1,6 @@
 
 module.exports = {
   storybookUrl: 'storybook-static',
-  browser: 'firefox',
   generateOnly: true,
   failOnDifference: true,
 
