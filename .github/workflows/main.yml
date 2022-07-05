@@ -35,20 +35,15 @@ jobs:
       - name: Build
         run: npm run build
 
-      - name: Test on Storybook
-        run: npm run test-on-example-storybook
-
       - name: Run Pages
         run: npm run run-example-pages &
 
-      - name: Test on Pages
-        run: npm run test-on-example-pages
+      - name: Test on examples
+        run: npm run test-on-examples
 
       - name: Artifacts upload
         uses: actions/upload-artifact@v2
         if: failure()
         with:
           name: shots
-          path: |
-            examples/lost-pixel-example-barebone/.lostpixel
-            examples/lost-pixel-example-next-js-pages/.lostpixel
+          path: examples/.lostpixel
