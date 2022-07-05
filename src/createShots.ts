@@ -16,7 +16,8 @@ export const createShots = async () => {
     imagePathCurrent,
     imagePathDifference,
   } = config;
-  let shotItems: ShotItem[] = [];
+  let storybookShotItems: ShotItem[] = [];
+  let pageShotItems: ShotItem[] = [];
 
   if (storybookUrl) {
     const collection = await collectStories(storybookUrl);
@@ -29,22 +30,27 @@ export const createShots = async () => {
 
     log(`Found ${collection.stories.length} stories`);
 
-    shotItems = generateStorybookShotItems(storybookUrl, collection.stories);
-    log(`Prepared ${shotItems.length} stories for screenshots`);
+    storybookShotItems = generateStorybookShotItems(
+      storybookUrl,
+      collection.stories,
+    );
 
-    await takeScreenShots(shotItems);
+    log(`Prepared ${storybookShotItems.length} stories for screenshots`);
+
+    await takeScreenShots(storybookShotItems);
 
     log('Screenshots done!');
   }
 
   if (pages && pageBaselineUrl) {
-    shotItems = generatePageShotItems(pages, pageBaselineUrl);
-    log(`Prepared ${shotItems.length} stories for screenshots`);
+    pageShotItems = generatePageShotItems(pages, pageBaselineUrl);
 
-    await takeScreenShots(shotItems);
+    log(`Prepared ${pageShotItems.length} stories for screenshots`);
+
+    await takeScreenShots(pageShotItems);
 
     log('Screenshots done!');
   }
 
-  return shotItems;
+  return [...storybookShotItems, ...pageShotItems];
 };
