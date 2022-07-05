@@ -19,20 +19,30 @@ type BaseConfig = {
   lostPixelUrl: string;
 
   /**
-   * URL of the Storybook instance or local folder
-   * @default 'storybook-static'
+   * Enable Storybook mode
    */
-  storybookUrl?: string;
+  storybookShots?: {
+    /**
+     * URL of the Storybook instance or local folder
+     * @default 'storybook-static'
+     */
+    storybookUrl: string;
+  };
 
   /**
-   * Paths to take screenshots of
+   * Enable Page mode
    */
-  pages?: PageScreenshotParameter[];
+  pageShots?: {
+    /**
+     * Paths to take screenshots of
+     */
+    pages: PageScreenshotParameter[];
 
-  /**
-   * URL of the running application
-   */
-  pageBaselineUrl?: string;
+    /**
+     * URL of the running application
+     */
+    pageBaselineUrl: string;
+  };
 
   /**
    * Path to the baseline image folder
