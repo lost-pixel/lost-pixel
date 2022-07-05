@@ -14,12 +14,13 @@ export const createShots = async () => {
   let storybookShotItems: ShotItem[] = [];
   let pageShotItems: ShotItem[] = [];
 
+  removeFilesInFolder(imagePathCurrent);
+  removeFilesInFolder(imagePathDifference);
+
   if (storybookShots) {
     const { storybookUrl } = storybookShots;
     const collection = await collectStories(storybookUrl);
 
-    removeFilesInFolder(imagePathCurrent);
-    removeFilesInFolder(imagePathDifference);
     if (!collection?.stories || collection.stories.length === 0) {
       throw new Error('Error: Stories not found');
     }
