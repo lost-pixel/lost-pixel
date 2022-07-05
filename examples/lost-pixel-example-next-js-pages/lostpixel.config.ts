@@ -12,4 +12,5 @@ export const config: CustomProjectConfig = {
   ],
   pageBaselineUrl:'http://localhost:3000',
   generateOnly: true,
+  failOnDifference: true,
 };
