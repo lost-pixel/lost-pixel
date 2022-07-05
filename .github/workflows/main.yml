@@ -49,4 +49,6 @@ jobs:
         if: failure()
         with:
           name: shots
-          path: examples/lost-pixel-example-barebone/.lostpixel
+          path: |
+            examples/lost-pixel-example-barebone/.lostpixel
+            examples/lost-pixel-example-next-js-pages/.lostpixel
