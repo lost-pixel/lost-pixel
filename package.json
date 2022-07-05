@@ -15,6 +15,7 @@
     "build-example-storybook": "rimraf examples/lost-pixel-example-barebone/storybook-static && cd examples/lost-pixel-example-barebone && npm install && npm run build-storybook",
     "test-on-example-storybook": "cd examples/lost-pixel-example-barebone && node ../../dist/bin.js",
     "build-example-pages": "cd examples/lost-pixel-example-next-js-pages && npm ci && npm run build",
+    "run-example-pages": "cd examples/lost-pixel-example-next-js-pages && npm run start",
     "test-on-example-pages": "cd examples/lost-pixel-example-next-js-pages && node ../../dist/bin.js",
     "lint": "xo && tsc --noEmit && eslint '*/**/*.ts'",
     "lint-fix": "tsc --noEmit && eslint '*/**/*.ts' --fix",
