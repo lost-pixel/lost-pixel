@@ -2,12 +2,10 @@ on: [push, pull_request]
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
     name: Lost Pixel
 
     steps:
-
       - name: Checkout
         uses: actions/checkout@v2
 
@@ -15,7 +13,7 @@ jobs:
         uses: actions/setup-node@v2
         with:
           node-version: 16.x
-          cache: 'npm'
+          cache: "npm"
 
       - name: Install dependencies
         run: |
@@ -28,8 +26,29 @@ jobs:
       - name: Build Example Storybook
         run: npm run build-example-storybook
 
+      - name: Build Example Pages
+        run: npm run build-example-pages
+
       - name: Test
         run: npm run test
 
       - name: Build
         run: npm run build
+
+      - name: Test on Storybook
+        run: npm run test-on-example-storybook
+
+      - name: Run Pages
+        run: npm run run-example-pages &
+
+      - name: Test on Pages
+        run: npm run test-on-example-pages
+
+      - name: Artifacts upload
+        uses: actions/upload-artifact@v2
+        if: failure()
+        with:
+          name: shots
+          path: |
+            examples/lost-pixel-example-barebone/.lostpixel
+            examples/lost-pixel-example-next-js-pages/.lostpixel
