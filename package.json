@@ -13,14 +13,16 @@
     "test:watch": "jest --watch --detectOpenHandles",
     "build": "rimraf dist && tsc",
     "build-example-storybook": "rimraf examples/lost-pixel-example-barebone/storybook-static && cd examples/lost-pixel-example-barebone && npm install && npm run build-storybook",
+    "test-on-example-storybook": "cd examples/lost-pixel-example-barebone && node ../../dist/bin.js",
     "build-example-pages": "cd examples/lost-pixel-example-next-js-pages && npm ci && npm run build",
+    "test-on-example-pages": "cd examples/lost-pixel-example-next-js-pages && node ../../dist/bin.js",
     "lint": "xo && tsc --noEmit && eslint '*/**/*.ts'",
     "lint-fix": "tsc --noEmit && eslint '*/**/*.ts' --fix",
     "lint-staged": "lint-staged",
     "prepare": "husky install",
     "release": "np --no-publish",
     "dev": "ts-node src/bin",
-    "start": "NODE_ENV=production node dist/runner.js"
+    "start": "NODE_ENV=production node dist/bin.js"
   },
   "lint-staged": {
     "*.{js,ts}": [
