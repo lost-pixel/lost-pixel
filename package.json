@@ -17,6 +17,7 @@
     "build-example-pages": "cd examples/lost-pixel-example-next-js-pages && npm ci && npm run build",
     "run-example-pages": "cd examples/lost-pixel-example-next-js-pages && npm run start",
     "test-on-example-pages": "cd examples/lost-pixel-example-next-js-pages && node ../../dist/bin.js",
+    "test-on-examples": "cd examples && node ../dist/bin.js",
     "lint": "xo && tsc --noEmit && eslint '*/**/*.ts'",
     "lint-fix": "tsc --noEmit && eslint '*/**/*.ts' --fix",
     "lint-staged": "lint-staged",
