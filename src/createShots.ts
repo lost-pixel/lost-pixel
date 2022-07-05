@@ -45,7 +45,7 @@ export const createShots = async () => {
   if (pages && pageBaselineUrl) {
     pageShotItems = generatePageShotItems(pages, pageBaselineUrl);
 
-    log(`Prepared ${pageShotItems.length} stories for screenshots`);
+    log(`Prepared ${pageShotItems.length} pages for screenshots`);
 
     await takeScreenShots(pageShotItems);
 
