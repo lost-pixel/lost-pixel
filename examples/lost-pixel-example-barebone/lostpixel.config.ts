@@ -1,6 +1,8 @@
+// @ts-nocheck
 
-module.exports = {
-  storybookUrl: 'storybook-static',
+import { CustomProjectConfig } from 'lost-pixel';
+
+export const config: CustomProjectConfig = {
   generateOnly: true,
   failOnDifference: true,
 
