@@ -179,7 +179,7 @@ export type ProjectConfig = {
   generateOnly?: boolean;
 
   /**
-   * Flag that decides if images should be uploaded to S3 bucket or just generated (non-SaaS self-hosted mode)
+   * Flag that decides if process should exit if a difference is found
    */
   failOnDifference?: boolean;
 
