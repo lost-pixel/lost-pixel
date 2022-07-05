@@ -12,7 +12,7 @@
     "test": "jest --detectOpenHandles",
     "test:watch": "jest --watch --detectOpenHandles",
     "build": "rimraf dist && tsc",
-    "build-example-storybook": "rimraf examples/examples/lost-pixel-example-barebone/storybook-static && cd examples/lost-pixel-example-barebone && npm install && npm run build-storybook",
+    "build-example-storybook": "rimraf examples/lost-pixel-example-barebone/storybook-static && cd examples/lost-pixel-example-barebone && npm install && npm run build-storybook",
     "lint": "xo && tsc --noEmit && eslint '*/**/*.ts'",
     "lint-fix": "tsc --noEmit && eslint '*/**/*.ts' --fix",
     "lint-staged": "lint-staged",
