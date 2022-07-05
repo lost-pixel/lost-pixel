@@ -442,6 +442,13 @@ export const configure = async (customProjectConfig?: CustomProjectConfig) => {
     ...projectConfig,
   };
 
+  // Default to Storybook mode if no mode is defined
+  if (!config.storybookShots && !config.pageShots) {
+    config.storybookShots = {
+      storybookUrl: 'storybook-static',
+    };
+  }
+
   if (!config.generateOnly) {
     checkConfig();
   }
