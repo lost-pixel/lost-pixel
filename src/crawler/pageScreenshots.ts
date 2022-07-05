@@ -6,6 +6,13 @@ export const generatePageShotItems = (
   pages: PageScreenshotParameter[],
   pageBaselineUrl: string,
 ): ShotItem[] => {
+  const names = pages.map((page) => page.name);
+  const uniqueNames = new Set(names);
+
+  if (names.length !== uniqueNames.size) {
+    throw new Error('Error: Page names must be unique');
+  }
+
   return pages.map((page) => {
     return {
       id: page.name,
