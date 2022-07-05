@@ -9,17 +9,13 @@ import { ShotItem, takeScreenShots } from './shots/shots';
 import { removeFilesInFolder } from './utils';
 
 export const createShots = async () => {
-  const {
-    pages,
-    pageBaselineUrl,
-    storybookUrl,
-    imagePathCurrent,
-    imagePathDifference,
-  } = config;
+  const { storybookShots, pageShots, imagePathCurrent, imagePathDifference } =
+    config;
   let storybookShotItems: ShotItem[] = [];
   let pageShotItems: ShotItem[] = [];
 
-  if (storybookUrl) {
+  if (storybookShots) {
+    const { storybookUrl } = storybookShots;
     const collection = await collectStories(storybookUrl);
 
     removeFilesInFolder(imagePathCurrent);
@@ -42,13 +38,13 @@ export const createShots = async () => {
     log('Screenshots done!');
   }
 
-  if (pages && pageBaselineUrl) {
-    pageShotItems = generatePageShotItems(pages, pageBaselineUrl);
+  if (pageShots) {
+    const { pages, pageBaselineUrl } = pageShots;
 
+    pageShotItems = generatePageShotItems(pages, pageBaselineUrl);
     log(`Prepared ${pageShotItems.length} pages for screenshots`);
 
     await takeScreenShots(pageShotItems);
-
     log('Screenshots done!');
   }
 
