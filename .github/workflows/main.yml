@@ -40,3 +40,10 @@ jobs:
 
       - name: Test on Pages
         run: npm run test-on-example-pages
+
+      - name: Artifacts upload
+        uses: actions/upload-artifact@v2
+        if: failure()
+        with:
+          name: shots
+          path: examples/lost-pixel-example-barebone/.lostpixel
