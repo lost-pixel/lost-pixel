@@ -41,7 +41,7 @@ export const runner = async () => {
     log('Creating shots');
     const shotItems = await createShots();
 
-    if (shotItems.length === 0) {
+    if (config.generateOnly && shotItems.length === 0) {
       log(`Exiting process with nothing to compare.`);
       process.exit(1);
     }
