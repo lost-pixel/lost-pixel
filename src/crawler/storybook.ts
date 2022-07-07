@@ -172,7 +172,7 @@ const generateBrowserConfig = (story: Story) => {
   return browserConfig;
 };
 
-export const generateShotItems = (
+export const generateStorybookShotItems = (
   baseUrl: string,
   stories: Story[],
 ): ShotItem[] => {

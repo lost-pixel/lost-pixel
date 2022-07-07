@@ -16,6 +16,7 @@ import { log } from './log';
 
 export const runner = async () => {
   await configure();
+  log('Successfully loaded the configuration!');
   try {
     if (config.setPendingStatusCheck && config.generateOnly) {
       await sendInitToAPI();
@@ -34,11 +35,21 @@ export const runner = async () => {
       );
     }
 
+    log('Creating shot folders');
     createShotsFolders();
+
+    log('Creating shots');
     const shotItems = await createShots();
+
+    if (config.generateOnly && shotItems.length === 0) {
+      log(`Exiting process with nothing to compare.`);
+      process.exit(1);
+    }
+
+    log('Checking differences');
     const { differenceCount } = await checkDifferences(shotItems);
 
-    if (config.failOnDifference) {
+    if (differenceCount > 0 && config.failOnDifference) {
       log(`Exiting process with ${differenceCount} found differences`);
       process.exit(1);
     }

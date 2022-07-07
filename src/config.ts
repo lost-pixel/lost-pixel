@@ -19,10 +19,30 @@ type BaseConfig = {
   lostPixelUrl: string;
 
   /**
-   * URL of the Storybook instance or local folder
-   * @default 'storybook-static'
+   * Enable Storybook mode
    */
-  storybookUrl: string;
+  storybookShots?: {
+    /**
+     * URL of the Storybook instance or local folder
+     * @default 'storybook-static'
+     */
+    storybookUrl: string;
+  };
+
+  /**
+   * Enable Page mode
+   */
+  pageShots?: {
+    /**
+     * Paths to take screenshots of
+     */
+    pages: PageScreenshotParameter[];
+
+    /**
+     * URL of the running application
+     */
+    pageBaselineUrl: string;
+  };
 
   /**
    * Path to the baseline image folder
@@ -114,6 +134,12 @@ type BaseConfig = {
   setPendingStatusCheck: boolean;
 };
 
+export type PageScreenshotParameter = {
+  id: string;
+  path: string;
+  name: string;
+};
+
 type StoryLike = {
   id?: string;
   kind?: string;
@@ -163,7 +189,7 @@ export type ProjectConfig = {
   generateOnly?: boolean;
 
   /**
-   * Flag that decides if images should be uploaded to S3 bucket or just generated (non-SaaS self-hosted mode)
+   * Flag that decides if process should exit if a difference is found
    */
   failOnDifference?: boolean;
 
@@ -287,7 +313,6 @@ export type CustomProjectConfig =
 const defaultConfig: BaseConfig = {
   browser: 'chromium',
   lostPixelUrl: 'https://app.lost-pixel.com/api/callback',
-  storybookUrl: 'storybook-static',
   imagePathBaseline: '.lostpixel/baseline/',
   imagePathCurrent: '.lostpixel/current/',
   imagePathDifference: '.lostpixel/difference/',
@@ -341,6 +366,7 @@ const checkConfig = () => {
 };
 
 const configFileNameBase = path.join(
+  process.env.LOST_PIXEL_CONFIG_DIR ? process.cwd() : '',
   process.env.LOST_PIXEL_CONFIG_DIR ?? process.cwd(),
   'lostpixel.config',
 );
@@ -348,7 +374,10 @@ const configFileNameBase = path.join(
 const loadProjectConfig = async (): Promise<CustomProjectConfig> => {
   log('Loading project configuration...');
   log('Current working directory:', process.cwd());
-  log('Defined configuration directory:', process.env.LOST_PIXEL_CONFIG_DIR);
+  if (process.env.LOST_PIXEL_CONFIG_DIR) {
+    log('Defined configuration directory:', process.env.LOST_PIXEL_CONFIG_DIR);
+  }
+
   log('Looking for configuration file:', `${configFileNameBase}.(js|ts)`);
 
   if (existsSync(`${configFileNameBase}.js`)) {
@@ -392,6 +421,13 @@ export const configure = async (customProjectConfig?: CustomProjectConfig) => {
     ...defaultConfig,
     ...projectConfig,
   };
+
+  // Default to Storybook mode if no mode is defined
+  if (!config.storybookShots && !config.pageShots) {
+    config.storybookShots = {
+      storybookUrl: 'storybook-static',
+    };
+  }
 
   if (!config.generateOnly) {
     checkConfig();
