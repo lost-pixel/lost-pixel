@@ -23,7 +23,7 @@ function Profile() {
       <div style={{fontSize:'36px',fontWeight:'bold', color:'crimson', marginBottom:'20px'}}>
         {data.title}
       </div>
-      <img style={{width:'100px', height:'100px', borderRadius:'10px'}} src={data.thumbnailUrl} />
+      <img style={{width:'640px', height:'360px', borderRadius:'10px'}} src="https://www.fillmurray.com/640/360" />
     </div>
   )
 }
