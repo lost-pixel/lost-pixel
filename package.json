@@ -47,7 +47,7 @@
   "homepage": "https://github.com/lost-pixel/lost-pixel#readme",
   "dependencies": {
     "async": "^3.2.3",
-    "axios": "^0.26.1",
+    "axios": "^0.27.2",
     "fs-extra": "^10.1.0",
     "lodash.get": "^4.4.2",
     "lodash.kebabcase": "^4.1.1",
