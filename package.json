@@ -60,7 +60,7 @@
   },
   "devDependencies": {
     "@octokit/webhooks-types": "^5.2.0",
-    "@types/async": "^3.2.12",
+    "@types/async": "3.2.15",
     "@types/fs-extra": "^9.0.13",
     "@types/jest": "27.0.3",
     "@types/lodash.get": "4.4.7",
