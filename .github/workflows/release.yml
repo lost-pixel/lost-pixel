@@ -45,7 +45,7 @@ jobs:
         run: npm publish --access public
 
       - name: Slack Notification
-        uses: 8398a7/action-slack@a74b761b4089b5d730d813fbedcd2ec5d394f3af
+        uses: 8398a7/action-slack@09d38354556399a0f7a8d78d617c8e61a3682b63
         if: always()
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK }}
@@ -82,7 +82,7 @@ jobs:
           buildoptions: '--compress --force-rm'
 
       - name: Slack Notification
-        uses: 8398a7/action-slack@a74b761b4089b5d730d813fbedcd2ec5d394f3af
+        uses: 8398a7/action-slack@09d38354556399a0f7a8d78d617c8e61a3682b63
         if: always()
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK }}
