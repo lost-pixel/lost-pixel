@@ -28,6 +28,15 @@ const takeScreenShot = async ({
   const context = await browser.newContext(shotItem.browserConfig);
   const page = await context.newPage();
 
+  page.on('console', async (msg) => {
+    const values = [];
+    for (const arg of msg.args()) {
+      values.push(await arg.jsonValue());
+    }
+
+    console.log(...values);
+  });
+
   await page.goto(shotItem.url);
 
   try {
@@ -85,7 +94,14 @@ const takeScreenShot = async ({
 };
 
 export const takeScreenShots = async (shotItems: ShotItem[]) => {
-  const browser = await getBrowser().launch();
+  const browser = await getBrowser().launch({
+    // Logger: {
+    //   isEnabled: () => true,
+    //   log(name, severity, message, args) {
+    //     console.log(`[browser] ${name} ${severity} ${message} ${args}`);
+    //   },
+    // },
+  });
   const total = shotItems.length;
 
   await mapLimit<[number, ShotItem], void>(
