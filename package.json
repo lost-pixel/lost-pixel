@@ -63,7 +63,7 @@
     "@types/async": "^3.2.12",
     "@types/fs-extra": "^9.0.13",
     "@types/jest": "27.0.3",
-    "@types/lodash.get": "^4.4.6",
+    "@types/lodash.get": "4.4.7",
     "@types/lodash.kebabcase": "4.1.7",
     "@types/minio": "7.0.13",
     "@types/pixelmatch": "^5.2.4",
