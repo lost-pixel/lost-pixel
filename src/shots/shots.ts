@@ -28,6 +28,22 @@ const takeScreenShot = async ({
   const context = await browser.newContext(shotItem.browserConfig);
   const page = await context.newPage();
 
+  page.on('pageerror', (exception) => {
+    logger('[pageerror]', 'Uncaught exception:', exception);
+  });
+
+  page.on('console', async (message) => {
+    const values = [];
+
+    for (const arg of message.args()) {
+      // eslint-disable-next-line no-await-in-loop
+      values.push(await arg.jsonValue());
+    }
+
+    const logMessage = `[console] ${String(values.shift())}`;
+    logger(logMessage, ...values);
+  });
+
   await page.goto(shotItem.url);
 
   try {
