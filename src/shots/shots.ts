@@ -5,6 +5,7 @@ import { log } from '../log';
 import { getBrowser, sleep } from '../utils';
 import { config } from '../config';
 import { resizeViewportToFullscreen, waitForNetworkRequests } from './utils';
+import { initializeWorker, prepareHandlers } from './msw';
 
 export type ShotItem = {
   id: string;
@@ -27,6 +28,11 @@ const takeScreenShot = async ({
 }) => {
   const context = await browser.newContext(shotItem.browserConfig);
   const page = await context.newPage();
+
+  await page.evaluate(() => {
+    initializeWorker();
+    prepareHandlers();
+  });
 
   await page.goto(shotItem.url);
 
