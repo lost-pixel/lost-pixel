@@ -46,6 +46,26 @@ const takeScreenShot = async ({
 
   await page.goto(shotItem.url);
 
+  await page.evaluate(() => {
+    // @ts-expect-error blah blah
+    console.log('mswUse', window.mswUse);
+    // @ts-expect-error blah blah
+    console.log('mswRest', window.mswRest);
+    // @ts-expect-error blah blah
+    window.mswUse(
+      // @ts-expect-error blah blah
+      window.mswRest.get('https://my.backend/a', (_, response, ctx) => {
+        console.log('I got here');
+        return response(
+          ctx.json({
+            title: 'Lord of the Flies',
+            description: 'The Lord of the Flies',
+          }),
+        );
+      }),
+    );
+  });
+
   try {
     await page.waitForLoadState('load', {
       timeout: config.timeouts.loadState,

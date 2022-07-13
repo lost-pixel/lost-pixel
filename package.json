@@ -91,6 +91,7 @@
       "@typescript-eslint/no-require-imports": "off",
       "@typescript-eslint/no-unsafe-call": "off",
       "@typescript-eslint/no-var-requires": "off",
+      "@typescript-eslint/no-unsafe-return": "off",
       "import/extensions": "off",
       "unicorn/filename-case": "off",
       "unicorn/no-process-exit": "off",
