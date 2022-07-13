@@ -1,7 +1,7 @@
 import { rest } from 'msw'
 
 export const handlers = [
-  rest.get('https://my.backend/book', (req, res, ctx) => {
+  rest.get('https://my.backend/a', (req, res, ctx) => {
     return res(
       ctx.json({
         title: 'Lord of the Rings',

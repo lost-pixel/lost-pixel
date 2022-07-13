@@ -12,7 +12,7 @@ export default function Home({ book }) {
 
 export async function getServerSideProps() {
   // Server-side requests are mocked by `mocks/server.js`.
-  const res = await fetch('https://my.backend/book')
+  const res = await fetch('https://my.backend/a')
   const book = await res.json()
 
   return {
