@@ -5,7 +5,6 @@ import { log } from '../log';
 import { getBrowser, sleep } from '../utils';
 import { config } from '../config';
 import { resizeViewportToFullscreen, waitForNetworkRequests } from './utils';
-import { initializeWorker, prepareHandlers } from './msw';
 
 export type ShotItem = {
   id: string;
