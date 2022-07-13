@@ -29,11 +29,6 @@ const takeScreenShot = async ({
   const context = await browser.newContext(shotItem.browserConfig);
   const page = await context.newPage();
 
-  await page.evaluate(() => {
-    initializeWorker();
-    prepareHandlers();
-  });
-
   await page.goto(shotItem.url);
 
   try {
