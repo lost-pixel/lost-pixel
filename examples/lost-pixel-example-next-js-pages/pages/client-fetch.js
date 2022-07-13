@@ -23,7 +23,7 @@ function Profile() {
       <div style={{fontSize:'36px',fontWeight:'bold', color:'crimson', marginBottom:'20px'}}>
         {data.title}
       </div>
-      <img style={{width:'640px', height:'360px', borderRadius:'10px'}} src="https://www.fillmurray.com/640/360" />
+      <img style={{width:'640px', height:'360px', borderRadius:'10px'}} src="https://dummyimage.com/640x360/5b0fd6/fff.png?text=Lost+Pixel" />
     </div>
   )
 }
