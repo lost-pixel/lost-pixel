@@ -6,7 +6,7 @@ async function initMocks() {
     server.listen()
   } else {
     const { worker } = await import('./browser')
-    window.mswUse = worker.use
+    window.mswWorker = worker
     window.mswRest = rest
     worker.start()
   }
