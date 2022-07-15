@@ -302,6 +302,8 @@ const requiredS3ConfigProps: Array<keyof ProjectConfig['s3']> = [
   'bucketName',
 ];
 
+export const MEDIA_UPLOAD_CONCURRENCY = 10;
+
 export type FullConfig =
   | (BaseConfig & ProjectConfig)
   | (BaseConfig & GenerateOnlyModeProjectConfig);

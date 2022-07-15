@@ -1,7 +1,10 @@
+import { mapLimit } from 'async';
+import { UploadedObjectInfo } from 'minio';
 import { uploadFile } from './upload';
 import { getChanges, getImageList, prepareComparisonList } from './utils';
-import { config } from './config';
+import { config, MEDIA_UPLOAD_CONCURRENCY } from './config';
 import { log } from './log';
+import { UploadFile } from './types';
 
 export const collect = async () => {
   if (config.generateOnly) {
@@ -45,16 +48,16 @@ export const collect = async () => {
 
   log(`Uploading ${uploadList.length} files`);
 
-  const uploadPromises = uploadList.map(
-    async ({ uploadPath, filePath, metaData }) =>
+  await mapLimit<UploadFile, UploadedObjectInfo>(
+    uploadList,
+    MEDIA_UPLOAD_CONCURRENCY,
+    async ({ uploadPath, filePath, metaData }: UploadFile) =>
       uploadFile({
         uploadPath,
         filePath,
         metaData,
       }),
   );
-
-  await Promise.all(uploadPromises);
 
   log(JSON.stringify(comparisons, null, 2));
 
