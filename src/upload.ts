@@ -42,6 +42,8 @@ export const uploadFile = async ({
       metaData,
       (error, objectInfo) => {
         if (error) {
+          log(`Error uploading '${filePath}' to '${uploadPath}'`);
+          log(error);
           reject(error);
         } else {
           resolve(objectInfo);
