@@ -44,7 +44,7 @@ export const config: CustomProjectConfig = {
   // ],
   pageShots: {
     pages: [
-      { path:'/app',name:'app' },
+      // { path:'/app',name:'app' },
       // { path:'/next-app',name:'next-app',params:{viewports:[{height:1200,widht:8000},{height:800,widht:400},{height:500,widht:8000}] },
       // { path:'/next-app',name:'next-app' ,params:{viewport:[580,100],waitBeforeScreen:1000}}, // higher specificiy than config 
       // { path:'/next-app',name:'next-app',params:{viewport:[360,100], mockLostPixel:{
@@ -70,9 +70,9 @@ export const config: CustomProjectConfig = {
       //     }),
       //   ]
       // },}, },
-      { path:'/next-app?name=App',name:'next-app-with-query-param' },
-      { path:'/fetch',name:'fetch' },
-      { path:'/client-fetch',name:'fetch-client' },
+      // { path:'/next-app?name=App',name:'next-app-with-query-param' },
+      // { path:'/fetch',name:'fetch' },
+      // { path:'/client-fetch',name:'fetch-client' },
       { path:'/msw',name:'msw' },
     ],
     pageBaselineUrl:'http://localhost:3000',
