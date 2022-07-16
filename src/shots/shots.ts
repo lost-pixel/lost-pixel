@@ -29,7 +29,7 @@ const takeScreenShot = async ({
   const page = await context.newPage();
 
   page.on('pageerror', (exception) => {
-    logger('[pageerror]', 'Uncaught exception:', exception);
+    logger('[pageerror] Uncaught exception:', exception);
   });
 
   page.on('console', async (message) => {
