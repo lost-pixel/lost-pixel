@@ -66,7 +66,7 @@ export const getStoryBookUrl = (url: string) => {
 export const getIframeUrl = (url: string) =>
   url.endsWith('/') ? `${url}iframe.html` : `${url}/iframe.html`;
 
-export const collectStories = async (url: string, isIframeUrl = false) => {
+export const collectStories = async (url: string) => {
   const browser = await getBrowser().launch();
   const context = await browser.newContext();
   const page = await context.newPage();
@@ -89,9 +89,7 @@ export const collectStories = async (url: string, isIframeUrl = false) => {
     log('Fallback to /iframe.html');
   }
 
-  const iframeUrl = isIframeUrl
-    ? getStoryBookUrl(url)
-    : getIframeUrl(getStoryBookUrl(url));
+  const iframeUrl = getIframeUrl(getStoryBookUrl(url));
 
   try {
     await page.goto(iframeUrl);
