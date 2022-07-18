@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`collectStories should collect stories from StoryBook 1`] = `
+exports[`collectStories should collect stories from StoryBook: ViaWindowApi 1`] = `
 Object {
   "stories": Array [
     Object {

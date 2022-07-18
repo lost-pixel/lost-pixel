@@ -71,7 +71,7 @@ describe(collectStories, () => {
 
     expect(
       await collectStoriesViaWindowApi(context, storyBookUrl),
-    ).toMatchSnapshot();
+    ).toMatchSnapshot('ViaWindowApi');
   });
 
   it('should fail when using invalid path to StoryBook', async () => {
