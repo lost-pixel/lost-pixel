@@ -3,6 +3,7 @@ import kebabCase from 'lodash.kebabcase';
 import { ShotItem } from '../shots/shots';
 import { config } from '../config';
 import { getBrowser } from '../utils';
+import { log } from '../log';
 
 export type StoryParameters = {
   lostpixel?: {
@@ -19,6 +20,9 @@ export type Story = {
   id: string;
   kind: string;
   story: string;
+  name?: string;
+  title?: string;
+  importPath?: string;
   parameters?: StoryParameters & {
     storyshots?: {
       disable?: boolean;
@@ -29,6 +33,11 @@ export type Story = {
 interface StorybookClientApi {
   raw?: () => Story[];
 }
+
+type StoriesJson = {
+  v: number;
+  stories: Story[];
+};
 
 type WindowObject = typeof window & {
   __STORYBOOK_CLIENT_API__: StorybookClientApi;
@@ -59,7 +68,27 @@ export const getIframeUrl = (url: string) =>
 
 export const collectStories = async (url: string, isIframeUrl = false) => {
   const browser = await getBrowser().launch();
-  const page = await browser.newPage();
+  const context = await browser.newContext();
+  const page = await context.newPage();
+
+  try {
+    log('Trying to collect stories from /stories.json');
+
+    const result = await context.request.get(
+      url.endsWith('/') ? `${url}stories.json` : `${url}/stories.json`,
+    );
+
+    const storiesJson = (await result.json()) as StoriesJson;
+
+    if (typeof storiesJson.stories === 'object') {
+      return {
+        stories: Object.values(storiesJson.stories),
+      };
+    }
+  } catch {
+    log('Fallback to /iframe.html');
+  }
+
   const iframeUrl = isIframeUrl
     ? getStoryBookUrl(url)
     : getIframeUrl(getStoryBookUrl(url));
