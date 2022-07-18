@@ -70,9 +70,12 @@ export const getIframeUrl = (url: string) =>
 export const collectStoriesViaWindowApi = async (
   context: BrowserContext,
   url: string,
+  isIframeUrl?: boolean,
 ) => {
   const page = await context.newPage();
-  const iframeUrl = getIframeUrl(getStoryBookUrl(url));
+  const iframeUrl = isIframeUrl
+    ? getStoryBookUrl(url)
+    : getIframeUrl(getStoryBookUrl(url));
 
   await page.goto(iframeUrl);
 

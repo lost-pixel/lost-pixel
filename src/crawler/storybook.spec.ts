@@ -1,7 +1,12 @@
-import { createShotsFolders } from '../utils';
+import { createShotsFolders, getBrowser } from '../utils';
 import { configure } from '../config';
 import { defaultTestConfig } from '../testUtils';
-import { collectStories, getIframeUrl, getStoryBookUrl } from './storybook';
+import {
+  collectStories,
+  collectStoriesViaWindowApi,
+  getIframeUrl,
+  getStoryBookUrl,
+} from './storybook';
 
 const storyBookUrl = getStoryBookUrl(
   'examples/lost-pixel-example-barebone/storybook-static',
@@ -61,30 +66,47 @@ describe(getIframeUrl, () => {
 
 describe(collectStories, () => {
   it('should collect stories from StoryBook', async () => {
-    expect(await collectStories(storyBookUrl)).toMatchSnapshot();
+    const browser = await getBrowser().launch();
+    const context = await browser.newContext();
+
+    expect(
+      await collectStoriesViaWindowApi(context, storyBookUrl),
+    ).toMatchSnapshot();
   });
 
   it('should fail when using invalid path to StoryBook', async () => {
+    const browser = await getBrowser().launch();
+    const context = await browser.newContext();
+
     await expect(async () =>
-      collectStories('this/path/does/not/exist'),
+      collectStoriesViaWindowApi(context, 'this/path/does/not/exist'),
     ).rejects.toThrow('ERR_FILE_NOT_FOUND');
   });
 
   it('should fail when using invalid URL to StoryBook', async () => {
+    const browser = await getBrowser().launch();
+    const context = await browser.newContext();
+
     await expect(async () =>
-      collectStories('http://localhost:99999'),
+      collectStoriesViaWindowApi(context, 'http://localhost:99999'),
     ).rejects.toThrow('invalid URL');
   });
 
   it('should timeout when using invalid URL to StoryBook', async () => {
+    const browser = await getBrowser().launch();
+    const context = await browser.newContext();
+
     await expect(async () =>
-      collectStories(`${storyBookUrl}/nothing/here`),
+      collectStoriesViaWindowApi(context, `${storyBookUrl}/nothing/here`),
     ).rejects.toThrow('ERR_FILE_NOT_FOUND');
   });
 
   it('should fail if no stories found', async () => {
+    const browser = await getBrowser().launch();
+    const context = await browser.newContext();
+
     await expect(async () =>
-      collectStories(`${storyBookUrl}/index.html`, true),
+      collectStoriesViaWindowApi(context, `${storyBookUrl}/index.html`, true),
     ).rejects.toThrow('Timeout 2000ms exceeded');
   }, 10_000);
 });
