@@ -268,6 +268,25 @@ export const collectStoriesViaWindowApi = async (
   return result;
 };
 
+export const collectStoriesViaStoriesJson = async (
+  context: BrowserContext,
+  url: string,
+) => {
+  const result = await context.request.get(
+    url.endsWith('/') ? `${url}stories.json` : `${url}/stories.json`,
+  );
+
+  const storiesJson = (await result.json()) as StoriesJson;
+
+  if (typeof storiesJson.stories === 'object') {
+    return {
+      stories: Object.values(storiesJson.stories),
+    };
+  }
+
+  throw new Error('Cannot load /stories.json');
+};
+
 const generateFilename = (story: Story) =>
   [story.kind, story.story].map((value) => kebabCase(value)).join('--');
 
