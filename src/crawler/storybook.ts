@@ -67,119 +67,6 @@ export const getStoryBookUrl = (url: string) => {
 export const getIframeUrl = (url: string) =>
   url.endsWith('/') ? `${url}iframe.html` : `${url}/iframe.html`;
 
-export const collectStories = async (url: string) => {
-  const browser = await getBrowser().launch();
-  const context = await browser.newContext();
-  const page = await context.newPage();
-
-  try {
-    log('Trying to collect stories from /stories.json');
-
-    const result = await context.request.get(
-      url.endsWith('/') ? `${url}stories.json` : `${url}/stories.json`,
-    );
-
-    const storiesJson = (await result.json()) as StoriesJson;
-
-    if (typeof storiesJson.stories === 'object') {
-      return {
-        stories: Object.values(storiesJson.stories),
-      };
-    }
-  } catch {
-    log('Fallback to /iframe.html');
-  }
-
-  const iframeUrl = getIframeUrl(getStoryBookUrl(url));
-
-  try {
-    await page.goto(iframeUrl);
-
-    await page.waitForFunction(
-      () => (window as WindowObject).__STORYBOOK_CLIENT_API__,
-      null,
-      {
-        timeout: config.timeouts.fetchStories,
-      },
-    );
-
-    const result = await page.evaluate(
-      async () =>
-        new Promise<CrawlerResult>((resolve) => {
-          const parseParameters = <T>(
-            parameters: T,
-            level = 0,
-          ): T | 'UNSUPPORTED_DEPTH' | 'UNSUPPORTED_TYPE' => {
-            if (level > 10) {
-              return 'UNSUPPORTED_DEPTH';
-            }
-
-            if (Array.isArray(parameters)) {
-              // @ts-expect-error FIXME
-              return parameters.map((value) =>
-                parseParameters<unknown>(value, level + 1),
-              );
-            }
-
-            if (
-              typeof parameters === 'string' ||
-              typeof parameters === 'number' ||
-              typeof parameters === 'boolean' ||
-              typeof parameters === 'undefined' ||
-              typeof parameters === 'function' ||
-              parameters instanceof RegExp ||
-              parameters instanceof Date ||
-              parameters === null
-            ) {
-              return parameters;
-            }
-
-            if (typeof parameters === 'object' && parameters !== null) {
-              // @ts-expect-error FIXME
-              // eslint-disable-next-line unicorn/no-array-reduce
-              return Object.keys(parameters).reduce<T>((acc, key: keyof T) => {
-                // @ts-expect-error FIXME
-                acc[key] = parseParameters(parameters[key], level + 1);
-                return acc;
-              }, {});
-            }
-
-            return 'UNSUPPORTED_TYPE';
-          };
-
-          const fetchStories = () => {
-            const { __STORYBOOK_CLIENT_API__: api } = window as WindowObject;
-
-            if (api.raw) {
-              const stories: Story[] = api.raw().map((item) => ({
-                id: item.id,
-                kind: item.kind,
-                story: item.story,
-                parameters: parseParameters(
-                  item.parameters as Record<string, unknown>,
-                ) as Story['parameters'],
-              }));
-
-              resolve({ stories });
-              return;
-            }
-
-            resolve({ stories: [] });
-          };
-
-          fetchStories();
-        }),
-    );
-
-    await browser.close();
-
-    return result;
-  } catch (error: unknown) {
-    await browser.close();
-    throw error;
-  }
-};
-
 export const collectStoriesViaWindowApi = async (
   context: BrowserContext,
   url: string,
@@ -285,6 +172,27 @@ export const collectStoriesViaStoriesJson = async (
   }
 
   throw new Error('Cannot load /stories.json');
+};
+
+export const collectStories = async (url: string) => {
+  const browser = await getBrowser().launch();
+  const context = await browser.newContext();
+
+  try {
+    log('Trying to collect stories from /stories.json');
+    return await collectStoriesViaStoriesJson(context, url);
+  } catch {
+    log('Fallback to window object');
+  }
+
+  try {
+    const result = await collectStoriesViaWindowApi(context, url);
+    await browser.close();
+    return result;
+  } catch (error: unknown) {
+    await browser.close();
+    throw error;
+  }
 };
 
 const generateFilename = (story: Story) =>
