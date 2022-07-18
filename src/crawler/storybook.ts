@@ -1,5 +1,6 @@
 import path from 'node:path';
 import kebabCase from 'lodash.kebabcase';
+import { BrowserContext } from 'playwright';
 import { ShotItem } from '../shots/shots';
 import { config } from '../config';
 import { getBrowser } from '../utils';
@@ -177,6 +178,94 @@ export const collectStories = async (url: string) => {
     await browser.close();
     throw error;
   }
+};
+
+export const collectStoriesViaWindowApi = async (
+  context: BrowserContext,
+  url: string,
+) => {
+  const page = await context.newPage();
+  const iframeUrl = getIframeUrl(getStoryBookUrl(url));
+
+  await page.goto(iframeUrl);
+
+  await page.waitForFunction(
+    () => (window as WindowObject).__STORYBOOK_CLIENT_API__,
+    null,
+    {
+      timeout: config.timeouts.fetchStories,
+    },
+  );
+
+  const result = await page.evaluate(
+    async () =>
+      new Promise<CrawlerResult>((resolve) => {
+        const parseParameters = <T>(
+          parameters: T,
+          level = 0,
+        ): T | 'UNSUPPORTED_DEPTH' | 'UNSUPPORTED_TYPE' => {
+          if (level > 10) {
+            return 'UNSUPPORTED_DEPTH';
+          }
+
+          if (Array.isArray(parameters)) {
+            // @ts-expect-error FIXME
+            return parameters.map((value) =>
+              parseParameters<unknown>(value, level + 1),
+            );
+          }
+
+          if (
+            typeof parameters === 'string' ||
+            typeof parameters === 'number' ||
+            typeof parameters === 'boolean' ||
+            typeof parameters === 'undefined' ||
+            typeof parameters === 'function' ||
+            parameters instanceof RegExp ||
+            parameters instanceof Date ||
+            parameters === null
+          ) {
+            return parameters;
+          }
+
+          if (typeof parameters === 'object' && parameters !== null) {
+            // @ts-expect-error FIXME
+            // eslint-disable-next-line unicorn/no-array-reduce
+            return Object.keys(parameters).reduce<T>((acc, key: keyof T) => {
+              // @ts-expect-error FIXME
+              acc[key] = parseParameters(parameters[key], level + 1);
+              return acc;
+            }, {});
+          }
+
+          return 'UNSUPPORTED_TYPE';
+        };
+
+        const fetchStories = () => {
+          const { __STORYBOOK_CLIENT_API__: api } = window as WindowObject;
+
+          if (api.raw) {
+            const stories: Story[] = api.raw().map((item) => ({
+              id: item.id,
+              kind: item.kind,
+              story: item.story,
+              parameters: parseParameters(
+                item.parameters as Record<string, unknown>,
+              ) as Story['parameters'],
+            }));
+
+            resolve({ stories });
+            return;
+          }
+
+          resolve({ stories: [] });
+        };
+
+        fetchStories();
+      }),
+  );
+
+  return result;
 };
 
 const generateFilename = (story: Story) =>
