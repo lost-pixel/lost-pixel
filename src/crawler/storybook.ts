@@ -6,6 +6,7 @@ import { ShotItem } from '../shots/shots';
 import { config } from '../config';
 import { getBrowser } from '../utils';
 import { log } from '../log';
+import { launchStaticWebServer } from './utils';
 
 export type StoryParameters = {
   lostpixel?: {
@@ -205,9 +206,18 @@ export const collectStories = async (url: string) => {
   const browser = await getBrowser().launch();
   const context = await browser.newContext();
 
+  let webUrl = url;
+  let localServer;
+
+  if (url.startsWith('file://')) {
+    const staticWebServer = await launchStaticWebServer(url);
+    webUrl = staticWebServer.url;
+    localServer = staticWebServer.server;
+  }
+
   try {
     log('Trying to collect stories via window object');
-    const result = await collectStoriesViaWindowApi(context, url);
+    const result = await collectStoriesViaWindowApi(context, webUrl);
     await browser.close();
     return result;
   } catch {
@@ -215,11 +225,13 @@ export const collectStories = async (url: string) => {
   }
 
   try {
-    const result = await collectStoriesViaStoriesJson(context, url + '2');
+    const result = await collectStoriesViaStoriesJson(context, webUrl + '2');
     await browser.close();
+    localServer?.close();
     return result;
   } catch (error: unknown) {
     await browser.close();
+    localServer?.close();
     throw error;
   }
 };
