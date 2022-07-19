@@ -189,11 +189,23 @@ export const collectStoriesViaStoriesJson = async (
   context: BrowserContext,
   url: string,
 ) => {
-  const result = await context.request.get(
-    url.endsWith('/') ? `${url}stories.json` : `${url}/stories.json`,
-  );
+  const storiesJsonUrl = url.endsWith('/')
+    ? `${url}stories.json`
+    : `${url}/stories.json`;
 
-  const storiesJson = (await result.json()) as StoriesJson;
+  let storiesJson: StoriesJson;
+
+  if (storiesJsonUrl.startsWith('file://')) {
+    try {
+      const file = readFileSync(storiesJsonUrl.slice(7));
+      storiesJson = JSON.parse(file.toString()) as StoriesJson;
+    } catch {
+      throw new Error(`Cannot load file ${storiesJsonUrl}`);
+    }
+  } else {
+    const result = await context.request.get(storiesJsonUrl);
+    storiesJson = (await result.json()) as StoriesJson;
+  }
 
   if (typeof storiesJson.stories === 'object') {
     return {
@@ -201,7 +213,7 @@ export const collectStoriesViaStoriesJson = async (
     };
   }
 
-  throw new Error('Cannot load /stories.json');
+  throw new Error(`Cannot load resource ${storiesJsonUrl}`);
 };
 
 export const collectStories = async (url: string) => {
