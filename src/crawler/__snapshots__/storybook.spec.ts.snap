@@ -894,7 +894,6 @@ Object {
         "docs": Object {
           "getContainer": undefined,
           "getPage": undefined,
-          "iframeHeight": 100,
           "inlineStories": true,
           "prepareForInline": undefined,
           "source": Object {
@@ -904,7 +903,7 @@ Object {
         },
         "fileName": "./stories/Button.stories.js",
         "framework": "html",
-        "globalTypes": undefined,
+        "globalTypes": Object {},
         "globals": Object {
           "measureEnabled": false,
           "outline": false,
@@ -996,7 +995,6 @@ Object {
         "docs": Object {
           "getContainer": undefined,
           "getPage": undefined,
-          "iframeHeight": 100,
           "inlineStories": true,
           "prepareForInline": undefined,
           "source": Object {
@@ -1006,7 +1004,7 @@ Object {
         },
         "fileName": "./stories/Button.stories.js",
         "framework": "html",
-        "globalTypes": undefined,
+        "globalTypes": Object {},
         "globals": Object {
           "measureEnabled": false,
           "outline": false,
@@ -1102,7 +1100,6 @@ Object {
         "docs": Object {
           "getContainer": undefined,
           "getPage": undefined,
-          "iframeHeight": 100,
           "inlineStories": true,
           "prepareForInline": undefined,
           "source": Object {
@@ -1112,7 +1109,7 @@ Object {
         },
         "fileName": "./stories/Button.stories.js",
         "framework": "html",
-        "globalTypes": undefined,
+        "globalTypes": Object {},
         "globals": Object {
           "measureEnabled": false,
           "outline": false,
@@ -1208,7 +1205,6 @@ Object {
         "docs": Object {
           "getContainer": undefined,
           "getPage": undefined,
-          "iframeHeight": 100,
           "inlineStories": true,
           "prepareForInline": undefined,
           "source": Object {
@@ -1218,7 +1214,7 @@ Object {
         },
         "fileName": "./stories/Button.stories.js",
         "framework": "html",
-        "globalTypes": undefined,
+        "globalTypes": Object {},
         "globals": Object {
           "measureEnabled": false,
           "outline": false,
@@ -1298,7 +1294,6 @@ Object {
         "docs": Object {
           "getContainer": undefined,
           "getPage": undefined,
-          "iframeHeight": 100,
           "inlineStories": true,
           "prepareForInline": undefined,
           "source": Object {
@@ -1308,7 +1303,7 @@ Object {
         },
         "fileName": "./stories/Header.stories.js",
         "framework": "html",
-        "globalTypes": undefined,
+        "globalTypes": Object {},
         "globals": Object {
           "measureEnabled": false,
           "outline": false,
@@ -1373,7 +1368,6 @@ Object {
         "docs": Object {
           "getContainer": undefined,
           "getPage": undefined,
-          "iframeHeight": 100,
           "inlineStories": true,
           "prepareForInline": undefined,
           "source": Object {
@@ -1383,7 +1377,7 @@ Object {
         },
         "fileName": "./stories/Header.stories.js",
         "framework": "html",
-        "globalTypes": undefined,
+        "globalTypes": Object {},
         "globals": Object {
           "measureEnabled": false,
           "outline": false,
@@ -1459,7 +1453,6 @@ Object {
         "docs": Object {
           "getContainer": undefined,
           "getPage": undefined,
-          "iframeHeight": 100,
           "inlineStories": true,
           "prepareForInline": undefined,
           "source": Object {
@@ -1469,7 +1462,7 @@ Object {
         },
         "fileName": "./stories/Page.stories.js",
         "framework": "html",
-        "globalTypes": undefined,
+        "globalTypes": Object {},
         "globals": Object {
           "measureEnabled": false,
           "outline": false,
@@ -1534,7 +1527,6 @@ Object {
         "docs": Object {
           "getContainer": undefined,
           "getPage": undefined,
-          "iframeHeight": 100,
           "inlineStories": true,
           "prepareForInline": undefined,
           "source": Object {
@@ -1544,7 +1536,7 @@ Object {
         },
         "fileName": "./stories/Page.stories.js",
         "framework": "html",
-        "globalTypes": undefined,
+        "globalTypes": Object {},
         "globals": Object {
           "measureEnabled": false,
           "outline": false,
