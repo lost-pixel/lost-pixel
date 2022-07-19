@@ -48,19 +48,23 @@ const takeScreenShot = async ({
 
   await page.evaluate(() => {
     // @ts-expect-error blah blah
-    console.log('mswUse', window.mswUse);
+    console.log('mswWorker', window.mswWorker);
     // @ts-expect-error blah blah
     console.log('mswRest', window.mswRest);
     // @ts-expect-error blah blah
-    window.mswUse(
+    window.mswWorker.use(
       // @ts-expect-error blah blah
-      window.mswRest.get('https://my.backend/a', (_, response, ctx) => {
+      window.mswRest.get('/reviews', (_, response, ctx) => {
         console.log('I got here');
+        console.log('ctx', ctx);
         return response(
-          ctx.json({
-            title: 'Lord of the Flies',
-            description: 'The Lord of the Flies',
-          }),
+          ctx.json([
+            {
+              id: '60333292-7ca1-4361-bf38-b6b43b90cb16',
+              author: 'John',
+              text: 'Lord of The Rings',
+            },
+          ]),
         );
       }),
     );
