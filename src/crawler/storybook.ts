@@ -225,7 +225,7 @@ export const collectStories = async (url: string) => {
   }
 
   try {
-    const result = await collectStoriesViaStoriesJson(context, webUrl + '2');
+    const result = await collectStoriesViaStoriesJson(context, webUrl);
     await browser.close();
     localServer?.close();
     return result;
