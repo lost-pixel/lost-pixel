@@ -1,8 +1,11 @@
 import http from 'node:http';
 import handler from 'serve-handler';
+import { getPort } from 'get-port-please';
 
 export const launchStaticWebServer = async (basePath: string) => {
-  const port = 3001;
+  const port = await getPort({
+    random: true,
+  });
 
   const server = http.createServer(async (request, response) => {
     return handler(request, response, {
