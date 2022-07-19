@@ -96,7 +96,7 @@ export const collectStoriesViaWindowApi = async (
     const { __STORYBOOK_CLIENT_API__: api } = window as WindowObject;
 
     if (api.storyStore) {
-      await api.storyStore.cacheAllCSFFiles();
+      await api.storyStore.cacheAllCSFFiles?.();
     }
   });
 
