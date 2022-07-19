@@ -1,15 +1,23 @@
+/* eslint-disable no-lone-blocks */
+
 import { createShotsFolders, getBrowser } from '../utils';
 import { configure } from '../config';
 import { defaultTestConfig } from '../testUtils';
 import {
   collectStories,
+  collectStoriesViaStoriesJson,
   collectStoriesViaWindowApi,
   getIframeUrl,
   getStoryBookUrl,
 } from './storybook';
+import { launchStaticWebServer } from './utils';
 
 const storyBookUrl = getStoryBookUrl(
   'examples/lost-pixel-example-barebone/storybook-static',
+);
+
+const storyBookV7Url = getStoryBookUrl(
+  'examples/lost-pixel-example-storybook-v7/storybook-static',
 );
 
 beforeAll(async () => {
@@ -69,10 +77,30 @@ describe(collectStories, () => {
     const browser = await getBrowser().launch();
     const context = await browser.newContext();
 
-    expect(
-      await collectStoriesViaWindowApi(context, storyBookUrl),
-    ).toMatchSnapshot('ViaWindowApi');
-  });
+    {
+      const { server, url } = await launchStaticWebServer(storyBookUrl);
+      expect(await collectStoriesViaWindowApi(context, url)).toMatchSnapshot(
+        'ViaWindowApi',
+      );
+      server.close();
+    }
+
+    {
+      const { server, url } = await launchStaticWebServer(storyBookV7Url);
+      expect(await collectStoriesViaWindowApi(context, url)).toMatchSnapshot(
+        'ViaWindowApi v7',
+      );
+      server.close();
+    }
+
+    {
+      const { server, url } = await launchStaticWebServer(storyBookV7Url);
+      expect(await collectStoriesViaStoriesJson(context, url)).toMatchSnapshot(
+        'ViaStoriesJson',
+      );
+      server.close();
+    }
+  }, 10_000);
 
   it('should fail when using invalid path to StoryBook', async () => {
     const browser = await getBrowser().launch();
