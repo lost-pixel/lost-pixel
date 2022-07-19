@@ -33,6 +33,9 @@ export type Story = {
 
 interface StorybookClientApi {
   raw?: () => Story[];
+  storyStore?: {
+    cacheAllCSFFiles: () => Promise<void>;
+  };
 }
 
 type StoriesJson = {
@@ -86,6 +89,30 @@ export const collectStoriesViaWindowApi = async (
       timeout: config.timeouts.fetchStories,
     },
   );
+
+  const isCacheable = await page.evaluate<boolean, string>(
+    async (url: string) => {
+      const { __STORYBOOK_CLIENT_API__: api } = window as WindowObject;
+
+      if (api.storyStore) {
+        if (url.startsWith('file://')) {
+          return false;
+        }
+
+        await api.storyStore.cacheAllCSFFiles();
+        return true;
+      }
+
+      return true;
+    },
+    iframeUrl,
+  );
+
+  if (!isCacheable) {
+    throw new Error(
+      'Error: Storybook needs to run in server mode to cache CSF files.',
+    );
+  }
 
   const result = await page.evaluate(
     async () =>
