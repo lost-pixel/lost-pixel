@@ -1,6 +1,7 @@
 import path from 'node:path';
 import kebabCase from 'lodash.kebabcase';
 import { BrowserContext } from 'playwright';
+import { readFileSync } from 'fs-extra';
 import { ShotItem } from '../shots/shots';
 import { config } from '../config';
 import { getBrowser } from '../utils';
@@ -221,14 +222,16 @@ export const collectStories = async (url: string) => {
   const context = await browser.newContext();
 
   try {
-    log('Trying to collect stories from /stories.json');
-    return await collectStoriesViaStoriesJson(context, url);
+    log('Trying to collect stories via window object');
+    const result = await collectStoriesViaWindowApi(context, url);
+    await browser.close();
+    return result;
   } catch {
-    log('Fallback to window object');
+    log('Fallback to /stories.json');
   }
 
   try {
-    const result = await collectStoriesViaWindowApi(context, url);
+    const result = await collectStoriesViaStoriesJson(context, url + '2');
     await browser.close();
     return result;
   } catch (error: unknown) {
