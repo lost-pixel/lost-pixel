@@ -91,29 +91,13 @@ export const collectStoriesViaWindowApi = async (
     },
   );
 
-  const isCacheable = await page.evaluate<boolean, string>(
-    async (url: string) => {
-      const { __STORYBOOK_CLIENT_API__: api } = window as WindowObject;
+  await page.evaluate(async () => {
+    const { __STORYBOOK_CLIENT_API__: api } = window as WindowObject;
 
-      if (api.storyStore) {
-        if (url.startsWith('file://')) {
-          return false;
-        }
-
-        await api.storyStore.cacheAllCSFFiles();
-        return true;
-      }
-
-      return true;
-    },
-    iframeUrl,
-  );
-
-  if (!isCacheable) {
-    throw new Error(
-      'Error: Storybook needs to run in server mode to cache CSF files.',
-    );
-  }
+    if (api.storyStore) {
+      await api.storyStore.cacheAllCSFFiles();
+    }
+  });
 
   const result = await page.evaluate(
     async () =>
