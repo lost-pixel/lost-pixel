@@ -209,7 +209,7 @@ export const collectStories = async (url: string) => {
   let webUrl = url;
   let localServer;
 
-  if (url.startsWith('file://')) {
+  if (!url.startsWith('http://') && !url.startsWith('https://')) {
     const staticWebServer = await launchStaticWebServer(url);
     webUrl = staticWebServer.url;
     localServer = staticWebServer.server;
