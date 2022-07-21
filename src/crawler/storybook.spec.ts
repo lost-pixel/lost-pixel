@@ -100,6 +100,8 @@ describe(collectStories, () => {
       );
       server.close();
     }
+
+    await browser.close();
   }, 10_000);
 
   it('should fail when using invalid path to StoryBook', async () => {
@@ -109,6 +111,8 @@ describe(collectStories, () => {
     await expect(async () =>
       collectStoriesViaWindowApi(context, 'this/path/does/not/exist'),
     ).rejects.toThrow('ERR_FILE_NOT_FOUND');
+
+    await browser.close();
   });
 
   it('should fail when using invalid URL to StoryBook', async () => {
@@ -118,6 +122,8 @@ describe(collectStories, () => {
     await expect(async () =>
       collectStoriesViaWindowApi(context, 'http://localhost:99999'),
     ).rejects.toThrow('invalid URL');
+
+    await browser.close();
   });
 
   it('should timeout when using invalid URL to StoryBook', async () => {
@@ -127,6 +133,8 @@ describe(collectStories, () => {
     await expect(async () =>
       collectStoriesViaWindowApi(context, `${storyBookUrl}/nothing/here`),
     ).rejects.toThrow('ERR_FILE_NOT_FOUND');
+
+    await browser.close();
   });
 
   it('should fail if no stories found', async () => {
@@ -136,5 +144,7 @@ describe(collectStories, () => {
     await expect(async () =>
       collectStoriesViaWindowApi(context, `${storyBookUrl}/index.html`, true),
     ).rejects.toThrow('Timeout 2000ms exceeded');
+
+    await browser.close();
   }, 10_000);
 });
