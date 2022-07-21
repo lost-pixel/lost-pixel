@@ -10,6 +10,7 @@ export const launchStaticWebServer = async (basePath: string) => {
   const server = http.createServer(async (request, response) => {
     return handler(request, response, {
       public: basePath.startsWith('file://') ? basePath.slice(7) : basePath,
+      cleanUrls: false,
     });
   });
 
