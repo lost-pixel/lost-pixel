@@ -13,6 +13,7 @@
     "test:watch": "jest --watch --detectOpenHandles",
     "build": "rimraf dist && tsc",
     "build-example-storybook": "rimraf examples/lost-pixel-example-barebone/storybook-static && cd examples/lost-pixel-example-barebone && npm install && npm run build-storybook",
+    "build-example-storystore-v7": "rimraf examples/lost-pixel-example-storystore-v7/storybook-static && cd examples/lost-pixel-example-storystore-v7 && npm install && npm run build-storybook",
     "build-example-pages": "cd examples/lost-pixel-example-next-js-pages && npm ci && npm run build",
     "run-example-pages": "cd examples/lost-pixel-example-next-js-pages && npm run start",
     "test-on-examples": "cd examples && node ../dist/bin.js",
