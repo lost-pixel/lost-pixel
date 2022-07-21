@@ -810,7 +810,7 @@ Object {
 }
 `;
 
-exports[`collectStories should collect stories from StoryBook: ViaWindowApi v7 1`] = `
+exports[`collectStories should collect stories from StoryBook: ViaWindowApi StoryStore v7 1`] = `
 Object {
   "stories": Array [
     Object {

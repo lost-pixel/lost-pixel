@@ -17,7 +17,7 @@ const storyBookUrl = getStoryBookUrl(
 );
 
 const storyBookV7Url = getStoryBookUrl(
-  'examples/lost-pixel-example-storybook-v7/storybook-static',
+  'examples/lost-pixel-example-storystore-v7/storybook-static',
 );
 
 beforeAll(async () => {
@@ -88,7 +88,7 @@ describe(collectStories, () => {
     {
       const { server, url } = await launchStaticWebServer(storyBookV7Url);
       expect(await collectStoriesViaWindowApi(context, url)).toMatchSnapshot(
-        'ViaWindowApi v7',
+        'ViaWindowApi StoryStore v7',
       );
       server.close();
     }
