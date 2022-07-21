@@ -16,6 +16,9 @@ export const config: CustomProjectConfig = {
     ],
     pageBaselineUrl:'http://localhost:3000',
   },
+  ladleShots:{
+    ladleUrl:'http://localhost:61000'
+  },
   generateOnly: true,
   failOnDifference: true,
 };
