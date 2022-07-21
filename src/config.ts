@@ -30,6 +30,17 @@ type BaseConfig = {
   };
 
   /**
+   * Enable Ladle mode
+   */
+  ladleShots?: {
+    /**
+     * URL of the Storybook instance or local folder
+     * @default 'http://localhost:61000'
+     */
+    ladleUrl: string;
+  };
+
+  /**
    * Enable Page mode
    */
   pageShots?: {
@@ -427,7 +438,7 @@ export const configure = async (customProjectConfig?: CustomProjectConfig) => {
   };
 
   // Default to Storybook mode if no mode is defined
-  if (!config.storybookShots && !config.pageShots) {
+  if (!config.storybookShots && !config.pageShots && !config.ladleShots) {
     config.storybookShots = {
       storybookUrl: 'storybook-static',
     };
