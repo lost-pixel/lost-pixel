@@ -13,11 +13,11 @@ import {
 import { launchStaticWebServer } from './utils';
 
 const storyBookUrl = getStoryBookUrl(
-  'examples/lost-pixel-example-barebone/storybook-static',
+  'examples/example-storybook-v6.4/storybook-static',
 );
 
 const storyBookV7Url = getStoryBookUrl(
-  'examples/lost-pixel-example-storystore-v7/storybook-static',
+  'examples/example-storybook-v6.5-storystore-v7/storybook-static',
 );
 
 beforeAll(async () => {
