@@ -1,5 +1,5 @@
 {
-  "name": "storybook-demo",
+  "name": "example-storybook-v6.4",
   "version": "0.0.1",
   "description": "Storybook demo",
   "main": "index.js",
@@ -9,19 +9,11 @@
     "lost-pixel:update": "npx run lost-pixel-action update",
     "lost-pixel:run": "npx run lost-pixel-action"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/chriskalmar/storybook-demo.git"
-  },
   "author": "Chris Kalmar",
   "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/chriskalmar/storybook-demo/issues"
-  },
   "prettier": {
     "singleQuote": true
   },
-  "homepage": "https://github.com/chriskalmar/storybook-demo#readme",
   "devDependencies": {
     "@babel/core": "^7.16.5",
     "@storybook/addon-actions": "^6.4.9",
