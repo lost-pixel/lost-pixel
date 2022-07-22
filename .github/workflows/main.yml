@@ -32,6 +32,9 @@ jobs:
       - name: Build Example Pages
         run: npm run build-example-next-js-pages
 
+      - name: Build Example Ladle
+        run: npm run build-example-ladle
+
       - name: Test
         run: npm run test
 
