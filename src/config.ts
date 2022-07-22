@@ -52,7 +52,7 @@ type BaseConfig = {
     /**
      * URL of the running application
      */
-    pageBaselineUrl: string;
+    pageUrl: string;
   };
 
   /**
