@@ -113,5 +113,5 @@ export const createShots = async () => {
     log('Screenshots done!');
   }
 
-  return [...storybookShotItems, ...pageShotItems];
+  return [...storybookShotItems, ...pageShotItems, ...ladleShotItems];
 };
