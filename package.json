@@ -73,7 +73,7 @@
     "@types/pngjs": "^6.0.1",
     "@types/serve-handler": "^6.1.1",
     "@typescript-eslint/eslint-plugin": "^5.18.0",
-    "eslint": "^8.13.0",
+    "eslint": "8.20.0",
     "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-unicorn": "^42.0.0",
     "husky": "^7.0.4",
