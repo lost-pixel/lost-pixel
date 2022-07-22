@@ -13,7 +13,7 @@ jobs:
         uses: actions/setup-node@v2
         with:
           node-version: 16.x
-          cache: "npm"
+          cache: 'npm'
 
       - name: Install dependencies
         run: |
@@ -40,6 +40,9 @@ jobs:
 
       - name: Run Example Next.js Pages
         run: npm run run-example-next-js-pages &
+
+      - name: Run Ladle
+        run: npm run run-example-ladle &
 
       - name: Test on examples
         run: npm run test-on-examples
