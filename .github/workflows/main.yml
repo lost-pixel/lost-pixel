@@ -44,7 +44,7 @@ jobs:
       - name: Run Example Next.js Pages
         run: npm run run-example-next-js-pages &
 
-      - name: Run Ladle
+      - name: Run Example Ladle
         run: npm run run-example-ladle &
 
       - name: Test on examples

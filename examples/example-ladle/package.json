@@ -4,7 +4,7 @@
   "license": "MIT",
   "private": true,
   "scripts": {
-    "serve": "ladle serve",
+    "serve": "npx serve build -p 61000",
     "build": "ladle build"
   },
   "dependencies": {
