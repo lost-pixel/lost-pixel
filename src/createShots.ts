@@ -27,8 +27,6 @@ export const createShots = async () => {
   removeFilesInFolder(imagePathCurrent);
   removeFilesInFolder(imagePathDifference);
 
-  log({ storybookShots, ladleShots, pageShots });
-
   if (ladleShots) {
     const { ladleUrl } = ladleShots;
 
