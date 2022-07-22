@@ -1,10 +1,23 @@
-import { createShotsFolders } from '../utils';
+/* eslint-disable no-lone-blocks */
+
+import { createShotsFolders, getBrowser } from '../utils';
 import { configure } from '../config';
 import { defaultTestConfig } from '../testUtils';
-import { collectStories, getIframeUrl, getStoryBookUrl } from './storybook';
+import {
+  collectStories,
+  collectStoriesViaStoriesJson,
+  collectStoriesViaWindowApi,
+  getIframeUrl,
+  getStoryBookUrl,
+} from './storybook';
+import { launchStaticWebServer } from './utils';
 
 const storyBookUrl = getStoryBookUrl(
-  'examples/lost-pixel-example-barebone/storybook-static',
+  'examples/example-storybook-v6.4/storybook-static',
+);
+
+const storyBookV7Url = getStoryBookUrl(
+  'examples/example-storybook-v6.5-storystore-v7/storybook-static',
 );
 
 beforeAll(async () => {
@@ -61,30 +74,77 @@ describe(getIframeUrl, () => {
 
 describe(collectStories, () => {
   it('should collect stories from StoryBook', async () => {
-    expect(await collectStories(storyBookUrl)).toMatchSnapshot();
-  });
+    const browser = await getBrowser().launch();
+    const context = await browser.newContext();
+
+    {
+      const { server, url } = await launchStaticWebServer(storyBookUrl);
+      expect(await collectStoriesViaWindowApi(context, url)).toMatchSnapshot(
+        'ViaWindowApi',
+      );
+      server.close();
+    }
+
+    {
+      const { server, url } = await launchStaticWebServer(storyBookV7Url);
+      expect(await collectStoriesViaWindowApi(context, url)).toMatchSnapshot(
+        'ViaWindowApi StoryStore v7',
+      );
+      server.close();
+    }
+
+    {
+      const { server, url } = await launchStaticWebServer(storyBookV7Url);
+      expect(await collectStoriesViaStoriesJson(context, url)).toMatchSnapshot(
+        'ViaStoriesJson',
+      );
+      server.close();
+    }
+
+    await browser.close();
+  }, 10_000);
 
   it('should fail when using invalid path to StoryBook', async () => {
+    const browser = await getBrowser().launch();
+    const context = await browser.newContext();
+
     await expect(async () =>
-      collectStories('this/path/does/not/exist'),
+      collectStoriesViaWindowApi(context, 'this/path/does/not/exist'),
     ).rejects.toThrow('ERR_FILE_NOT_FOUND');
+
+    await browser.close();
   });
 
   it('should fail when using invalid URL to StoryBook', async () => {
+    const browser = await getBrowser().launch();
+    const context = await browser.newContext();
+
     await expect(async () =>
-      collectStories('http://localhost:99999'),
+      collectStoriesViaWindowApi(context, 'http://localhost:99999'),
     ).rejects.toThrow('invalid URL');
+
+    await browser.close();
   });
 
   it('should timeout when using invalid URL to StoryBook', async () => {
+    const browser = await getBrowser().launch();
+    const context = await browser.newContext();
+
     await expect(async () =>
-      collectStories(`${storyBookUrl}/nothing/here`),
+      collectStoriesViaWindowApi(context, `${storyBookUrl}/nothing/here`),
     ).rejects.toThrow('ERR_FILE_NOT_FOUND');
+
+    await browser.close();
   });
 
   it('should fail if no stories found', async () => {
+    const browser = await getBrowser().launch();
+    const context = await browser.newContext();
+
     await expect(async () =>
-      collectStories(`${storyBookUrl}/index.html`, true),
+      collectStoriesViaWindowApi(context, `${storyBookUrl}/index.html`, true),
     ).rejects.toThrow('Timeout 2000ms exceeded');
+
+    await browser.close();
   }, 10_000);
 });

@@ -73,7 +73,8 @@ export const waitForNetworkRequests = async ({
       }
 
       lastRequestTimeoutId = setTimeout(() => {
-        if (requestCounter === 0) {
+        // `requestCounter` can be below 0 if requests have completed before they were being tracked
+        if (requestCounter <= 0) {
           cleanup();
           resolve(true);
         }

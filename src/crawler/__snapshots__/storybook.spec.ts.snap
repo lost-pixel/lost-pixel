@@ -1,6 +1,67 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`collectStories should collect stories from StoryBook 1`] = `
+exports[`collectStories should collect stories from StoryBook: ViaStoriesJson 1`] = `
+Object {
+  "stories": Array [
+    Object {
+      "id": "example-introduction--page",
+      "importPath": "./stories/Introduction.stories.mdx",
+      "name": "Page",
+      "title": "Example/Introduction",
+    },
+    Object {
+      "id": "example-button--primary",
+      "importPath": "./stories/Button.stories.js",
+      "name": "Primary",
+      "title": "Example/Button",
+    },
+    Object {
+      "id": "example-button--secondary",
+      "importPath": "./stories/Button.stories.js",
+      "name": "Secondary",
+      "title": "Example/Button",
+    },
+    Object {
+      "id": "example-button--large",
+      "importPath": "./stories/Button.stories.js",
+      "name": "Large",
+      "title": "Example/Button",
+    },
+    Object {
+      "id": "example-button--small",
+      "importPath": "./stories/Button.stories.js",
+      "name": "Small",
+      "title": "Example/Button",
+    },
+    Object {
+      "id": "example-header--logged-in",
+      "importPath": "./stories/Header.stories.js",
+      "name": "Logged In",
+      "title": "Example/Header",
+    },
+    Object {
+      "id": "example-header--logged-out",
+      "importPath": "./stories/Header.stories.js",
+      "name": "Logged Out",
+      "title": "Example/Header",
+    },
+    Object {
+      "id": "example-page--logged-in",
+      "importPath": "./stories/Page.stories.js",
+      "name": "Logged In",
+      "title": "Example/Page",
+    },
+    Object {
+      "id": "example-page--logged-out",
+      "importPath": "./stories/Page.stories.js",
+      "name": "Logged Out",
+      "title": "Example/Page",
+    },
+  ],
+}
+`;
+
+exports[`collectStories should collect stories from StoryBook: ViaWindowApi 1`] = `
 Object {
   "stories": Array [
     Object {
@@ -735,6 +796,747 @@ Object {
         "fileName": "./stories/Page.stories.js",
         "framework": "html",
         "globalTypes": undefined,
+        "globals": Object {
+          "measureEnabled": false,
+          "outline": false,
+        },
+        "storySource": Object {
+          "source": "(args) => createPage(args)",
+        },
+      },
+      "story": "Logged Out",
+    },
+  ],
+}
+`;
+
+exports[`collectStories should collect stories from StoryBook: ViaWindowApi StoryStore v7 1`] = `
+Object {
+  "stories": Array [
+    Object {
+      "id": "example-button--primary",
+      "kind": "Example/Button",
+      "parameters": Object {
+        "__id": "example-button--primary",
+        "__isArgsStory": true,
+        "actions": Object {
+          "argTypesRegex": "^on[A-Z].*",
+        },
+        "argTypes": Object {
+          "backgroundColor": Object {
+            "control": Object {
+              "type": "color",
+            },
+            "name": "backgroundColor",
+          },
+          "label": Object {
+            "control": Object {
+              "type": "text",
+            },
+            "name": "label",
+            "type": Object {
+              "name": "string",
+            },
+          },
+          "onClick": Object {
+            "action": "onClick",
+            "name": "onClick",
+          },
+          "primary": Object {
+            "control": Object {
+              "type": "boolean",
+            },
+            "name": "primary",
+            "type": Object {
+              "name": "boolean",
+            },
+          },
+          "size": Object {
+            "control": Object {
+              "type": "select",
+            },
+            "name": "size",
+            "options": Array [
+              "small",
+              "medium",
+              "large",
+            ],
+          },
+        },
+        "args": Object {
+          "label": "Button",
+          "onClick": undefined,
+          "primary": true,
+        },
+        "backgrounds": Object {
+          "grid": Object {
+            "cellAmount": 5,
+            "cellSize": 20,
+            "opacity": 0.5,
+          },
+          "values": Array [
+            Object {
+              "name": "light",
+              "value": "#F8F8F8",
+            },
+            Object {
+              "name": "dark",
+              "value": "#333333",
+            },
+          ],
+        },
+        "controls": Object {
+          "matchers": Object {
+            "color": /\\(background\\|color\\)\\$/i,
+            "date": /Date\\$/,
+          },
+        },
+        "docs": Object {
+          "getContainer": undefined,
+          "getPage": undefined,
+          "inlineStories": true,
+          "prepareForInline": undefined,
+          "source": Object {
+            "language": "html",
+            "type": "dynamic",
+          },
+        },
+        "fileName": "./stories/Button.stories.js",
+        "framework": "html",
+        "globalTypes": Object {},
+        "globals": Object {
+          "measureEnabled": false,
+          "outline": false,
+        },
+        "storySource": Object {
+          "source": "({ label, ...args }) => {
+  // You can either use a function to create DOM elements or use a plain html string!
+  // return \`<div>\${label}</div>\`;
+  return createButton({ label, ...args });
+}",
+        },
+      },
+      "story": "Primary",
+    },
+    Object {
+      "id": "example-button--secondary",
+      "kind": "Example/Button",
+      "parameters": Object {
+        "__id": "example-button--secondary",
+        "__isArgsStory": true,
+        "actions": Object {
+          "argTypesRegex": "^on[A-Z].*",
+        },
+        "argTypes": Object {
+          "backgroundColor": Object {
+            "control": Object {
+              "type": "color",
+            },
+            "name": "backgroundColor",
+          },
+          "label": Object {
+            "control": Object {
+              "type": "text",
+            },
+            "name": "label",
+            "type": Object {
+              "name": "string",
+            },
+          },
+          "onClick": Object {
+            "action": "onClick",
+            "name": "onClick",
+          },
+          "primary": Object {
+            "control": Object {
+              "type": "boolean",
+            },
+            "name": "primary",
+          },
+          "size": Object {
+            "control": Object {
+              "type": "select",
+            },
+            "name": "size",
+            "options": Array [
+              "small",
+              "medium",
+              "large",
+            ],
+          },
+        },
+        "args": Object {
+          "label": "Button",
+          "onClick": undefined,
+        },
+        "backgrounds": Object {
+          "grid": Object {
+            "cellAmount": 5,
+            "cellSize": 20,
+            "opacity": 0.5,
+          },
+          "values": Array [
+            Object {
+              "name": "light",
+              "value": "#F8F8F8",
+            },
+            Object {
+              "name": "dark",
+              "value": "#333333",
+            },
+          ],
+        },
+        "controls": Object {
+          "matchers": Object {
+            "color": /\\(background\\|color\\)\\$/i,
+            "date": /Date\\$/,
+          },
+        },
+        "docs": Object {
+          "getContainer": undefined,
+          "getPage": undefined,
+          "inlineStories": true,
+          "prepareForInline": undefined,
+          "source": Object {
+            "language": "html",
+            "type": "dynamic",
+          },
+        },
+        "fileName": "./stories/Button.stories.js",
+        "framework": "html",
+        "globalTypes": Object {},
+        "globals": Object {
+          "measureEnabled": false,
+          "outline": false,
+        },
+        "storySource": Object {
+          "source": "({ label, ...args }) => {
+  // You can either use a function to create DOM elements or use a plain html string!
+  // return \`<div>\${label}</div>\`;
+  return createButton({ label, ...args });
+}",
+        },
+      },
+      "story": "Secondary",
+    },
+    Object {
+      "id": "example-button--large",
+      "kind": "Example/Button",
+      "parameters": Object {
+        "__id": "example-button--large",
+        "__isArgsStory": true,
+        "actions": Object {
+          "argTypesRegex": "^on[A-Z].*",
+        },
+        "argTypes": Object {
+          "backgroundColor": Object {
+            "control": Object {
+              "type": "color",
+            },
+            "name": "backgroundColor",
+          },
+          "label": Object {
+            "control": Object {
+              "type": "text",
+            },
+            "name": "label",
+            "type": Object {
+              "name": "string",
+            },
+          },
+          "onClick": Object {
+            "action": "onClick",
+            "name": "onClick",
+          },
+          "primary": Object {
+            "control": Object {
+              "type": "boolean",
+            },
+            "name": "primary",
+          },
+          "size": Object {
+            "control": Object {
+              "type": "select",
+            },
+            "name": "size",
+            "options": Array [
+              "small",
+              "medium",
+              "large",
+            ],
+            "type": Object {
+              "name": "string",
+            },
+          },
+        },
+        "args": Object {
+          "label": "Button",
+          "onClick": undefined,
+          "size": "large",
+        },
+        "backgrounds": Object {
+          "grid": Object {
+            "cellAmount": 5,
+            "cellSize": 20,
+            "opacity": 0.5,
+          },
+          "values": Array [
+            Object {
+              "name": "light",
+              "value": "#F8F8F8",
+            },
+            Object {
+              "name": "dark",
+              "value": "#333333",
+            },
+          ],
+        },
+        "controls": Object {
+          "matchers": Object {
+            "color": /\\(background\\|color\\)\\$/i,
+            "date": /Date\\$/,
+          },
+        },
+        "docs": Object {
+          "getContainer": undefined,
+          "getPage": undefined,
+          "inlineStories": true,
+          "prepareForInline": undefined,
+          "source": Object {
+            "language": "html",
+            "type": "dynamic",
+          },
+        },
+        "fileName": "./stories/Button.stories.js",
+        "framework": "html",
+        "globalTypes": Object {},
+        "globals": Object {
+          "measureEnabled": false,
+          "outline": false,
+        },
+        "storySource": Object {
+          "source": "({ label, ...args }) => {
+  // You can either use a function to create DOM elements or use a plain html string!
+  // return \`<div>\${label}</div>\`;
+  return createButton({ label, ...args });
+}",
+        },
+      },
+      "story": "Large",
+    },
+    Object {
+      "id": "example-button--small",
+      "kind": "Example/Button",
+      "parameters": Object {
+        "__id": "example-button--small",
+        "__isArgsStory": true,
+        "actions": Object {
+          "argTypesRegex": "^on[A-Z].*",
+        },
+        "argTypes": Object {
+          "backgroundColor": Object {
+            "control": Object {
+              "type": "color",
+            },
+            "name": "backgroundColor",
+          },
+          "label": Object {
+            "control": Object {
+              "type": "text",
+            },
+            "name": "label",
+            "type": Object {
+              "name": "string",
+            },
+          },
+          "onClick": Object {
+            "action": "onClick",
+            "name": "onClick",
+          },
+          "primary": Object {
+            "control": Object {
+              "type": "boolean",
+            },
+            "name": "primary",
+          },
+          "size": Object {
+            "control": Object {
+              "type": "select",
+            },
+            "name": "size",
+            "options": Array [
+              "small",
+              "medium",
+              "large",
+            ],
+            "type": Object {
+              "name": "string",
+            },
+          },
+        },
+        "args": Object {
+          "label": "Button",
+          "onClick": undefined,
+          "size": "small",
+        },
+        "backgrounds": Object {
+          "grid": Object {
+            "cellAmount": 5,
+            "cellSize": 20,
+            "opacity": 0.5,
+          },
+          "values": Array [
+            Object {
+              "name": "light",
+              "value": "#F8F8F8",
+            },
+            Object {
+              "name": "dark",
+              "value": "#333333",
+            },
+          ],
+        },
+        "controls": Object {
+          "matchers": Object {
+            "color": /\\(background\\|color\\)\\$/i,
+            "date": /Date\\$/,
+          },
+        },
+        "docs": Object {
+          "getContainer": undefined,
+          "getPage": undefined,
+          "inlineStories": true,
+          "prepareForInline": undefined,
+          "source": Object {
+            "language": "html",
+            "type": "dynamic",
+          },
+        },
+        "fileName": "./stories/Button.stories.js",
+        "framework": "html",
+        "globalTypes": Object {},
+        "globals": Object {
+          "measureEnabled": false,
+          "outline": false,
+        },
+        "storySource": Object {
+          "source": "({ label, ...args }) => {
+  // You can either use a function to create DOM elements or use a plain html string!
+  // return \`<div>\${label}</div>\`;
+  return createButton({ label, ...args });
+}",
+        },
+      },
+      "story": "Small",
+    },
+    Object {
+      "id": "example-header--logged-in",
+      "kind": "Example/Header",
+      "parameters": Object {
+        "__id": "example-header--logged-in",
+        "__isArgsStory": true,
+        "actions": Object {
+          "argTypesRegex": "^on[A-Z].*",
+        },
+        "argTypes": Object {
+          "onCreateAccount": Object {
+            "action": "onCreateAccount",
+            "name": "onCreateAccount",
+          },
+          "onLogin": Object {
+            "action": "onLogin",
+            "name": "onLogin",
+          },
+          "onLogout": Object {
+            "action": "onLogout",
+            "name": "onLogout",
+          },
+          "user": Object {
+            "control": Object {
+              "type": "object",
+            },
+            "name": "user",
+            "type": Object {
+              "name": "object",
+              "value": Object {},
+            },
+          },
+        },
+        "args": Object {
+          "onCreateAccount": undefined,
+          "onLogin": undefined,
+          "onLogout": undefined,
+          "user": Object {},
+        },
+        "backgrounds": Object {
+          "grid": Object {
+            "cellAmount": 5,
+            "cellSize": 20,
+            "opacity": 0.5,
+          },
+          "values": Array [
+            Object {
+              "name": "light",
+              "value": "#F8F8F8",
+            },
+            Object {
+              "name": "dark",
+              "value": "#333333",
+            },
+          ],
+        },
+        "controls": Object {
+          "matchers": Object {
+            "color": /\\(background\\|color\\)\\$/i,
+            "date": /Date\\$/,
+          },
+        },
+        "docs": Object {
+          "getContainer": undefined,
+          "getPage": undefined,
+          "inlineStories": true,
+          "prepareForInline": undefined,
+          "source": Object {
+            "language": "html",
+            "type": "dynamic",
+          },
+        },
+        "fileName": "./stories/Header.stories.js",
+        "framework": "html",
+        "globalTypes": Object {},
+        "globals": Object {
+          "measureEnabled": false,
+          "outline": false,
+        },
+        "storySource": Object {
+          "source": "(args) => createHeader(args)",
+        },
+      },
+      "story": "Logged In",
+    },
+    Object {
+      "id": "example-header--logged-out",
+      "kind": "Example/Header",
+      "parameters": Object {
+        "__id": "example-header--logged-out",
+        "__isArgsStory": true,
+        "actions": Object {
+          "argTypesRegex": "^on[A-Z].*",
+        },
+        "argTypes": Object {
+          "onCreateAccount": Object {
+            "action": "onCreateAccount",
+            "name": "onCreateAccount",
+          },
+          "onLogin": Object {
+            "action": "onLogin",
+            "name": "onLogin",
+          },
+          "onLogout": Object {
+            "action": "onLogout",
+            "name": "onLogout",
+          },
+        },
+        "args": Object {
+          "onCreateAccount": undefined,
+          "onLogin": undefined,
+          "onLogout": undefined,
+        },
+        "backgrounds": Object {
+          "grid": Object {
+            "cellAmount": 5,
+            "cellSize": 20,
+            "opacity": 0.5,
+          },
+          "values": Array [
+            Object {
+              "name": "light",
+              "value": "#F8F8F8",
+            },
+            Object {
+              "name": "dark",
+              "value": "#333333",
+            },
+          ],
+        },
+        "controls": Object {
+          "matchers": Object {
+            "color": /\\(background\\|color\\)\\$/i,
+            "date": /Date\\$/,
+          },
+        },
+        "docs": Object {
+          "getContainer": undefined,
+          "getPage": undefined,
+          "inlineStories": true,
+          "prepareForInline": undefined,
+          "source": Object {
+            "language": "html",
+            "type": "dynamic",
+          },
+        },
+        "fileName": "./stories/Header.stories.js",
+        "framework": "html",
+        "globalTypes": Object {},
+        "globals": Object {
+          "measureEnabled": false,
+          "outline": false,
+        },
+        "storySource": Object {
+          "source": "(args) => createHeader(args)",
+        },
+      },
+      "story": "Logged Out",
+    },
+    Object {
+      "id": "example-page--logged-in",
+      "kind": "Example/Page",
+      "parameters": Object {
+        "__id": "example-page--logged-in",
+        "__isArgsStory": true,
+        "actions": Object {
+          "argTypesRegex": "^on[A-Z].*",
+        },
+        "argTypes": Object {
+          "onCreateAccount": Object {
+            "action": "onCreateAccount",
+            "name": "onCreateAccount",
+          },
+          "onLogin": Object {
+            "action": "onLogin",
+            "name": "onLogin",
+          },
+          "onLogout": Object {
+            "action": "onLogout",
+            "name": "onLogout",
+          },
+          "user": Object {
+            "control": Object {
+              "type": "object",
+            },
+            "name": "user",
+            "type": Object {
+              "name": "object",
+              "value": Object {},
+            },
+          },
+        },
+        "args": Object {
+          "onCreateAccount": undefined,
+          "onLogin": undefined,
+          "onLogout": undefined,
+          "user": Object {},
+        },
+        "backgrounds": Object {
+          "grid": Object {
+            "cellAmount": 5,
+            "cellSize": 20,
+            "opacity": 0.5,
+          },
+          "values": Array [
+            Object {
+              "name": "light",
+              "value": "#F8F8F8",
+            },
+            Object {
+              "name": "dark",
+              "value": "#333333",
+            },
+          ],
+        },
+        "controls": Object {
+          "matchers": Object {
+            "color": /\\(background\\|color\\)\\$/i,
+            "date": /Date\\$/,
+          },
+        },
+        "docs": Object {
+          "getContainer": undefined,
+          "getPage": undefined,
+          "inlineStories": true,
+          "prepareForInline": undefined,
+          "source": Object {
+            "language": "html",
+            "type": "dynamic",
+          },
+        },
+        "fileName": "./stories/Page.stories.js",
+        "framework": "html",
+        "globalTypes": Object {},
+        "globals": Object {
+          "measureEnabled": false,
+          "outline": false,
+        },
+        "storySource": Object {
+          "source": "(args) => createPage(args)",
+        },
+      },
+      "story": "Logged In",
+    },
+    Object {
+      "id": "example-page--logged-out",
+      "kind": "Example/Page",
+      "parameters": Object {
+        "__id": "example-page--logged-out",
+        "__isArgsStory": true,
+        "actions": Object {
+          "argTypesRegex": "^on[A-Z].*",
+        },
+        "argTypes": Object {
+          "onCreateAccount": Object {
+            "action": "onCreateAccount",
+            "name": "onCreateAccount",
+          },
+          "onLogin": Object {
+            "action": "onLogin",
+            "name": "onLogin",
+          },
+          "onLogout": Object {
+            "action": "onLogout",
+            "name": "onLogout",
+          },
+        },
+        "args": Object {
+          "onCreateAccount": undefined,
+          "onLogin": undefined,
+          "onLogout": undefined,
+        },
+        "backgrounds": Object {
+          "grid": Object {
+            "cellAmount": 5,
+            "cellSize": 20,
+            "opacity": 0.5,
+          },
+          "values": Array [
+            Object {
+              "name": "light",
+              "value": "#F8F8F8",
+            },
+            Object {
+              "name": "dark",
+              "value": "#333333",
+            },
+          ],
+        },
+        "controls": Object {
+          "matchers": Object {
+            "color": /\\(background\\|color\\)\\$/i,
+            "date": /Date\\$/,
+          },
+        },
+        "docs": Object {
+          "getContainer": undefined,
+          "getPage": undefined,
+          "inlineStories": true,
+          "prepareForInline": undefined,
+          "source": Object {
+            "language": "html",
+            "type": "dynamic",
+          },
+        },
+        "fileName": "./stories/Page.stories.js",
+        "framework": "html",
+        "globalTypes": Object {},
         "globals": Object {
           "measureEnabled": false,
           "outline": false,
