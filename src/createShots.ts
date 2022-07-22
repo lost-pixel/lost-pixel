@@ -10,6 +10,7 @@ import { generatePageShotItems } from './crawler/pageScreenshots';
 import { log } from './log';
 import { ShotItem, takeScreenShots } from './shots/shots';
 import { removeFilesInFolder } from './utils';
+import { launchStaticWebServer } from './crawler/utils';
 
 export const createShots = async () => {
   const {
@@ -63,22 +64,41 @@ export const createShots = async () => {
 
   if (storybookShots) {
     const { storybookUrl } = storybookShots;
-    const collection = await collectStories(storybookUrl);
 
-    if (!collection?.stories || collection.stories.length === 0) {
-      throw new Error('Error: Stories not found');
+    let storybookWebUrl = storybookUrl;
+    let localServer;
+
+    if (
+      !storybookUrl.startsWith('http://') &&
+      !storybookUrl.startsWith('https://')
+    ) {
+      const staticWebServer = await launchStaticWebServer(storybookUrl);
+      storybookWebUrl = staticWebServer.url;
+      localServer = staticWebServer.server;
     }
 
-    log(`Found ${collection.stories.length} stories`);
+    try {
+      const collection = await collectStories(storybookWebUrl);
 
-    storybookShotItems = generateStorybookShotItems(
-      storybookUrl,
-      collection.stories,
-    );
+      if (!collection?.stories || collection.stories.length === 0) {
+        throw new Error('Error: Stories not found');
+      }
 
-    log(`Prepared ${storybookShotItems.length} stories for screenshots`);
+      log(`Found ${collection.stories.length} stories`);
 
-    await takeScreenShots(storybookShotItems);
+      storybookShotItems = generateStorybookShotItems(
+        storybookWebUrl,
+        collection.stories,
+      );
+
+      log(`Prepared ${storybookShotItems.length} stories for screenshots`);
+
+      await takeScreenShots(storybookShotItems);
+      localServer?.close();
+    } catch (error: unknown) {
+      localServer?.close();
+      throw error;
+    }
 
     log('Screenshots done!');
   }
