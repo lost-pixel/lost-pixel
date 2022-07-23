@@ -34,7 +34,7 @@ type BaseConfig = {
    */
   ladleShots?: {
     /**
-     * URL of the Storybook instance or local folder
+     * URL of the Ladle served instance
      * @default 'http://localhost:61000'
      */
     ladleUrl: string;
