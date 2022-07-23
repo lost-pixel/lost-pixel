@@ -1,10 +1,11 @@
-import axios from 'axios';
-import { generateLadleShotItems } from './crawler/ladleScreenshots';
+import {
+  collectLadleStories,
+  generateLadleShotItems,
+} from './crawler/ladleScreenshots';
 import { config } from './config';
 import {
   collectStories,
   generateStorybookShotItems,
-  Story,
 } from './crawler/storybook';
 import { generatePageShotItems } from './crawler/pageScreenshots';
 import { log } from './log';
@@ -30,34 +31,25 @@ export const createShots = async () => {
   if (ladleShots) {
     const { ladleUrl } = ladleShots;
 
-    const {
-      data: ladleMeta,
-    }: {
-      data: {
-        stories: {
-          id: string;
-        };
-      };
-    } = await axios.get(`${ladleUrl}/meta.json`);
-    const collection: Story[] | undefined = Object.keys(ladleMeta.stories).map(
-      (storyKey) => ({ id: storyKey, story: storyKey, kind: storyKey }),
-    );
+    try {
+      const collection = await collectLadleStories(ladleUrl);
 
-    if (!collection || collection.length === 0) {
-      throw new Error('Error: Stories not found');
+      if (!collection || collection.length === 0) {
+        throw new Error('Error: Stories not found');
+      }
+
+      log(`Found ${collection.length} ladle stories`);
+
+      ladleShotItems = generateLadleShotItems(ladleUrl, collection);
+
+      log(`Prepared ${ladleShotItems.length} ladle stories for screenshots`);
+
+      await takeScreenShots(ladleShotItems);
+
+      log('Screenshots done!');
+    } catch (error: unknown) {
+      throw error;
     }
-
-    log(`Found ${collection.length} ladle stories`);
-
-    ladleShotItems = generateLadleShotItems(ladleUrl, collection);
-
-    log(`Prepared ${ladleShotItems.length} ladle stories for screenshots`);
-
-    log({ ladleShotItems });
-
-    await takeScreenShots(ladleShotItems);
-
-    log('Screenshots done!');
   }
 
   if (storybookShots) {
