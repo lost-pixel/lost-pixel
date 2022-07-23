@@ -13,3 +13,7 @@ cd examples \
 && cd example-next-js-pages \
 && node ../../dist/bin.js \
 && cd .. \
+&& echo "======== Testing: example-ladle" \
+&& cd example-ladle \
+&& node ../../dist/bin.js \
+&& cd .. \
