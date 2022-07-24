@@ -1,0 +1,15 @@
+{
+  "name": "example",
+  "version": "0.3.12",
+  "license": "MIT",
+  "private": true,
+  "scripts": {
+    "serve": "npx serve build -p 61000",
+    "build": "ladle build"
+  },
+  "dependencies": {
+    "@ladle/react": "^2.0.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
+  }
+}

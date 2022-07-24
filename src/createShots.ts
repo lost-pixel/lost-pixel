@@ -1,3 +1,7 @@
+import {
+  collectLadleStories,
+  generateLadleShotItems,
+} from './crawler/ladleScreenshots';
 import { config } from './config';
 import {
   collectStories,
@@ -10,13 +14,38 @@ import { removeFilesInFolder } from './utils';
 import { launchStaticWebServer } from './crawler/utils';
 
 export const createShots = async () => {
-  const { storybookShots, pageShots, imagePathCurrent, imagePathDifference } =
-    config;
+  const {
+    ladleShots,
+    storybookShots,
+    pageShots,
+    imagePathCurrent,
+    imagePathDifference,
+  } = config;
   let storybookShotItems: ShotItem[] = [];
   let pageShotItems: ShotItem[] = [];
+  let ladleShotItems: ShotItem[] = [];
 
   removeFilesInFolder(imagePathCurrent);
   removeFilesInFolder(imagePathDifference);
+
+  if (ladleShots) {
+    const { ladleUrl } = ladleShots;
+    const collection = await collectLadleStories(ladleUrl);
+
+    if (!collection || collection.length === 0) {
+      throw new Error('Error: Stories not found');
+    }
+
+    log(`Found ${collection.length} ladle stories`);
+
+    ladleShotItems = generateLadleShotItems(ladleUrl, collection);
+
+    log(`Prepared ${ladleShotItems.length} ladle stories for screenshots`);
+
+    await takeScreenShots(ladleShotItems);
+
+    log('Screenshots done!');
+  }
 
   if (storybookShots) {
     const { storybookUrl } = storybookShots;
@@ -60,14 +89,14 @@ export const createShots = async () => {
   }
 
   if (pageShots) {
-    const { pages, pageBaselineUrl } = pageShots;
+    const { pages, pageUrl } = pageShots;
 
-    pageShotItems = generatePageShotItems(pages, pageBaselineUrl);
+    pageShotItems = generatePageShotItems(pages, pageUrl);
     log(`Prepared ${pageShotItems.length} pages for screenshots`);
 
     await takeScreenShots(pageShotItems);
     log('Screenshots done!');
   }
 
-  return [...storybookShotItems, ...pageShotItems];
+  return [...storybookShotItems, ...pageShotItems, ...ladleShotItems];
 };

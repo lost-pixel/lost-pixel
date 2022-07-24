@@ -32,6 +32,9 @@ jobs:
       - name: Build Example Pages
         run: npm run build-example-next-js-pages
 
+      - name: Build Example Ladle
+        run: npm run build-example-ladle
+
       - name: Test
         run: npm run test
 
@@ -41,6 +44,9 @@ jobs:
       - name: Run Example Next.js Pages
         run: npm run run-example-next-js-pages &
 
+      - name: Run Example Ladle
+        run: npm run run-example-ladle &
+
       - name: Test on examples
         run: npm run test-on-examples
 
@@ -49,4 +55,4 @@ jobs:
         if: failure()
         with:
           name: shots
-          path: examples/.lostpixel
+          path: examples/**/.lostpixel

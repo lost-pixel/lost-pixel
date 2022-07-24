@@ -4,7 +4,7 @@ import { ShotItem } from '../shots/shots';
 
 export const generatePageShotItems = (
   pages: PageScreenshotParameter[],
-  pageBaselineUrl: string,
+  pageUrl: string,
 ): ShotItem[] => {
   const names = pages.map((page) => page.name);
   const uniqueNames = new Set(names);
@@ -16,7 +16,7 @@ export const generatePageShotItems = (
   return pages.map((page) => {
     return {
       id: page.name,
-      url: path.join(pageBaselineUrl, page.path),
+      url: path.join(pageUrl, page.path),
       filePathBaseline: `${path.join(config.imagePathBaseline, page.name)}.png`,
       filePathCurrent: `${path.join(config.imagePathCurrent, page.name)}.png`,
       filePathDifference: `${path.join(
