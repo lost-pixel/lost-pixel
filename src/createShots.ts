@@ -30,26 +30,21 @@ export const createShots = async () => {
 
   if (ladleShots) {
     const { ladleUrl } = ladleShots;
+    const collection = await collectLadleStories(ladleUrl);
 
-    try {
-      const collection = await collectLadleStories(ladleUrl);
-
-      if (!collection || collection.length === 0) {
-        throw new Error('Error: Stories not found');
-      }
-
-      log(`Found ${collection.length} ladle stories`);
-
-      ladleShotItems = generateLadleShotItems(ladleUrl, collection);
-
-      log(`Prepared ${ladleShotItems.length} ladle stories for screenshots`);
-
-      await takeScreenShots(ladleShotItems);
-
-      log('Screenshots done!');
-    } catch (error: unknown) {
-      throw error;
+    if (!collection || collection.length === 0) {
+      throw new Error('Error: Stories not found');
     }
+
+    log(`Found ${collection.length} ladle stories`);
+
+    ladleShotItems = generateLadleShotItems(ladleUrl, collection);
+
+    log(`Prepared ${ladleShotItems.length} ladle stories for screenshots`);
+
+    await takeScreenShots(ladleShotItems);
+
+    log('Screenshots done!');
   }
 
   if (storybookShots) {
