@@ -29,6 +29,9 @@ jobs:
       - name: Build Example Storybook v6.4
         run: npm run build-example-storybook-v6.4
 
+      - name: Build Example Storybook v6.5 with StoryStore v7
+        run: npm run build-example-storybook-v6.5-storystore-v7
+
       - name: Test
         run: npm run test
 
