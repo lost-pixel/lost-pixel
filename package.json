@@ -55,7 +55,7 @@
     "get-port-please": "^2.5.0",
     "lodash.get": "^4.4.2",
     "lodash.kebabcase": "^4.1.1",
-    "minio": "^7.0.26",
+    "minio": "^7.0.28",
     "pixelmatch": "^5.2.1",
     "playwright": "^1.23.4",
     "pngjs": "^6.0.0",
