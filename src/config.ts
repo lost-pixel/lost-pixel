@@ -155,6 +155,7 @@ type StoryLike = {
   id?: string;
   kind?: string;
   story?: string;
+  shotName?: string;
   parameters?: Record<string, unknown>;
 };
 

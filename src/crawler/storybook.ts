@@ -251,15 +251,17 @@ export const generateStorybookShotItems = (
   const iframeUrl = getIframeUrl(getStoryBookUrl(baseUrl));
 
   const shotItems = stories
+    .map((story) => ({
+      ...story,
+      shotName: config.imageFilenameGenerator
+        ? config.imageFilenameGenerator(story)
+        : generateFilename(story),
+    }))
     .filter((story) => story.parameters?.lostpixel?.disable !== true)
     .filter((story) => story.parameters?.storyshots?.disable !== true)
     .filter((story) => (config.filterStory ? config.filterStory(story) : true))
     .map((story) => {
-      const fileName = config.imageFilenameGenerator
-        ? config.imageFilenameGenerator(story)
-        : generateFilename(story);
-
-      const fileNameWithExt = `${fileName}.png`;
+      const fileNameWithExt = `${story.shotName}.png`;
 
       return {
         id: story.id,
