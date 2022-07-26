@@ -47,7 +47,15 @@ const takeScreenShot = async ({
     logger(logMessage, ...values);
   });
 
-  await page.goto(shotItem.url);
+  try {
+    await page.goto(shotItem.url);
+  } catch (error: unknown) {
+    if (error instanceof Error && error.name === 'TimeoutError') {
+      logger(`Timeout while loading page: ${shotItem.url}`);
+    } else {
+      logger('Page loading failed', error);
+    }
+  }
 
   try {
     await page.waitForLoadState('load', {
