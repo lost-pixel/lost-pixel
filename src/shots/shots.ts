@@ -3,10 +3,11 @@ import { Browser, BrowserContextOptions } from 'playwright';
 import { mapLimit } from 'async';
 import { log } from '../log';
 import { getBrowser, sleep } from '../utils';
-import { config } from '../config';
+import { config, ShotMode } from '../config';
 import { resizeViewportToFullscreen, waitForNetworkRequests } from './utils';
 
 export type ShotItem = {
+  shotMode: ShotMode;
   id: string;
   shotName: string;
   url: string;
@@ -68,6 +69,7 @@ const takeScreenShot = async ({
 
   if (config.beforeScreenshot) {
     await config.beforeScreenshot(page, {
+      shotMode: shotItem.shotMode,
       id: shotItem.id,
       shotName: shotItem.shotName,
     });

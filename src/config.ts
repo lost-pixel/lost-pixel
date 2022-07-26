@@ -151,7 +151,10 @@ export type PageScreenshotParameter = {
   name: string;
 };
 
+export type ShotMode = 'storybook' | 'ladle' | 'page';
+
 type StoryLike = {
+  shotMode: ShotMode;
   id?: string;
   kind?: string;
   story?: string;

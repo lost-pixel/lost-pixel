@@ -10,9 +10,10 @@ export const generateLadleShotItems = (
 ): ShotItem[] => {
   return ladleStories.map((ladleStory) => {
     return {
+      shotMode: 'ladle',
       id: ladleStory.story,
       shotName: config.shotNameGenerator
-        ? config.shotNameGenerator(ladleStory)
+        ? config.shotNameGenerator({ ...ladleStory, shotMode: 'ladle' })
         : ladleStory.id,
       url: `${ladleUrl}/?story=${ladleStory.story}&mode=preview`,
       filePathBaseline: `${path.join(

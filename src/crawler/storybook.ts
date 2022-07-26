@@ -229,7 +229,10 @@ const generateFilename = (story: Story) =>
   [story.kind, story.story].map((value) => kebabCase(value)).join('--');
 
 const generateBrowserConfig = (story: Story) => {
-  const browserConfig = config.configureBrowser?.(story);
+  const browserConfig = config.configureBrowser?.({
+    ...story,
+    shotMode: 'storybook',
+  });
 
   if (story.parameters?.viewport && browserConfig) {
     browserConfig.viewport = browserConfig.viewport ?? {
@@ -255,16 +258,21 @@ export const generateStorybookShotItems = (
     .map((story) => ({
       ...story,
       shotName: config.shotNameGenerator
-        ? config.shotNameGenerator(story)
+        ? config.shotNameGenerator({ ...story, shotMode: 'storybook' })
         : generateFilename(story),
     }))
     .filter((story) => story.parameters?.lostpixel?.disable !== true)
     .filter((story) => story.parameters?.storyshots?.disable !== true)
-    .filter((story) => (config.filterShot ? config.filterShot(story) : true))
-    .map((story) => {
+    .filter((story) =>
+      config.filterShot
+        ? config.filterShot({ ...story, shotMode: 'storybook' })
+        : true,
+    )
+    .map((story): ShotItem => {
       const fileNameWithExt = `${story.shotName}.png`;
 
       return {
+        shotMode: 'storybook',
         id: story.id,
         shotName: story.shotName,
         url: `${iframeUrl}?id=${story.id}&viewMode=story`,

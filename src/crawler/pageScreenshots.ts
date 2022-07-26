@@ -15,9 +15,10 @@ export const generatePageShotItems = (
 
   return pages.map((page) => {
     return {
+      shotMode: 'page',
       id: page.name,
       shotName: config.shotNameGenerator
-        ? config.shotNameGenerator(page)
+        ? config.shotNameGenerator({ ...page, shotMode: 'page' })
         : page.name,
       url: path.join(pageUrl, page.path),
       filePathBaseline: `${path.join(config.imagePathBaseline, page.name)}.png`,
