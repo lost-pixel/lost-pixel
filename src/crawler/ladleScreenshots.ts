@@ -11,6 +11,9 @@ export const generateLadleShotItems = (
   return ladleStories.map((ladleStory) => {
     return {
       id: ladleStory.story,
+      shotName: config.shotNameGenerator
+        ? config.shotNameGenerator(ladleStory)
+        : ladleStory.id,
       url: `${ladleUrl}/?story=${ladleStory.story}&mode=preview`,
       filePathBaseline: `${path.join(
         config.imagePathBaseline,
@@ -39,8 +42,10 @@ export const collectLadleStories = async (ladleUrl: string) => {
       };
     };
   } = await axios.get(`${ladleUrl}/meta.json`);
+
   const collection: Story[] | undefined = Object.keys(ladleMeta.stories).map(
     (storyKey) => ({ id: storyKey, story: storyKey, kind: storyKey }),
   );
+
   return collection;
 };

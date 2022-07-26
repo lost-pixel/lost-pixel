@@ -266,6 +266,7 @@ export const generateStorybookShotItems = (
 
       return {
         id: story.id,
+        shotName: story.shotName,
         url: `${iframeUrl}?id=${story.id}&viewMode=story`,
         filePathBaseline: path.join(config.imagePathBaseline, fileNameWithExt),
         filePathCurrent: path.join(config.imagePathCurrent, fileNameWithExt),

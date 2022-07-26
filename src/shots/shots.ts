@@ -8,6 +8,7 @@ import { resizeViewportToFullscreen, waitForNetworkRequests } from './utils';
 
 export type ShotItem = {
   id: string;
+  shotName: string;
   url: string;
   filePathBaseline: string;
   filePathCurrent: string;
@@ -66,7 +67,10 @@ const takeScreenShot = async ({
   }
 
   if (config.beforeScreenshot) {
-    await config.beforeScreenshot(page, { id: shotItem.id });
+    await config.beforeScreenshot(page, {
+      id: shotItem.id,
+      shotName: shotItem.shotName,
+    });
   }
 
   let fullScreenMode = true;
@@ -75,7 +79,7 @@ const takeScreenShot = async ({
     await resizeViewportToFullscreen({ page });
     fullScreenMode = false;
   } catch {
-    log(`Could not resize viewport to fullscreen: ${shotItem.id}`);
+    log(`Could not resize viewport to fullscreen: ${shotItem.shotName}`);
   }
 
   await sleep(shotItem?.waitBeforeScreenshot ?? config.waitBeforeScreenshot);
@@ -93,11 +97,13 @@ const takeScreenShot = async ({
   if (videoPath) {
     const dirname = path.dirname(videoPath);
     const ext = videoPath.split('.').pop() ?? 'webm';
-    const newVideoPath = `${dirname}/${shotItem.id}.${ext}`;
+    const newVideoPath = `${dirname}/${shotItem.shotName}.${ext}`;
     await page.video()?.saveAs(newVideoPath);
     await page.video()?.delete();
 
-    logger(`Video of '${shotItem.id}' recorded and saved to '${newVideoPath}`);
+    logger(
+      `Video of '${shotItem.shotName}' recorded and saved to '${newVideoPath}`,
+    );
   }
 };
 
@@ -114,7 +120,7 @@ export const takeScreenShots = async (shotItems: ShotItem[]) => {
         log(`[${index + 1}/${total}] ${message}`, ...rest);
       };
 
-      logger(`Taking screenshot of '${shotItem.id}'`);
+      logger(`Taking screenshot of '${shotItem.shotName}'`);
 
       const startTime = Date.now();
       await takeScreenShot({ browser, shotItem, logger });
@@ -122,7 +128,7 @@ export const takeScreenShots = async (shotItems: ShotItem[]) => {
       const elapsedTime = Number((endTime - startTime) / 1000).toFixed(3);
 
       logger(
-        `Screenshot of '${shotItem.id}' taken and saved to '${shotItem.filePathCurrent}' in ${elapsedTime}s`,
+        `Screenshot of '${shotItem.shotName}' taken and saved to '${shotItem.filePathCurrent}' in ${elapsedTime}s`,
       );
     },
   );
