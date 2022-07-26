@@ -278,7 +278,7 @@ export type ProjectConfig = {
   /**
    * Configure page before screenshot
    */
-  beforeScreenshot?: (page: Page, input: { id: string }) => Promise<void>;
+  beforeScreenshot?: (page: Page, input: StoryLike) => Promise<void>;
 };
 
 type GenerateOnlyModeProjectConfig = Omit<
