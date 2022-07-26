@@ -14,6 +14,7 @@ export type ShotItem = {
   filePathDifference: string;
   browserConfig?: BrowserContextOptions;
   threshold: number;
+  waitBeforeScreenshot?: number;
 };
 
 const takeScreenShot = async ({
@@ -77,7 +78,7 @@ const takeScreenShot = async ({
     log(`Could not resize viewport to fullscreen: ${shotItem.id}`);
   }
 
-  await sleep(config.waitBeforeScreenshot);
+  await sleep(shotItem?.waitBeforeScreenshot ?? config.waitBeforeScreenshot);
 
   await page.screenshot({
     path: shotItem.filePathCurrent,

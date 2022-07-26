@@ -11,6 +11,7 @@ export type StoryParameters = {
   lostpixel?: {
     disable?: boolean;
     threshold?: number;
+    waitBeforeScreenshot?: number;
   };
   viewport?: {
     width?: number;
@@ -274,6 +275,9 @@ export const generateStorybookShotItems = (
         ),
         browserConfig: generateBrowserConfig(story),
         threshold: story.parameters?.lostpixel?.threshold ?? config.threshold,
+        waitBeforeScreenshot:
+          story.parameters?.lostpixel?.waitBeforeScreenshot ??
+          config.waitBeforeScreenshot,
       };
     });
 
