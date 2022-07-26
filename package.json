@@ -97,7 +97,8 @@
       "node/prefer-global/process": "off",
       "@typescript-eslint/naming-convention": "off",
       "unicorn/prefer-module": "off",
-      "import/no-mutable-exports": "off"
+      "import/no-mutable-exports": "off",
+      "@typescript-eslint/ban-ts-comment": "off"
     }
   }
 }
