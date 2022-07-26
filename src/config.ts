@@ -261,14 +261,14 @@ export type ProjectConfig = {
   eventFilePath?: string;
 
   /**
-   * Global story filter
+   * Global shot filter
    */
-  filterStory?: (input: StoryLike) => boolean;
+  filterShot?: (input: StoryLike) => boolean;
 
   /**
-   * File name generator for images
+   * Shot and file name generator for images
    */
-  imageFilenameGenerator?: (input: StoryLike) => string;
+  shotNameGenerator?: (input: StoryLike) => string;
 
   /**
    * Configure browser context options

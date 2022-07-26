@@ -253,13 +253,13 @@ export const generateStorybookShotItems = (
   const shotItems = stories
     .map((story) => ({
       ...story,
-      shotName: config.imageFilenameGenerator
-        ? config.imageFilenameGenerator(story)
+      shotName: config.shotNameGenerator
+        ? config.shotNameGenerator(story)
         : generateFilename(story),
     }))
     .filter((story) => story.parameters?.lostpixel?.disable !== true)
     .filter((story) => story.parameters?.storyshots?.disable !== true)
-    .filter((story) => (config.filterStory ? config.filterStory(story) : true))
+    .filter((story) => (config.filterShot ? config.filterShot(story) : true))
     .map((story) => {
       const fileNameWithExt = `${story.shotName}.png`;
 
