@@ -15,7 +15,11 @@ import { Comparison, ComparisonType, UploadFile, WebhookEvent } from './types';
 
 export const isUpdateMode = (): boolean => {
   const args = yargs(hideBin(process.argv)).parse();
-  return args._.includes('update') || args.m === 'update';
+  return (
+    args._.includes('update') ||
+    args.m === 'update' ||
+    process.env.LOST_PIXEL_MODE === 'update'
+  );
 };
 
 export type Files = {
