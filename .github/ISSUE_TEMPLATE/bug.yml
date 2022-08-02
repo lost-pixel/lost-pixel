@@ -21,7 +21,7 @@ body:
         1. Use lost-pixel v2.3.4 image
         2. Build storybook
         3. Try updating snapshots on CI pipeline
-        4. See error
+        4. See error in lost-pixel action logs
         -->
     validations:
       required: true
