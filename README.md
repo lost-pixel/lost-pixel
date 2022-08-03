@@ -7,7 +7,7 @@
   <a href="https://github.com/lost-pixel/lost-pixel/blob/main/docs/contributing.md"><img src="https://img.shields.io/badge/PRs-welcome-brightgreen.svg" /></a>
   <a href="https://github.com/lost-pixel/lost-pixel/blob/main/LICENSE"><img src="https://img.shields.io/github/license/lost-pixel/lost-pixel" /></a>
   <br />
-  <hr />
+  <br />
   <a href="https://docs.lost-pixel.com/user-docs">Documentation</a>
   <span>&nbsp;&nbsp;•&nbsp;&nbsp;</span>
   <a href="https://docs.lost-pixel.com/user-docs/community-edition/getting-started">Quickstart</a>
@@ -15,6 +15,7 @@
   <a href="https://github.com/lost-pixel/lost-pixel-examples">Examples</a>
   <br />
   <br />
+  <hr />
 </div>
 
 ## What is Lost Pixel?
@@ -24,14 +25,19 @@
 **Lost Pixel** consists of two products:
 
 - **lost-pixel** (*open BETA*) - the core engine driving the visual regression test runs. It could be used standalone and the main use-cases are outlined in the documentation
-- **lost-pixel-platform** (*closed BETA*) -  the UI and CI helpers that allow you to use lost-pixel's managed version. Configure it just once and enjoy hassle free visual regression tests integrated into your GitHub actions pipeline. 
-###  📇 Fill in the form to participate in closed beta for free.
+- **lost-pixel-platform** (*closed BETA*) -  the UI and CI helpers that allow you to use lost-pixel's managed version. This includes specified regression UI, collaboration with team members and easy approval/rejection process for the snapshots. Configure it just once and enjoy hassle free visual regression tests integrated into your GitHub actions pipeline. 
 
+<hr/>
+<div align="center">
+  <a href="https://tally.so/r/3xXRoo">🚀 Get the platform beta invite 🚀</a>
+</div>
 <hr/>
 
 ## Ladle example 🥄
 
-Assuming you are using [basic example of Ladle](https://github.com/tajo/ladle)
+Assuming you are using [basic example of Ladle](https://github.com/tajo/ladle). This setup will run visual regression tests against all the ladle stories on every push.
+
+You can find more examples in the [examples repository](https://github.com/lost-pixel/lost-pixel-examples). You can learn more about Lost Pixel workflow and get more useful recipes in [documentation](https://docs.lost-pixel.com/user-docs).
 
 Add `lostpixel.config.ts` at the root of the project:
 
@@ -88,7 +94,28 @@ jobs:
         uses: lost-pixel/lost-pixel-action@v2.7.0
 ```
 
-To see more examples(storybook/pages), recipes and intended usage workflow visit the documentation.
+---
+## Support
+
+### Ask a question about Lost Pixel
+
+You can ask questions and initiate [discussions](https://github.com/lost-pixel/lost-pixel/discussions/) about Lost Pixel.
+
+❓ [**Ask a question**](https://github.com/lost-pixel/lost-pixel/discussions/new)
+
+### Create a bug report for Lost Pixel
+
+If you see an error message or run into an issue, help us with creating a bug report!
+
+🐛 [**Create bug report**](https://github.com/lost-pixel/lost-pixel/issues/new?assignees=&labels=kind%2Fbug&template=bug.yml)
+
+### Submit a feature request
+
+If Lost Pixel at the moment doesn't support some mode or does not have a feature we would appreciate your thoughts!
+
+🆕 [**Submit feature request**](https://github.com/lost-pixel/lost-pixel/issues/new?assignees=&labels=kind%2Ffeature&template=feature.yml)
+
+---
 
 ## Contributing
 
