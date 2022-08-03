@@ -35,8 +35,6 @@ body:
       description: CI workflow file in which lost-pixel has been used
       value: |
         <!-- Do not include sensitive information like your secrets, passwords, credentials here! -->
-    validations:
-      required: true
   - type: textarea
     attributes:
       label: lost-pixel logs from CI
