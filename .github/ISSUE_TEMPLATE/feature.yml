@@ -9,8 +9,8 @@ body:
   - type: dropdown
     id: mode
     attributes:
-      label: Vendor
-      description: Vendor of the requested feature
+      label: Mode
+      description: Mode of the requested feature
       options:
         - Storybook
         - Ladle
