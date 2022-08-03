@@ -7,7 +7,7 @@ body:
       value: |
         Thanks for helping us improve Lost Pixel! 🙏 Please fill in the template to ensure we are aware of your use case!
   - type: dropdown
-    id: vendor
+    id: mode
     attributes:
       label: Vendor
       description: Vendor of the requested feature
