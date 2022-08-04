@@ -18,7 +18,7 @@
   <hr />
 </div>
 
-## What is Lost Pixel?
+## What is Lost Pixel ❓
 
 **Lost Pixel** is an open source visual regression testing tool. Run visual regression tests on your **Storybook** and **Ladle** stories and on your application pages.
 
@@ -29,7 +29,7 @@
 
 <hr/>
 <div align="center">
-  <a href="https://tally.so/r/3xXRoo">🚀 Get the platform beta invite 🚀</a>
+ <h3> <a href="https://tally.so/r/3xXRoo">🚀 Get the platform beta invite 🚀</a></h3>
 </div>
 <hr/>
 
@@ -95,7 +95,7 @@ jobs:
 ```
 
 ---
-## Support
+## Support 👨🏼‍💻
 
 ### Ask a question about Lost Pixel
 
@@ -117,7 +117,7 @@ If Lost Pixel at the moment doesn't support some mode or does not have a feature
 
 ---
 
-## Contributing
+## Contributing 🏗️
 
 **Lost Pixel** is open source in it's heart and welcomes any external contribution. You can refer to [CONTRIBUTING.md](https://github.com/lost-pixel/lost-pixel/blob/main/CONTRIBUTING.md) to get going with the project locally in couple of minutes.
 
