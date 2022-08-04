@@ -1,16 +1,17 @@
 # Integrating With GitHub Actions
 
-To configure Lost Pixel, you only need to add this step to your GitHub workflow file:
+Lost Pixel has the first class support for GitHub Actions offering a dedicated action in the GitHub Action Marketplace:
 
 ```
 - name: Lost Pixel
-  uses: lost-pixel/lost-pixel-action@v1.6.0
+  uses: lost-pixel/lost-pixel@v2.7.0
 ```
 
-Of course, you will need a **Storybook build** for this to work.
+As outlined in [modes](project-configuration/modes.md) Lost Pixel can run in different modes or in all of them simultaneously. You would need to build the respective provider and serve it in the action to make it available for the Lost Pixel e.g. build & serve storybook, build & serve ladle, build & serve next app
 
-Here's an example of a full workflow file that builds the Storybook before continuing with Lost Pixel:
+Here's an example of a full workflow file that builds the Storybook before continuing with Lost Pixel. To make it run you just need to place `vis-reg-test.yml` into `.github/workflows` at the root for your project. This will execute the Lost Pixel visual regression tests on every commit:
 
+{% code title="vis-reg-test.yml" %}
 ```yaml
 on: [push]
 
@@ -36,9 +37,6 @@ jobs:
         run: npm run build-storybook
 
       - name: Lost Pixel
-        uses: lost-pixel/lost-pixel-action@v1.12.1
+        uses: lost-pixel/lost-pixel@v2.7.0
 ```
-
-Depending on your individual project needs, there might be many other steps before and after that. For example, linter checks, builds, registry uploads, code coverage reports, etc.
-
-For Lost Pixel to work, you only need a freshly built Storybook.
+{% endcode %}

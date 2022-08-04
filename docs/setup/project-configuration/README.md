@@ -2,17 +2,20 @@
 
 Each project needs a configuration file that sits inside the Git repo of the project.
 
-To get started you can use the init command to create an initial configuration:
+To get started you can use the init command to create an initial configuration which uses storybook by default, you can [change the mode](modes.md) in the config file later:
 
 ```bash
 npx lost-pixel-action init-js
 ```
 
-This will create a new file `lostpixel.config.js` that might look somewhat like that:
+This will create a new file `lostpixel.config.js` that looks the following way:
 
 ```javascript
 module.exports = {
-  lostPixelProjectId: 'YOUR_PROJECT_ID',
+  storybookShots: {
+    storybookUrl: 'examples/storybook-build/storybook-static',
+  },
+  generateOnly: true,
 };
 ```
 
@@ -35,10 +38,13 @@ npm i -D lost-pixel-action
 Finally, we can take a look at the created configuration file `lostpixel.config.ts`. You can notice that it includes types already, which makes the job of writing the configuration so much easier (IDE IntelliSense, type safety, ...).
 
 ```typescript
-import { CustomProjectConfig } from 'lost-pixel-action'
+import { CustomProjectConfig } from 'lost-pixel';
 
 export const config: CustomProjectConfig = {
-  lostPixelProjectId: 'YOUR_PROJECT_ID',
+  storybookShots: {
+    storybookUrl: 'examples/storybook-build/storybook-static',
+  },
+  generateOnly: true,
 };
 ```
 

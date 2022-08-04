@@ -4,20 +4,24 @@
 
 ## ⚙ Setup
 
-* [Project Configuration](setup/project-configuration.md)
+* [Project Configuration](setup/project-configuration/README.md)
+  * [Modes](setup/project-configuration/modes.md)
+  * [Baseline images](setup/project-configuration/baseline-images.md)
 * [Integrating With GitHub Actions](setup/integrating-with-github-actions.md)
-* [Monorepo Setup](setup/monorepo-setup.md)
 
-## 🍕 Community edition
+## 👨🏫 Guides
 
-* [Getting started](community-edition/getting-started.md)
-* [Testing workflow (Github Actions)](community-edition/testing-workflow-github-actions.md)
-* [Testing & updating baseline locally](community-edition/testing-and-updating-baseline-locally.md)
+* [Getting started with Ladle](guides/getting-started.md)
+* [Getting started with Storybook](guides/getting-started-1.md)
+* [Getting started with Next js](guides/getting-started-2.md)
+* [Testing workflow (GitHub Actions)](guides/testing-workflow-github-actions.md)
+* [Updating baseline images](guides/testing-and-updating-baseline-locally.md)
 
 ## 🥘 Recipes
 
 * [Access test run images](recipes/access-test-run-images.md)
 * [Failing GitHub Action check](recipes/failing-github-action-check.md)
+* [Automatic baseline update PR](recipes/automatic-baseline-update-pr.md)
 
 ## 💡 Examples
 

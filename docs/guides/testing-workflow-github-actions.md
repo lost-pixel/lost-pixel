@@ -1,8 +1,6 @@
-# Testing workflow (Github Actions)
+# Testing workflow (GitHub Actions)
 
-Whenever your frontend code changes there is a possibility of a visual regression being introduced. It would help if you always strived to automate the testing process and reduce manual labor and blocking tasks.
-
-Given that your storybook build is working & `lost-pixel` config file has been created, we are ready to write the Github Action to spin the visual regression testing on every commit.
+Whenever your frontend code changes there is a possibility of a visual regression being introduced. Lost Pixel automates the testing process and reduce manual labor and blocking tasks.
 
 Follow the GitHub Actions configuration instructions to set up the CI job. Every run will result in either result in a **green state** ✅ (no visual differences between the baseline image & image resulting from the change) or a **red state** ❌ (visual difference between the baseline image & image resulting from the change).\
 \
