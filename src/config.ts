@@ -1,8 +1,9 @@
-import { existsSync } from 'fs';
-import { loadTSProjectConfigFile, log } from './utils';
+import { existsSync } from 'node:fs';
+import path from 'node:path';
 import get from 'lodash.get';
-import path from 'path';
 import { BrowserContextOptions, Page } from 'playwright';
+import { loadTSProjectConfigFile } from './configHelper';
+import { log } from './log';
 
 type BaseConfig = {
   /**
@@ -18,10 +19,41 @@ type BaseConfig = {
   lostPixelUrl: string;
 
   /**
-   * URL of the Storybook instance or local folder
-   * @default 'storybook-static'
+   * Enable Storybook mode
    */
-  storybookUrl: string;
+  storybookShots?: {
+    /**
+     * URL of the Storybook instance or local folder
+     * @default 'storybook-static'
+     */
+    storybookUrl: string;
+  };
+
+  /**
+   * Enable Ladle mode
+   */
+  ladleShots?: {
+    /**
+     * URL of the Ladle served instance
+     * @default 'http://localhost:61000'
+     */
+    ladleUrl: string;
+  };
+
+  /**
+   * Enable Page mode
+   */
+  pageShots?: {
+    /**
+     * Paths to take screenshots of
+     */
+    pages: PageScreenshotParameter[];
+
+    /**
+     * URL of the running application
+     */
+    pageUrl: string;
+  };
 
   /**
    * Path to the baseline image folder
@@ -113,10 +145,20 @@ type BaseConfig = {
   setPendingStatusCheck: boolean;
 };
 
+export type PageScreenshotParameter = {
+  id: string;
+  path: string;
+  name: string;
+};
+
+export type ShotMode = 'storybook' | 'ladle' | 'page';
+
 type StoryLike = {
+  shotMode: ShotMode;
   id?: string;
   kind?: string;
   story?: string;
+  shotName?: string;
   parameters?: Record<string, unknown>;
 };
 
@@ -162,7 +204,7 @@ export type ProjectConfig = {
   generateOnly?: boolean;
 
   /**
-   * Flag that decides if images should be uploaded to S3 bucket or just generated (non-SaaS self-hosted mode)
+   * Flag that decides if process should exit if a difference is found
    */
   failOnDifference?: boolean;
 
@@ -181,7 +223,7 @@ export type ProjectConfig = {
     port?: number;
 
     /**
-     * use SSL
+     * Use SSL
      */
     ssl?: boolean;
 
@@ -222,14 +264,14 @@ export type ProjectConfig = {
   eventFilePath?: string;
 
   /**
-   * Global story filter
+   * Global shot filter
    */
-  filterStory?: (input: StoryLike) => boolean;
+  filterShot?: (input: StoryLike) => boolean;
 
   /**
-   * File name generator for images
+   * Shot and file name generator for images
    */
-  imageFilenameGenerator?: (input: StoryLike) => string;
+  shotNameGenerator?: (input: StoryLike) => string;
 
   /**
    * Configure browser context options
@@ -239,10 +281,25 @@ export type ProjectConfig = {
   /**
    * Configure page before screenshot
    */
-  beforeScreenshot?: (page: Page, input: { id: string }) => Promise<void>;
+  beforeScreenshot?: (page: Page, input: StoryLike) => Promise<void>;
 };
 
-const requiredConfigProps: Array<keyof FullConfig> = [
+type GenerateOnlyModeProjectConfig = Omit<
+  ProjectConfig,
+  | 'lostPixelProjectId'
+  | 'ciBuildId'
+  | 'ciBuildId'
+  | 'ciBuildNumber'
+  | 'repository'
+  | 'commitRef'
+  | 'commitRefName'
+  | 'commitHash'
+  | 's3'
+> & {
+  generateOnly: true;
+};
+
+const requiredConfigProps: Array<keyof ProjectConfig> = [
   'lostPixelProjectId',
   'ciBuildId',
   'ciBuildNumber',
@@ -253,20 +310,26 @@ const requiredConfigProps: Array<keyof FullConfig> = [
   's3',
 ];
 
-const requiredS3ConfigProps: Array<keyof FullConfig['s3']> = [
+const requiredS3ConfigProps: Array<keyof ProjectConfig['s3']> = [
   'endPoint',
   'accessKey',
   'secretKey',
   'bucketName',
 ];
 
-export type FullConfig = BaseConfig & ProjectConfig;
-export type CustomProjectConfig = Partial<BaseConfig> & ProjectConfig;
+export const MEDIA_UPLOAD_CONCURRENCY = 10;
+
+export type FullConfig =
+  | (BaseConfig & ProjectConfig)
+  | (BaseConfig & GenerateOnlyModeProjectConfig);
+
+export type CustomProjectConfig =
+  | (Partial<BaseConfig> & GenerateOnlyModeProjectConfig)
+  | (Partial<BaseConfig> & ProjectConfig);
 
 const defaultConfig: BaseConfig = {
   browser: 'chromium',
   lostPixelUrl: 'https://app.lost-pixel.com/api/callback',
-  storybookUrl: 'storybook-static',
   imagePathBaseline: '.lostpixel/baseline/',
   imagePathCurrent: '.lostpixel/current/',
   imagePathDifference: '.lostpixel/difference/',
@@ -277,11 +340,20 @@ const defaultConfig: BaseConfig = {
     loadState: 30_000,
     networkRequests: 30_000,
   },
-  waitBeforeScreenshot: 1_000,
-  waitForFirstRequest: 1_000,
-  waitForLastRequest: 1_000,
+  waitBeforeScreenshot: 1000,
+  waitForFirstRequest: 1000,
+  waitForLastRequest: 1000,
   threshold: 0,
   setPendingStatusCheck: false,
+};
+
+const githubConfigDefaults: Partial<ProjectConfig> = {
+  ciBuildId: process.env.GITHUB_RUN_ID,
+  ciBuildNumber: process.env.GITHUB_RUN_NUMBER,
+  repository: process.env.REPOSITORY,
+  commitRef: process.env.GITHUB_REF,
+  commitRefName: process.env.GITHUB_REF_NAME,
+  commitHash: process.env.COMMIT_HASH,
 };
 
 export let config: FullConfig;
@@ -294,11 +366,11 @@ const checkConfig = () => {
     ...requiredS3ConfigProps.map((prop) => `s3.${prop}`),
   ];
 
-  requiredProps.forEach((prop) => {
+  for (const prop of requiredProps) {
     if (!get(config, prop)) {
       missingProps.push(prop);
     }
-  });
+  }
 
   if (missingProps.length > 0) {
     log(
@@ -310,34 +382,45 @@ const checkConfig = () => {
   }
 };
 
+const configDirBase = process.env.LOST_PIXEL_CONFIG_DIR ?? process.cwd();
+
 const configFileNameBase = path.join(
-  process.env.LOST_PIXEL_CONFIG_DIR || process.cwd(),
+  configDirBase.startsWith('/') ? '' : process.cwd(),
+  configDirBase,
   'lostpixel.config',
 );
 
 const loadProjectConfig = async (): Promise<CustomProjectConfig> => {
   log('Loading project configuration...');
   log('Current working directory:', process.cwd());
-  log('Defined configuration directory:', process.env.LOST_PIXEL_CONFIG_DIR);
+  if (process.env.LOST_PIXEL_CONFIG_DIR) {
+    log('Defined configuration directory:', process.env.LOST_PIXEL_CONFIG_DIR);
+  }
+
   log('Looking for configuration file:', `${configFileNameBase}.(js|ts)`);
 
   if (existsSync(`${configFileNameBase}.js`)) {
-    const projectConfig = require(`${configFileNameBase}.js`);
+    const projectConfig =
+      // eslint-disable-next-line @typescript-eslint/no-require-imports, @typescript-eslint/no-var-requires
+      require(`${configFileNameBase}.js`) as CustomProjectConfig;
     return projectConfig;
-  } else if (existsSync(`${configFileNameBase}.ts`)) {
+  }
+
+  if (existsSync(`${configFileNameBase}.ts`)) {
     try {
       const imported = (await loadTSProjectConfigFile(
         `${configFileNameBase}.ts`,
       )) as CustomProjectConfig;
       return imported;
-    } catch (error) {
+    } catch (error: unknown) {
       log(error);
       log('Failed to load TypeScript configuration file');
       process.exit(1);
     }
   }
 
-  throw new Error("Couldn't find project config file 'lostpixel.config.js'");
+  log("Couldn't find project config file 'lostpixel.config.js'");
+  process.exit(1);
 };
 
 export const configure = async (customProjectConfig?: CustomProjectConfig) => {
@@ -353,9 +436,19 @@ export const configure = async (customProjectConfig?: CustomProjectConfig) => {
   const projectConfig = await loadProjectConfig();
 
   config = {
+    ...(!projectConfig.generateOnly && { ...githubConfigDefaults }),
     ...defaultConfig,
     ...projectConfig,
   };
 
-  checkConfig();
+  // Default to Storybook mode if no mode is defined
+  if (!config.storybookShots && !config.pageShots && !config.ladleShots) {
+    config.storybookShots = {
+      storybookUrl: 'storybook-static',
+    };
+  }
+
+  if (!config.generateOnly) {
+    checkConfig();
+  }
 };

@@ -1,18 +1,22 @@
+import path from 'node:path';
 import { Browser, BrowserContextOptions } from 'playwright';
 import { mapLimit } from 'async';
-import { getBrowser, log, sleep } from '../utils';
+import { log } from '../log';
+import { getBrowser, sleep } from '../utils';
+import { config, ShotMode } from '../config';
 import { resizeViewportToFullscreen, waitForNetworkRequests } from './utils';
-import { config } from '../config';
-import path from 'path';
 
 export type ShotItem = {
+  shotMode: ShotMode;
   id: string;
+  shotName: string;
   url: string;
   filePathBaseline: string;
   filePathCurrent: string;
   filePathDifference: string;
   browserConfig?: BrowserContextOptions;
   threshold: number;
+  waitBeforeScreenshot?: number;
 };
 
 const takeScreenShot = async ({
@@ -27,13 +31,37 @@ const takeScreenShot = async ({
   const context = await browser.newContext(shotItem.browserConfig);
   const page = await context.newPage();
 
-  await page.goto(shotItem.url);
+  page.on('pageerror', (exception) => {
+    logger('[pageerror] Uncaught exception:', exception);
+  });
+
+  page.on('console', async (message) => {
+    const values = [];
+
+    for (const arg of message.args()) {
+      // eslint-disable-next-line no-await-in-loop
+      values.push(await arg.jsonValue());
+    }
+
+    const logMessage = `[console] ${String(values.shift())}`;
+    logger(logMessage, ...values);
+  });
+
+  try {
+    await page.goto(shotItem.url);
+  } catch (error: unknown) {
+    if (error instanceof Error && error.name === 'TimeoutError') {
+      logger(`Timeout while loading page: ${shotItem.url}`);
+    } else {
+      logger('Page loading failed', error);
+    }
+  }
 
   try {
     await page.waitForLoadState('load', {
       timeout: config.timeouts.loadState,
     });
-  } catch (e) {
+  } catch {
     logger(`Timeout while waiting for page load state: ${shotItem.url}`);
   }
 
@@ -43,12 +71,16 @@ const takeScreenShot = async ({
       logger,
       ignoreUrls: ['/__webpack_hmr'],
     });
-  } catch (e) {
+  } catch {
     logger(`Timeout while waiting for all network requests: ${shotItem.url}`);
   }
 
   if (config.beforeScreenshot) {
-    await config.beforeScreenshot(page, { id: shotItem.id });
+    await config.beforeScreenshot(page, {
+      shotMode: shotItem.shotMode,
+      id: shotItem.id,
+      shotName: shotItem.shotName,
+    });
   }
 
   let fullScreenMode = true;
@@ -56,11 +88,11 @@ const takeScreenShot = async ({
   try {
     await resizeViewportToFullscreen({ page });
     fullScreenMode = false;
-  } catch (error) {
-    log(`Could not resize viewport to fullscreen: ${shotItem.id}`);
+  } catch {
+    log(`Could not resize viewport to fullscreen: ${shotItem.shotName}`);
   }
 
-  await sleep(config.waitBeforeScreenshot);
+  await sleep(shotItem?.waitBeforeScreenshot ?? config.waitBeforeScreenshot);
 
   await page.screenshot({
     path: shotItem.filePathCurrent,
@@ -74,12 +106,14 @@ const takeScreenShot = async ({
 
   if (videoPath) {
     const dirname = path.dirname(videoPath);
-    const ext = videoPath.split('.').pop();
-    const newVideoPath = `${dirname}/${shotItem.id}.${ext}`;
+    const ext = videoPath.split('.').pop() ?? 'webm';
+    const newVideoPath = `${dirname}/${shotItem.shotName}.${ext}`;
     await page.video()?.saveAs(newVideoPath);
     await page.video()?.delete();
 
-    logger(`Video of '${shotItem.id}' recorded and saved to '${newVideoPath}`);
+    logger(
+      `Video of '${shotItem.shotName}' recorded and saved to '${newVideoPath}`,
+    );
   }
 };
 
@@ -92,18 +126,19 @@ export const takeScreenShots = async (shotItems: ShotItem[]) => {
     config.shotConcurrency,
     async (item: [number, ShotItem]) => {
       const [index, shotItem] = item;
-      const logger = (message: string, ...rest: unknown[]) =>
+      const logger = (message: string, ...rest: unknown[]) => {
         log(`[${index + 1}/${total}] ${message}`, ...rest);
+      };
 
-      logger(`Taking screenshot of '${shotItem.id}'`);
+      logger(`Taking screenshot of '${shotItem.shotName}'`);
 
-      const startTime = new Date().getTime();
+      const startTime = Date.now();
       await takeScreenShot({ browser, shotItem, logger });
-      const endTime = new Date().getTime();
+      const endTime = Date.now();
       const elapsedTime = Number((endTime - startTime) / 1000).toFixed(3);
 
       logger(
-        `Screenshot of '${shotItem.id}' taken and saved to '${shotItem.filePathCurrent}' in ${elapsedTime}s`,
+        `Screenshot of '${shotItem.shotName}' taken and saved to '${shotItem.filePathCurrent}' in ${elapsedTime}s`,
       );
     },
   );

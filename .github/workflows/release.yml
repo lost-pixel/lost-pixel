@@ -9,7 +9,6 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-
       - name: Checkout
         uses: actions/checkout@v2
 
@@ -17,7 +16,7 @@ jobs:
         uses: actions/setup-node@v2
         with:
           node-version: 16.x
-          cache: 'npm'
+          cache: "npm"
 
       - name: Install dependencies
         run: |
@@ -27,8 +26,11 @@ jobs:
       - name: Lint
         run: npm run lint
 
-      - name: Build Example Storybook
-        run: npm run build-example-storybook
+      - name: Build Example Storybook v6.4
+        run: npm run build-example-storybook-v6.4
+
+      - name: Build Example Storybook v6.5 with StoryStore v7
+        run: npm run build-example-storybook-v6.5-storystore-v7
 
       - name: Test
         run: npm run test
@@ -75,11 +77,11 @@ jobs:
       - name: Publish to Registry
         uses: elgohr/Publish-Docker-Github-Action@47433670daec88d900599790a6fadbf5291a835b
         with:
-          name: lostpixel/lost-pixel-action
+          name: lostpixel/lost-pixel
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
           tags: "latest,${{ github.event.release.tag_name }}"
-          buildoptions: '--compress --force-rm'
+          buildoptions: "--compress --force-rm"
 
       - name: Slack Notification
         uses: 8398a7/action-slack@a74b761b4089b5d730d813fbedcd2ec5d394f3af

@@ -4,31 +4,22 @@ import {
   readdirSync,
   unlinkSync,
   writeFileSync,
-} from 'fs';
-import { UploadFile, WebhookEvent } from './upload';
-import { normalize, join } from 'path';
-import { config } from './config';
-import { Service } from 'ts-node';
+} from 'node:fs';
+import { normalize, join } from 'node:path';
 import { BrowserType, chromium, firefox, webkit } from 'playwright';
 import yargs from 'yargs';
 import { hideBin } from 'yargs/helpers';
-
-type LogMemory = Array<{
-  timestamp: Date;
-  content: unknown[];
-}>;
-
-export const logMemory: LogMemory = [];
+import { config } from './config';
+import { log } from './log';
+import { Comparison, ComparisonType, UploadFile, WebhookEvent } from './types';
 
 export const isUpdateMode = (): boolean => {
   const args = yargs(hideBin(process.argv)).parse();
-  return args._.includes('update') || args.m === 'update';
-};
-
-export const log = (...content: unknown[]) => {
-  logMemory.push({ timestamp: new Date(), content });
-  // eslint-disable-next-line no-console
-  console.log(...content);
+  return (
+    args._.includes('update') ||
+    args.m === 'update' ||
+    process.env.LOST_PIXEL_MODE === 'update'
+  );
 };
 
 export type Files = {
@@ -66,7 +57,9 @@ export const extendFileName = ({ fileName, extension }: ExtendFileName) => {
 
   if (parts.length === 1) {
     return `${extension}.${parts[0]}`;
-  } else if (parts.length === 0) {
+  }
+
+  if (parts.length === 0) {
     return extension;
   }
 
@@ -74,8 +67,6 @@ export const extendFileName = ({ fileName, extension }: ExtendFileName) => {
 
   return parts.join('.');
 };
-
-type ComparisonType = 'ADDITION' | 'DELETION' | 'DIFFERENCE';
 
 type CreateUploadItem = {
   uploadFileName: string;
@@ -90,6 +81,10 @@ const createUploadItem = ({
   fileName,
   type,
 }: CreateUploadItem): UploadFile => {
+  if (config.generateOnly) {
+    throw new Error("Can't create upload item when generateOnly is true");
+  }
+
   const filePath = normalize(join(path, fileName));
 
   return {
@@ -108,15 +103,6 @@ const createUploadItem = ({
   };
 };
 
-export type Comparison = {
-  beforeImageUrl?: string;
-  afterImageUrl?: string;
-  differenceImageUrl?: string;
-  type: ComparisonType;
-  path: string;
-  name: string;
-};
-
 type PrepareComparisonList = {
   changes: Changes;
   baseUrl: string;
@@ -129,7 +115,7 @@ export const prepareComparisonList = ({
   const comparisonList: Comparison[] = [];
   const uploadList: UploadFile[] = [];
 
-  changes.addition.forEach((fileName) => {
+  for (const fileName of changes.addition) {
     const afterFile = extendFileName({
       fileName,
       extension: 'after',
@@ -151,9 +137,9 @@ export const prepareComparisonList = ({
         type,
       }),
     );
-  });
+  }
 
-  changes.deletion.forEach((fileName) => {
+  for (const fileName of changes.deletion) {
     const beforeFile = extendFileName({
       fileName,
       extension: 'before',
@@ -175,9 +161,9 @@ export const prepareComparisonList = ({
         type,
       }),
     );
-  });
+  }
 
-  changes.difference.forEach((fileName) => {
+  for (const fileName of changes.difference) {
     const beforeFile = extendFileName({
       fileName,
       extension: 'before',
@@ -208,18 +194,12 @@ export const prepareComparisonList = ({
         fileName,
         type,
       }),
-    );
-
-    uploadList.push(
       createUploadItem({
         uploadFileName: afterFile,
         path: config.imagePathCurrent,
         fileName,
         type,
       }),
-    );
-
-    uploadList.push(
       createUploadItem({
         uploadFileName: differenceFile,
         path: config.imagePathDifference,
@@ -227,19 +207,19 @@ export const prepareComparisonList = ({
         type,
       }),
     );
-  });
+  }
 
   return [comparisonList, uploadList];
 };
 
-export const getImageList = (path: string): string[] | null => {
+export const getImageList = (path: string): string[] | undefined => {
   try {
     const files = readdirSync(path);
 
     return files.filter((name) => name.endsWith('.png'));
-  } catch (error) {
+  } catch (error: unknown) {
     log(error);
-    return null;
+    return undefined;
   }
 };
 
@@ -249,8 +229,9 @@ export const getEventData = (path?: string): WebhookEvent | undefined => {
   }
 
   try {
+    // eslint-disable-next-line @typescript-eslint/no-require-imports, @typescript-eslint/no-unsafe-return
     return require(path);
-  } catch (error) {
+  } catch (error: unknown) {
     log(error);
     return undefined;
   }
@@ -263,11 +244,11 @@ export const createShotsFolders = () => {
     config.imagePathDifference,
   ];
 
-  paths.forEach((path) => {
+  for (const path of paths) {
     if (!existsSync(path)) {
       mkdirSync(path, { recursive: true });
     }
-  });
+  }
 
   const ignoreFile = normalize(
     join(config.imagePathBaseline, '..', '.gitignore'),
@@ -278,56 +259,19 @@ export const createShotsFolders = () => {
   }
 };
 
-export const sleep = (ms: number) =>
-  new Promise((resolve) => setTimeout(resolve, ms));
+export const sleep = async (ms: number) =>
+  new Promise((resolve) => {
+    setTimeout(resolve, ms);
+  });
 
 export const removeFilesInFolder = (path: string) => {
   const files = readdirSync(path);
   log(`Removing ${files.length} files from ${path}`);
 
-  files.forEach((file) => {
+  for (const file of files) {
     const filePath = join(path, file);
     unlinkSync(filePath);
-  });
-};
-
-let tsNodeService: Service;
-
-export const setupTsNode = async (): Promise<Service> => {
-  if (tsNodeService) {
-    return tsNodeService;
   }
-
-  try {
-    const tsNode = await import('ts-node');
-
-    tsNodeService = tsNode.register({
-      transpileOnly: true,
-    });
-
-    return tsNodeService;
-  } catch (error) {
-    // @ts-expect-error Error type definition is missing 'code'
-    if (['ERR_MODULE_NOT_FOUND', 'MODULE_NOT_FOUND'].includes(error.code)) {
-      log(`Please install "ts-node" to use a TypeScript configuration file`);
-      // @ts-expect-error Error type definition is missing 'message'
-      log(error.message);
-      process.exit(1);
-    }
-
-    throw error;
-  }
-};
-
-export const loadTSProjectConfigFile = async (
-  configFilepath: string,
-): Promise<unknown> => {
-  await setupTsNode();
-  tsNodeService.enabled(true);
-  const imported = require(configFilepath);
-  tsNodeService.enabled(false);
-
-  return imported.default || imported.config;
 };
 
 export const getBrowser = (): BrowserType => {
@@ -338,5 +282,7 @@ export const getBrowser = (): BrowserType => {
       return firefox;
     case 'webkit':
       return webkit;
+    default:
+      return chromium;
   }
 };

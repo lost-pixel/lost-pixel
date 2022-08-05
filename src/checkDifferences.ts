@@ -1,8 +1,8 @@
+import { existsSync } from 'node:fs';
 import { mapLimit } from 'async';
-import { existsSync } from 'fs';
 import { compareImages } from './compare/compare';
 import { ShotItem } from './shots/shots';
-import { log } from './utils';
+import { log } from './log';
 import { config } from './config';
 
 export const checkDifferences = async (shotItems: ShotItem[]) => {
@@ -16,8 +16,9 @@ export const checkDifferences = async (shotItems: ShotItem[]) => {
     config.compareConcurrency,
     async (item: [number, ShotItem]) => {
       const [index, shotItem] = item;
-      const logger = (message: string) =>
+      const logger = (message: string) => {
         log(`[${index + 1}/${total}] ${message}`);
+      };
 
       logger(`Comparing '${shotItem.id}'`);
 
@@ -27,6 +28,7 @@ export const checkDifferences = async (shotItems: ShotItem[]) => {
         logger('Baseline image missing. Will be treated as addition.');
         return;
       }
+
       const currentImageExists = existsSync(shotItem.filePathCurrent);
 
       if (!currentImageExists) {
@@ -57,7 +59,7 @@ export const checkDifferences = async (shotItems: ShotItem[]) => {
           );
         }
       } else {
-        logger(`No difference found.`);
+        logger('No difference found.');
       }
     },
   );

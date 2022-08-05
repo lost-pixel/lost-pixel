@@ -1,4 +1,4 @@
-import { existsSync, mkdirSync } from 'fs';
+import { existsSync, mkdirSync } from 'node:fs';
 import { checkThreshold, compareImages } from './compare';
 
 beforeAll(() => {
@@ -105,7 +105,7 @@ describe(compareImages, () => {
       pixelDifferencePercentage: 0,
       isWithinThreshold: true,
     });
-  }, 12000);
+  }, 12_000);
 
   it('should accept differences in images within a given threshold', async () => {
     const result1 = await compareImages(
@@ -134,5 +134,5 @@ describe(compareImages, () => {
     );
     expect(result3.isWithinThreshold).toBe(true);
     expect(result3.pixelDifference).toBeGreaterThan(40_000);
-  }, 12000);
+  }, 12_000);
 });

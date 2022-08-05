@@ -1,8 +1,16 @@
+import { mapLimit } from 'async';
+import { UploadedObjectInfo } from 'minio';
 import { uploadFile } from './upload';
-import { getChanges, getImageList, log, prepareComparisonList } from './utils';
-import { config } from './config';
+import { getChanges, getImageList, prepareComparisonList } from './utils';
+import { config, MEDIA_UPLOAD_CONCURRENCY } from './config';
+import { log } from './log';
+import { UploadFile } from './types';
 
 export const collect = async () => {
+  if (config.generateOnly) {
+    return;
+  }
+
   log('Collecting files');
 
   const baseline = getImageList(config.imagePathBaseline);
@@ -20,9 +28,9 @@ export const collect = async () => {
   log(`Found ${difference?.length ?? 0} difference images`);
 
   const files = {
-    baseline: baseline || [],
-    current: current || [],
-    difference: difference || [],
+    baseline: baseline ?? [],
+    current: current ?? [],
+    difference: difference ?? [],
   };
 
   const changes = getChanges(files);
@@ -30,7 +38,7 @@ export const collect = async () => {
   log(`Preparing comparison list`);
 
   const s3BaseUrl =
-    config.s3.baseUrl ||
+    config.s3.baseUrl ??
     `https://${config.s3.bucketName}.${config.s3.endPoint}`;
 
   const [comparisons, uploadList] = prepareComparisonList({
@@ -40,9 +48,16 @@ export const collect = async () => {
 
   log(`Uploading ${uploadList.length} files`);
 
-  const uploadPromises = uploadList.map(uploadFile);
-
-  await Promise.all(uploadPromises);
+  await mapLimit<UploadFile, UploadedObjectInfo>(
+    uploadList,
+    MEDIA_UPLOAD_CONCURRENCY,
+    async ({ uploadPath, filePath, metaData }: UploadFile) =>
+      uploadFile({
+        uploadPath,
+        filePath,
+        metaData,
+      }),
+  );
 
   log(JSON.stringify(comparisons, null, 2));
 

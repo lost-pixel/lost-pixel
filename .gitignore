@@ -107,5 +107,6 @@ dist
 
 /tmp
 
-lostpixel.config.js
-lostpixel.config.ts
+/.vscode/settings.json
+/lostpixel.config.js
+/lostpixel.config.ts

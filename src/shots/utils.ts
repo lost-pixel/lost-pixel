@@ -11,7 +11,7 @@ const checkIgnoreUrls = (url: string, ignoreUrls: string[]) => {
   return false;
 };
 
-export const waitForNetworkRequests = ({
+export const waitForNetworkRequests = async ({
   page,
   logger,
   timeout = config.timeouts.networkRequests,
@@ -66,12 +66,15 @@ export const waitForNetworkRequests = ({
 
         const statusText = failure
           ? failure.errorText
-          : `${response?.status()} ${response?.statusText()}`;
+          : `${response?.status() ?? 'unknown'} ${
+              response?.statusText() ?? 'unknown'
+            }`;
         logger(`- ${request.url()} [${statusText}]`);
       }
 
       lastRequestTimeoutId = setTimeout(() => {
-        if (requestCounter === 0) {
+        // `requestCounter` can be below 0 if requests have completed before they were being tracked
+        if (requestCounter <= 0) {
           cleanup();
           resolve(true);
         }
@@ -94,7 +97,7 @@ export const waitForNetworkRequests = ({
 
 export const resizeViewportToFullscreen = async ({ page }: { page: Page }) => {
   const viewport = await page.evaluate(
-    () =>
+    async () =>
       new Promise<{ height: number; width: number }>((resolve) => {
         const body = document.body;
         const html = document.documentElement;
@@ -120,7 +123,7 @@ export const resizeViewportToFullscreen = async ({ page }: { page: Page }) => {
   );
 
   await page.setViewportSize({
-    width: Math.max(page.viewportSize()?.width || 800, viewport.width),
+    width: Math.max(page.viewportSize()?.width ?? 800, viewport.width),
     height: viewport.height,
   });
 };

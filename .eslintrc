@@ -1,5 +1,5 @@
 {
-  "plugins": ["@typescript-eslint"],
+  "plugins": ["@typescript-eslint", "unicorn"],
   "extends": ["plugin:@typescript-eslint/recommended", "prettier"],
   "rules": {
     "@typescript-eslint/no-unused-vars": "error",

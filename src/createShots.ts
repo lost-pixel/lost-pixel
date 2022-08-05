@@ -1,25 +1,102 @@
+import {
+  collectLadleStories,
+  generateLadleShotItems,
+} from './crawler/ladleScreenshots';
 import { config } from './config';
-import { collectStories, generateShotItems } from './crawler/storybook';
-import { takeScreenShots } from './shots/shots';
-import { log, removeFilesInFolder } from './utils';
+import {
+  collectStories,
+  generateStorybookShotItems,
+} from './crawler/storybook';
+import { generatePageShotItems } from './crawler/pageScreenshots';
+import { log } from './log';
+import { ShotItem, takeScreenShots } from './shots/shots';
+import { removeFilesInFolder } from './utils';
+import { launchStaticWebServer } from './crawler/utils';
 
 export const createShots = async () => {
-  const collection = await collectStories(config.storybookUrl);
+  const {
+    ladleShots,
+    storybookShots,
+    pageShots,
+    imagePathCurrent,
+    imagePathDifference,
+  } = config;
+  let storybookShotItems: ShotItem[] = [];
+  let pageShotItems: ShotItem[] = [];
+  let ladleShotItems: ShotItem[] = [];
 
-  removeFilesInFolder(config.imagePathCurrent);
-  removeFilesInFolder(config.imagePathDifference);
-  if (!collection?.stories || collection.stories.length === 0) {
-    throw new Error('Error: Stories not found');
+  removeFilesInFolder(imagePathCurrent);
+  removeFilesInFolder(imagePathDifference);
+
+  if (ladleShots) {
+    const { ladleUrl } = ladleShots;
+    const collection = await collectLadleStories(ladleUrl);
+
+    if (!collection || collection.length === 0) {
+      throw new Error('Error: Stories not found');
+    }
+
+    log(`Found ${collection.length} ladle stories`);
+
+    ladleShotItems = generateLadleShotItems(ladleUrl, collection);
+
+    log(`Prepared ${ladleShotItems.length} ladle stories for screenshots`);
+
+    await takeScreenShots(ladleShotItems);
+
+    log('Screenshots done!');
   }
 
-  log(`Found ${collection.stories.length} stories`);
+  if (storybookShots) {
+    const { storybookUrl } = storybookShots;
 
-  const shotItems = generateShotItems(config.storybookUrl, collection.stories);
-  log(`Prepared ${shotItems.length} stories for screenshots`);
+    let storybookWebUrl = storybookUrl;
+    let localServer;
 
-  await takeScreenShots(shotItems);
+    if (
+      !storybookUrl.startsWith('http://') &&
+      !storybookUrl.startsWith('https://')
+    ) {
+      const staticWebServer = await launchStaticWebServer(storybookUrl);
+      storybookWebUrl = staticWebServer.url;
+      localServer = staticWebServer.server;
+    }
 
-  log('Screenshots done!');
+    try {
+      const collection = await collectStories(storybookWebUrl);
 
-  return shotItems;
+      if (!collection?.stories || collection.stories.length === 0) {
+        throw new Error('Error: Stories not found');
+      }
+
+      log(`Found ${collection.stories.length} stories`);
+
+      storybookShotItems = generateStorybookShotItems(
+        storybookWebUrl,
+        collection.stories,
+      );
+
+      log(`Prepared ${storybookShotItems.length} stories for screenshots`);
+
+      await takeScreenShots(storybookShotItems);
+      localServer?.close();
+    } catch (error: unknown) {
+      localServer?.close();
+      throw error;
+    }
+
+    log('Screenshots done!');
+  }
+
+  if (pageShots) {
+    const { pages, pageUrl } = pageShots;
+
+    pageShotItems = generatePageShotItems(pages, pageUrl);
+    log(`Prepared ${pageShotItems.length} pages for screenshots`);
+
+    await takeScreenShots(pageShotItems);
+    log('Screenshots done!');
+  }
+
+  return [...storybookShotItems, ...pageShotItems, ...ladleShotItems];
 };

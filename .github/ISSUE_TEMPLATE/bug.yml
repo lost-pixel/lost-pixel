@@ -1,0 +1,40 @@
+name: Lost Pixel bug report
+description: Lost Pixel action is not working as expected
+labels: 'kind/bug'
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for helping us improve Lost Pixel! 🙏 Please fill in the template to ensure we have all the information to provide help!
+  - type: textarea
+    attributes:
+      label: Bug description
+      description: A clear description of what went wrong
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: How to reproduce
+      description: Steps to reproduce the bug
+      value: |
+        <!--
+        1. Use lost-pixel v2.3.4 image
+        2. Build storybook
+        3. Try updating snapshots on CI pipeline
+        4. See error in lost-pixel action logs
+        -->
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: Expected behavior
+      description: A clear description of what you expected to happen.
+  - type: textarea
+    attributes:
+      label: Lost Pixel information
+      description: CI workflow file in which lost-pixel has been used
+      value: |
+        <!-- Do not include sensitive information like your secrets, passwords, credentials here! -->
+  - type: textarea
+    attributes:
+      label: lost-pixel logs from CI

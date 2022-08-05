@@ -22,4 +22,4 @@ echo "REPOSITORY=$REPOSITORY"
 
 cd $WORKSPACE
 
-npx lost-pixel-action
+npx lost-pixel
