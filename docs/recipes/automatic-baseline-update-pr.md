@@ -52,8 +52,8 @@ jobs:
 
 ```
 
-![Run the action this way](../.gitbook/assets/image.png)
+![Run the action this way](<../.gitbook/assets/image (1).png>)
 
 The action run will generate a new PR against the original branch that will contain updated baselines, merge it and expect your tests to be **green again**:green\_circle:
 
-![Automatically generated PR](<../.gitbook/assets/image (1).png>)
+![Automatically generated PR](../.gitbook/assets/image.png)

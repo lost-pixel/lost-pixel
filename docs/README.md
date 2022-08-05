@@ -34,14 +34,14 @@ In bigger engineering teams, it is impossible to know and remember each change t
 
 Follow our handy guides to get started on the basics as quickly as possible:
 
-{% content-ref url="broken-reference/" %}
-[broken-reference](broken-reference/)
+{% content-ref url="guides/getting-started.md" %}
+[getting-started.md](guides/getting-started.md)
 {% endcontent-ref %}
 
-{% content-ref url="setup/project-configuration/" %}
-[project-configuration](setup/project-configuration/)
+{% content-ref url="guides/getting-started-1.md" %}
+[getting-started-1.md](guides/getting-started-1.md)
 {% endcontent-ref %}
 
-{% content-ref url="broken-reference" %}
-[Broken link](broken-reference)
+{% content-ref url="guides/getting-started-2.md" %}
+[getting-started-2.md](guides/getting-started-2.md)
 {% endcontent-ref %}
