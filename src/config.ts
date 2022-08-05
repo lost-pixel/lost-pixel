@@ -5,7 +5,7 @@ import { BrowserContextOptions, Page } from 'playwright';
 import { loadTSProjectConfigFile } from './configHelper';
 import { log } from './log';
 
-type BaseConfig = {
+export type BaseConfig = {
   /**
    * Browser to use: chromium, firefox, or webkit
    * @default 'chromium'
@@ -153,7 +153,7 @@ export type PageScreenshotParameter = {
 
 export type ShotMode = 'storybook' | 'ladle' | 'page';
 
-type StoryLike = {
+export type StoryLike = {
   shotMode: ShotMode;
   id?: string;
   kind?: string;
@@ -284,7 +284,7 @@ export type ProjectConfig = {
   beforeScreenshot?: (page: Page, input: StoryLike) => Promise<void>;
 };
 
-type GenerateOnlyModeProjectConfig = Omit<
+export type GenerateOnlyModeProjectConfig = Omit<
   ProjectConfig,
   | 'lostPixelProjectId'
   | 'ciBuildId'
