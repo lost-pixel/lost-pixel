@@ -2,7 +2,7 @@
 
 Lost Pixel offers and easy GitHub action integration that will help you to automate the baseline update process by creating the PR with updated images. You will just need to accept it and merge into the original branch.
 
-Assuming you are using [Ladle example](../guides/getting-started.md), in the root of your repo let's add a new action file that runs on demand:\
+Assuming you are using [Ladle example](../guides/getting-started/getting-started.md), in the root of your repo let's add a new action file that runs on demand:\
 `.github/workflows/update-baselines.yml`
 
 {% hint style="info" %}

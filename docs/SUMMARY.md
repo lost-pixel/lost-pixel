@@ -11,9 +11,10 @@
 
 ## 👨🏫 Guides
 
-* [Getting started with Ladle](guides/getting-started.md)
-* [Getting started with Storybook](guides/getting-started-1.md)
-* [Getting started with Next js](guides/getting-started-2.md)
+* [Getting started](guides/getting-started/README.md)
+  * [Getting started with Storybook](guides/getting-started/getting-started-1.md)
+  * [Getting started with Ladle](guides/getting-started/getting-started.md)
+  * [Getting started with Next js](guides/getting-started/getting-started-2.md)
 * [Testing workflow (GitHub Actions)](guides/testing-workflow-github-actions.md)
 * [Updating baseline images](guides/testing-and-updating-baseline-locally.md)
 
@@ -25,5 +26,6 @@
 
 ## 💡 Examples
 
-* [lost-pixel-example-next-js](https://github.com/lost-pixel/lost-pixel-examples/tree/main/lost-pixel-example-next-js)
-* [lost-pixel-example-storybook](https://github.com/lost-pixel/lost-pixel-examples/tree/main/lost-pixel-example-barebone)
+* [lost-pixel-example-next-js](https://github.com/lost-pixel/lost-pixel-examples/tree/main/example-next-js-pages)
+* [lost-pixel-example-storybook](https://github.com/lost-pixel/lost-pixel-examples/tree/main/example-storybook-v6.5-storystore-v7)
+* [lost-pixel-example-ladle](https://github.com/lost-pixel/lost-pixel-examples/tree/main/example-ladle)
