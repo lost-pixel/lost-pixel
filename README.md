@@ -33,7 +33,64 @@
 </div>
 <hr/>
 
-## Ladle example 🥄
+## Quick start ⚡
+
+<details open>
+<summary> Storybook 🖼 </summary>
+
+
+Assuming you are using [basic example of Storybook]([https://github.com/tajo/ladle](https://github.com/snipcart/nextjs-storybook-example)). This setup will run visual regression tests against all the storybook stories on every push.
+
+You can find more examples in the [examples repository](https://github.com/lost-pixel/lost-pixel-examples). You can learn more about Lost Pixel workflow and get more useful recipes in [documentation](https://docs.lost-pixel.com/user-docs).
+
+Add `lostpixel.config.ts` at the root of the project:
+
+```typescript
+import { CustomProjectConfig } from 'lost-pixel';
+
+export const config: CustomProjectConfig = {
+  storybookShots: {
+    storybookUrl: './storybook-static',
+  },
+  generateOnly: true,
+  failOnDifference: true,
+};
+```
+
+Add GitHub action `.github/workflows/lost-pixel-run.yml`
+
+```yml
+on: [push]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Setup Node
+        uses: actions/setup-node@v2
+        with:
+          node-version: 16.x
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build Storybook
+        run: npm run build-storybook
+
+      - name: Lost Pixel
+        uses: lost-pixel/lost-pixel-action@2.7.0
+```
+
+</details>
+
+<details>
+<summary>Ladle example 🥄</summary>
+
 
 Assuming you are using [basic example of Ladle](https://github.com/tajo/ladle). This setup will run visual regression tests against all the ladle stories on every push.
 
@@ -93,6 +150,67 @@ jobs:
       - name: Lost Pixel
         uses: lost-pixel/lost-pixel-action@v2.7.0
 ```
+
+</details>
+
+<details>
+<summary>Pages example(next.js) ⚛️</summary>
+
+
+Assuming you are using [basic example of Next.js](https://nextjs.org/docs). This setup will run visual regression tests against **selected pages** on every push.
+
+You can find more examples in the [examples repository](https://github.com/lost-pixel/lost-pixel-examples). You can learn more about Lost Pixel workflow and get more useful recipes in [documentation](https://docs.lost-pixel.com/user-docs).
+
+Add `lostpixel.config.ts` at the root of the project:
+
+```typescript
+import { CustomProjectConfig } from 'lost-pixel';
+
+export const config: CustomProjectConfig = {
+  pageShots: {
+    pages: [
+      { path: '/app', name: 'app' },
+    ],
+    pageUrl: 'http://localhost:3000',
+  },
+  generateOnly: true,
+  failOnDifference: true,
+};
+```
+
+Add GitHub action `.github/workflows/lost-pixel-run.yml`
+
+```yml
+on: [push]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Setup Node
+        uses: actions/setup-node@v2
+        with:
+          node-version: 16.x
+          cache: "npm"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build Next app
+        run: npm run build
+
+      - name: Run Next app
+        run: npm run start &
+
+      - name: Lost Pixel
+        uses: lost-pixel/lost-pixel-action@v2.7.0
+```
+
+</details>
 
 ---
 ## Support 👨🏼‍💻
