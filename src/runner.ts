@@ -47,15 +47,22 @@ export const runner = async () => {
     }
 
     log('Checking differences');
-    const { differenceCount } = await checkDifferences(shotItems);
+    const { differenceCount, noBaselinesCount } = await checkDifferences(
+      shotItems,
+    );
 
     if (isUpdateMode()) {
       removeFilesInFolder(config.imagePathBaseline);
       fse.copySync(config.imagePathCurrent, config.imagePathBaseline);
     }
 
-    if (differenceCount > 0 && config.failOnDifference) {
-      log(`Exiting process with ${differenceCount} found differences`);
+    if (
+      (differenceCount > 0 || noBaselinesCount > 0) &&
+      config.failOnDifference
+    ) {
+      log(
+        `Exiting process with ${differenceCount} found differences & ${noBaselinesCount} baselines to update`,
+      );
       process.exit(1);
     }
 
