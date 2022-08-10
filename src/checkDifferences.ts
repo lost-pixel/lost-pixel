@@ -10,6 +10,7 @@ export const checkDifferences = async (shotItems: ShotItem[]) => {
 
   const total = shotItems.length;
   let differenceCount = 0;
+  let noBaselinesCount = 0;
 
   await mapLimit<[number, ShotItem], void>(
     shotItems.entries(),
@@ -26,6 +27,7 @@ export const checkDifferences = async (shotItems: ShotItem[]) => {
 
       if (!baselineImageExists) {
         logger('Baseline image missing. Will be treated as addition.');
+        noBaselinesCount++;
         return;
       }
 
@@ -65,5 +67,5 @@ export const checkDifferences = async (shotItems: ShotItem[]) => {
   );
 
   log('Comparison done!');
-  return { differenceCount };
+  return { differenceCount, noBaselinesCount };
 };
