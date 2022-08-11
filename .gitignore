@@ -105,6 +105,9 @@ dist
 
 .idea
 
+# tsdocs
+docs/api
+
 /tmp
 
 /.vscode/settings.json
