@@ -286,3 +286,12 @@ export const getBrowser = (): BrowserType => {
       return chromium;
   }
 };
+
+export const getVersion = (): string | void => {
+  try {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-require-imports, @typescript-eslint/no-var-requires
+    const packageJson: { version: string } = require('../package.json');
+
+    return packageJson.version;
+  } catch {}
+};

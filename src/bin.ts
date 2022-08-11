@@ -6,11 +6,17 @@ import { hideBin } from 'yargs/helpers';
 import fs from 'fs-extra';
 import { log } from './log';
 import { runner } from './runner';
+import { getVersion } from './utils';
 
 type CommandArgs = ['init-js', 'init-ts'];
 
 const args = yargs(hideBin(process.argv)).parse();
 const commandArgs = args._ as CommandArgs;
+
+const version = getVersion();
+if (version) {
+  log(`Version: ${version}`);
+}
 
 (async () => {
   if (commandArgs.includes('init-js')) {
