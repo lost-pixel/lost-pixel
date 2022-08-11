@@ -1,6 +1,5 @@
 #!/bin/sh
 
-
 WORKSPACE=${WORKSPACE:-$PWD}
 
 export CI_BUILD_ID=${GITHUB_RUN_ID:-$CI_BUILD_ID}
@@ -22,5 +21,4 @@ echo "REPOSITORY=$REPOSITORY"
 
 cd $WORKSPACE
 
-npx playwright install \
-&& TS_NODE_COMPILER_OPTIONS='{"module":"commonjs"}' npx lost-pixel
+TS_NODE_COMPILER_OPTIONS='{"module":"commonjs"}' npx lost-pixel
