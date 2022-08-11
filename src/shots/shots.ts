@@ -38,9 +38,13 @@ const takeScreenShot = async ({
   page.on('console', async (message) => {
     const values = [];
 
-    for (const arg of message.args()) {
-      // eslint-disable-next-line no-await-in-loop
-      values.push(await arg.jsonValue());
+    try {
+      for (const arg of message.args()) {
+        // eslint-disable-next-line no-await-in-loop
+        values.push(await arg.jsonValue());
+      }
+    } catch (error: unknown) {
+      logger(`[console] Error while collecting console output`, error);
     }
 
     const logMessage = `[console] ${String(values.shift())}`;
