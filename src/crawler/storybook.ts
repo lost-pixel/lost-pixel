@@ -17,6 +17,7 @@ export type StoryParameters = {
     width?: number;
     height?: number;
   };
+  fileName?: string;
 };
 
 export type Story = {
@@ -148,14 +149,19 @@ export const collectStoriesViaWindowApi = async (
           const { __STORYBOOK_CLIENT_API__: api } = window as WindowObject;
 
           if (api.raw) {
-            const stories: Story[] = api.raw().map((item) => ({
-              id: item.id,
-              kind: item.kind,
-              story: item.story,
-              parameters: parseParameters(
+            const stories: Story[] = api.raw().map((item) => {
+              const parameters = parseParameters(
                 item.parameters as Record<string, unknown>,
-              ) as Story['parameters'],
-            }));
+              ) as Story['parameters'];
+
+              return {
+                id: item.id,
+                kind: item.kind,
+                story: item.story,
+                filePath: parameters?.fileName,
+                parameters,
+              };
+            });
 
             resolve({ stories });
             return;
