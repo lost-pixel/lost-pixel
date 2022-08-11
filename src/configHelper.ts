@@ -13,6 +13,9 @@ export const setupTsNode = async (): Promise<Service> => {
 
     tsNodeService = tsNode.register({
       transpileOnly: true,
+      compilerOptions: {
+        module: 'commonjs',
+      },
     });
 
     return tsNodeService;
