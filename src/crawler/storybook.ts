@@ -158,7 +158,7 @@ export const collectStoriesViaWindowApi = async (
                 id: item.id,
                 kind: item.kind,
                 story: item.story,
-                filePath: parameters?.fileName,
+                importPath: parameters?.fileName,
                 parameters,
               };
             });
@@ -281,6 +281,7 @@ export const generateStorybookShotItems = (
         shotMode: 'storybook',
         id: story.id,
         shotName: story.shotName,
+        importPath: story.importPath,
         url: `${iframeUrl}?id=${story.id}&viewMode=story`,
         filePathBaseline: path.join(config.imagePathBaseline, fileNameWithExt),
         filePathCurrent: path.join(config.imagePathCurrent, fileNameWithExt),

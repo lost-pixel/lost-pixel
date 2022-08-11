@@ -17,6 +17,7 @@ export type ShotItem = {
   browserConfig?: BrowserContextOptions;
   threshold: number;
   waitBeforeScreenshot?: number;
+  importPath?: string;
 };
 
 const takeScreenShot = async ({
