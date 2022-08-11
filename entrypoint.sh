@@ -22,4 +22,4 @@ echo "REPOSITORY=$REPOSITORY"
 
 cd $WORKSPACE
 
-npx lost-pixel
+TS_NODE_COMPILER_OPTIONS='{"module":"commonjs"}' npx lost-pixel
