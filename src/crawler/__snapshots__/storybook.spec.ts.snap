@@ -66,6 +66,7 @@ Object {
   "stories": Array [
     Object {
       "id": "example-button--primary",
+      "importPath": "./stories/Button.stories.js",
       "kind": "Example/Button",
       "parameters": Object {
         "__id": "example-button--primary",
@@ -172,6 +173,7 @@ Object {
     },
     Object {
       "id": "example-button--secondary",
+      "importPath": "./stories/Button.stories.js",
       "kind": "Example/Button",
       "parameters": Object {
         "__id": "example-button--secondary",
@@ -274,6 +276,7 @@ Object {
     },
     Object {
       "id": "example-button--large",
+      "importPath": "./stories/Button.stories.js",
       "kind": "Example/Button",
       "parameters": Object {
         "__id": "example-button--large",
@@ -380,6 +383,7 @@ Object {
     },
     Object {
       "id": "example-button--small",
+      "importPath": "./stories/Button.stories.js",
       "kind": "Example/Button",
       "parameters": Object {
         "__id": "example-button--small",
@@ -486,6 +490,7 @@ Object {
     },
     Object {
       "id": "example-header--logged-in",
+      "importPath": "./stories/Header.stories.js",
       "kind": "Example/Header",
       "parameters": Object {
         "__id": "example-header--logged-in",
@@ -572,6 +577,7 @@ Object {
     },
     Object {
       "id": "example-header--logged-out",
+      "importPath": "./stories/Header.stories.js",
       "kind": "Example/Header",
       "parameters": Object {
         "__id": "example-header--logged-out",
@@ -647,6 +653,7 @@ Object {
     },
     Object {
       "id": "example-page--logged-in",
+      "importPath": "./stories/Page.stories.js",
       "kind": "Example/Page",
       "parameters": Object {
         "__id": "example-page--logged-in",
@@ -733,6 +740,7 @@ Object {
     },
     Object {
       "id": "example-page--logged-out",
+      "importPath": "./stories/Page.stories.js",
       "kind": "Example/Page",
       "parameters": Object {
         "__id": "example-page--logged-out",
@@ -815,6 +823,7 @@ Object {
   "stories": Array [
     Object {
       "id": "example-button--primary",
+      "importPath": "./stories/Button.stories.js",
       "kind": "Example/Button",
       "parameters": Object {
         "__id": "example-button--primary",
@@ -920,6 +929,7 @@ Object {
     },
     Object {
       "id": "example-button--secondary",
+      "importPath": "./stories/Button.stories.js",
       "kind": "Example/Button",
       "parameters": Object {
         "__id": "example-button--secondary",
@@ -1021,6 +1031,7 @@ Object {
     },
     Object {
       "id": "example-button--large",
+      "importPath": "./stories/Button.stories.js",
       "kind": "Example/Button",
       "parameters": Object {
         "__id": "example-button--large",
@@ -1126,6 +1137,7 @@ Object {
     },
     Object {
       "id": "example-button--small",
+      "importPath": "./stories/Button.stories.js",
       "kind": "Example/Button",
       "parameters": Object {
         "__id": "example-button--small",
@@ -1231,6 +1243,7 @@ Object {
     },
     Object {
       "id": "example-header--logged-in",
+      "importPath": "./stories/Header.stories.js",
       "kind": "Example/Header",
       "parameters": Object {
         "__id": "example-header--logged-in",
@@ -1316,6 +1329,7 @@ Object {
     },
     Object {
       "id": "example-header--logged-out",
+      "importPath": "./stories/Header.stories.js",
       "kind": "Example/Header",
       "parameters": Object {
         "__id": "example-header--logged-out",
@@ -1390,6 +1404,7 @@ Object {
     },
     Object {
       "id": "example-page--logged-in",
+      "importPath": "./stories/Page.stories.js",
       "kind": "Example/Page",
       "parameters": Object {
         "__id": "example-page--logged-in",
@@ -1475,6 +1490,7 @@ Object {
     },
     Object {
       "id": "example-page--logged-out",
+      "importPath": "./stories/Page.stories.js",
       "kind": "Example/Page",
       "parameters": Object {
         "__id": "example-page--logged-out",
