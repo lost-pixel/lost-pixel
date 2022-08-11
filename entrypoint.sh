@@ -22,4 +22,5 @@ echo "REPOSITORY=$REPOSITORY"
 
 cd $WORKSPACE
 
-TS_NODE_COMPILER_OPTIONS='{"module":"commonjs"}' npx lost-pixel
+npx playwright install \
+&& TS_NODE_COMPILER_OPTIONS='{"module":"commonjs"}' npx lost-pixel
