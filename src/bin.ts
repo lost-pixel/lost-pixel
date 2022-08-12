@@ -11,6 +11,7 @@ import { getVersion } from './utils';
 type CommandArgs = ['init-js', 'init-ts'];
 
 const args = yargs(hideBin(process.argv)).parse();
+// @ts-expect-error TBD
 const commandArgs = args._ as CommandArgs;
 
 const version = getVersion();

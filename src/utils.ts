@@ -13,8 +13,15 @@ import { config } from './config';
 import { log } from './log';
 import { Comparison, ComparisonType, UploadFile, WebhookEvent } from './types';
 
+type ParsedYargs = {
+  _: ['update'];
+  m: 'update';
+};
+
 export const isUpdateMode = (): boolean => {
-  const args = yargs(hideBin(process.argv)).parse();
+  // @ts-expect-error TBD
+  const args = yargs(hideBin(process.argv)).parse() as ParsedYargs;
+
   return (
     args._.includes('update') ||
     args.m === 'update' ||
