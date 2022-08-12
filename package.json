@@ -98,7 +98,9 @@
       "@typescript-eslint/naming-convention": "off",
       "unicorn/prefer-module": "off",
       "import/no-mutable-exports": "off",
-      "@typescript-eslint/ban-ts-comment": "off"
+      "@typescript-eslint/ban-ts-comment": "off",
+      "n/prefer-global/process": "off",
+      "n/file-extension-in-import": "off"
     }
   }
 }
