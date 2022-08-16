@@ -99,11 +99,15 @@ const takeScreenShot = async ({
 
   await sleep(shotItem?.waitBeforeScreenshot ?? config.waitBeforeScreenshot);
 
-  await page.screenshot({
-    path: shotItem.filePathCurrent,
-    fullPage: fullScreenMode,
-    animations: 'disabled',
-  });
+  try {
+    await page.screenshot({
+      path: shotItem.filePathCurrent,
+      fullPage: fullScreenMode,
+      animations: 'disabled',
+    });
+  } catch (error: unknown) {
+    logger('Error when taking screenshot', error);
+  }
 
   await context.close();
 
