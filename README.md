@@ -25,6 +25,10 @@
 **Lost Pixel** consists of two products:
 
 - **lost-pixel** (*open BETA*) - the core engine driving the visual regression test runs. It could be used standalone and the main use-cases are outlined in the documentation
+
+| What machine sees 🤖  | What human sees 👀 |
+| ------------- | ------------- |
+| ![ezgif-5-e71eb0773d](https://user-images.githubusercontent.com/29632358/185067771-03467437-badd-466b-ad6c-60d7183d99ae.gif) | ![ezgif-5-43091ece5d](https://user-images.githubusercontent.com/29632358/185067989-3f2d818b-c01f-4304-97f6-77295b1970d9.gif)  |
 - **lost-pixel-platform** (*closed BETA*) -  the UI and CI helpers that allow you to use lost-pixel's managed version. This includes specified regression UI, collaboration with team members and easy approval/rejection process for the snapshots. Configure it just once and enjoy hassle free visual regression tests integrated into your GitHub actions pipeline. 
 
 <hr/>
