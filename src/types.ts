@@ -4,6 +4,8 @@ import {
   CheckSuiteRequestedEvent,
   CheckRunRerequestedEvent,
 } from '@octokit/webhooks-types';
+import { BrowserContextOptions } from 'playwright';
+import { ShotMode } from './config';
 
 export type WebhookEvent =
   | PullRequestEvent
@@ -25,4 +27,18 @@ export type UploadFile = {
   uploadPath: string;
   filePath: string;
   metaData: ItemBucketMetadata;
+};
+
+export type ShotItem = {
+  shotMode: ShotMode;
+  id: string;
+  shotName: string;
+  url: string;
+  filePathBaseline: string;
+  filePathCurrent: string;
+  filePathDifference: string;
+  browserConfig?: BrowserContextOptions;
+  threshold: number;
+  waitBeforeScreenshot?: number;
+  importPath?: string;
 };

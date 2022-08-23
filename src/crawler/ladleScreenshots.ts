@@ -1,7 +1,7 @@
 import path from 'node:path';
 import axios from 'axios';
 import { config } from '../config';
-import { ShotItem } from '../shots/shots';
+import { ShotItem } from '../types';
 import { Story } from './storybook';
 
 export const generateLadleShotItems = (

@@ -1,7 +1,7 @@
 import { existsSync } from 'node:fs';
 import { mapLimit } from 'async';
 import { compareImages } from './compare/compare';
-import { ShotItem } from './shots/shots';
+import { ShotItem } from './types';
 import { log } from './log';
 import { config } from './config';
 

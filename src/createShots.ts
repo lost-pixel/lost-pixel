@@ -9,9 +9,10 @@ import {
 } from './crawler/storybook';
 import { generatePageShotItems } from './crawler/pageScreenshots';
 import { log } from './log';
-import { ShotItem, takeScreenShots } from './shots/shots';
+import { takeScreenShots } from './shots/shots';
 import { removeFilesInFolder } from './utils';
 import { launchStaticWebServer } from './crawler/utils';
+import { ShotItem } from './types';
 
 export const createShots = async () => {
   const {

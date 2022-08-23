@@ -11,7 +11,13 @@ import yargs from 'yargs';
 import { hideBin } from 'yargs/helpers';
 import { config } from './config';
 import { log } from './log';
-import { Comparison, ComparisonType, UploadFile, WebhookEvent } from './types';
+import {
+  Comparison,
+  ComparisonType,
+  ShotItem,
+  UploadFile,
+  WebhookEvent,
+} from './types';
 
 type ParsedYargs = {
   _: ['update'];
