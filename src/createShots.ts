@@ -10,7 +10,7 @@ import {
 import { generatePageShotItems } from './crawler/pageScreenshots';
 import { log } from './log';
 import { takeScreenShots } from './shots/shots';
-import { removeFilesInFolder } from './utils';
+import { readDirIntoShotItems, removeFilesInFolder } from './utils';
 import { launchStaticWebServer } from './crawler/utils';
 import { ShotItem } from './types';
 
@@ -19,12 +19,14 @@ export const createShots = async () => {
     ladleShots,
     storybookShots,
     pageShots,
+    customShots,
     imagePathCurrent,
     imagePathDifference,
   } = config;
   let storybookShotItems: ShotItem[] = [];
   let pageShotItems: ShotItem[] = [];
   let ladleShotItems: ShotItem[] = [];
+  let customShotItems: ShotItem[] = [];
 
   removeFilesInFolder(imagePathCurrent);
   removeFilesInFolder(imagePathDifference);
@@ -99,5 +101,15 @@ export const createShots = async () => {
     log('Screenshots done!');
   }
 
-  return [...storybookShotItems, ...pageShotItems, ...ladleShotItems];
+  if (customShots) {
+    customShotItems = readDirIntoShotItems(customShots.currentShotsPath);
+    log(`Found ${customShotItems.length} custom shots`);
+  }
+
+  return [
+    ...storybookShotItems,
+    ...pageShotItems,
+    ...ladleShotItems,
+    ...customShotItems,
+  ];
 };
