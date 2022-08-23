@@ -33,6 +33,8 @@ export const createShots = async () => {
 
   if (ladleShots) {
     const { ladleUrl } = ladleShots;
+    log(`\n=== [Ladle Mode] ${ladleUrl} ===\n`);
+
     const collection = await collectLadleStories(ladleUrl);
 
     if (!collection || collection.length === 0) {
@@ -52,6 +54,7 @@ export const createShots = async () => {
 
   if (storybookShots) {
     const { storybookUrl } = storybookShots;
+    log(`\n=== [Storybook Mode] ${storybookUrl} ===\n`);
 
     let storybookWebUrl = storybookUrl;
     let localServer;
@@ -93,6 +96,7 @@ export const createShots = async () => {
 
   if (pageShots) {
     const { pages, pageUrl } = pageShots;
+    log(`\n=== [Page Mode] ${pageUrl} ===\n`);
 
     pageShotItems = generatePageShotItems(pages, pageUrl);
     log(`Prepared ${pageShotItems.length} pages for screenshots`);
@@ -102,7 +106,10 @@ export const createShots = async () => {
   }
 
   if (customShots) {
-    customShotItems = readDirIntoShotItems(customShots.currentShotsPath);
+    const { currentShotsPath } = customShots;
+    log(`\n=== [Custom Mode] ${currentShotsPath} ===\n`);
+
+    customShotItems = readDirIntoShotItems(currentShotsPath);
     log(`Found ${customShotItems.length} custom shots`);
   }
 
