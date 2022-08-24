@@ -90,14 +90,14 @@ const takeScreenShot = async ({
 
   let fullScreenMode = true;
 
+  await sleep(shotItem?.waitBeforeScreenshot ?? config.waitBeforeScreenshot);
+
   try {
     await resizeViewportToFullscreen({ page });
     fullScreenMode = false;
   } catch {
     log(`Could not resize viewport to fullscreen: ${shotItem.shotName}`);
   }
-
-  await sleep(shotItem?.waitBeforeScreenshot ?? config.waitBeforeScreenshot);
 
   try {
     await page.screenshot({
