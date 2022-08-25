@@ -1,5 +1,10 @@
 import { join } from 'node:path';
-import { getChanges, extendFileName, prepareComparisonList } from './utils';
+import {
+  getChanges,
+  extendFileName,
+  prepareComparisonList,
+  readDirIntoShotItems,
+} from './utils';
 import { config, configure } from './config';
 import { defaultTestConfig } from './testUtils';
 
@@ -245,5 +250,62 @@ describe(extendFileName, () => {
     expect(extendFileName({ fileName: '', extension: 'before' })).toEqual(
       'before',
     );
+  });
+});
+
+describe(readDirIntoShotItems, () => {
+  it('should generate correct shot lists from supplied folder', () => {
+    expect(readDirIntoShotItems('./fixtures/current')).toEqual([
+      {
+        filePathBaseline: '.lostpixel/baseline/add-to-cart.png',
+        filePathCurrent: 'fixtures/current/add-to-cart.png',
+        filePathDifference: '.lostpixel/difference/add-to-cart.png',
+        id: 'add-to-cart',
+        shotMode: 'custom',
+        shotName: 'add-to-cart',
+        threshold: 0,
+        url: 'add-to-cart',
+      },
+      {
+        filePathBaseline: '.lostpixel/baseline/banner1.png',
+        filePathCurrent: 'fixtures/current/banner1.png',
+        filePathDifference: '.lostpixel/difference/banner1.png',
+        id: 'banner1',
+        shotMode: 'custom',
+        shotName: 'banner1',
+        threshold: 0,
+        url: 'banner1',
+      },
+      {
+        filePathBaseline: '.lostpixel/baseline/banner2.png',
+        filePathCurrent: 'fixtures/current/banner2.png',
+        filePathDifference: '.lostpixel/difference/banner2.png',
+        id: 'banner2',
+        shotMode: 'custom',
+        shotName: 'banner2',
+        threshold: 0,
+        url: 'banner2',
+      },
+      {
+        filePathBaseline: '.lostpixel/baseline/banner3.png',
+        filePathCurrent: 'fixtures/current/banner3.png',
+        filePathDifference: '.lostpixel/difference/banner3.png',
+        id: 'banner3',
+        shotMode: 'custom',
+        shotName: 'banner3',
+        threshold: 0,
+        url: 'banner3',
+      },
+      {
+        filePathBaseline: '.lostpixel/baseline/remove-to-cart.png',
+        filePathCurrent: 'fixtures/current/remove-to-cart.png',
+        filePathDifference: '.lostpixel/difference/remove-to-cart.png',
+        id: 'remove-to-cart',
+        shotMode: 'custom',
+        shotName: 'remove-to-cart',
+        threshold: 0,
+        url: 'remove-to-cart',
+      },
+    ]);
   });
 });
