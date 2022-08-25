@@ -2,7 +2,7 @@ import path from 'node:path';
 import kebabCase from 'lodash.kebabcase';
 import { BrowserContext } from 'playwright';
 import { readFileSync } from 'fs-extra';
-import { ShotItem } from '../shots/shots';
+import { ShotItem } from '../types';
 import { config } from '../config';
 import { getBrowser } from '../utils';
 import { log } from '../log';

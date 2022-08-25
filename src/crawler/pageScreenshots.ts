@@ -1,6 +1,6 @@
 import path from 'node:path';
 import { config, PageScreenshotParameter } from '../config';
-import { ShotItem } from '../shots/shots';
+import { ShotItem } from '../types';
 
 export const generatePageShotItems = (
   pages: PageScreenshotParameter[],

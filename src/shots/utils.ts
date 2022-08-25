@@ -50,7 +50,7 @@ export const waitForNetworkRequests = async ({
         clearTimeout(lastRequestTimeoutId);
         requestCounter++;
         requests.add(request);
-        logger(`+ ${request.url()}`);
+        logger(`[network] + ${request.url()}`);
       }
     };
 
@@ -69,7 +69,7 @@ export const waitForNetworkRequests = async ({
           : `${response?.status() ?? 'unknown'} ${
               response?.statusText() ?? 'unknown'
             }`;
-        logger(`- ${request.url()} [${statusText}]`);
+        logger(`[network] - ${request.url()} [${statusText}]`);
       }
 
       lastRequestTimeoutId = setTimeout(() => {

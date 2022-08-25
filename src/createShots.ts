@@ -9,27 +9,32 @@ import {
 } from './crawler/storybook';
 import { generatePageShotItems } from './crawler/pageScreenshots';
 import { log } from './log';
-import { ShotItem, takeScreenShots } from './shots/shots';
-import { removeFilesInFolder } from './utils';
+import { takeScreenShots } from './shots/shots';
+import { readDirIntoShotItems, removeFilesInFolder } from './utils';
 import { launchStaticWebServer } from './crawler/utils';
+import { ShotItem } from './types';
 
 export const createShots = async () => {
   const {
     ladleShots,
     storybookShots,
     pageShots,
+    customShots,
     imagePathCurrent,
     imagePathDifference,
   } = config;
   let storybookShotItems: ShotItem[] = [];
   let pageShotItems: ShotItem[] = [];
   let ladleShotItems: ShotItem[] = [];
+  let customShotItems: ShotItem[] = [];
 
   removeFilesInFolder(imagePathCurrent);
   removeFilesInFolder(imagePathDifference);
 
   if (ladleShots) {
     const { ladleUrl } = ladleShots;
+    log(`\n=== [Ladle Mode] ${ladleUrl} ===\n`);
+
     const collection = await collectLadleStories(ladleUrl);
 
     if (!collection || collection.length === 0) {
@@ -49,6 +54,7 @@ export const createShots = async () => {
 
   if (storybookShots) {
     const { storybookUrl } = storybookShots;
+    log(`\n=== [Storybook Mode] ${storybookUrl} ===\n`);
 
     let storybookWebUrl = storybookUrl;
     let localServer;
@@ -90,6 +96,7 @@ export const createShots = async () => {
 
   if (pageShots) {
     const { pages, pageUrl } = pageShots;
+    log(`\n=== [Page Mode] ${pageUrl} ===\n`);
 
     pageShotItems = generatePageShotItems(pages, pageUrl);
     log(`Prepared ${pageShotItems.length} pages for screenshots`);
@@ -98,5 +105,18 @@ export const createShots = async () => {
     log('Screenshots done!');
   }
 
-  return [...storybookShotItems, ...pageShotItems, ...ladleShotItems];
+  if (customShots) {
+    const { currentShotsPath } = customShots;
+    log(`\n=== [Custom Mode] ${currentShotsPath} ===\n`);
+
+    customShotItems = readDirIntoShotItems(currentShotsPath);
+    log(`Found ${customShotItems.length} custom shots`);
+  }
+
+  return [
+    ...storybookShotItems,
+    ...pageShotItems,
+    ...ladleShotItems,
+    ...customShotItems,
+  ];
 };

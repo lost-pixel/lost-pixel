@@ -11,7 +11,13 @@ import yargs from 'yargs';
 import { hideBin } from 'yargs/helpers';
 import { config } from './config';
 import { log } from './log';
-import { Comparison, ComparisonType, UploadFile, WebhookEvent } from './types';
+import {
+  Comparison,
+  ComparisonType,
+  ShotItem,
+  UploadFile,
+  WebhookEvent,
+} from './types';
 
 type ParsedYargs = {
   _: ['update'];
@@ -301,4 +307,29 @@ export const getVersion = (): string | void => {
 
     return packageJson.version;
   } catch {}
+};
+
+export const fileNameWithoutExtension = (fileName: string): string => {
+  return fileName.split('.').slice(0, -1).join('.');
+};
+
+export const readDirIntoShotItems = (path: string): ShotItem[] => {
+  const files = readdirSync(path);
+
+  return files
+    .filter((name) => name.endsWith('.png'))
+    .map((fileNameWithExt): ShotItem => {
+      const fileName = fileNameWithoutExtension(fileNameWithExt);
+
+      return {
+        id: fileName,
+        shotName: fileName,
+        shotMode: 'custom',
+        filePathBaseline: join(config.imagePathBaseline, fileNameWithExt),
+        filePathCurrent: join(path, fileNameWithExt),
+        filePathDifference: join(config.imagePathDifference, fileNameWithExt),
+        url: fileName,
+        threshold: config.threshold,
+      };
+    });
 };

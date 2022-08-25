@@ -1,24 +1,11 @@
 import path from 'node:path';
-import { Browser, BrowserContextOptions } from 'playwright';
+import { Browser } from 'playwright';
 import { mapLimit } from 'async';
 import { log } from '../log';
 import { getBrowser, sleep } from '../utils';
-import { config, ShotMode } from '../config';
+import { config } from '../config';
+import { ShotItem } from '../types';
 import { resizeViewportToFullscreen, waitForNetworkRequests } from './utils';
-
-export type ShotItem = {
-  shotMode: ShotMode;
-  id: string;
-  shotName: string;
-  url: string;
-  filePathBaseline: string;
-  filePathCurrent: string;
-  filePathDifference: string;
-  browserConfig?: BrowserContextOptions;
-  threshold: number;
-  waitBeforeScreenshot?: number;
-  importPath?: string;
-};
 
 const takeScreenShot = async ({
   browser,

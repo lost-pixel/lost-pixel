@@ -56,6 +56,16 @@ type BaseConfig = {
   };
 
   /**
+   * Enable Custom mode
+   */
+  customShots?: {
+    /**
+     * Path to current shots folder
+     */
+    currentShotsPath: string;
+  };
+
+  /**
    * Path to the baseline image folder
    * @default '.lostpixel/baseline/'
    */
@@ -151,7 +161,7 @@ export type PageScreenshotParameter = {
   name: string;
 };
 
-export type ShotMode = 'storybook' | 'ladle' | 'page';
+export type ShotMode = 'storybook' | 'ladle' | 'page' | 'custom';
 
 type StoryLike = {
   shotMode: ShotMode;
@@ -442,7 +452,12 @@ export const configure = async (customProjectConfig?: CustomProjectConfig) => {
   };
 
   // Default to Storybook mode if no mode is defined
-  if (!config.storybookShots && !config.pageShots && !config.ladleShots) {
+  if (
+    !config.storybookShots &&
+    !config.pageShots &&
+    !config.ladleShots &&
+    !config.customShots
+  ) {
     config.storybookShots = {
       storybookUrl: 'storybook-static',
     };
