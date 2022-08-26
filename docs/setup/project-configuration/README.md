@@ -5,7 +5,7 @@ Each project needs a configuration file that sits inside the Git repo of the pro
 To get started you can use the init command to create an initial configuration which uses storybook by default, you can [change the mode](modes.md) in the config file later:
 
 ```bash
-npx lost-pixel-action init-js
+npx lost-pixel init-js
 ```
 
 This will create a new file `lostpixel.config.js` that looks the following way:
@@ -26,13 +26,13 @@ In case you prefer TypeScript (recommended) you will need to do a bit more but w
 To initialize the configuration run this command:
 
 ```bash
-npx lost-pixel-action init-ts
+npx lost-pixel init-ts
 ```
 
-We will also need the `lost-pixel-action` NPM package to get access to the configuration types. Run this command to add it as a developer dependency:
+We will also need the `lost-pixel` NPM package to get access to the configuration types. Run this command to add it as a developer dependency:
 
 ```bash
-npm i -D lost-pixel-action
+npm i -D lost-pixel
 ```
 
 Finally, we can take a look at the created configuration file `lostpixel.config.ts`. You can notice that it includes types already, which makes the job of writing the configuration so much easier (IDE IntelliSense, type safety, ...).
