@@ -15,8 +15,11 @@
   <a href="https://github.com/lost-pixel/lost-pixel-examples">Examples</a>
   <br />
   <br />
-  <hr />
 </div>
+<div align='center'>  <a href="https://www.youtube.com/watch?v=8Ws28rQymkE"><img width='400px' src='https://user-images.githubusercontent.com/29632358/187195828-92e2a8fd-0bd5-4b66-bb82-596f5688dc4d.png'> </div>
+<h4 align='center'> <a href="https://www.youtube.com/watch?v=8Ws28rQymkE">Quick start video</a></div>
+
+  <hr />
 
 ## What is Lost Pixel ❓
 
