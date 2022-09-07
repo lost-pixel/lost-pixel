@@ -51,6 +51,7 @@ export const runner = async () => {
     if (config.generateOnly && shotItems.length === 0) {
       log(`Exiting process with nothing to compare.`);
       log(`Process took ${parseHrtimeToSeconds(createShotsStop)} seconds`);
+      sendTelemetryData({ shotsNumber: shotItems.length });
       process.exit(1);
     }
 
@@ -69,6 +70,10 @@ export const runner = async () => {
       (differenceCount > 0 || noBaselinesCount > 0) &&
       config.failOnDifference
     ) {
+      if (config.generateOnly) {
+        sendTelemetryData({ shotsNumber: shotItems.length });
+      }
+
       log(
         `Exiting process with ${differenceCount} found differences & ${noBaselinesCount} baselines to update`,
       );
