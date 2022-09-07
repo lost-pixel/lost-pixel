@@ -46,7 +46,7 @@ export const runner = async () => {
     const shotItems = await createShots();
 
     const createShotsStop = process.hrtime(createShotsStart);
-    log(`Creating shots took:${parseHrtimeToSeconds(createShotsStop)}`);
+    log(`Creating shots took ${parseHrtimeToSeconds(createShotsStop)} seconds`);
 
     if (config.generateOnly && shotItems.length === 0) {
       log(`Exiting process with nothing to compare.`);
