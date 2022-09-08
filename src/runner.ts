@@ -69,14 +69,12 @@ export const runner = async () => {
       (differenceCount > 0 || noBaselinesCount > 0) &&
       config.failOnDifference
     ) {
-      if (config.generateOnly) {
-        exitProcess({ shotsNumber: shotItems.length });
-      }
-
       log(
         `Exiting process with ${differenceCount} found differences & ${noBaselinesCount} baselines to update`,
       );
-      process.exit(1);
+      if (config.generateOnly) {
+        exitProcess({ shotsNumber: shotItems.length });
+      }
     }
 
     const checkDifferenceStop = process.hrtime(checkDifferenceStart);
@@ -94,6 +92,7 @@ export const runner = async () => {
       exitProcess({
         shotsNumber: shotItems.length,
         runDuration: Number(parseHrtimeToSeconds(executionStop)),
+        exitCode: 0,
       });
     } else {
       const comparisons = await collect();

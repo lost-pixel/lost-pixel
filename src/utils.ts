@@ -386,10 +386,11 @@ export const exitProcess = (properties: {
   runDuration?: number;
   shotsNumber?: number;
   error?: unknown;
+  exitCode?: 0 | 1;
 }) => {
   if (process.env.LOST_PIXEL_DISABLE_TELEMETRY !== '1') {
     sendTelemetryData(properties);
   }
 
-  process.exit(1);
+  process.exit(properties.exitCode ?? 1);
 };
