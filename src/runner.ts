@@ -50,7 +50,6 @@ export const runner = async () => {
 
     if (config.generateOnly && shotItems.length === 0) {
       log(`Exiting process with nothing to compare.`);
-      log(`Process took ${parseHrtimeToSeconds(createShotsStop)} seconds`);
       exitProcess({ shotsNumber: shotItems.length });
     }
 
