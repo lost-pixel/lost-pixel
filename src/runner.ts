@@ -5,11 +5,11 @@ import { collect } from './collect';
 import { createShots } from './createShots';
 import {
   createShotsFolders,
+  exitProcess,
   getEventData,
   isUpdateMode,
   parseHrtimeToSeconds,
   removeFilesInFolder,
-  sendTelemetryData,
 } from './utils';
 import { config, configure } from './config';
 import { sendResultToAPI } from './upload';
@@ -51,8 +51,7 @@ export const runner = async () => {
     if (config.generateOnly && shotItems.length === 0) {
       log(`Exiting process with nothing to compare.`);
       log(`Process took ${parseHrtimeToSeconds(createShotsStop)} seconds`);
-      sendTelemetryData({ shotsNumber: shotItems.length });
-      process.exit(1);
+      exitProcess({ shotsNumber: shotItems.length });
     }
 
     log('Checking differences');
@@ -71,7 +70,7 @@ export const runner = async () => {
       config.failOnDifference
     ) {
       if (config.generateOnly) {
-        sendTelemetryData({ shotsNumber: shotItems.length });
+        exitProcess({ shotsNumber: shotItems.length });
       }
 
       log(
@@ -91,11 +90,8 @@ export const runner = async () => {
 
     log(`Lost Pixel run took ${parseHrtimeToSeconds(executionStop)} seconds`);
 
-    if (
-      config.generateOnly &&
-      process.env.LOST_PIXEL_DISABLE_TELEMETRY !== '1'
-    ) {
-      sendTelemetryData({
+    if (config.generateOnly) {
+      exitProcess({
         shotsNumber: shotItems.length,
         runDuration: Number(parseHrtimeToSeconds(executionStop)),
       });
@@ -118,17 +114,18 @@ export const runner = async () => {
     }
   } catch (error: unknown) {
     const executionStop = process.hrtime(executionStart);
-    if (config.generateOnly) {
-      sendTelemetryData({
-        runDuration: Number(parseHrtimeToSeconds(executionStop)),
-        error,
-      });
-    }
 
     if (error instanceof Error) {
       log(error.message);
     } else {
       log(error);
+    }
+
+    if (config.generateOnly) {
+      exitProcess({
+        runDuration: Number(parseHrtimeToSeconds(executionStop)),
+        error,
+      });
     }
 
     if (!config.generateOnly) {

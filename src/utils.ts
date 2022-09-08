@@ -381,3 +381,15 @@ export const parseHrtimeToSeconds = (hrtime: [number, number]) => {
   const seconds = (hrtime[0] + hrtime[1] / 1e9).toFixed(3);
   return seconds;
 };
+
+export const exitProcess = (properties: {
+  runDuration?: number;
+  shotsNumber?: number;
+  error?: unknown;
+}) => {
+  if (process.env.LOST_PIXEL_DISABLE_TELEMETRY !== '1') {
+    sendTelemetryData(properties);
+  }
+
+  process.exit(1);
+};
