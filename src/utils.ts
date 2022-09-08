@@ -6,6 +6,8 @@ import {
   writeFileSync,
 } from 'node:fs';
 import { normalize, join } from 'node:path';
+import { PostHog } from 'posthog-node';
+import { v4 as uuid } from 'uuid';
 import { BrowserType, chromium, firefox, webkit } from 'playwright';
 import yargs from 'yargs';
 import { hideBin } from 'yargs/helpers';
@@ -332,4 +334,63 @@ export const readDirIntoShotItems = (path: string): ShotItem[] => {
         threshold: config.threshold,
       };
     });
+};
+
+export const sendTelemetryData = (properties: {
+  runDuration?: number;
+  shotsNumber?: number;
+  error?: unknown;
+}) => {
+  const client = new PostHog(
+    'phc_RDNnzvANh1mNm9JKogF9UunG3Ky02YCxWP9gXScKShk',
+    {
+      host: 'https://app.posthog.com',
+    },
+  );
+  const id: string = uuid();
+  try {
+    log('Sending anonymized telemetry data.');
+
+    const version = getVersion() as string;
+    const modes = [];
+    if (config.storybookShots) modes.push('storybook');
+    if (config.ladleShots) modes.push('ladle');
+    if (config.pageShots) modes.push('pages');
+    if (config.customShots) modes.push('custom');
+
+    if (properties.error) {
+      client.capture({
+        distinctId: id,
+        event: 'lost-pixel-error',
+        properties: { ...properties },
+      });
+    } else {
+      client.capture({
+        distinctId: id,
+        event: 'lost-pixel-run',
+        properties: { ...properties, version, modes },
+      });
+      client.shutdown();
+    }
+  } catch (error: unknown) {
+    log('Error when sending telemetry data', error);
+  }
+};
+
+export const parseHrtimeToSeconds = (hrtime: [number, number]) => {
+  const seconds = (hrtime[0] + hrtime[1] / 1e9).toFixed(3);
+  return seconds;
+};
+
+export const exitProcess = (properties: {
+  runDuration?: number;
+  shotsNumber?: number;
+  error?: unknown;
+  exitCode?: 0 | 1;
+}) => {
+  if (process.env.LOST_PIXEL_DISABLE_TELEMETRY !== '1') {
+    sendTelemetryData(properties);
+  }
+
+  process.exit(properties.exitCode ?? 1);
 };

@@ -5,8 +5,10 @@ import { collect } from './collect';
 import { createShots } from './createShots';
 import {
   createShotsFolders,
+  exitProcess,
   getEventData,
   isUpdateMode,
+  parseHrtimeToSeconds,
   removeFilesInFolder,
 } from './utils';
 import { config, configure } from './config';
@@ -15,6 +17,7 @@ import { sendInitToAPI } from './sendInit';
 import { log } from './log';
 
 export const runner = async () => {
+  const executionStart = process.hrtime();
   await configure();
   log('Successfully loaded the configuration!');
   try {
@@ -36,17 +39,22 @@ export const runner = async () => {
     }
 
     log('Creating shot folders');
+    const createShotsStart = process.hrtime();
     createShotsFolders();
 
     log('Creating shots');
     const shotItems = await createShots();
 
+    const createShotsStop = process.hrtime(createShotsStart);
+    log(`Creating shots took ${parseHrtimeToSeconds(createShotsStop)} seconds`);
+
     if (config.generateOnly && shotItems.length === 0) {
       log(`Exiting process with nothing to compare.`);
-      process.exit(1);
+      exitProcess({ shotsNumber: shotItems.length });
     }
 
     log('Checking differences');
+    const checkDifferenceStart = process.hrtime();
     const { differenceCount, noBaselinesCount } = await checkDifferences(
       shotItems,
     );
@@ -63,22 +71,59 @@ export const runner = async () => {
       log(
         `Exiting process with ${differenceCount} found differences & ${noBaselinesCount} baselines to update`,
       );
-      process.exit(1);
+      if (config.generateOnly) {
+        exitProcess({ shotsNumber: shotItems.length });
+      }
     }
 
-    if (!config.generateOnly) {
+    const checkDifferenceStop = process.hrtime(checkDifferenceStart);
+    log(
+      `Checking differences took ${parseHrtimeToSeconds(
+        checkDifferenceStop,
+      )} seconds`,
+    );
+
+    const executionStop = process.hrtime(executionStart);
+
+    log(`Lost Pixel run took ${parseHrtimeToSeconds(executionStop)} seconds`);
+
+    if (config.generateOnly) {
+      exitProcess({
+        shotsNumber: shotItems.length,
+        runDuration: Number(parseHrtimeToSeconds(executionStop)),
+        exitCode: 0,
+      });
+    } else {
       const comparisons = await collect();
       await sendResultToAPI({
         success: true,
         comparisons,
         event: getEventData(config.eventFilePath),
+        durations: {
+          runDuration: Number(parseHrtimeToSeconds(executionStop)),
+          differenceComparisonsDuration: Number(
+            parseHrtimeToSeconds(checkDifferenceStop),
+          ),
+          shotsCreationDuration: Number(
+            parseHrtimeToSeconds(checkDifferenceStop),
+          ),
+        },
       });
     }
   } catch (error: unknown) {
+    const executionStop = process.hrtime(executionStart);
+
     if (error instanceof Error) {
       log(error.message);
     } else {
       log(error);
+    }
+
+    if (config.generateOnly) {
+      exitProcess({
+        runDuration: Number(parseHrtimeToSeconds(executionStop)),
+        error,
+      });
     }
 
     if (!config.generateOnly) {

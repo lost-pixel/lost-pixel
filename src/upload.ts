@@ -57,10 +57,16 @@ export const sendResultToAPI = async ({
   success,
   comparisons,
   event,
+  durations,
 }: {
   success: boolean;
   comparisons?: Comparison[];
   event?: WebhookEvent;
+  durations?: {
+    runDuration: number;
+    shotsCreationDuration: number;
+    differenceComparisonsDuration: number;
+  };
 }) => {
   if (config.generateOnly) {
     return;
@@ -81,5 +87,6 @@ export const sendResultToAPI = async ({
     comparisons: comparisons ?? [],
     success,
     log: logMemory,
+    durations,
   });
 };
