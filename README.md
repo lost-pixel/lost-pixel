@@ -24,6 +24,14 @@
 ## What is Lost Pixel ❓
 
 **Lost Pixel** is an open source visual regression testing tool. Run visual regression tests on your **Storybook** and **Ladle** stories and on your application pages.
+  
+| Provider | Status | Description |
+| --------------- | :--: | --------------- |
+| **Storybook** | ✅ | `First class integration`. Provide your storybook build - Lost Pixel does the rest. |
+| **Ladle** | ✅ | `First class integration`. Provide your ladle build - Lost Pixel does the rest. |
+| **Pages** | ✅ | Visual tests for modern frontend apps like **Next**, **Gatsby**, **Remix**. Run your app - provide Lost Pixel with paths to test. |
+| **Custom shots** | ✅ | Take care of taking screenshots on your side - provide Lost Pixel with path to directory with images. Best suitable for custom **Cypress**/**Playwright** integrations |
+  
 
 **Lost Pixel** consists of two products:
 
