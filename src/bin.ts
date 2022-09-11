@@ -7,8 +7,9 @@ import fs from 'fs-extra';
 import { log } from './log';
 import { runner } from './runner';
 import { getVersion } from './utils';
+import { sendFinalizeToAPI } from './sendFinalize';
 
-type CommandArgs = ['init-js', 'init-ts'];
+type CommandArgs = ['init-js', 'init-ts', 'finalize'];
 
 const args = yargs(hideBin(process.argv)).parse();
 // @ts-expect-error TBD
@@ -52,6 +53,8 @@ if (version) {
       modifiedFile,
     );
     log('✅ Config successfully initialized');
+  } else if (commandArgs.includes('finalize')) {
+    await sendFinalizeToAPI();
   } else {
     await runner();
   }
