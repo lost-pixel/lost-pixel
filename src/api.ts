@@ -2,7 +2,7 @@ import axios from 'axios';
 import { log } from './log';
 import { config } from './config';
 
-type ApiAction = 'init' | 'result';
+type ApiAction = 'init' | 'result' | 'finalize';
 
 export const apiClient = axios.create({
   headers: {
