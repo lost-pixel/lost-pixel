@@ -28,6 +28,7 @@ export const checkDifferences = async (shotItems: ShotItem[]) => {
       if (!baselineImageExists) {
         logger('Baseline image missing. Will be treated as addition.');
         noBaselinesCount++;
+
         return;
       }
 
@@ -67,5 +68,6 @@ export const checkDifferences = async (shotItems: ShotItem[]) => {
   );
 
   log('Comparison done!');
+
   return { differenceCount, noBaselinesCount };
 };

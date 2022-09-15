@@ -79,6 +79,7 @@ describe(collectStories, () => {
 
     {
       const { server, url } = await launchStaticWebServer(storyBookUrl);
+
       expect(await collectStoriesViaWindowApi(context, url)).toMatchSnapshot(
         'ViaWindowApi',
       );
@@ -87,6 +88,7 @@ describe(collectStories, () => {
 
     {
       const { server, url } = await launchStaticWebServer(storyBookV7Url);
+
       expect(await collectStoriesViaWindowApi(context, url)).toMatchSnapshot(
         'ViaWindowApi StoryStore v7',
       );
@@ -95,6 +97,7 @@ describe(collectStories, () => {
 
     {
       const { server, url } = await launchStaticWebServer(storyBookV7Url);
+
       expect(await collectStoriesViaStoriesJson(context, url)).toMatchSnapshot(
         'ViaStoriesJson',
       );

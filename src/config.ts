@@ -403,6 +403,7 @@ const configFileNameBase = path.join(
 const loadProjectConfig = async (): Promise<CustomProjectConfig> => {
   log('Loading project configuration...');
   log('Current working directory:', process.cwd());
+
   if (process.env.LOST_PIXEL_CONFIG_DIR) {
     log('Defined configuration directory:', process.env.LOST_PIXEL_CONFIG_DIR);
   }
@@ -413,6 +414,7 @@ const loadProjectConfig = async (): Promise<CustomProjectConfig> => {
     const projectConfig =
       // eslint-disable-next-line @typescript-eslint/no-require-imports, @typescript-eslint/no-var-requires
       require(`${configFileNameBase}.js`) as CustomProjectConfig;
+
     return projectConfig;
   }
 
@@ -421,6 +423,7 @@ const loadProjectConfig = async (): Promise<CustomProjectConfig> => {
       const imported = (await loadTSProjectConfigFile(
         `${configFileNameBase}.ts`,
       )) as CustomProjectConfig;
+
       return imported;
     } catch (error: unknown) {
       log(error);

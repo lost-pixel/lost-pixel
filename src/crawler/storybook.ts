@@ -138,6 +138,7 @@ export const collectStoriesViaWindowApi = async (
             return Object.keys(parameters).reduce<T>((acc, key: keyof T) => {
               // @ts-expect-error FIXME
               acc[key] = parseParameters(parameters[key], level + 1);
+
               return acc;
             }, {});
           }
@@ -164,6 +165,7 @@ export const collectStoriesViaWindowApi = async (
             });
 
             resolve({ stories });
+
             return;
           }
 
@@ -190,12 +192,14 @@ export const collectStoriesViaStoriesJson = async (
   if (storiesJsonUrl.startsWith('file://')) {
     try {
       const file = readFileSync(storiesJsonUrl.slice(7));
+
       storiesJson = JSON.parse(file.toString()) as StoriesJson;
     } catch {
       throw new Error(`Cannot load file ${storiesJsonUrl}`);
     }
   } else {
     const result = await context.request.get(storiesJsonUrl);
+
     storiesJson = (await result.json()) as StoriesJson;
   }
 
@@ -215,7 +219,9 @@ export const collectStories = async (url: string) => {
   try {
     log('Trying to collect stories via window object');
     const result = await collectStoriesViaWindowApi(context, url);
+
     await browser.close();
+
     return result;
   } catch {
     log('Fallback to /stories.json');
@@ -223,7 +229,9 @@ export const collectStories = async (url: string) => {
 
   try {
     const result = await collectStoriesViaStoriesJson(context, url);
+
     await browser.close();
+
     return result;
   } catch (error: unknown) {
     await browser.close();

@@ -16,6 +16,7 @@ const args = yargs(hideBin(process.argv)).parse();
 const commandArgs = args._ as CommandArgs;
 
 const version = getVersion();
+
 if (version) {
   log(`Version: ${version}`);
 }

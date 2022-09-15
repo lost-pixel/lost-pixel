@@ -32,6 +32,7 @@ export const uploadFile = async ({
   return new Promise((resolve, reject) => {
     if (config.generateOnly) {
       reject(new Error('Generate only mode'));
+
       return;
     }
 

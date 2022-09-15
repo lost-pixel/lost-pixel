@@ -36,6 +36,7 @@ const takeScreenShot = async ({
     }
 
     const logMessage = `[console] ${String(values.shift())}`;
+
     logger(logMessage, ...values);
   });
 
@@ -104,6 +105,7 @@ const takeScreenShot = async ({
     const dirname = path.dirname(videoPath);
     const ext = videoPath.split('.').pop() ?? 'webm';
     const newVideoPath = `${dirname}/${shotItem.shotName}.${ext}`;
+
     await page.video()?.saveAs(newVideoPath);
     await page.video()?.delete();
 
@@ -129,6 +131,7 @@ export const takeScreenShots = async (shotItems: ShotItem[]) => {
       logger(`Taking screenshot of '${shotItem.shotName}'`);
 
       const startTime = Date.now();
+
       await takeScreenShot({ browser, shotItem, logger });
       const endTime = Date.now();
       const elapsedTime = Number((endTime - startTime) / 1000).toFixed(3);

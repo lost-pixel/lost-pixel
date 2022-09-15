@@ -33,6 +33,7 @@ export const createShots = async () => {
 
   if (ladleShots) {
     const { ladleUrl } = ladleShots;
+
     log(`\n=== [Ladle Mode] ${ladleUrl} ===\n`);
 
     const collection = await collectLadleStories(ladleUrl);
@@ -54,6 +55,7 @@ export const createShots = async () => {
 
   if (storybookShots) {
     const { storybookUrl } = storybookShots;
+
     log(`\n=== [Storybook Mode] ${storybookUrl} ===\n`);
 
     let storybookWebUrl = storybookUrl;
@@ -64,6 +66,7 @@ export const createShots = async () => {
       !storybookUrl.startsWith('https://')
     ) {
       const staticWebServer = await launchStaticWebServer(storybookUrl);
+
       storybookWebUrl = staticWebServer.url;
       localServer = staticWebServer.server;
     }
@@ -96,6 +99,7 @@ export const createShots = async () => {
 
   if (pageShots) {
     const { pages, pageUrl } = pageShots;
+
     log(`\n=== [Page Mode] ${pageUrl} ===\n`);
 
     pageShotItems = generatePageShotItems(pages, pageUrl);
@@ -107,6 +111,7 @@ export const createShots = async () => {
 
   if (customShots) {
     const { currentShotsPath } = customShots;
+
     log(`\n=== [Custom Mode] ${currentShotsPath} ===\n`);
 
     customShotItems = readDirIntoShotItems(currentShotsPath);

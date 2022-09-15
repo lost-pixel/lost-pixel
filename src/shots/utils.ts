@@ -33,6 +33,7 @@ export const waitForNetworkRequests = async ({
 
     const timeoutId = setTimeout(() => {
       const pendingUrls = [...requests].map((request) => request.url());
+
       logger('Pending requests:', pendingUrls);
 
       cleanup();
@@ -69,6 +70,7 @@ export const waitForNetworkRequests = async ({
           : `${response?.status() ?? 'unknown'} ${
               response?.statusText() ?? 'unknown'
             }`;
+
         logger(`[network] - ${request.url()} [${statusText}]`);
       }
 

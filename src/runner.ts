@@ -18,8 +18,10 @@ import { log } from './log';
 
 export const runner = async () => {
   const executionStart = process.hrtime();
+
   await configure();
   log('Successfully loaded the configuration!');
+
   try {
     if (config.setPendingStatusCheck && config.generateOnly) {
       await sendInitToAPI();
@@ -40,12 +42,14 @@ export const runner = async () => {
 
     log('Creating shot folders');
     const createShotsStart = process.hrtime();
+
     createShotsFolders();
 
     log('Creating shots');
     const shotItems = await createShots();
 
     const createShotsStop = process.hrtime(createShotsStart);
+
     log(`Creating shots took ${parseHrtimeToSeconds(createShotsStop)} seconds`);
 
     if (config.generateOnly && shotItems.length === 0) {
@@ -71,12 +75,14 @@ export const runner = async () => {
       log(
         `Exiting process with ${differenceCount} found differences & ${noBaselinesCount} baselines to update`,
       );
+
       if (config.generateOnly) {
         exitProcess({ shotsNumber: shotItems.length });
       }
     }
 
     const checkDifferenceStop = process.hrtime(checkDifferenceStart);
+
     log(
       `Checking differences took ${parseHrtimeToSeconds(
         checkDifferenceStop,
@@ -95,6 +101,7 @@ export const runner = async () => {
       });
     } else {
       const comparisons = await collect();
+
       await sendResultToAPI({
         success: true,
         comparisons,

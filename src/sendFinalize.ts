@@ -8,6 +8,7 @@ export const sendFinalizeToAPI = async () => {
 
   if (config.generateOnly) {
     log('Running lost-pixel in generateOnly mode. Skipping sending finalize.');
+
     return;
   }
 

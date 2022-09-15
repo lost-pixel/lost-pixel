@@ -234,6 +234,7 @@ export const getImageList = (path: string): string[] | undefined => {
     return files.filter((name) => name.endsWith('.png'));
   } catch (error: unknown) {
     log(error);
+
     return undefined;
   }
 };
@@ -248,6 +249,7 @@ export const getEventData = (path?: string): WebhookEvent | undefined => {
     return require(path);
   } catch (error: unknown) {
     log(error);
+
     return undefined;
   }
 };
@@ -281,10 +283,12 @@ export const sleep = async (ms: number) =>
 
 export const removeFilesInFolder = (path: string) => {
   const files = readdirSync(path);
+
   log(`Removing ${files.length} files from ${path}`);
 
   for (const file of files) {
     const filePath = join(path, file);
+
     unlinkSync(filePath);
   }
 };
@@ -348,14 +352,19 @@ export const sendTelemetryData = (properties: {
     },
   );
   const id: string = uuid();
+
   try {
     log('Sending anonymized telemetry data.');
 
     const version = getVersion() as string;
     const modes = [];
+
     if (config.storybookShots) modes.push('storybook');
+
     if (config.ladleShots) modes.push('ladle');
+
     if (config.pageShots) modes.push('pages');
+
     if (config.customShots) modes.push('custom');
 
     if (properties.error) {
@@ -379,6 +388,7 @@ export const sendTelemetryData = (properties: {
 
 export const parseHrtimeToSeconds = (hrtime: [number, number]) => {
   const seconds = (hrtime[0] + hrtime[1] / 1e9).toFixed(3);
+
   return seconds;
 };
 
