@@ -8,8 +8,9 @@ import { log } from './log';
 import { runner } from './runner';
 import { getVersion } from './utils';
 import { sendFinalizeToAPI } from './sendFinalize';
+import { runInDocker } from './docker-runner';
 
-type CommandArgs = ['init-js', 'init-ts', 'finalize'];
+type CommandArgs = ['docker', 'init-js', 'init-ts', 'finalize'];
 
 const args = yargs(hideBin(process.argv)).parse();
 // @ts-expect-error TBD
@@ -22,7 +23,9 @@ if (version) {
 }
 
 (async () => {
-  if (commandArgs.includes('init-js')) {
+  if (commandArgs.includes('docker')) {
+    await runInDocker();
+  } else if (commandArgs.includes('init-js')) {
     log('Initializing javascript lost-pixel config');
 
     await fs.copy(
