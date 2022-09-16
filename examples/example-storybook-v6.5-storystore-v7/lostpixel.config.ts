@@ -8,4 +8,5 @@ export const config: CustomProjectConfig = {
   },
   generateOnly: true,
   failOnDifference: true,
+  browser:'firefox'
 };

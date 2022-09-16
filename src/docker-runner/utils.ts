@@ -53,6 +53,7 @@ export const executeDockerRun = async ({ version }: { version: string }) => {
     '--rm',
     '-v',
     '$PWD:/workspace',
+    `--platform linux/amd64`,
     '-e WORKSPACE=/workspace',
     `-e LOST_PIXEL_CONFIG_DIR=${argv.configDir}`,
     `lostpixel/lost-pixel:v${version}`,
