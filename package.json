@@ -52,7 +52,7 @@
     "async": "3.2.4",
     "axios": "0.27.2",
     "fs-extra": "^10.1.0",
-    "get-port-please": "^2.5.0",
+    "get-port-please": "2.6.1",
     "lodash.get": "^4.4.2",
     "lodash.kebabcase": "^4.1.1",
     "minio": "7.0.32",
