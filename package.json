@@ -66,7 +66,7 @@
     "yargs": "^17.5.1"
   },
   "devDependencies": {
-    "@octokit/webhooks-types": "5.2.0",
+    "@octokit/webhooks-types": "5.8.0",
     "@types/async": "3.2.15",
     "@types/fs-extra": "9.0.13",
     "@types/jest": "29.0.3",
