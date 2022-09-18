@@ -1,10 +1,10 @@
 import path from 'node:path';
-import { Browser } from 'playwright';
 import { mapLimit } from 'async';
+import type { Browser } from 'playwright';
 import { log } from '../log';
 import { getBrowser, sleep } from '../utils';
 import { config } from '../config';
-import { ShotItem } from '../types';
+import type { ShotItem } from '../types';
 import { resizeViewportToFullscreen, waitForNetworkRequests } from './utils';
 
 const takeScreenShot = async ({

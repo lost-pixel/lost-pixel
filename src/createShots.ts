@@ -12,7 +12,7 @@ import { log } from './log';
 import { takeScreenShots } from './shots/shots';
 import { readDirIntoShotItems, removeFilesInFolder } from './utils';
 import { launchStaticWebServer } from './crawler/utils';
-import { ShotItem } from './types';
+import type { ShotItem } from './types';
 
 export const createShots = async () => {
   const {

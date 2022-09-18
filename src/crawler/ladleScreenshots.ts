@@ -1,8 +1,8 @@
 import path from 'node:path';
 import axios from 'axios';
 import { config } from '../config';
-import { ShotItem } from '../types';
-import { Story } from './storybook';
+import type { ShotItem } from '../types';
+import type { Story } from './storybook';
 
 export const generateLadleShotItems = (
   ladleUrl: string,

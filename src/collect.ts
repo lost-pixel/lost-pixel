@@ -1,10 +1,10 @@
 import { mapLimit } from 'async';
-import { UploadedObjectInfo } from 'minio';
+import type { UploadedObjectInfo } from 'minio';
 import { uploadFile } from './upload';
 import { getChanges, getImageList, prepareComparisonList } from './utils';
 import { config, MEDIA_UPLOAD_CONCURRENCY } from './config';
 import { log } from './log';
-import { UploadFile } from './types';
+import type { UploadFile } from './types';
 
 export const collect = async () => {
   if (config.generateOnly) {

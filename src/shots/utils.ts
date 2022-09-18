@@ -1,4 +1,4 @@
-import { Page, Request } from 'playwright';
+import type { Page, Request } from 'playwright';
 import { config } from '../config';
 
 const checkIgnoreUrls = (url: string, ignoreUrls: string[]) => {

@@ -1,4 +1,4 @@
-import { CustomProjectConfig } from './config';
+import type { CustomProjectConfig } from './config';
 
 export const defaultTestConfig: CustomProjectConfig = {
   lostPixelProjectId: 'lostpixel-test',
