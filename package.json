@@ -88,7 +88,7 @@
     "rimraf": "3.0.2",
     "ts-jest": "29.0.1",
     "typescript": "4.7.4",
-    "xo": "0.51.0"
+    "xo": "0.52.3"
   },
   "xo": {
     "prettier": true,
