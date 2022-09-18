@@ -103,7 +103,8 @@
       "import/no-mutable-exports": "off",
       "@typescript-eslint/ban-ts-comment": "off",
       "n/prefer-global/process": "off",
-      "n/file-extension-in-import": "off"
+      "n/file-extension-in-import": "off",
+      "no-lone-blocks": "off"
     }
   }
 }
