@@ -1,4 +1,4 @@
-import { Service } from 'ts-node';
+import type { Service } from 'ts-node';
 import { log } from './log';
 
 let tsNodeService: Service;

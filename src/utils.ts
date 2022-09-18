@@ -8,12 +8,13 @@ import {
 import { normalize, join } from 'node:path';
 import { PostHog } from 'posthog-node';
 import { v4 as uuid } from 'uuid';
-import { BrowserType, chromium, firefox, webkit } from 'playwright';
+import { chromium, firefox, webkit } from 'playwright';
+import type { BrowserType } from 'playwright';
 import yargs from 'yargs';
 import { hideBin } from 'yargs/helpers';
 import { config } from './config';
 import { log } from './log';
-import {
+import type {
   Comparison,
   ComparisonType,
   ShotItem,

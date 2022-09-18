@@ -1,8 +1,8 @@
 import path from 'node:path';
 import kebabCase from 'lodash.kebabcase';
-import { BrowserContext } from 'playwright';
+import type { BrowserContext } from 'playwright';
 import { readFileSync } from 'fs-extra';
-import { ShotItem } from '../types';
+import type { ShotItem } from '../types';
 import { config } from '../config';
 import { getBrowser } from '../utils';
 import { log } from '../log';
@@ -34,12 +34,12 @@ export type Story = {
   };
 };
 
-interface StorybookClientApi {
+type StorybookClientApi = {
   raw?: () => Story[];
   storyStore?: {
     cacheAllCSFFiles: () => Promise<void>;
   };
-}
+};
 
 type StoriesJson = {
   v: number;

@@ -1,11 +1,11 @@
-import { ItemBucketMetadata } from 'minio';
-import {
+import type { ItemBucketMetadata } from 'minio';
+import type {
   PullRequestEvent,
   CheckSuiteRequestedEvent,
   CheckRunRerequestedEvent,
 } from '@octokit/webhooks-types';
-import { BrowserContextOptions } from 'playwright';
-import { ShotMode } from './config';
+import type { BrowserContextOptions } from 'playwright';
+import type { ShotMode } from './config';
 
 export type WebhookEvent =
   | PullRequestEvent

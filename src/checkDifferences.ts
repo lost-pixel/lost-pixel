@@ -1,9 +1,9 @@
 import { existsSync } from 'node:fs';
 import { mapLimit } from 'async';
 import { compareImages } from './compare/compare';
-import { ShotItem } from './types';
 import { log } from './log';
 import { config } from './config';
+import type { ShotItem } from './types';
 
 export const checkDifferences = async (shotItems: ShotItem[]) => {
   log(`Comparing ${shotItems.length} screenshots`);

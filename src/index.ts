@@ -1,2 +1,2 @@
 export * from './config';
-export { StoryParameters } from './crawler/storybook';
+export type { StoryParameters } from './crawler/storybook';

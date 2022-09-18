@@ -2,7 +2,7 @@ import { Client as MinioClient } from 'minio';
 import { log, logMemory } from './log';
 import { config } from './config';
 import { sendToAPI } from './api';
-import { Comparison, UploadFile, WebhookEvent } from './types';
+import type { Comparison, UploadFile, WebhookEvent } from './types';
 
 let minio: MinioClient;
 
