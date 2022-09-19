@@ -23,7 +23,7 @@ export const runner = async () => {
   log('Successfully loaded the configuration!');
 
   try {
-    if (config.setPendingStatusCheck && config.generateOnly) {
+    if (config.setPendingStatusCheck && !config.generateOnly) {
       await sendInitToAPI();
     }
 
