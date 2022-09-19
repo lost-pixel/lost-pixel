@@ -28,6 +28,8 @@ COPY --from=builder /app/node_modules node_modules
 COPY config-templates config-templates
 COPY entrypoint.sh /entrypoint.sh
 
+RUN ln -s /lost-pixel/dist/bin.js /usr/local/bin/lost-pixel
+RUN chmod +x /usr/local/bin/lost-pixel
 
 WORKDIR /
 
