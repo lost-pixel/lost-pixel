@@ -143,3 +143,61 @@ export const runner = async () => {
     process.exit(1);
   }
 };
+
+export const platformRunner = async () => {
+  const executionStart = process.hrtime();
+
+  await configure();
+  log('Successfully loaded the configuration!');
+
+  if (isUpdateMode()) {
+    log(
+      'Running lost-pixel in update mode is not compatible with the platform runner',
+    );
+    process.exit(1);
+  }
+
+  if (config.generateOnly) {
+    log(
+      'Running lost-pixel in generateOnly mode is not compatible with the platform runner',
+    );
+    process.exit(1);
+  }
+
+  try {
+    if (config.setPendingStatusCheck) {
+      await sendInitToAPI();
+    }
+
+    log('Creating shot folders');
+    const createShotsStart = process.hrtime();
+
+    createShotsFolders();
+
+    log('Creating shots');
+    const shotItems = await createShots();
+
+    const createShotsStop = process.hrtime(createShotsStart);
+
+    log(`Creating shots took ${parseHrtimeToSeconds(createShotsStop)} seconds`);
+
+    const executionStop = process.hrtime(executionStart);
+
+    log(`Lost Pixel run took ${parseHrtimeToSeconds(executionStop)} seconds`);
+  } catch (error: unknown) {
+    const executionStop = process.hrtime(executionStart);
+
+    if (error instanceof Error) {
+      log(error.message);
+    } else {
+      log(error);
+    }
+
+    await sendResultToAPI({
+      success: false,
+      event: getEventData(config.eventFilePath),
+    });
+
+    process.exit(1);
+  }
+};
