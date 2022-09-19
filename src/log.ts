@@ -12,8 +12,9 @@ export const logMemory: LogMemory = [];
 
 const renderLog = (entry: LogEntry) => {
   const { log } = console;
+  const itemLog = entry.uniqueItemId ? `{${entry.uniqueItemId}} ` : '';
 
-  log(`[${entry.type}] {${entry.uniqueItemId}} `, ...entry.content);
+  log(`[${entry.type}] ${itemLog}`, ...entry.content);
 };
 
 export const log = {
