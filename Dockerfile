@@ -1,8 +1,14 @@
-FROM mcr.microsoft.com/playwright:v1.25.2-focal
-# Check available tags: https://mcr.microsoft.com/en-us/product/playwright/tags
 
-COPY entrypoint.sh /entrypoint.sh
 
-RUN npm i -g lost-pixel
+FROM node:16-alpine as builder
 
-ENTRYPOINT ["/entrypoint.sh"]
+WORKDIR /app
+
+COPY src src
+COPY tsconfig.json .
+COPY package.json .
+COPY package-lock.json .
+
+RUN npm install --ignore-scripts
+RUN npm run build
+
