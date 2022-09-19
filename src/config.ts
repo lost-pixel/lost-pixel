@@ -454,7 +454,8 @@ const checkConfig = () => {
   }
 
   if (missingProps.length > 0) {
-    log(
+    log.process(
+      'error',
       `Error: Missing required configuration properties: ${missingProps.join(
         ', ',
       )}`,
@@ -472,14 +473,22 @@ const configFileNameBase = path.join(
 );
 
 const loadProjectConfig = async (): Promise<CustomProjectConfig> => {
-  log('Loading project configuration...');
-  log('Current working directory:', process.cwd());
+  log.process('info', 'Loading project configuration...');
+  log.process('info', 'Current working directory:', process.cwd());
 
   if (process.env.LOST_PIXEL_CONFIG_DIR) {
-    log('Defined configuration directory:', process.env.LOST_PIXEL_CONFIG_DIR);
+    log.process(
+      'info',
+      'Defined configuration directory:',
+      process.env.LOST_PIXEL_CONFIG_DIR,
+    );
   }
 
-  log('Looking for configuration file:', `${configFileNameBase}.(js|ts)`);
+  log.process(
+    'info',
+    'Looking for configuration file:',
+    `${configFileNameBase}.(js|ts)`,
+  );
 
   if (existsSync(`${configFileNameBase}.js`)) {
     const projectConfig =
@@ -497,13 +506,16 @@ const loadProjectConfig = async (): Promise<CustomProjectConfig> => {
 
       return imported;
     } catch (error: unknown) {
-      log(error);
-      log('Failed to load TypeScript configuration file');
+      log.process('error', error);
+      log.process('error', 'Failed to load TypeScript configuration file');
       process.exit(1);
     }
   }
 
-  log("Couldn't find project config file 'lostpixel.config.js'");
+  log.process(
+    'error',
+    "Couldn't find project config file 'lostpixel.config.js'",
+  );
   process.exit(1);
 };
 

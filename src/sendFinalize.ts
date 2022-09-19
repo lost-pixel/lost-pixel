@@ -4,10 +4,13 @@ import { log } from './log';
 
 export const sendFinalizeToAPI = async () => {
   await configure();
-  log('Successfully loaded the configuration!');
+  log.process('info', 'Successfully loaded the configuration!');
 
   if (config.generateOnly) {
-    log('Running lost-pixel in generateOnly mode. Skipping sending finalize.');
+    log.process(
+      'info',
+      'Running lost-pixel in generateOnly mode. Skipping sending finalize.',
+    );
 
     return;
   }

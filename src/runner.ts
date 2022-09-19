@@ -187,7 +187,7 @@ export const platformRunner = async () => {
     createShotsFolders();
 
     log.process('info', 'Creating shots');
-    const shotItems = await createShots();
+    // const shotItems = await createShots();
 
     const createShotsStop = process.hrtime(createShotsStart);
 
@@ -203,7 +203,7 @@ export const platformRunner = async () => {
       `Lost Pixel run took ${parseHrtimeToSeconds(executionStop)} seconds`,
     );
   } catch (error: unknown) {
-    const executionStop = process.hrtime(executionStart);
+    // const executionStop = process.hrtime(executionStart);
 
     if (error instanceof Error) {
       log.process('error', error.message);

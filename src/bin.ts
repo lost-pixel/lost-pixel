@@ -18,12 +18,12 @@ const commandArgs = args._ as CommandArgs;
 const version = getVersion();
 
 if (version) {
-  log(`Version: ${version}`);
+  log.process('info', `Version: ${version}`);
 }
 
 (async () => {
   if (commandArgs.includes('init-js')) {
-    log('Initializing javascript lost-pixel config');
+    log.process('info', 'Initializing javascript lost-pixel config');
 
     await fs.copy(
       path.join(
@@ -34,9 +34,9 @@ if (version) {
       ),
       path.join(process.cwd(), './lostpixel.config.js'),
     );
-    log('✅ Config successfully initialized');
+    log.process('info', '✅ Config successfully initialized');
   } else if (commandArgs.includes('init-ts')) {
-    log('Initializing typescript lost-pixel config');
+    log.process('info', 'Initializing typescript lost-pixel config');
 
     // Replace local type resolution with module resolution
     const file = fs.readFileSync(
@@ -53,7 +53,7 @@ if (version) {
       path.join(process.cwd(), './lostpixel.config.ts'),
       modifiedFile,
     );
-    log('✅ Config successfully initialized');
+    log.process('info', '✅ Config successfully initialized');
   } else if (commandArgs.includes('finalize')) {
     await sendFinalizeToAPI();
   } else {

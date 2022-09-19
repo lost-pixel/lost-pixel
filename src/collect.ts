@@ -11,7 +11,7 @@ export const collect = async () => {
     return;
   }
 
-  log('Collecting files');
+  log.process('info', 'Collecting files');
 
   const baseline = getImageList(config.imagePathBaseline);
   const current = getImageList(config.imagePathCurrent);
@@ -23,9 +23,9 @@ export const collect = async () => {
     );
   }
 
-  log(`Found ${baseline?.length ?? 0} baseline images`);
-  log(`Found ${current?.length ?? 0} current images`);
-  log(`Found ${difference?.length ?? 0} difference images`);
+  log.process('info', `Found ${baseline?.length ?? 0} baseline images`);
+  log.process('info', `Found ${current?.length ?? 0} current images`);
+  log.process('info', `Found ${difference?.length ?? 0} difference images`);
 
   const files = {
     baseline: baseline ?? [],
@@ -35,7 +35,7 @@ export const collect = async () => {
 
   const changes = getChanges(files);
 
-  log(`Preparing comparison list`);
+  log.process('info', `Preparing comparison list`);
 
   const s3BaseUrl =
     config.s3.baseUrl ??
@@ -46,7 +46,7 @@ export const collect = async () => {
     baseUrl: [s3BaseUrl, config.lostPixelProjectId, config.ciBuildId].join('/'),
   });
 
-  log(`Uploading ${uploadList.length} files`);
+  log.process('info', `Uploading ${uploadList.length} files`);
 
   await mapLimit<UploadFile, UploadedObjectInfo>(
     uploadList,
@@ -59,7 +59,7 @@ export const collect = async () => {
       }),
   );
 
-  log(JSON.stringify(comparisons, null, 2));
+  log.process('info', JSON.stringify(comparisons, null, 2));
 
   return comparisons;
 };

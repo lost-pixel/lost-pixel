@@ -20,7 +20,7 @@ export const sendToAPI = async (
     commit: string;
   } & Record<string, unknown>,
 ) => {
-  log(`Sending to API [${action}]`);
+  log.process('info', `Sending to API [${action}]`);
 
   try {
     const response = await apiClient.post(config.lostPixelUrl, {
@@ -29,7 +29,8 @@ export const sendToAPI = async (
     });
 
     if (response.status !== 200) {
-      log(
+      log.process(
+        'error',
         `Error: Failed to send to API [${action}]. Status: ${response.status} ${response.statusText}`,
       );
 
@@ -37,15 +38,19 @@ export const sendToAPI = async (
     }
   } catch (error: unknown) {
     if (axios.isAxiosError(error)) {
-      log('API response: ', error.response?.data || error.message);
+      log.process(
+        'error',
+        'API response: ',
+        error.response?.data || error.message,
+      );
     } else if (error instanceof Error) {
-      log(error.message);
+      log.process('error', error.message);
     } else {
-      log(error);
+      log.process('error', error);
     }
 
     process.exit(1);
   }
 
-  log(`Successfully sent to API [${action}]`);
+  log.process('info', `Successfully sent to API [${action}]`);
 };

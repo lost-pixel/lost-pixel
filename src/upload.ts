@@ -15,7 +15,7 @@ export const uploadFile = async ({
     return;
   }
 
-  log(`Uploading '${filePath}' to '${uploadPath}'`);
+  log.process('info', `Uploading '${filePath}' to '${uploadPath}'`);
 
   if (!minio) {
     minio = new MinioClient({
@@ -43,8 +43,11 @@ export const uploadFile = async ({
       metaData,
       (error, objectInfo) => {
         if (error) {
-          log(`Error uploading '${filePath}' to '${uploadPath}'`);
-          log(error);
+          log.process(
+            'error',
+            `Error uploading '${filePath}' to '${uploadPath}'`,
+          );
+          log.process('error', error);
           reject(error);
         } else {
           resolve(objectInfo);

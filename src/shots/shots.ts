@@ -85,7 +85,10 @@ const takeScreenShot = async ({
     await resizeViewportToFullscreen({ page });
     fullScreenMode = false;
   } catch {
-    log(`Could not resize viewport to fullscreen: ${shotItem.shotName}`);
+    log.process(
+      'error',
+      `Could not resize viewport to fullscreen: ${shotItem.shotName}`,
+    );
   }
 
   try {
@@ -133,7 +136,12 @@ export const takeScreenShots = async (shotItems: ShotItem[]) => {
     async (item: [number, ShotItem]) => {
       const [index, shotItem] = item;
       const logger = (message: string, ...rest: unknown[]) => {
-        log(`[${index + 1}/${total}] ${message}`, ...rest);
+        log.item.process(
+          shotItem.shotName,
+          'info',
+          `[${index + 1}/${total}] ${message}`,
+          ...rest,
+        );
       };
 
       logger(`Taking screenshot of '${shotItem.shotName}'`);

@@ -6,7 +6,7 @@ import { config } from './config';
 import type { ShotItem } from './types';
 
 export const checkDifferences = async (shotItems: ShotItem[]) => {
-  log(`Comparing ${shotItems.length} screenshots`);
+  log.process('info', `Comparing ${shotItems.length} screenshots`);
 
   const total = shotItems.length;
   let differenceCount = 0;
@@ -18,7 +18,11 @@ export const checkDifferences = async (shotItems: ShotItem[]) => {
     async (item: [number, ShotItem]) => {
       const [index, shotItem] = item;
       const logger = (message: string) => {
-        log(`[${index + 1}/${total}] ${message}`);
+        log.item.process(
+          shotItem.shotName,
+          'info',
+          `[${index + 1}/${total}] ${message}`,
+        );
       };
 
       logger(`Comparing '${shotItem.id}'`);
@@ -67,7 +71,7 @@ export const checkDifferences = async (shotItems: ShotItem[]) => {
     },
   );
 
-  log('Comparison done!');
+  log.process('info', 'Comparison done!');
 
   return { differenceCount, noBaselinesCount };
 };
