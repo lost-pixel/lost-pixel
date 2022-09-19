@@ -20,7 +20,7 @@ export const runner = async () => {
   const executionStart = process.hrtime();
 
   await configure();
-  log('Successfully loaded the configuration!');
+  log.process('info', 'Successfully loaded the configuration!');
 
   try {
     if (config.setPendingStatusCheck && !config.generateOnly) {
@@ -29,35 +29,40 @@ export const runner = async () => {
 
     if (isUpdateMode()) {
       if (!config.generateOnly) {
-        log(
+        log.process(
+          'error',
           'Running lost-pixel in update mode requires the generateOnly option to be set to true',
         );
         process.exit(1);
       }
 
-      log(
+      log.process(
+        'info',
         'Running lost-pixel in update mode. Baseline screenshots will be updated',
       );
     }
 
-    log('Creating shot folders');
+    log.process('info', 'Creating shot folders');
     const createShotsStart = process.hrtime();
 
     createShotsFolders();
 
-    log('Creating shots');
+    log.process('info', 'Creating shots');
     const shotItems = await createShots();
 
     const createShotsStop = process.hrtime(createShotsStart);
 
-    log(`Creating shots took ${parseHrtimeToSeconds(createShotsStop)} seconds`);
+    log.process(
+      'info',
+      `Creating shots took ${parseHrtimeToSeconds(createShotsStop)} seconds`,
+    );
 
     if (config.generateOnly && shotItems.length === 0) {
-      log(`Exiting process with nothing to compare.`);
+      log.process('info', `Exiting process with nothing to compare.`);
       exitProcess({ shotsNumber: shotItems.length });
     }
 
-    log('Checking differences');
+    log.process('info', 'Checking differences');
     const checkDifferenceStart = process.hrtime();
     const { differenceCount, noBaselinesCount } = await checkDifferences(
       shotItems,
@@ -72,7 +77,8 @@ export const runner = async () => {
       (differenceCount > 0 || noBaselinesCount > 0) &&
       config.failOnDifference
     ) {
-      log(
+      log.process(
+        'info',
         `Exiting process with ${differenceCount} found differences & ${noBaselinesCount} baselines to update`,
       );
 
@@ -83,7 +89,8 @@ export const runner = async () => {
 
     const checkDifferenceStop = process.hrtime(checkDifferenceStart);
 
-    log(
+    log.process(
+      'info',
       `Checking differences took ${parseHrtimeToSeconds(
         checkDifferenceStop,
       )} seconds`,
@@ -91,7 +98,10 @@ export const runner = async () => {
 
     const executionStop = process.hrtime(executionStart);
 
-    log(`Lost Pixel run took ${parseHrtimeToSeconds(executionStop)} seconds`);
+    log.process(
+      'info',
+      `Lost Pixel run took ${parseHrtimeToSeconds(executionStop)} seconds`,
+    );
 
     if (config.generateOnly) {
       exitProcess({
@@ -121,9 +131,9 @@ export const runner = async () => {
     const executionStop = process.hrtime(executionStart);
 
     if (error instanceof Error) {
-      log(error.message);
+      log.process('error', error.message);
     } else {
-      log(error);
+      log.process('error', error);
     }
 
     if (config.generateOnly) {
@@ -148,17 +158,19 @@ export const platformRunner = async () => {
   const executionStart = process.hrtime();
 
   await configure();
-  log('Successfully loaded the configuration!');
+  log.process('info', 'Successfully loaded the configuration!');
 
   if (isUpdateMode()) {
-    log(
+    log.process(
+      'error',
       'Running lost-pixel in update mode is not compatible with the platform runner',
     );
     process.exit(1);
   }
 
   if (config.generateOnly) {
-    log(
+    log.process(
+      'error',
       'Running lost-pixel in generateOnly mode is not compatible with the platform runner',
     );
     process.exit(1);
@@ -169,28 +181,34 @@ export const platformRunner = async () => {
       await sendInitToAPI();
     }
 
-    log('Creating shot folders');
+    log.process('info', 'Creating shot folders');
     const createShotsStart = process.hrtime();
 
     createShotsFolders();
 
-    log('Creating shots');
+    log.process('info', 'Creating shots');
     const shotItems = await createShots();
 
     const createShotsStop = process.hrtime(createShotsStart);
 
-    log(`Creating shots took ${parseHrtimeToSeconds(createShotsStop)} seconds`);
+    log.process(
+      'info',
+      `Creating shots took ${parseHrtimeToSeconds(createShotsStop)} seconds`,
+    );
 
     const executionStop = process.hrtime(executionStart);
 
-    log(`Lost Pixel run took ${parseHrtimeToSeconds(executionStop)} seconds`);
+    log.process(
+      'info',
+      `Lost Pixel run took ${parseHrtimeToSeconds(executionStop)} seconds`,
+    );
   } catch (error: unknown) {
     const executionStop = process.hrtime(executionStart);
 
     if (error instanceof Error) {
-      log(error.message);
+      log.process('error', error.message);
     } else {
-      log(error);
+      log.process('error', error);
     }
 
     await sendResultToAPI({
