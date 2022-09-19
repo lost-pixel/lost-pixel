@@ -26,6 +26,7 @@ COPY --from=builder /app/dist dist
 COPY --from=builder /app/node_modules node_modules
 
 COPY config-templates config-templates
+COPY package.json .
 COPY entrypoint.sh /entrypoint.sh
 
 RUN ln -s /lost-pixel/dist/bin.js /usr/local/bin/lost-pixel
