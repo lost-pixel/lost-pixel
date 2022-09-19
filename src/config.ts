@@ -19,6 +19,11 @@ type BaseConfig = {
   lostPixelUrl: string;
 
   /**
+   * API key for the Lost Pixel platform
+   */
+  apiKey?: string;
+
+  /**
    * Enable Storybook mode
    */
   storybookShots?: {
