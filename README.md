@@ -163,7 +163,7 @@ jobs:
         run: npm run serve &
 
       - name: Lost Pixel
-        uses: lost-pixel/lost-pixel@v2.15.0
+        uses: lost-pixel/lost-pixel@v2.18.1
 ```
 
 </details>
