@@ -398,7 +398,7 @@ export const exitProcess = (properties: {
   exitCode?: 0 | 1;
 }) => {
   if (process.env.LOST_PIXEL_DISABLE_TELEMETRY !== '1') {
-    sendTelemetryData(properties).then(() => {
+    sendTelemetryData(properties).finally(() => {
       process.exit(properties.exitCode ?? 1);
     });
   } else {
