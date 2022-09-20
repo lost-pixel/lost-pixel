@@ -341,7 +341,7 @@ export const readDirIntoShotItems = (path: string): ShotItem[] => {
     });
 };
 
-export const sendTelemetryData = (properties: {
+export const sendTelemetryData = async (properties: {
   runDuration?: number;
   shotsNumber?: number;
   error?: unknown;
@@ -380,8 +380,9 @@ export const sendTelemetryData = (properties: {
         event: 'lost-pixel-run',
         properties: { ...properties, version, modes },
       });
-      client.shutdown();
     }
+
+    await client.shutdownAsync();
   } catch (error: unknown) {
     log('Error when sending telemetry data', error);
   }
@@ -400,8 +401,10 @@ export const exitProcess = (properties: {
   exitCode?: 0 | 1;
 }) => {
   if (process.env.LOST_PIXEL_DISABLE_TELEMETRY !== '1') {
-    sendTelemetryData(properties);
+    sendTelemetryData(properties).then(() => {
+      process.exit(properties.exitCode ?? 1);
+    });
+  } else {
+    process.exit(properties.exitCode ?? 1);
   }
-
-  process.exit(properties.exitCode ?? 1);
 };
