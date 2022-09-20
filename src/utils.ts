@@ -397,11 +397,11 @@ export const exitProcess = (properties: {
   error?: unknown;
   exitCode?: 0 | 1;
 }) => {
-  if (process.env.LOST_PIXEL_DISABLE_TELEMETRY !== '1') {
+  if (process.env.LOST_PIXEL_DISABLE_TELEMETRY === '1') {
+    process.exit(properties.exitCode ?? 1);
+  } else {
     sendTelemetryData(properties).finally(() => {
       process.exit(properties.exitCode ?? 1);
     });
-  } else {
-    process.exit(properties.exitCode ?? 1);
   }
 };
