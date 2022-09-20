@@ -23,7 +23,7 @@ jobs:
         uses: actions/setup-node@v2
         with:
           node-version: 16.x
-          cache: "npm"
+          cache: 'npm'
 
       - name: Install dependencies
         run: npm install
@@ -36,7 +36,7 @@ jobs:
 
       - name: Lost Pixel
         id: lp
-        uses: lost-pixel/lost-pixel@v2.15.0
+        uses: lost-pixel/lost-pixel@v2.18.1
         env:
           LOST_PIXEL_MODE: update
       - name: Create Pull Request
@@ -46,14 +46,13 @@ jobs:
           token: ${{ secrets.GH_TOKEN }}
           commit-message: update lost-pixel baselines
           delete-branch: true
-          branch: "lost-pixel-update/${{ github.ref_name }}"
-          title: "Lost Pixel update - ${{ github.ref_name }}"
+          branch: 'lost-pixel-update/${{ github.ref_name }}'
+          title: 'Lost Pixel update - ${{ github.ref_name }}'
           body: Automated baseline update PR created by Lost Pixel
-
 ```
 
 ![Run the action this way](<../.gitbook/assets/image (1).png>)
 
-The action run will generate a new PR against the original branch that will contain updated baselines, merge it and expect your tests to be **green again**:green\_circle:
+The action run will generate a new PR against the original branch that will contain updated baselines, merge it and expect your tests to be **green again**:green_circle:
 
 ![Automatically generated PR](../.gitbook/assets/image.png)

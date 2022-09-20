@@ -24,23 +24,23 @@
 ## What is Lost Pixel ❓
 
 **Lost Pixel** is an open source visual regression testing tool. Run visual regression tests on your **Storybook** and **Ladle** stories and on your application pages.
-  
-| Provider | Status | Description |
-| --------------- | :--: | --------------- |
-| **Storybook** | ✅ | `First class integration`. Provide your storybook build - Lost Pixel does the rest. |
-| **Ladle** | ✅ | `First class integration`. Provide your ladle build - Lost Pixel does the rest. |
-| **Pages** | ✅ | Visual tests for modern frontend apps like **Next**, **Gatsby**, **Remix**. Run your app - provide Lost Pixel with paths to test. |
-| **Custom shots** | ✅ | Take care of taking screenshots on your side - provide Lost Pixel with path to directory with images. Best suitable for custom **Cypress**/**Playwright** integrations |
-  
+
+| Provider         | Status | Description                                                                                                                                                            |
+| ---------------- | :----: | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Storybook**    |   ✅   | `First class integration`. Provide your storybook build - Lost Pixel does the rest.                                                                                    |
+| **Ladle**        |   ✅   | `First class integration`. Provide your ladle build - Lost Pixel does the rest.                                                                                        |
+| **Pages**        |   ✅   | Visual tests for modern frontend apps like **Next**, **Gatsby**, **Remix**. Run your app - provide Lost Pixel with paths to test.                                      |
+| **Custom shots** |   ✅   | Take care of taking screenshots on your side - provide Lost Pixel with path to directory with images. Best suitable for custom **Cypress**/**Playwright** integrations |
 
 **Lost Pixel** consists of two products:
 
-- **lost-pixel** (*open BETA*) - the core engine driving the visual regression test runs. It could be used standalone and the main use-cases are outlined in the documentation
+- **lost-pixel** (_open BETA_) - the core engine driving the visual regression test runs. It could be used standalone and the main use-cases are outlined in the documentation
 
-| What machine sees 🤖  | What human sees 👀 |
-| ------------- | ------------- |
-| ![ezgif-5-e71eb0773d](https://user-images.githubusercontent.com/29632358/185067771-03467437-badd-466b-ad6c-60d7183d99ae.gif) | ![ezgif-5-43091ece5d](https://user-images.githubusercontent.com/29632358/185067989-3f2d818b-c01f-4304-97f6-77295b1970d9.gif)  |
-- **lost-pixel-platform** (*closed BETA*) -  the UI and CI helpers that allow you to use lost-pixel's managed version. This includes specified regression UI, collaboration with team members and easy approval/rejection process for the snapshots. Configure it just once and enjoy hassle free visual regression tests integrated into your GitHub actions pipeline. 
+| What machine sees 🤖                                                                                                         | What human sees 👀                                                                                                           |
+| ---------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------- |
+| ![ezgif-5-e71eb0773d](https://user-images.githubusercontent.com/29632358/185067771-03467437-badd-466b-ad6c-60d7183d99ae.gif) | ![ezgif-5-43091ece5d](https://user-images.githubusercontent.com/29632358/185067989-3f2d818b-c01f-4304-97f6-77295b1970d9.gif) |
+
+- **lost-pixel-platform** (_closed BETA_) - the UI and CI helpers that allow you to use lost-pixel's managed version. This includes specified regression UI, collaboration with team members and easy approval/rejection process for the snapshots. Configure it just once and enjoy hassle free visual regression tests integrated into your GitHub actions pipeline.
 
 <hr/>
 <div align="center">
@@ -53,8 +53,7 @@
 <details open>
 <summary> Storybook 🖼 </summary>
 
-
-Assuming you are using [basic example of Storybook]([https://github.com/tajo/ladle](https://github.com/snipcart/nextjs-storybook-example)). This setup will run visual regression tests against all the storybook stories on every push.
+Assuming you are using [basic example of Storybook](<[https://github.com/tajo/ladle](https://github.com/snipcart/nextjs-storybook-example)>). This setup will run visual regression tests against all the storybook stories on every push.
 
 You can find more examples in the [examples repository](https://github.com/lost-pixel/lost-pixel-examples). You can learn more about Lost Pixel workflow and get more useful recipes in [documentation](https://docs.lost-pixel.com/user-docs).
 
@@ -98,14 +97,13 @@ jobs:
         run: npm run build-storybook
 
       - name: Lost Pixel
-        uses: lost-pixel/lost-pixel@2.15.0
+        uses: lost-pixel/lost-pixel@2.18.1
 ```
 
 </details>
 
 <details>
 <summary>Ladle example 🥄</summary>
-
 
 Assuming you are using [basic example of Ladle](https://github.com/tajo/ladle). This setup will run visual regression tests against all the ladle stories on every push.
 
@@ -114,14 +112,14 @@ You can find more examples in the [examples repository](https://github.com/lost-
 Add `lostpixel.config.ts` at the root of the project:
 
 ```typescript
-import { CustomProjectConfig } from "lost-pixel";
+import { CustomProjectConfig } from 'lost-pixel';
 
 export const config: CustomProjectConfig = {
   ladleShots: {
-    ladleUrl: "http://172.17.0.1:61000",
+    ladleUrl: 'http://172.17.0.1:61000',
   },
   generateOnly: true,
-  failOnDifference: true
+  failOnDifference: true,
 };
 ```
 
@@ -151,7 +149,7 @@ jobs:
         uses: actions/setup-node@v2
         with:
           node-version: 16.x
-          cache: "npm"
+          cache: 'npm'
 
       - name: Install dependencies
         run: npm install
@@ -171,7 +169,6 @@ jobs:
 <details>
 <summary>Pages example(next.js) ⚛️</summary>
 
-
 Assuming you are using [basic example of Next.js](https://nextjs.org/docs). This setup will run visual regression tests against **selected pages** on every push.
 
 You can find more examples in the [examples repository](https://github.com/lost-pixel/lost-pixel-examples). You can learn more about Lost Pixel workflow and get more useful recipes in [documentation](https://docs.lost-pixel.com/user-docs).
@@ -183,9 +180,7 @@ import { CustomProjectConfig } from 'lost-pixel';
 
 export const config: CustomProjectConfig = {
   pageShots: {
-    pages: [
-      { path: '/app', name: 'app' },
-    ],
+    pages: [{ path: '/app', name: 'app' }],
     pageUrl: 'http://localhost:3000',
   },
   generateOnly: true,
@@ -210,7 +205,7 @@ jobs:
         uses: actions/setup-node@v2
         with:
           node-version: 16.x
-          cache: "npm"
+          cache: 'npm'
 
       - name: Install dependencies
         run: npm ci
@@ -222,12 +217,13 @@ jobs:
         run: npm run start &
 
       - name: Lost Pixel
-        uses: lost-pixel/lost-pixel@v2.15.0
+        uses: lost-pixel/lost-pixel@v2.18.1
 ```
 
 </details>
 
 ---
+
 ## Support 👨🏼‍💻
 
 ### Ask a question about Lost Pixel
@@ -253,5 +249,3 @@ If Lost Pixel at the moment doesn't support some mode or does not have a feature
 ## Contributing 🏗️
 
 **Lost Pixel** is open source in it's heart and welcomes any external contribution. You can refer to [CONTRIBUTING.md](https://github.com/lost-pixel/lost-pixel/blob/main/CONTRIBUTING.md) to get going with the project locally in couple of minutes.
-
-
