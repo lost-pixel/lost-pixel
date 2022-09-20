@@ -27,6 +27,8 @@ type ParsedYargs = {
   m: 'update';
 };
 
+const POST_HOG_API_KEY = 'phc_RDNnzvANh1mNm9JKogF9UunG3Ky02YCxWP9gXScKShk';
+
 export const isUpdateMode = (): boolean => {
   // @ts-expect-error TBD
   const args = yargs(hideBin(process.argv)).parse() as ParsedYargs;
@@ -346,12 +348,7 @@ export const sendTelemetryData = async (properties: {
   shotsNumber?: number;
   error?: unknown;
 }) => {
-  const client = new PostHog(
-    'phc_RDNnzvANh1mNm9JKogF9UunG3Ky02YCxWP9gXScKShk',
-    {
-      host: 'https://app.posthog.com',
-    },
-  );
+  const client = new PostHog(POST_HOG_API_KEY);
   const id: string = uuid();
 
   try {
