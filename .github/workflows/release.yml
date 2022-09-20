@@ -16,7 +16,7 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: 16.x
-          cache: "npm"
+          cache: 'npm'
 
       - name: Install dependencies
         run: |
@@ -47,7 +47,7 @@ jobs:
         run: npm publish --access public
 
       - name: Slack Notification
-        uses: 8398a7/action-slack@e080ee3e943fe9b371ba3b94543f7b9e347d8e87
+        uses: 8398a7/action-slack@a74b761b4089b5d730d813fbedcd2ec5d394f3af
         if: always()
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK }}
@@ -80,11 +80,11 @@ jobs:
           name: lostpixel/lost-pixel
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
-          tags: "latest,${{ github.event.release.tag_name }}"
-          buildoptions: "--compress --force-rm"
+          tags: 'latest,${{ github.event.release.tag_name }}'
+          buildoptions: '--compress --force-rm'
 
       - name: Slack Notification
-        uses: 8398a7/action-slack@e080ee3e943fe9b371ba3b94543f7b9e347d8e87
+        uses: 8398a7/action-slack@a74b761b4089b5d730d813fbedcd2ec5d394f3af
         if: always()
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK }}
