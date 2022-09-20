@@ -27,6 +27,8 @@ type ParsedYargs = {
   m: 'update';
 };
 
+const POST_HOG_API_KEY = 'phc_RDNnzvANh1mNm9JKogF9UunG3Ky02YCxWP9gXScKShk';
+
 export const isUpdateMode = (): boolean => {
   // @ts-expect-error TBD
   const args = yargs(hideBin(process.argv)).parse() as ParsedYargs;
@@ -341,17 +343,12 @@ export const readDirIntoShotItems = (path: string): ShotItem[] => {
     });
 };
 
-export const sendTelemetryData = (properties: {
+export const sendTelemetryData = async (properties: {
   runDuration?: number;
   shotsNumber?: number;
   error?: unknown;
 }) => {
-  const client = new PostHog(
-    'phc_RDNnzvANh1mNm9JKogF9UunG3Ky02YCxWP9gXScKShk',
-    {
-      host: 'https://app.posthog.com',
-    },
-  );
+  const client = new PostHog(POST_HOG_API_KEY);
   const id: string = uuid();
 
   try {
@@ -380,8 +377,9 @@ export const sendTelemetryData = (properties: {
         event: 'lost-pixel-run',
         properties: { ...properties, version, modes },
       });
-      client.shutdown();
     }
+
+    await client.shutdownAsync();
   } catch (error: unknown) {
     log('Error when sending telemetry data', error);
   }
@@ -399,9 +397,11 @@ export const exitProcess = (properties: {
   error?: unknown;
   exitCode?: 0 | 1;
 }) => {
-  if (process.env.LOST_PIXEL_DISABLE_TELEMETRY !== '1') {
-    sendTelemetryData(properties);
+  if (process.env.LOST_PIXEL_DISABLE_TELEMETRY === '1') {
+    process.exit(properties.exitCode ?? 1);
+  } else {
+    sendTelemetryData(properties).finally(() => {
+      process.exit(properties.exitCode ?? 1);
+    });
   }
-
-  process.exit(properties.exitCode ?? 1);
 };
