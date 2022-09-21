@@ -50,7 +50,7 @@ type BaseConfig = {
     pages: PageScreenshotParameter[];
 
     /**
-     * URL of the running application
+     * Base URL of the running application (e.g. http://localhost:3000)
      */
     baseUrl: string;
   };
@@ -157,7 +157,15 @@ type BaseConfig = {
 
 export type PageScreenshotParameter = {
   id: string;
+
+  /**
+   * Path to the page to take a screenshot of (e.g. /login)
+   */
   path: string;
+
+  /**
+   * Unique name for the page
+   */
   name: string;
 };
 
