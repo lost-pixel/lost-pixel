@@ -29,6 +29,8 @@ export const generatePageShotItems = (
         page.name,
       )}.png`,
       threshold: page.threshold ?? config.threshold,
+      waitBeforeScreenshot:
+        page.waitBeforeScreenshot ?? config.waitBeforeScreenshot,
     };
   });
 };

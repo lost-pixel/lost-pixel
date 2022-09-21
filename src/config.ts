@@ -167,6 +167,12 @@ export type PageScreenshotParameter = {
   name: string;
 
   /**
+   * Time to wait before taking a screenshot
+   * @default 1_000
+   */
+  waitBeforeScreenshot?: number;
+
+  /**
    * Threshold for the difference between the baseline and current image
    *
    * Values between 0 and 1 are interpreted as percentage of the image size
