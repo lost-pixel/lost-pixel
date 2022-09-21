@@ -3,6 +3,26 @@ import { config } from '../config';
 import type { PageScreenshotParameter } from '../config';
 import type { ShotItem } from '../types';
 
+const generateBrowserConfig = (page: PageScreenshotParameter) => {
+  const browserConfig = config.configureBrowser?.({
+    ...page,
+    shotMode: 'page',
+  });
+
+  if (page.viewport && browserConfig) {
+    browserConfig.viewport = browserConfig.viewport ?? {
+      width: 1280,
+      height: 720,
+    };
+    browserConfig.viewport = {
+      ...browserConfig.viewport,
+      ...page.viewport,
+    };
+  }
+
+  return browserConfig;
+};
+
 export const generatePageShotItems = (
   pages: PageScreenshotParameter[],
   baseUrl: string,
@@ -28,6 +48,7 @@ export const generatePageShotItems = (
         config.imagePathDifference,
         page.name,
       )}.png`,
+      browserConfig: generateBrowserConfig(page),
       threshold: page.threshold ?? config.threshold,
       waitBeforeScreenshot:
         page.waitBeforeScreenshot ?? config.waitBeforeScreenshot,

@@ -181,6 +181,15 @@ export type PageScreenshotParameter = {
    * @default 0
    */
   threshold?: number;
+
+  /**
+   * Define a custom viewport for the page
+   * @default { width: 1280, height: 720 }
+   */
+  viewport?: {
+    width?: number;
+    height?: number;
+  };
 };
 
 export type ShotMode = 'storybook' | 'ladle' | 'page' | 'custom';
