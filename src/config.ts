@@ -165,6 +165,16 @@ export type PageScreenshotParameter = {
    * Unique name for the page
    */
   name: string;
+
+  /**
+   * Threshold for the difference between the baseline and current image
+   *
+   * Values between 0 and 1 are interpreted as percentage of the image size
+   *
+   * Values greater or equal to 1 are interpreted as pixel count.
+   * @default 0
+   */
+  threshold?: number;
 };
 
 export type ShotMode = 'storybook' | 'ladle' | 'page' | 'custom';

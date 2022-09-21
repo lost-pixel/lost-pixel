@@ -28,7 +28,7 @@ export const generatePageShotItems = (
         config.imagePathDifference,
         page.name,
       )}.png`,
-      threshold: config.threshold,
+      threshold: page.threshold ?? config.threshold,
     };
   });
 };
