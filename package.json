@@ -9,6 +9,7 @@
     "config-templates"
   ],
   "scripts": {
+    "version": "echo \"version: $npm_package_version\" > dist/version.txt",
     "test": "jest --detectOpenHandles",
     "test:watch": "jest --watch --detectOpenHandles",
     "build": "rimraf dist && tsc",
@@ -23,7 +24,7 @@
     "lint-fix": "tsc --noEmit && eslint '*/**/*.ts' --fix",
     "lint-staged": "lint-staged",
     "prepare": "husky install",
-    "release": "np --no-publish",
+    "release": "np --no-publish --yolo",
     "dev": "ts-node src/bin",
     "start": "NODE_ENV=production node dist/bin.js"
   },
