@@ -156,8 +156,6 @@ type BaseConfig = {
 };
 
 export type PageScreenshotParameter = {
-  id: string;
-
   /**
    * Path to the page to take a screenshot of (e.g. /login)
    */
