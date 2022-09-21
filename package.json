@@ -24,7 +24,7 @@
     "lint-fix": "tsc --noEmit && eslint '*/**/*.ts' --fix",
     "lint-staged": "lint-staged",
     "prepare": "husky install",
-    "release": "np --no-publish --yolo",
+    "release": "np --no-publish",
     "dev": "ts-node src/bin",
     "start": "NODE_ENV=production node dist/bin.js"
   },
