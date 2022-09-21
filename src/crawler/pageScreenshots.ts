@@ -5,7 +5,7 @@ import type { ShotItem } from '../types';
 
 export const generatePageShotItems = (
   pages: PageScreenshotParameter[],
-  pageUrl: string,
+  baseUrl: string,
 ): ShotItem[] => {
   const names = pages.map((page) => page.name);
   const uniqueNames = new Set(names);
@@ -21,7 +21,7 @@ export const generatePageShotItems = (
       shotName: config.shotNameGenerator
         ? config.shotNameGenerator({ ...page, shotMode: 'page' })
         : page.name,
-      url: path.join(pageUrl, page.path),
+      url: path.join(baseUrl, page.path),
       filePathBaseline: `${path.join(config.imagePathBaseline, page.name)}.png`,
       filePathCurrent: `${path.join(config.imagePathCurrent, page.name)}.png`,
       filePathDifference: `${path.join(
