@@ -116,6 +116,7 @@ import { CustomProjectConfig } from 'lost-pixel';
 
 export const config: CustomProjectConfig = {
   ladleShots: {
+    //ip should be localhost when running locally & 172.17.0.1 when running in GitHub action
     ladleUrl: 'http://172.17.0.1:61000',
   },
   generateOnly: true,
@@ -181,7 +182,8 @@ import { CustomProjectConfig } from 'lost-pixel';
 export const config: CustomProjectConfig = {
   pageShots: {
     pages: [{ path: '/app', name: 'app' }],
-    pageUrl: 'http://localhost:3000',
+    //ip should be localhost when running locally & 172.17.0.1 when running in GitHub action
+    pageUrl: 'http://172.17.0.1:3000',
   },
   generateOnly: true,
   failOnDifference: true,
