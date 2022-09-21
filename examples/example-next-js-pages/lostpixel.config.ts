@@ -11,7 +11,7 @@ export const config: CustomProjectConfig = {
       { path: '/fetch', name: 'fetch-static-props' },
       { path: '/client-fetch', name: 'fetch-client' },
     ],
-    pageUrl: 'http://localhost:3000',
+    baseUrl: 'http://localhost:3000',
   },
   generateOnly: true,
   failOnDifference: true,

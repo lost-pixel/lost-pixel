@@ -50,9 +50,9 @@ type BaseConfig = {
     pages: PageScreenshotParameter[];
 
     /**
-     * URL of the running application
+     * Base URL of the running application (e.g. http://localhost:3000)
      */
-    pageUrl: string;
+    baseUrl: string;
   };
 
   /**
@@ -156,9 +156,40 @@ type BaseConfig = {
 };
 
 export type PageScreenshotParameter = {
-  id: string;
+  /**
+   * Path to the page to take a screenshot of (e.g. /login)
+   */
   path: string;
+
+  /**
+   * Unique name for the page
+   */
   name: string;
+
+  /**
+   * Time to wait before taking a screenshot
+   * @default 1_000
+   */
+  waitBeforeScreenshot?: number;
+
+  /**
+   * Threshold for the difference between the baseline and current image
+   *
+   * Values between 0 and 1 are interpreted as percentage of the image size
+   *
+   * Values greater or equal to 1 are interpreted as pixel count.
+   * @default 0
+   */
+  threshold?: number;
+
+  /**
+   * Define a custom viewport for the page
+   * @default { width: 1280, height: 720 }
+   */
+  viewport?: {
+    width?: number;
+    height?: number;
+  };
 };
 
 export type ShotMode = 'storybook' | 'ladle' | 'page' | 'custom';

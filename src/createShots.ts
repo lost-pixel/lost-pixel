@@ -98,11 +98,11 @@ export const createShots = async () => {
   }
 
   if (pageShots) {
-    const { pages, pageUrl } = pageShots;
+    const { pages, baseUrl } = pageShots;
 
-    log(`\n=== [Page Mode] ${pageUrl} ===\n`);
+    log(`\n=== [Page Mode] ${baseUrl} ===\n`);
 
-    pageShotItems = generatePageShotItems(pages, pageUrl);
+    pageShotItems = generatePageShotItems(pages, baseUrl);
     log(`Prepared ${pageShotItems.length} pages for screenshots`);
 
     await takeScreenShots(pageShotItems);

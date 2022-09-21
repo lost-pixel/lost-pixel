@@ -28,7 +28,7 @@ export const generateLadleShotItems = (
         config.imagePathDifference,
         ladleStory.story,
       )}.png`,
-      threshold: 0,
+      threshold: config.threshold,
     };
   });
 };
