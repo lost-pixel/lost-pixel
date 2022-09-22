@@ -92,6 +92,9 @@ const takeScreenShot = async ({
       path: shotItem.filePathCurrent,
       fullPage: fullScreenMode,
       animations: 'disabled',
+      mask: shotItem.mask
+        ? shotItem.mask.map((mask) => page.locator(mask.selector))
+        : [],
     });
   } catch (error: unknown) {
     logger('Error when taking screenshot', error);
