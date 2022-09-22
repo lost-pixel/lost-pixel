@@ -25,8 +25,13 @@ export const sendToAPI = async (
 
   try {
     const response = await apiClient.post(
-      `${config.lostPixelPlatform}/api/${action}`,
+      `${config.lostPixelPlatform}/app/${action}`,
       payload,
+      {
+        headers: {
+          Authorization: `Bearer ${config.apiKey ?? ''}`,
+        },
+      },
     );
 
     if (response.status !== 200) {
