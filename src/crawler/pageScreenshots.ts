@@ -1,6 +1,6 @@
 import path from 'node:path';
-import { config, Mask } from '../config';
-import type { PageScreenshotParameter } from '../config';
+import { config } from '../config';
+import type { PageScreenshotParameter, Mask } from '../config';
 import type { ShotItem } from '../types';
 
 const generateBrowserConfig = (page: PageScreenshotParameter) => {
