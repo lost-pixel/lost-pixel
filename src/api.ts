@@ -18,22 +18,35 @@ const apiRoutes: Record<ApiAction, string> = {
   finalize: '/app/finalize',
 };
 
-export const sendToAPI = async (
-  action: ApiAction,
-  payload: {
-    projectId: string;
-    branchName: string;
-    repoOwner: string;
-    repoName: string;
-    commit: string;
-  } & Record<string, unknown>,
-) => {
-  log.process('info', `Sending to API [${action}]`);
+type ApiPayloadGetApiToken = {
+  apiKey: string;
+  projectIdentifier: string;
+};
+
+type ApiPayloadInit = {
+  projectId: string;
+  branchName: string;
+  repoOwner: string;
+  repoName: string;
+  commit: string;
+};
+
+type ApiPayload<A extends ApiAction, P extends Record<string, unknown>> = {
+  action: A;
+  payload: P;
+};
+
+type ApiPayloads =
+  | ApiPayload<'getApiToken', ApiPayloadGetApiToken>
+  | ApiPayload<'init', ApiPayloadInit>;
+
+export const sendToAPI = async (parameters: ApiPayloads) => {
+  log.process('info', `Sending to API [${parameters.action}]`);
 
   try {
     const response = await apiClient.post(
-      `${config.lostPixelPlatform}${apiRoutes[action]}`,
-      payload,
+      `${config.lostPixelPlatform}${apiRoutes[parameters.action]}`,
+      parameters.payload,
       {
         headers: {
           Authorization: `Bearer ${config.apiKey ?? ''}`,
@@ -44,7 +57,7 @@ export const sendToAPI = async (
     if (response.status !== 200) {
       log.process(
         'error',
-        `Error: Failed to send to API [${action}]. Status: ${response.status} ${response.statusText}`,
+        `Error: Failed to send to API [${parameters.action}]. Status: ${response.status} ${response.statusText}`,
       );
 
       process.exit(1);
@@ -78,5 +91,5 @@ export const sendToAPI = async (
     process.exit(1);
   }
 
-  log.process('info', `Successfully sent to API [${action}]`);
+  log.process('info', `Successfully sent to API [${parameters.action}]`);
 };
