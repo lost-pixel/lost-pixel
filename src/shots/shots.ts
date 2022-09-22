@@ -15,9 +15,10 @@ const takeScreenShot = async ({
   browser: Browser;
   shotItem: ShotItem;
   logger: (message: string, ...rest: unknown[]) => void;
-}) => {
+}): Promise<boolean> => {
   const context = await browser.newContext(shotItem.browserConfig);
   const page = await context.newPage();
+  let success = false;
 
   page.on('pageerror', (exception) => {
     logger('[pageerror] Uncaught exception:', exception);
@@ -96,6 +97,8 @@ const takeScreenShot = async ({
         ? shotItem.mask.map((mask) => page.locator(mask.selector))
         : [],
     });
+
+    success = true;
   } catch (error: unknown) {
     logger('Error when taking screenshot', error);
   }
@@ -116,6 +119,8 @@ const takeScreenShot = async ({
       `Video of '${shotItem.shotName}' recorded and saved to '${newVideoPath}`,
     );
   }
+
+  return success;
 };
 
 export const takeScreenShots = async (shotItems: ShotItem[]) => {
@@ -135,13 +140,19 @@ export const takeScreenShots = async (shotItems: ShotItem[]) => {
 
       const startTime = Date.now();
 
-      await takeScreenShot({ browser, shotItem, logger });
+      const result = await takeScreenShot({ browser, shotItem, logger });
       const endTime = Date.now();
       const elapsedTime = Number((endTime - startTime) / 1000).toFixed(3);
 
-      logger(
-        `Screenshot of '${shotItem.shotName}' taken and saved to '${shotItem.filePathCurrent}' in ${elapsedTime}s`,
-      );
+      if (result) {
+        logger(
+          `Screenshot of '${shotItem.shotName}' taken and saved to '${shotItem.filePathCurrent}' in ${elapsedTime}s`,
+        );
+      } else {
+        logger(
+          `Screenshot of '${shotItem.shotName}' failed and took ${elapsedTime}s`,
+        );
+      }
     },
   );
 
