@@ -27,6 +27,11 @@ type BaseConfig = {
      * @default 'storybook-static'
      */
     storybookUrl: string;
+
+    /**
+     * Define areas for all stories where differences will be ignored
+     */
+    mask?: Mask[];
   };
 
   /**
@@ -38,6 +43,11 @@ type BaseConfig = {
      * @default 'http://localhost:61000'
      */
     ladleUrl: string;
+
+    /**
+     * Define areas for all stories where differences will be ignored
+     */
+    mask?: Mask[];
   };
 
   /**
@@ -53,6 +63,11 @@ type BaseConfig = {
      * Base URL of the running application (e.g. http://localhost:3000)
      */
     baseUrl: string;
+
+    /**
+     * Define areas for all pages where differences will be ignored
+     */
+    mask?: Mask[];
   };
 
   /**
@@ -155,6 +170,21 @@ type BaseConfig = {
   setPendingStatusCheck: boolean;
 };
 
+export type Mask = {
+  /**
+   * CSS selector for the element to mask
+   * Examples:
+   * - `#my-id`: Selects the element with the id `my-id`
+   * - `.my-class`: Selects all elements with the class `my-class`
+   * - `div`: Selects all `div` elements
+   * - `div.my-class`: Selects all `div` elements with the class `my-class`
+   * - `li:nth-child(2n)`: Selects all even `li` elements
+   * - `[data-testid="hero-banner"]`: Selects all elements with the attribute `data-testid` set to `hero-banner`
+   * - `div > p`: Selects all `p` elements that are direct children of a `div` element
+   */
+  selector: string;
+};
+
 export type PageScreenshotParameter = {
   /**
    * Path to the page to take a screenshot of (e.g. /login)
@@ -190,6 +220,11 @@ export type PageScreenshotParameter = {
     width?: number;
     height?: number;
   };
+
+  /**
+   * Define areas for the page where differences will be ignored
+   */
+  mask?: Mask[];
 };
 
 export type ShotMode = 'storybook' | 'ladle' | 'page' | 'custom';

@@ -32,7 +32,7 @@ export const createShots = async () => {
   removeFilesInFolder(imagePathDifference);
 
   if (ladleShots) {
-    const { ladleUrl } = ladleShots;
+    const { ladleUrl, mask } = ladleShots;
 
     log(`\n=== [Ladle Mode] ${ladleUrl} ===\n`);
 
@@ -44,7 +44,7 @@ export const createShots = async () => {
 
     log(`Found ${collection.length} ladle stories`);
 
-    ladleShotItems = generateLadleShotItems(ladleUrl, collection);
+    ladleShotItems = generateLadleShotItems(ladleUrl, collection, mask);
 
     log(`Prepared ${ladleShotItems.length} ladle stories for screenshots`);
 
@@ -54,7 +54,7 @@ export const createShots = async () => {
   }
 
   if (storybookShots) {
-    const { storybookUrl } = storybookShots;
+    const { storybookUrl, mask } = storybookShots;
 
     log(`\n=== [Storybook Mode] ${storybookUrl} ===\n`);
 
@@ -83,6 +83,7 @@ export const createShots = async () => {
       storybookShotItems = generateStorybookShotItems(
         storybookWebUrl,
         collection.stories,
+        mask,
       );
 
       log(`Prepared ${storybookShotItems.length} stories for screenshots`);
@@ -98,11 +99,11 @@ export const createShots = async () => {
   }
 
   if (pageShots) {
-    const { pages, baseUrl } = pageShots;
+    const { pages, baseUrl, mask } = pageShots;
 
     log(`\n=== [Page Mode] ${baseUrl} ===\n`);
 
-    pageShotItems = generatePageShotItems(pages, baseUrl);
+    pageShotItems = generatePageShotItems(pages, baseUrl, mask);
     log(`Prepared ${pageShotItems.length} pages for screenshots`);
 
     await takeScreenShots(pageShotItems);

@@ -41,4 +41,7 @@ export type ShotItem = {
   threshold: number;
   waitBeforeScreenshot?: number;
   importPath?: string;
+  mask?: Array<{
+    selector: string;
+  }>;
 };

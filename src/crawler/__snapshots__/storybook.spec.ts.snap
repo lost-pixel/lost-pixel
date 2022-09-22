@@ -814,6 +814,89 @@ exports[`collectStories should collect stories from StoryBook: ViaWindowApi 1`] 
       },
       "story": "Logged Out",
     },
+    {
+      "id": "example-page--masked",
+      "importPath": "./stories/Page.stories.js",
+      "kind": "Example/Page",
+      "parameters": {
+        "__id": "example-page--masked",
+        "__isArgsStory": true,
+        "actions": {
+          "argTypesRegex": "^on[A-Z].*",
+        },
+        "argTypes": {
+          "onCreateAccount": {
+            "action": "onCreateAccount",
+            "name": "onCreateAccount",
+          },
+          "onLogin": {
+            "action": "onLogin",
+            "name": "onLogin",
+          },
+          "onLogout": {
+            "action": "onLogout",
+            "name": "onLogout",
+          },
+        },
+        "args": {
+          "onCreateAccount": undefined,
+          "onLogin": undefined,
+          "onLogout": undefined,
+        },
+        "backgrounds": {
+          "grid": {
+            "cellAmount": 5,
+            "cellSize": 20,
+            "opacity": 0.5,
+          },
+          "values": [
+            {
+              "name": "light",
+              "value": "#F8F8F8",
+            },
+            {
+              "name": "dark",
+              "value": "#333333",
+            },
+          ],
+        },
+        "controls": {
+          "matchers": {
+            "color": /\\(background\\|color\\)\\$/i,
+            "date": /Date\\$/,
+          },
+        },
+        "docs": {
+          "getContainer": undefined,
+          "getPage": undefined,
+          "iframeHeight": 100,
+          "inlineStories": true,
+          "prepareForInline": undefined,
+          "source": {
+            "language": "html",
+            "type": "dynamic",
+          },
+        },
+        "fileName": "./stories/Page.stories.js",
+        "framework": "html",
+        "globalTypes": undefined,
+        "globals": {
+          "measureEnabled": false,
+          "outline": false,
+        },
+        "lostpixel": {
+          "mask": [
+            {
+              "selector": "a",
+            },
+          ],
+        },
+        "storySource": {
+          "source": "(args) => createPage(args)",
+        },
+      },
+      "story": "Masked",
+    },
   ],
 }
 `;
