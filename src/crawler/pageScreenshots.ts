@@ -1,5 +1,5 @@
 import path from 'node:path';
-import { config } from '../config';
+import { config, Mask } from '../config';
 import type { PageScreenshotParameter } from '../config';
 import type { ShotItem } from '../types';
 
@@ -26,6 +26,7 @@ const generateBrowserConfig = (page: PageScreenshotParameter) => {
 export const generatePageShotItems = (
   pages: PageScreenshotParameter[],
   baseUrl: string,
+  mask?: Mask[],
 ): ShotItem[] => {
   const names = pages.map((page) => page.name);
   const uniqueNames = new Set(names);
@@ -52,7 +53,7 @@ export const generatePageShotItems = (
       threshold: page.threshold ?? config.threshold,
       waitBeforeScreenshot:
         page.waitBeforeScreenshot ?? config.waitBeforeScreenshot,
-      mask: page.mask,
+      mask: [...(mask ?? []), ...(page.mask ?? [])],
     };
   });
 };
