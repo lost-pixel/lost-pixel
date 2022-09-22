@@ -8,11 +8,14 @@ export const sendInitToAPI = async () => {
 
   const [repoOwner, repoName] = config.repository.split('/');
 
-  return sendToAPI('init', {
-    projectId: config.lostPixelProjectId,
-    branchName: config.commitRefName,
-    repoOwner,
-    repoName,
-    commit: config.commitHash,
+  return sendToAPI({
+    action: 'init',
+    payload: {
+      projectId: config.lostPixelProjectId,
+      branchName: config.commitRefName,
+      repoOwner,
+      repoName,
+      commit: config.commitHash,
+    },
   });
 };
