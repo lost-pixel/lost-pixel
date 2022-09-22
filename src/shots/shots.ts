@@ -14,14 +14,14 @@ const takeScreenShot = async ({
 }: {
   browser: Browser;
   shotItem: ShotItem;
-  logger: (message: string, ...rest: unknown[]) => void;
+  logger: ReturnType<typeof log.item>;
 }): Promise<boolean> => {
   const context = await browser.newContext(shotItem.browserConfig);
   const page = await context.newPage();
   let success = false;
 
   page.on('pageerror', (exception) => {
-    logger('[pageerror] Uncaught exception:', exception);
+    logger.browser('error', 'Uncaught exception:', exception);
   });
 
   page.on('console', async (message) => {
@@ -33,21 +33,19 @@ const takeScreenShot = async ({
         values.push(await arg.jsonValue());
       }
     } catch (error: unknown) {
-      logger(`[console] Error while collecting console output`, error);
+      logger.browser('console', 'Error while collecting console output', error);
     }
 
-    const logMessage = `[console] ${String(values.shift())}`;
-
-    logger(logMessage, ...values);
+    logger.browser('console', String(values.shift()), ...values);
   });
 
   try {
     await page.goto(shotItem.url);
   } catch (error: unknown) {
     if (error instanceof Error && error.name === 'TimeoutError') {
-      logger(`Timeout while loading page: ${shotItem.url}`);
+      logger.process('error', `Timeout while loading page: ${shotItem.url}`);
     } else {
-      logger('Page loading failed', error);
+      logger.process('error', 'Page loading failed', error);
     }
   }
 
@@ -56,7 +54,10 @@ const takeScreenShot = async ({
       timeout: config.timeouts.loadState,
     });
   } catch {
-    logger(`Timeout while waiting for page load state: ${shotItem.url}`);
+    logger.process(
+      'error',
+      `Timeout while waiting for page load state: ${shotItem.url}`,
+    );
   }
 
   try {
@@ -66,7 +67,10 @@ const takeScreenShot = async ({
       ignoreUrls: ['/__webpack_hmr'],
     });
   } catch {
-    logger(`Timeout while waiting for all network requests: ${shotItem.url}`);
+    logger.process(
+      'error',
+      `Timeout while waiting for all network requests: ${shotItem.url}`,
+    );
   }
 
   if (config.beforeScreenshot) {
@@ -85,7 +89,7 @@ const takeScreenShot = async ({
     await resizeViewportToFullscreen({ page });
     fullScreenMode = false;
   } catch {
-    log.process(
+    logger.process(
       'error',
       `Could not resize viewport to fullscreen: ${shotItem.shotName}`,
     );
@@ -103,7 +107,7 @@ const takeScreenShot = async ({
 
     success = true;
   } catch (error: unknown) {
-    logger('Error when taking screenshot', error);
+    logger.process('error', 'Error when taking screenshot', error);
   }
 
   await context.close();
@@ -118,7 +122,8 @@ const takeScreenShot = async ({
     await page.video()?.saveAs(newVideoPath);
     await page.video()?.delete();
 
-    logger(
+    logger.process(
+      'info',
       `Video of '${shotItem.shotName}' recorded and saved to '${newVideoPath}`,
     );
   }
@@ -135,16 +140,14 @@ export const takeScreenShots = async (shotItems: ShotItem[]) => {
     config.shotConcurrency,
     async (item: [number, ShotItem]) => {
       const [index, shotItem] = item;
-      const logger = (message: string, ...rest: unknown[]) => {
-        log.item.process(
-          shotItem.shotName,
-          'info',
-          `[${index + 1}/${total}] ${message}`,
-          ...rest,
-        );
-      };
+      const logger = log.item(shotItem.shotName);
+      // const logger = (message: string, ...rest: unknown[]) => {
+      //   log
+      //     .item(shotItem.shotName)
+      //     .process('info', `[${index + 1}/${total}] ${message}`, ...rest);
+      // };
 
-      logger(`Taking screenshot of '${shotItem.shotName}'`);
+      logger.process('info', `Taking screenshot of '${shotItem.shotName}'`);
 
       const startTime = Date.now();
 
@@ -153,11 +156,13 @@ export const takeScreenShots = async (shotItems: ShotItem[]) => {
       const elapsedTime = Number((endTime - startTime) / 1000).toFixed(3);
 
       if (result) {
-        logger(
+        logger.process(
+          'info',
           `Screenshot of '${shotItem.shotName}' taken and saved to '${shotItem.filePathCurrent}' in ${elapsedTime}s`,
         );
       } else {
-        logger(
+        logger.process(
+          'info',
           `Screenshot of '${shotItem.shotName}' failed and took ${elapsedTime}s`,
         );
       }
