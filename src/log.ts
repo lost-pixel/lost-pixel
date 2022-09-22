@@ -15,13 +15,17 @@ export const logMemory: LogMemory = [];
 const renderLog = (entry: LogEntry) => {
   const { log } = console;
 
-  const itemLog =
-    entry.itemIndex && entry.totalItems
-      ? `[${entry.itemIndex + 1}/${entry.totalItems}] `
-      : '';
-  const typeLog = entry.type === 'info' ? '' : `[${entry.type}] `;
+  const logPrefix = [];
 
-  log(`${itemLog}${typeLog}`, ...entry.content);
+  if (entry.itemIndex !== undefined && entry.totalItems) {
+    logPrefix.push(`[${entry.itemIndex + 1}/${entry.totalItems}]`);
+  }
+
+  if (entry.type !== 'info') {
+    logPrefix.push(`[${entry.type}]`);
+  }
+
+  log(...logPrefix, ...entry.content);
 };
 
 export const log = {
