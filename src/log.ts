@@ -13,7 +13,7 @@ type LogEntry = {
   content: unknown[];
 };
 
-type LogMemory = LogEntry[];
+export type LogMemory = LogEntry[];
 
 export const logMemory: LogMemory = [];
 
