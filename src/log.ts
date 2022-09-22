@@ -1,8 +1,10 @@
 type LogEntry = {
   timestamp: Date;
-  uniqueItemId?: string;
-  itemIndex?: number;
-  totalItems?: number;
+  item?: {
+    uniqueItemId: string;
+    itemIndex: number;
+    totalItems: number;
+  };
   source: 'process' | 'browser';
   type: 'info' | 'console' | 'network' | 'timeout' | 'error';
   content: unknown[];
@@ -20,8 +22,8 @@ const renderLog = (entry: LogEntry) => {
   const { log } = console;
   const logPrefix = [];
 
-  if (entry.itemIndex !== undefined && entry.totalItems) {
-    logPrefix.push(`[${entry.itemIndex + 1}/${entry.totalItems}]`);
+  if (entry.item) {
+    logPrefix.push(`[${entry.item.itemIndex + 1}/${entry.item.totalItems}]`);
   }
 
   if (entry.type !== 'info') {
@@ -32,17 +34,11 @@ const renderLog = (entry: LogEntry) => {
 };
 
 export const log = {
-  item: (
-    uniqueItemId: LogEntry['uniqueItemId'],
-    itemIndex: LogEntry['itemIndex'],
-    totalItems: LogEntry['totalItems'],
-  ) => ({
+  item: (item: LogEntry['item']) => ({
     process(type: LogEntry['type'], ...content: unknown[]) {
       const entry: LogEntry = {
         timestamp: new Date(),
-        uniqueItemId,
-        itemIndex,
-        totalItems,
+        item,
         source: 'process',
         type,
         content,
@@ -54,9 +50,7 @@ export const log = {
     browser(type: LogEntry['type'], ...content: unknown[]) {
       const entry: LogEntry = {
         timestamp: new Date(),
-        uniqueItemId,
-        itemIndex,
-        totalItems,
+        item,
         source: 'browser',
         type,
         content,

@@ -140,7 +140,11 @@ export const takeScreenShots = async (shotItems: ShotItem[]) => {
     config.shotConcurrency,
     async (item: [number, ShotItem]) => {
       const [index, shotItem] = item;
-      const logger = log.item(shotItem.shotName, index, total);
+      const logger = log.item({
+        uniqueItemId: shotItem.shotName,
+        itemIndex: index,
+        totalItems: total,
+      });
 
       logger.process('info', `Taking screenshot of '${shotItem.shotName}'`);
 

@@ -18,7 +18,13 @@ export const checkDifferences = async (shotItems: ShotItem[]) => {
     async (item: [number, ShotItem]) => {
       const [index, shotItem] = item;
       const logger = (message: string) => {
-        log.item(shotItem.shotName, index, total).process('info', message);
+        log
+          .item({
+            uniqueItemId: shotItem.shotName,
+            itemIndex: index,
+            totalItems: total,
+          })
+          .process('info', message);
       };
 
       logger(`Comparing '${shotItem.id}'`);
