@@ -190,6 +190,21 @@ export type PageScreenshotParameter = {
     width?: number;
     height?: number;
   };
+
+  mask?: Array<{
+    /**
+     * CSS selector for the element to mask
+     * Examples:
+     * - `#my-id`: Selects the element with the id `my-id`
+     * - `.my-class`: Selects all elements with the class `my-class`
+     * - `div`: Selects all `div` elements
+     * - `div.my-class`: Selects all `div` elements with the class `my-class`
+     * - `li:nth-child(2n)`: Selects all even `li` elements
+     * - `[data-testid="hero-banner"]`: Selects all elements with the attribute `data-testid` set to `hero-banner`
+     * - `div > p`: Selects all `p` elements that are direct children of a `div` element
+     */
+    selector: string;
+  }>;
 };
 
 export type ShotMode = 'storybook' | 'ladle' | 'page' | 'custom';
