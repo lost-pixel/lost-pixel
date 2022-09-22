@@ -7,6 +7,7 @@ type ApiAction = 'init' | 'next' | 'finalize';
 export const apiClient = axios.create({
   headers: {
     'Content-type': 'application/json',
+    'x-api-version': '3',
   },
 });
 
