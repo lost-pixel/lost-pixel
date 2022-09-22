@@ -20,6 +20,7 @@ export const checkDifferences = async (shotItems: ShotItem[]) => {
       const logger = (message: string) => {
         log
           .item({
+            shotMode: shotItem.shotMode,
             uniqueItemId: shotItem.shotName,
             itemIndex: index,
             totalItems: total,

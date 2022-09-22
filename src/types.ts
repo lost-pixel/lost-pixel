@@ -5,7 +5,8 @@ import type {
   CheckRunRerequestedEvent,
 } from '@octokit/webhooks-types';
 import type { BrowserContextOptions } from 'playwright';
-import type { ShotMode } from './config';
+
+export type ShotMode = 'storybook' | 'ladle' | 'page' | 'custom';
 
 export type WebhookEvent =
   | PullRequestEvent

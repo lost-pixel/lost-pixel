@@ -1,6 +1,9 @@
+import { ShotMode } from './types';
+
 type LogEntry = {
   timestamp: Date;
   item?: {
+    shotMode: ShotMode;
     uniqueItemId: string;
     itemIndex: number;
     totalItems: number;

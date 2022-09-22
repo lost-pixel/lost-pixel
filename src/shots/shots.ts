@@ -141,6 +141,7 @@ export const takeScreenShots = async (shotItems: ShotItem[]) => {
     async (item: [number, ShotItem]) => {
       const [index, shotItem] = item;
       const logger = log.item({
+        shotMode: shotItem.shotMode,
         uniqueItemId: shotItem.shotName,
         itemIndex: index,
         totalItems: total,

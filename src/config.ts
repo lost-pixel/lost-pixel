@@ -4,6 +4,7 @@ import get from 'lodash.get';
 import type { BrowserContextOptions, Page } from 'playwright';
 import { loadTSProjectConfigFile } from './configHelper';
 import { log } from './log';
+import { ShotMode } from './types';
 
 type BaseConfig = {
   /**
@@ -231,8 +232,6 @@ export type PageScreenshotParameter = {
    */
   mask?: Mask[];
 };
-
-export type ShotMode = 'storybook' | 'ladle' | 'page' | 'custom';
 
 type StoryLike = {
   shotMode: ShotMode;
