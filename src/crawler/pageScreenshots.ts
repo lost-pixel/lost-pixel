@@ -52,6 +52,7 @@ export const generatePageShotItems = (
       threshold: page.threshold ?? config.threshold,
       waitBeforeScreenshot:
         page.waitBeforeScreenshot ?? config.waitBeforeScreenshot,
+      mask: page.mask,
     };
   });
 };
