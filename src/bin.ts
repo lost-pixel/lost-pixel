@@ -5,9 +5,10 @@ import yargs from 'yargs';
 import { hideBin } from 'yargs/helpers';
 import fs from 'fs-extra';
 import { log } from './log';
-import { runner } from './runner';
+import { platformRunner, runner } from './runner';
 import { getVersion } from './utils';
 import { sendFinalizeToAPI } from './sendFinalize';
+import { config, configure } from './config';
 
 type CommandArgs = ['init-js', 'init-ts', 'finalize'];
 
@@ -54,9 +55,16 @@ if (version) {
       modifiedFile,
     );
     log.process('info', '✅ Config successfully initialized');
-  } else if (commandArgs.includes('finalize')) {
-    await sendFinalizeToAPI();
   } else {
-    await runner();
+    await configure();
+    log.process('info', 'Successfully loaded the configuration!');
+
+    if (commandArgs.includes('finalize')) {
+      await sendFinalizeToAPI();
+    } else if (config.apiKey) {
+      await platformRunner();
+    } else {
+      await runner();
+    }
   }
 })();

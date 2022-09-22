@@ -11,16 +11,13 @@ import {
   parseHrtimeToSeconds,
   removeFilesInFolder,
 } from './utils';
-import { config, configure } from './config';
+import { config } from './config';
 import { sendResultToAPI } from './upload';
 import { sendInitToAPI } from './sendInit';
 import { log } from './log';
 
 export const runner = async () => {
   const executionStart = process.hrtime();
-
-  await configure();
-  log.process('info', 'Successfully loaded the configuration!');
 
   try {
     if (config.setPendingStatusCheck && !config.generateOnly) {
@@ -156,9 +153,6 @@ export const runner = async () => {
 
 export const platformRunner = async () => {
   const executionStart = process.hrtime();
-
-  await configure();
-  log.process('info', 'Successfully loaded the configuration!');
 
   if (isUpdateMode()) {
     log.process(
