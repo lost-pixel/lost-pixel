@@ -13,8 +13,11 @@ type LogMemory = LogEntry[];
 export const logMemory: LogMemory = [];
 
 const renderLog = (entry: LogEntry) => {
-  const { log } = console;
+  if (entry.source === 'browser' && entry.type === 'console') {
+    return;
+  }
 
+  const { log } = console;
   const logPrefix = [];
 
   if (entry.itemIndex !== undefined && entry.totalItems) {
