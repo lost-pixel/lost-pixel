@@ -1,6 +1,8 @@
 import axios from 'axios';
 import { log } from './log';
+import type { LogMemory } from './log';
 import { config } from './config';
+import type { WebhookEvent } from './types';
 
 type ApiAction = 'getApiToken' | 'init' | 'next' | 'finalize';
 
@@ -31,6 +33,28 @@ type ApiPayloadInit = {
   commit: string;
 };
 
+type ApiPayloadNext = {
+  projectId: string;
+  branchName: string;
+  repoOwner: string;
+  repoName: string;
+  commit: string;
+  buildId: string;
+  buildNumber: string;
+  branchRef: string;
+  buildMeta?: WebhookEvent;
+  success: boolean;
+  log: LogMemory;
+};
+
+type ApiPayloadFinalize = {
+  projectId: string;
+  branchName: string;
+  repoOwner: string;
+  repoName: string;
+  commit: string;
+};
+
 type ApiPayload<A extends ApiAction, P extends Record<string, unknown>> = {
   action: A;
   payload: P;
@@ -38,7 +62,9 @@ type ApiPayload<A extends ApiAction, P extends Record<string, unknown>> = {
 
 type ApiPayloads =
   | ApiPayload<'getApiToken', ApiPayloadGetApiToken>
-  | ApiPayload<'init', ApiPayloadInit>;
+  | ApiPayload<'init', ApiPayloadInit>
+  | ApiPayload<'next', ApiPayloadNext>
+  | ApiPayload<'finalize', ApiPayloadFinalize>;
 
 export const sendToAPI = async (parameters: ApiPayloads) => {
   log.process('info', `Sending to API [${parameters.action}]`);
