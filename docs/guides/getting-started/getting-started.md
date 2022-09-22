@@ -39,7 +39,7 @@ coverY: 0
            run: npm run serve &
 
          - name: Lost Pixel
-           uses: lost-pixel/lost-pixel@v2.19.0
+           uses: lost-pixel/lost-pixel@v2.20.0
    ```
 
    This action file will run on every commit and will **build & serve Ladle** before running Lost Pixel visual regression checks on it.&#x20;
