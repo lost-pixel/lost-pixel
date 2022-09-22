@@ -17,11 +17,14 @@ export const sendFinalizeToAPI = async () => {
 
   const [repoOwner, repoName] = config.repository.split('/');
 
-  return sendToAPI('finalize', {
-    projectId: config.lostPixelProjectId,
-    branchName: config.commitRefName,
-    repoOwner,
-    repoName,
-    commit: config.commitHash,
+  return sendToAPI({
+    action: 'finalize',
+    payload: {
+      projectId: config.lostPixelProjectId,
+      branchName: config.commitRefName,
+      repoOwner,
+      repoName,
+      commit: config.commitHash,
+    },
   });
 };
