@@ -2,7 +2,7 @@ import axios from 'axios';
 import { log } from './log';
 import { config } from './config';
 
-type ApiAction = 'init' | 'result' | 'finalize';
+type ApiAction = 'init' | 'next' | 'finalize';
 
 export const apiClient = axios.create({
   headers: {
@@ -23,10 +23,10 @@ export const sendToAPI = async (
   log.process('info', `Sending to API [${action}]`);
 
   try {
-    const response = await apiClient.post(config.lostPixelUrl, {
-      ...payload,
-      action,
-    });
+    const response = await apiClient.post(
+      `${config.lostPixelPlatform}/api/${action}`,
+      payload,
+    );
 
     if (response.status !== 200) {
       log.process(

@@ -78,7 +78,7 @@ export const sendResultToAPI = async ({
 
   const [repoOwner, repoName] = config.repository.split('/');
 
-  return sendToAPI('result', {
+  return sendToAPI('next', {
     projectId: config.lostPixelProjectId,
     buildId: config.ciBuildId,
     buildNumber: config.ciBuildNumber,
