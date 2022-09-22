@@ -15,9 +15,9 @@ type BaseConfig = {
 
   /**
    * URL of the Lost Pixel API endpoint
-   * @default 'https://app.lost-pixel.com/api/callback'
+   * @default 'https://app.lost-pixel.com'
    */
-  lostPixelUrl: string;
+  lostPixelPlatform: string;
 
   /**
    * API key for the Lost Pixel platform
@@ -409,7 +409,7 @@ export type CustomProjectConfig =
 
 const defaultConfig: BaseConfig = {
   browser: 'chromium',
-  lostPixelUrl: 'https://app.lost-pixel.com/api/callback',
+  lostPixelPlatform: 'https://app.lost-pixel.com',
   imagePathBaseline: '.lostpixel/baseline/',
   imagePathCurrent: '.lostpixel/current/',
   imagePathDifference: '.lostpixel/difference/',
