@@ -2,7 +2,7 @@ import axios from 'axios';
 import { log } from './log';
 import { config } from './config';
 
-type ApiAction = 'init' | 'next' | 'finalize';
+type ApiAction = 'getApiToken' | 'init' | 'next' | 'finalize';
 
 export const apiClient = axios.create({
   headers: {
@@ -10,6 +10,13 @@ export const apiClient = axios.create({
     'x-api-version': '3',
   },
 });
+
+const apiRoutes: Record<ApiAction, string> = {
+  getApiToken: '/auth/get-api-token',
+  init: '/app/init',
+  next: '/app/next',
+  finalize: '/app/finalize',
+};
 
 export const sendToAPI = async (
   action: ApiAction,
@@ -25,7 +32,7 @@ export const sendToAPI = async (
 
   try {
     const response = await apiClient.post(
-      `${config.lostPixelPlatform}/app/${action}`,
+      `${config.lostPixelPlatform}${apiRoutes[action]}`,
       payload,
       {
         headers: {
