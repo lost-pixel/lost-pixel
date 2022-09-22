@@ -20,12 +20,8 @@ const renderLog = (entry: LogEntry) => {
 };
 
 export const log = {
-  item: {
-    process: (
-      uniqueItemId: LogEntry['uniqueItemId'],
-      type: LogEntry['type'],
-      ...content: unknown[]
-    ) => {
+  item: (uniqueItemId: LogEntry['uniqueItemId']) => ({
+    process: (type: LogEntry['type'], ...content: unknown[]) => {
       const entry: LogEntry = {
         timestamp: new Date(),
         uniqueItemId,
@@ -37,11 +33,7 @@ export const log = {
       logMemory.push(entry);
       renderLog(entry);
     },
-    browser: (
-      uniqueItemId: LogEntry['uniqueItemId'],
-      type: LogEntry['type'],
-      ...content: unknown[]
-    ) => {
+    browser: (type: LogEntry['type'], ...content: unknown[]) => {
       const entry: LogEntry = {
         timestamp: new Date(),
         uniqueItemId,
@@ -53,7 +45,7 @@ export const log = {
       logMemory.push(entry);
       renderLog(entry);
     },
-  },
+  }),
   process: (type: LogEntry['type'], ...content: unknown[]) => {
     const entry: LogEntry = {
       timestamp: new Date(),
