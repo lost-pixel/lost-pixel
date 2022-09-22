@@ -78,19 +78,22 @@ export const sendResultToAPI = async ({
 
   const [repoOwner, repoName] = config.repository.split('/');
 
-  return sendToAPI('next', {
-    projectId: config.lostPixelProjectId,
-    buildId: config.ciBuildId,
-    buildNumber: config.ciBuildNumber,
-    branchRef: config.commitRef,
-    branchName: config.commitRefName,
-    repoOwner,
-    repoName,
-    commit: config.commitHash,
-    buildMeta: event,
-    comparisons: comparisons ?? [],
-    success,
-    log: logMemory,
-    durations,
+  return sendToAPI({
+    action: 'next',
+    payload: {
+      projectId: config.lostPixelProjectId,
+      buildId: config.ciBuildId,
+      buildNumber: config.ciBuildNumber,
+      branchRef: config.commitRef,
+      branchName: config.commitRefName,
+      repoOwner,
+      repoName,
+      commit: config.commitHash,
+      buildMeta: event,
+      success,
+      log: logMemory,
+      // To check: only shot duratios are needed
+      // durations,
+    },
   });
 };
