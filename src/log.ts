@@ -8,17 +8,20 @@ type LogEntry = {
   content: unknown[];
 };
 
-type LogMemory = Array<LogEntry>;
+type LogMemory = LogEntry[];
 
 export const logMemory: LogMemory = [];
 
 const renderLog = (entry: LogEntry) => {
   const { log } = console;
 
+  const itemLog =
+    entry.itemIndex && entry.totalItems
+      ? `[${entry.itemIndex + 1}/${entry.totalItems}] `
+      : '';
   const typeLog = entry.type === 'info' ? '' : `[${entry.type}] `;
-  const itemLog = entry.uniqueItemId ? `{${entry.uniqueItemId}} ` : '';
 
-  log(`${typeLog}${itemLog}`, ...entry.content);
+  log(`${itemLog}${typeLog}`, ...entry.content);
 };
 
 export const log = {
@@ -27,7 +30,7 @@ export const log = {
     itemIndex: LogEntry['itemIndex'],
     totalItems: LogEntry['totalItems'],
   ) => ({
-    process: (type: LogEntry['type'], ...content: unknown[]) => {
+    process(type: LogEntry['type'], ...content: unknown[]) {
       const entry: LogEntry = {
         timestamp: new Date(),
         uniqueItemId,
@@ -41,7 +44,7 @@ export const log = {
       logMemory.push(entry);
       renderLog(entry);
     },
-    browser: (type: LogEntry['type'], ...content: unknown[]) => {
+    browser(type: LogEntry['type'], ...content: unknown[]) {
       const entry: LogEntry = {
         timestamp: new Date(),
         uniqueItemId,
@@ -56,7 +59,7 @@ export const log = {
       renderLog(entry);
     },
   }),
-  process: (type: LogEntry['type'], ...content: unknown[]) => {
+  process(type: LogEntry['type'], ...content: unknown[]) {
     const entry: LogEntry = {
       timestamp: new Date(),
       source: 'process',
@@ -67,7 +70,7 @@ export const log = {
     logMemory.push(entry);
     renderLog(entry);
   },
-  browser: (type: LogEntry['type'], ...content: unknown[]) => {
+  browser(type: LogEntry['type'], ...content: unknown[]) {
     const entry: LogEntry = {
       timestamp: new Date(),
       source: 'browser',
