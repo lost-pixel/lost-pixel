@@ -42,6 +42,19 @@ export const sendToAPI = async (
 
       process.exit(1);
     }
+
+    const outdatedApiRequest = response?.headers?.['x-api-version-warning'];
+
+    if (outdatedApiRequest) {
+      log.process(
+        'info',
+        [
+          '~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~',
+          `~~ ${outdatedApiRequest}`,
+          '~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~',
+        ].join('\n'),
+      );
+    }
   } catch (error: unknown) {
     if (axios.isAxiosError(error)) {
       log.process(
