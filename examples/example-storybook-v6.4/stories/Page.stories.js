@@ -22,3 +22,17 @@ export const LoggedOut = Template.bind({});
 LoggedOut.args = {
   ...HeaderStories.LoggedOut.args,
 };
+
+export const Masked = Template.bind({});
+Masked.args = {
+  ...HeaderStories.LoggedOut.args,
+};
+Masked.parameters = {
+  lostpixel: {
+    mask: [
+      {
+        selector: 'a',
+      },
+    ],
+  },
+};
