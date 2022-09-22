@@ -27,6 +27,11 @@ type BaseConfig = {
      * @default 'storybook-static'
      */
     storybookUrl: string;
+
+    /**
+     * Define areas for all stories where differences will be ignored
+     */
+    mask?: Mask[];
   };
 
   /**
@@ -38,6 +43,11 @@ type BaseConfig = {
      * @default 'http://localhost:61000'
      */
     ladleUrl: string;
+
+    /**
+     * Define areas for all stories where differences will be ignored
+     */
+    mask?: Mask[];
   };
 
   /**

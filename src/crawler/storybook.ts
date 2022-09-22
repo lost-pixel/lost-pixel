@@ -4,6 +4,7 @@ import type { BrowserContext } from 'playwright';
 import { readFileSync } from 'fs-extra';
 import type { ShotItem } from '../types';
 import { config } from '../config';
+import type { Mask } from '../config';
 import { getBrowser } from '../utils';
 import { log } from '../log';
 
@@ -12,6 +13,7 @@ export type StoryParameters = {
     disable?: boolean;
     threshold?: number;
     waitBeforeScreenshot?: number;
+    mask?: Mask[];
   };
   viewport?: {
     width?: number;
@@ -265,6 +267,7 @@ const generateBrowserConfig = (story: Story) => {
 export const generateStorybookShotItems = (
   baseUrl: string,
   stories: Story[],
+  mask?: Mask[],
 ): ShotItem[] => {
   const iframeUrl = getIframeUrl(getStoryBookUrl(baseUrl));
 
@@ -302,6 +305,7 @@ export const generateStorybookShotItems = (
         waitBeforeScreenshot:
           story.parameters?.lostpixel?.waitBeforeScreenshot ??
           config.waitBeforeScreenshot,
+        mask: [...(mask ?? []), ...(story.parameters?.lostpixel?.mask ?? [])],
       };
     });
 
