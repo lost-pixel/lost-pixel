@@ -129,6 +129,20 @@ export const sendToAPI = async (parameters: ApiPayloads) => {
   log.process('info', `Successfully sent to API [${parameters.action}]`);
 };
 
+export const getApiToken = async () => {
+  if (config.generateOnly) {
+    return;
+  }
+
+  return sendToAPI({
+    action: 'getApiToken',
+    payload: {
+      apiKey: config.apiKey ?? 'undefined',
+      projectIdentifier: config.lostPixelProjectId,
+    },
+  });
+};
+
 export const sendInitToAPI = async () => {
   if (config.generateOnly) {
     return;
