@@ -18,19 +18,7 @@ export const runner = async () => {
   const executionStart = process.hrtime();
 
   try {
-    if (config.setPendingStatusCheck && !config.generateOnly) {
-      await sendInitToAPI();
-    }
-
     if (isUpdateMode()) {
-      if (!config.generateOnly) {
-        log.process(
-          'error',
-          'Running lost-pixel in update mode requires the generateOnly option to be set to true',
-        );
-        process.exit(1);
-      }
-
       log.process(
         'info',
         'Running lost-pixel in update mode. Baseline screenshots will be updated',
@@ -98,18 +86,11 @@ export const runner = async () => {
       `Lost Pixel run took ${parseHrtimeToSeconds(executionStop)} seconds`,
     );
 
-    if (config.generateOnly) {
-      exitProcess({
-        shotsNumber: shotItems.length,
-        runDuration: Number(parseHrtimeToSeconds(executionStop)),
-        exitCode: 0,
-      });
-    } else {
-      await sendResultToAPI({
-        success: true,
-        event: getEventData(config.eventFilePath),
-      });
-    }
+    exitProcess({
+      shotsNumber: shotItems.length,
+      runDuration: Number(parseHrtimeToSeconds(executionStop)),
+      exitCode: 0,
+    });
   } catch (error: unknown) {
     const executionStop = process.hrtime(executionStart);
 
@@ -119,21 +100,10 @@ export const runner = async () => {
       log.process('error', error);
     }
 
-    if (config.generateOnly) {
-      exitProcess({
-        runDuration: Number(parseHrtimeToSeconds(executionStop)),
-        error,
-      });
-    }
-
-    if (!config.generateOnly) {
-      await sendResultToAPI({
-        success: false,
-        event: getEventData(config.eventFilePath),
-      });
-    }
-
-    process.exit(1);
+    exitProcess({
+      runDuration: Number(parseHrtimeToSeconds(executionStop)),
+      error,
+    });
   }
 };
 
