@@ -324,9 +324,10 @@ type GenerateOnlyModeProjectConfig = Omit<
   | 'commitRef'
   | 'commitRefName'
   | 'commitHash'
-> & {
-  generateOnly: true;
-};
+> &
+  Partial<Pick<ProjectConfig, 'lostPixelProjectId'>> & {
+    generateOnly: true;
+  };
 
 const requiredConfigProps: Array<keyof ProjectConfig> = [
   'lostPixelProjectId',
