@@ -1,7 +1,6 @@
 import fse from 'fs-extra';
 
 import { checkDifferences } from './checkDifferences';
-import { collect } from './collect';
 import { createShots } from './createShots';
 import {
   createShotsFolders,
@@ -12,8 +11,7 @@ import {
   removeFilesInFolder,
 } from './utils';
 import { config } from './config';
-import { sendResultToAPI } from './upload';
-import { sendInitToAPI } from './sendInit';
+import { sendInitToAPI, sendResultToAPI } from './api';
 import { log } from './log';
 
 export const runner = async () => {
@@ -107,21 +105,9 @@ export const runner = async () => {
         exitCode: 0,
       });
     } else {
-      const comparisons = await collect();
-
       await sendResultToAPI({
         success: true,
-        comparisons,
         event: getEventData(config.eventFilePath),
-        durations: {
-          runDuration: Number(parseHrtimeToSeconds(executionStop)),
-          differenceComparisonsDuration: Number(
-            parseHrtimeToSeconds(checkDifferenceStop),
-          ),
-          shotsCreationDuration: Number(
-            parseHrtimeToSeconds(checkDifferenceStop),
-          ),
-        },
       });
     }
   } catch (error: unknown) {

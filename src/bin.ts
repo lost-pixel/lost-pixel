@@ -7,7 +7,7 @@ import fs from 'fs-extra';
 import { log } from './log';
 import { platformRunner, runner } from './runner';
 import { getVersion } from './utils';
-import { sendFinalizeToAPI } from './sendFinalize';
+import { sendFinalizeToAPI } from './api';
 import { config, configure } from './config';
 
 type CommandArgs = ['init-js', 'init-ts', 'finalize'];

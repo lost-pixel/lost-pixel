@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { log } from './log';
+import { log, logMemory } from './log';
 import type { LogMemory } from './log';
 import { config } from './config';
 import type { WebhookEvent } from './types';
@@ -127,4 +127,73 @@ export const sendToAPI = async (parameters: ApiPayloads) => {
   }
 
   log.process('info', `Successfully sent to API [${parameters.action}]`);
+};
+
+export const sendInitToAPI = async () => {
+  if (config.generateOnly) {
+    return;
+  }
+
+  const [repoOwner, repoName] = config.repository.split('/');
+
+  return sendToAPI({
+    action: 'init',
+    payload: {
+      projectId: config.lostPixelProjectId,
+      branchName: config.commitRefName,
+      repoOwner,
+      repoName,
+      commit: config.commitHash,
+    },
+  });
+};
+
+export const sendResultToAPI = async ({
+  success,
+  event,
+}: {
+  success: boolean;
+  event?: WebhookEvent;
+}) => {
+  if (config.generateOnly) {
+    return;
+  }
+
+  const [repoOwner, repoName] = config.repository.split('/');
+
+  return sendToAPI({
+    action: 'next',
+    payload: {
+      projectId: config.lostPixelProjectId,
+      buildId: config.ciBuildId,
+      buildNumber: config.ciBuildNumber,
+      branchRef: config.commitRef,
+      branchName: config.commitRefName,
+      repoOwner,
+      repoName,
+      commit: config.commitHash,
+      buildMeta: event,
+      success,
+      log: logMemory,
+    },
+  });
+};
+
+export const sendFinalizeToAPI = async () => {
+  if (config.generateOnly) {
+    return;
+  }
+
+  const [repoOwner, repoName] = config.repository.split('/');
+
+  return sendToAPI({
+    action: 'finalize',
+    payload: {
+      projectId: config.lostPixelProjectId,
+      branchName: config.commitRefName,
+      repoOwner,
+      repoName,
+      commit: config.commitHash,
+    },
+  });
 };
