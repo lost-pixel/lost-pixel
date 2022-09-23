@@ -113,15 +113,7 @@ export const platformRunner = async () => {
   if (isUpdateMode()) {
     log.process(
       'error',
-      'Running lost-pixel in update mode is not compatible with the platform runner',
-    );
-    process.exit(1);
-  }
-
-  if (config.generateOnly) {
-    log.process(
-      'error',
-      'Running lost-pixel in generateOnly mode is not compatible with the platform runner',
+      'Running lost-pixel in update mode requires the generateOnly option to be set to true',
     );
     process.exit(1);
   }
@@ -152,6 +144,11 @@ export const platformRunner = async () => {
       'info',
       `Lost Pixel run took ${parseHrtimeToSeconds(executionStop)} seconds`,
     );
+
+    await sendResultToAPI({
+      success: true,
+      event: getEventData(config.eventFilePath),
+    });
   } catch (error: unknown) {
     // const executionStop = process.hrtime(executionStart);
 
