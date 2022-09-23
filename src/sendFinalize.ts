@@ -1,14 +1,8 @@
 import { config } from './config';
 import { sendToAPI } from './api';
-import { log } from './log';
 
 export const sendFinalizeToAPI = async () => {
   if (config.generateOnly) {
-    log.process(
-      'info',
-      'Running lost-pixel in generateOnly mode. Skipping sending finalize.',
-    );
-
     return;
   }
 

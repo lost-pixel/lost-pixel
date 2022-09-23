@@ -67,6 +67,15 @@ type ApiPayloads =
   | ApiPayload<'finalize', ApiPayloadFinalize>;
 
 export const sendToAPI = async (parameters: ApiPayloads) => {
+  if (config.generateOnly) {
+    log.process(
+      'info',
+      'Running lost-pixel in generateOnly mode. Skipping API requests.',
+    );
+
+    return;
+  }
+
   log.process('info', `Sending to API [${parameters.action}]`);
 
   try {
