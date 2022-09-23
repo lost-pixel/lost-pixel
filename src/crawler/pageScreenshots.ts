@@ -87,7 +87,6 @@ export const getPagesFromExternalLoader = async () => {
           .optional(),
       }),
     );
-    log({ pages });
 
     const validatePages = pagesArraySchema.safeParse(pages);
 
@@ -97,6 +96,7 @@ export const getPagesFromExternalLoader = async () => {
 
     log('Error validating the loaded pages structure');
     log(validatePages.error);
+
     return [];
   } catch (error: unknown) {
     if (axios.isAxiosError(error)) {
