@@ -2,7 +2,7 @@ import { Client as MinioClient } from 'minio';
 import { log, logMemory } from './log';
 import { config } from './config';
 import { sendToAPI } from './api';
-import type { Comparison, UploadFile, WebhookEvent } from './types';
+import type { UploadFile, WebhookEvent } from './types';
 
 let minio: MinioClient;
 
@@ -59,18 +59,10 @@ export const uploadFile = async ({
 
 export const sendResultToAPI = async ({
   success,
-  comparisons,
   event,
-  durations,
 }: {
   success: boolean;
-  comparisons?: Comparison[];
   event?: WebhookEvent;
-  durations?: {
-    runDuration: number;
-    shotsCreationDuration: number;
-    differenceComparisonsDuration: number;
-  };
 }) => {
   if (config.generateOnly) {
     return;
@@ -92,8 +84,6 @@ export const sendResultToAPI = async ({
       buildMeta: event,
       success,
       log: logMemory,
-      // To check: only shot duratios are needed
-      // durations,
     },
   });
 };
