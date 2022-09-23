@@ -7,7 +7,10 @@ import {
   collectStories,
   generateStorybookShotItems,
 } from './crawler/storybook';
-import { generatePageShotItems } from './crawler/pageScreenshots';
+import {
+  generatePageShotItems,
+  getPagesFromExternalLoader,
+} from './crawler/pageScreenshots';
 import { log } from './log';
 import { takeScreenShots } from './shots/shots';
 import { readDirIntoShotItems, removeFilesInFolder } from './utils';
@@ -99,7 +102,11 @@ export const createShots = async () => {
   }
 
   if (pageShots) {
-    const { pages, baseUrl, mask } = pageShots;
+    const { pages: pagesFromConfig, baseUrl, mask } = pageShots;
+
+    const pagesFromLoader = await getPagesFromExternalLoader();
+
+    const pages = [...pagesFromConfig, ...pagesFromLoader];
 
     log(`\n=== [Page Mode] ${baseUrl} ===\n`);
 

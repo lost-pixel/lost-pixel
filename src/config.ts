@@ -58,6 +58,10 @@ type BaseConfig = {
      * Paths to take screenshots of
      */
     pages: PageScreenshotParameter[];
+    /**
+     * Url that must return a JSON compatible with `PageScreenshotParameter[]`. It is useful when you want to autogenerate the pages that you want to run lost-pixel on. Can be used together with `pages` as both are composed into a single run.
+     */
+    pagesJsonUrl?: string;
 
     /**
      * Base URL of the running application (e.g. http://localhost:3000)

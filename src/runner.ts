@@ -54,7 +54,7 @@ export const runner = async () => {
 
     if (config.generateOnly && shotItems.length === 0) {
       log(`Exiting process with nothing to compare.`);
-      exitProcess({ shotsNumber: shotItems.length });
+      await exitProcess({ shotsNumber: shotItems.length });
     }
 
     log('Checking differences');
@@ -77,7 +77,7 @@ export const runner = async () => {
       );
 
       if (config.generateOnly) {
-        exitProcess({ shotsNumber: shotItems.length });
+        await exitProcess({ shotsNumber: shotItems.length });
       }
     }
 
@@ -94,29 +94,29 @@ export const runner = async () => {
     log(`Lost Pixel run took ${parseHrtimeToSeconds(executionStop)} seconds`);
 
     if (config.generateOnly) {
-      exitProcess({
+      await exitProcess({
         shotsNumber: shotItems.length,
         runDuration: Number(parseHrtimeToSeconds(executionStop)),
         exitCode: 0,
       });
-    } else {
-      const comparisons = await collect();
-
-      await sendResultToAPI({
-        success: true,
-        comparisons,
-        event: getEventData(config.eventFilePath),
-        durations: {
-          runDuration: Number(parseHrtimeToSeconds(executionStop)),
-          differenceComparisonsDuration: Number(
-            parseHrtimeToSeconds(checkDifferenceStop),
-          ),
-          shotsCreationDuration: Number(
-            parseHrtimeToSeconds(checkDifferenceStop),
-          ),
-        },
-      });
     }
+
+    const comparisons = await collect();
+
+    await sendResultToAPI({
+      success: true,
+      comparisons,
+      event: getEventData(config.eventFilePath),
+      durations: {
+        runDuration: Number(parseHrtimeToSeconds(executionStop)),
+        differenceComparisonsDuration: Number(
+          parseHrtimeToSeconds(checkDifferenceStop),
+        ),
+        shotsCreationDuration: Number(
+          parseHrtimeToSeconds(checkDifferenceStop),
+        ),
+      },
+    });
   } catch (error: unknown) {
     const executionStop = process.hrtime(executionStart);
 
@@ -127,7 +127,7 @@ export const runner = async () => {
     }
 
     if (config.generateOnly) {
-      exitProcess({
+      await exitProcess({
         runDuration: Number(parseHrtimeToSeconds(executionStop)),
         error,
       });
