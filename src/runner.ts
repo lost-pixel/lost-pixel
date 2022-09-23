@@ -11,7 +11,7 @@ import {
   removeFilesInFolder,
 } from './utils';
 import { config } from './config';
-import { sendInitToAPI, sendResultToAPI } from './api';
+import { getApiToken, sendInitToAPI, sendResultToAPI } from './api';
 import { log } from './log';
 
 export const runner = async () => {
@@ -119,8 +119,12 @@ export const platformRunner = async () => {
   }
 
   try {
+    const result = await getApiToken();
+    const { apiToken } = result;
+    console.log(apiToken);
+
     if (config.setPendingStatusCheck) {
-      await sendInitToAPI();
+      await sendInitToAPI(apiToken);
     }
 
     log.process('info', 'Creating shot folders');

@@ -57,6 +57,7 @@ type ApiPayloadFinalize = {
 
 type ApiPayload<A extends ApiAction, P extends Record<string, unknown>> = {
   action: A;
+  apiToken?: string;
   payload: P;
 };
 
@@ -66,16 +67,9 @@ type ApiPayloads =
   | ApiPayload<'next', ApiPayloadNext>
   | ApiPayload<'finalize', ApiPayloadFinalize>;
 
-export const sendToAPI = async (parameters: ApiPayloads) => {
-  if (config.generateOnly) {
-    log.process(
-      'info',
-      'Running lost-pixel in generateOnly mode. Skipping API requests.',
-    );
-
-    return;
-  }
-
+export const sendToAPI = async <T extends Record<string, unknown>>(
+  parameters: ApiPayloads,
+): Promise<T> => {
   log.process('info', `Sending to API [${parameters.action}]`);
 
   try {
@@ -84,12 +78,12 @@ export const sendToAPI = async (parameters: ApiPayloads) => {
       parameters.payload,
       {
         headers: {
-          Authorization: `Bearer ${config.apiKey ?? ''}`,
+          Authorization: `Bearer ${parameters.apiToken ?? ''}`,
         },
       },
     );
 
-    if (response.status !== 200) {
+    if (response.status !== 200 && response.status !== 201) {
       log.process(
         'error',
         `Error: Failed to send to API [${parameters.action}]. Status: ${response.status} ${response.statusText}`,
@@ -110,6 +104,10 @@ export const sendToAPI = async (parameters: ApiPayloads) => {
         ].join('\n'),
       );
     }
+
+    log.process('info', `Successfully sent to API [${parameters.action}]`);
+
+    return response.data as T;
   } catch (error: unknown) {
     if (axios.isAxiosError(error)) {
       log.process(
@@ -125,25 +123,19 @@ export const sendToAPI = async (parameters: ApiPayloads) => {
 
     process.exit(1);
   }
-
-  log.process('info', `Successfully sent to API [${parameters.action}]`);
 };
 
 export const getApiToken = async () => {
-  if (config.generateOnly) {
-    return;
-  }
-
-  return sendToAPI({
+  return sendToAPI<{ apiToken: string }>({
     action: 'getApiToken',
     payload: {
       apiKey: config.apiKey ?? 'undefined',
-      projectIdentifier: config.lostPixelProjectId,
+      projectIdentifier: config.lostPixelProjectId ?? 'undefined',
     },
   });
 };
 
-export const sendInitToAPI = async () => {
+export const sendInitToAPI = async (apiToken: string) => {
   if (config.generateOnly) {
     return;
   }
@@ -152,6 +144,7 @@ export const sendInitToAPI = async () => {
 
   return sendToAPI({
     action: 'init',
+    apiToken,
     payload: {
       projectId: config.lostPixelProjectId,
       branchName: config.commitRefName,
