@@ -1,4 +1,3 @@
-import type { ItemBucketMetadata } from 'minio';
 import type {
   PullRequestEvent,
   CheckSuiteRequestedEvent,
@@ -22,12 +21,6 @@ export type Comparison = {
   type: ComparisonType;
   path: string;
   name: string;
-};
-
-export type UploadFile = {
-  uploadPath: string;
-  filePath: string;
-  metaData: ItemBucketMetadata;
 };
 
 export type ShotItem = {
