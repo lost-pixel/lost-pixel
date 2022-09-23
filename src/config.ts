@@ -289,56 +289,6 @@ export type ProjectConfig = {
   failOnDifference?: boolean;
 
   /**
-   * S3 configuration
-   */
-  s3: {
-    /**
-     * S3 endpoint
-     */
-    endPoint: string;
-
-    /**
-     * S3 server port number
-     */
-    port?: number;
-
-    /**
-     * Use SSL
-     */
-    ssl?: boolean;
-
-    /**
-     * S3 region
-     */
-    region?: string;
-
-    /**
-     * S3 access key
-     */
-    accessKey: string;
-
-    /**
-     * S3 secret key
-     */
-    secretKey: string;
-
-    /**
-     * S3 session token
-     */
-    sessionToken?: string;
-
-    /**
-     * S3 bucket name
-     */
-    bucketName: string;
-
-    /**
-     * S3 base URL
-     */
-    baseUrl?: string;
-  };
-
-  /**
    * File path to event.json file
    */
   eventFilePath?: string;
@@ -374,7 +324,6 @@ type GenerateOnlyModeProjectConfig = Omit<
   | 'commitRef'
   | 'commitRefName'
   | 'commitHash'
-  | 's3'
 > & {
   generateOnly: true;
 };
@@ -387,14 +336,6 @@ const requiredConfigProps: Array<keyof ProjectConfig> = [
   'commitRef',
   'commitRefName',
   'commitHash',
-  's3',
-];
-
-const requiredS3ConfigProps: Array<keyof ProjectConfig['s3']> = [
-  'endPoint',
-  'accessKey',
-  'secretKey',
-  'bucketName',
 ];
 
 export const MEDIA_UPLOAD_CONCURRENCY = 10;
@@ -441,12 +382,7 @@ export let config: FullConfig;
 const checkConfig = () => {
   const missingProps: string[] = [];
 
-  const requiredProps = [
-    ...requiredConfigProps,
-    ...requiredS3ConfigProps.map((prop) => `s3.${prop}`),
-  ];
-
-  for (const prop of requiredProps) {
+  for (const prop of requiredConfigProps) {
     if (!get(config, prop)) {
       missingProps.push(prop);
     }
