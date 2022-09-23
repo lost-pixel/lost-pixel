@@ -78,7 +78,13 @@ export const getPagesFromExternalLoader = async () => {
         name: z.string(),
         waitBeforeScreenshot: z.number().optional(),
         threshold: z.number().optional(),
-        mask: z.string().optional(),
+        mask: z
+          .array(
+            z.object({
+              selector: z.string(),
+            }),
+          )
+          .optional(),
         viewport: z
           .object({
             width: z.string(),
