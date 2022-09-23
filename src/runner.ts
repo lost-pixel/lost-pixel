@@ -55,6 +55,8 @@ export const runner = async () => {
     if (config.generateOnly && shotItems.length === 0) {
       log(`Exiting process with nothing to compare.`);
       exitProcess({ shotsNumber: shotItems.length });
+
+      return;
     }
 
     log('Checking differences');
@@ -78,6 +80,8 @@ export const runner = async () => {
 
       if (config.generateOnly) {
         exitProcess({ shotsNumber: shotItems.length });
+
+        return;
       }
     }
 
@@ -99,24 +103,26 @@ export const runner = async () => {
         runDuration: Number(parseHrtimeToSeconds(executionStop)),
         exitCode: 0,
       });
-    } else {
-      const comparisons = await collect();
 
-      await sendResultToAPI({
-        success: true,
-        comparisons,
-        event: getEventData(config.eventFilePath),
-        durations: {
-          runDuration: Number(parseHrtimeToSeconds(executionStop)),
-          differenceComparisonsDuration: Number(
-            parseHrtimeToSeconds(checkDifferenceStop),
-          ),
-          shotsCreationDuration: Number(
-            parseHrtimeToSeconds(checkDifferenceStop),
-          ),
-        },
-      });
+      return;
     }
+
+    const comparisons = await collect();
+
+    await sendResultToAPI({
+      success: true,
+      comparisons,
+      event: getEventData(config.eventFilePath),
+      durations: {
+        runDuration: Number(parseHrtimeToSeconds(executionStop)),
+        differenceComparisonsDuration: Number(
+          parseHrtimeToSeconds(checkDifferenceStop),
+        ),
+        shotsCreationDuration: Number(
+          parseHrtimeToSeconds(checkDifferenceStop),
+        ),
+      },
+    });
   } catch (error: unknown) {
     const executionStop = process.hrtime(executionStart);
 
@@ -131,6 +137,8 @@ export const runner = async () => {
         runDuration: Number(parseHrtimeToSeconds(executionStop)),
         error,
       });
+
+      return;
     }
 
     if (!config.generateOnly) {
