@@ -61,10 +61,10 @@ if (version) {
 
     if (commandArgs.includes('finalize')) {
       await sendFinalizeToAPI();
-    } else if (config.apiKey) {
-      await platformRunner();
-    } else {
+    } else if (config.generateOnly) {
       await runner();
+    } else {
+      await platformRunner();
     }
   }
 })();
