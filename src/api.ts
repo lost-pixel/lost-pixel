@@ -157,9 +157,11 @@ export const sendInitToAPI = async (apiToken: string) => {
 
 export const sendResultToAPI = async ({
   success,
+  apiToken,
   event,
 }: {
   success: boolean;
+  apiToken: string;
   event?: WebhookEvent;
 }) => {
   if (config.generateOnly) {
@@ -170,6 +172,7 @@ export const sendResultToAPI = async ({
 
   return sendToAPI({
     action: 'next',
+    apiToken,
     payload: {
       projectId: config.lostPixelProjectId,
       buildId: config.ciBuildId,
@@ -186,7 +189,7 @@ export const sendResultToAPI = async ({
   });
 };
 
-export const sendFinalizeToAPI = async () => {
+export const sendFinalizeToAPI = async (apiToken: string) => {
   if (config.generateOnly) {
     return;
   }
@@ -195,6 +198,7 @@ export const sendFinalizeToAPI = async () => {
 
   return sendToAPI({
     action: 'finalize',
+    apiToken,
     payload: {
       projectId: config.lostPixelProjectId,
       branchName: config.commitRefName,
