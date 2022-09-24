@@ -5,7 +5,7 @@ import yargs from 'yargs';
 import { hideBin } from 'yargs/helpers';
 import fs from 'fs-extra';
 import { log } from './log';
-import { platformRunner, runner } from './runner';
+import { getPlatformApiToken, platformRunner, runner } from './runner';
 import { getVersion } from './utils';
 import { sendFinalizeToAPI } from './api';
 import { config, configure } from './config';
@@ -59,12 +59,20 @@ if (version) {
     await configure();
     log.process('info', 'Successfully loaded the configuration!');
 
-    if (commandArgs.includes('finalize')) {
-      await sendFinalizeToAPI();
-    } else if (config.generateOnly) {
+    if (config.generateOnly) {
+      log.process('info', `🚀 Starting Lost Pixel in 'generateOnly' mode`);
+
       await runner();
     } else {
-      await platformRunner();
+      log.process('info', `🚀 Starting Lost Pixel in 'platform' mode`);
+
+      const apiToken = await getPlatformApiToken();
+
+      if (commandArgs.includes('finalize')) {
+        await sendFinalizeToAPI(apiToken);
+      } else {
+        await platformRunner(apiToken);
+      }
     }
   }
 })();
