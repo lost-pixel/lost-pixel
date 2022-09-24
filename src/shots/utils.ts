@@ -59,19 +59,21 @@ export const waitForNetworkRequests = async ({
       clearTimeout(lastRequestTimeoutId);
 
       if (!checkIgnoreUrls(request.url(), ignoreUrls)) {
-        const failure = request.failure();
-        const response = await request.response();
+        // Skip
+        // const failure = request.failure();
+        // const response = await request.response();
 
         requestCounter--;
         requests.delete(request);
 
-        const statusText = failure
-          ? failure.errorText
-          : `${response?.status() ?? 'unknown'} ${
-              response?.statusText() ?? 'unknown'
-            }`;
+        // Skip
+        // const statusText = failure
+        //   ? failure.errorText
+        //   : `${response?.status() ?? 'unknown'} ${
+        //       response?.statusText() ?? 'unknown'
+        //     }`;
 
-        // Skip logger(`[network] - ${request.url()} [${statusText}]`);
+        // logger(`[network] - ${request.url()} [${statusText}]`);
       }
 
       lastRequestTimeoutId = setTimeout(() => {
