@@ -4,7 +4,10 @@ import {
   readdirSync,
   unlinkSync,
   writeFileSync,
+  readFileSync,
 } from 'node:fs';
+import * as crypto from 'node:crypto';
+import type { Buffer } from 'node:buffer';
 import { normalize, join } from 'node:path';
 import { PostHog } from 'posthog-node';
 import { v4 as uuid } from 'uuid';
@@ -254,4 +257,18 @@ export const exitProcess = (properties: {
       process.exit(properties.exitCode ?? 1);
     });
   }
+};
+
+const hashBuffer = (buffer: Buffer): string => {
+  const hashSum = crypto.createHash('sha256');
+
+  hashSum.update(buffer);
+
+  return hashSum.digest('hex');
+};
+
+export const hashFile = (filePath: string): string => {
+  const file = readFileSync(filePath);
+
+  return hashBuffer(file);
 };
