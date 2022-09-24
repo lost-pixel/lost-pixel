@@ -1,8 +1,9 @@
 import axios from 'axios';
-import { log, logMemory } from './log';
+import { log } from './log';
+// import { log, logMemory } from './log';
 // import type { LogMemory } from './log';
-import { config } from './config';
-import type { WebhookEvent } from './types';
+import type { PlatformModeConfig } from './config';
+// import type { WebhookEvent } from './types';
 
 type ApiAction = 'getApiToken' | 'init' | 'finalize' | 'prepareUpload';
 
@@ -134,21 +135,20 @@ export const sendToAPI = async <T extends Record<string, unknown>>(
   }
 };
 
-export const getApiToken = async () => {
+export const getApiToken = async (config: PlatformModeConfig) => {
   return sendToAPI<{ apiToken: string }>({
     action: 'getApiToken',
     payload: {
       apiKey: config.apiKey ?? 'undefined',
-      projectIdentifier: config.lostPixelProjectId ?? 'undefined',
+      projectIdentifier: config.lostPixelProjectId,
     },
   });
 };
 
-export const sendInitToAPI = async (apiToken: string) => {
-  if (config.generateOnly) {
-    return;
-  }
-
+export const sendInitToAPI = async (
+  config: PlatformModeConfig,
+  apiToken: string,
+) => {
   const [repoOwner, repoName] = config.repository.split('/');
 
   return sendToAPI({
@@ -164,45 +164,46 @@ export const sendInitToAPI = async (apiToken: string) => {
   });
 };
 
-export const sendResultToAPI = async ({
-  success,
-  apiToken,
-  event,
-}: {
-  success: boolean;
-  apiToken: string;
-  event?: WebhookEvent;
-}) => {
-  if (config.generateOnly) {
-    return;
-  }
+// export const sendResultToAPI = async ({
+//   config,
+//   success,
+//   apiToken,
+//   event,
+// }: {
+//   config: PlatformModeConfig,
+//   success: boolean;
+//   apiToken: string;
+//   event?: WebhookEvent;
+// }) => {
+//   if (config.generateOnly) {
+//     return;
+//   }
 
-  const [repoOwner, repoName] = config.repository.split('/');
+//   const [repoOwner, repoName] = config.repository.split('/');
 
-  return sendToAPI({
-    action: 'next',
-    apiToken,
-    payload: {
-      projectId: config.lostPixelProjectId,
-      buildId: config.ciBuildId,
-      buildNumber: config.ciBuildNumber,
-      branchRef: config.commitRef,
-      branchName: config.commitRefName,
-      repoOwner,
-      repoName,
-      commit: config.commitHash,
-      buildMeta: event,
-      success,
-      log: logMemory,
-    },
-  });
-};
+//   return sendToAPI({
+//     action: 'next',
+//     apiToken,
+//     payload: {
+//       projectId: config.lostPixelProjectId,
+//       buildId: config.ciBuildId,
+//       buildNumber: config.ciBuildNumber,
+//       branchRef: config.commitRef,
+//       branchName: config.commitRefName,
+//       repoOwner,
+//       repoName,
+//       commit: config.commitHash,
+//       buildMeta: event,
+//       success,
+//       log: logMemory,
+//     },
+//   });
+// };
 
-export const sendFinalizeToAPI = async (apiToken: string) => {
-  if (config.generateOnly) {
-    return;
-  }
-
+export const sendFinalizeToAPI = async (
+  config: PlatformModeConfig,
+  apiToken: string,
+) => {
   const [repoOwner, repoName] = config.repository.split('/');
 
   return sendToAPI({
@@ -214,6 +215,25 @@ export const sendFinalizeToAPI = async (apiToken: string) => {
       repoOwner,
       repoName,
       commit: config.commitHash,
+    },
+  });
+};
+
+export const prepareUpload = async (
+  config: PlatformModeConfig,
+  apiToken: string,
+  fileHashes: string[],
+) => {
+  // allowPlatformModeOnly(config);
+
+  return sendToAPI<{ requiredFileHashes: string[]; uploadToken: string }>({
+    action: 'prepareUpload',
+    apiToken,
+    payload: {
+      branchName: config.commitRefName,
+      commit: config.commitHash,
+      buildNumber: config.ciBuildNumber,
+      fileHashes,
     },
   });
 };

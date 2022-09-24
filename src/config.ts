@@ -345,9 +345,11 @@ export type FullConfig =
   | (BaseConfig & ProjectConfig)
   | (BaseConfig & GenerateOnlyModeProjectConfig);
 
+export type PlatformModeConfig = Partial<BaseConfig> & ProjectConfig;
+
 export type CustomProjectConfig =
   | (Partial<BaseConfig> & GenerateOnlyModeProjectConfig)
-  | (Partial<BaseConfig> & ProjectConfig);
+  | PlatformModeConfig;
 
 const defaultConfig: BaseConfig = {
   browser: 'chromium',
