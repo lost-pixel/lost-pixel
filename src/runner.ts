@@ -130,10 +130,23 @@ export const platformRunner = async () => {
     process.exit(1);
   }
 
+  let apiToken: string;
+
   try {
     const result = await getApiToken();
-    const { apiToken } = result;
 
+    apiToken = result.apiToken;
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      log.process('error', error.message);
+    } else {
+      log.process('error', error);
+    }
+
+    process.exit(1);
+  }
+
+  try {
     if (config.setPendingStatusCheck) {
       await sendInitToAPI(apiToken);
     }
@@ -163,6 +176,7 @@ export const platformRunner = async () => {
 
     await sendResultToAPI({
       success: true,
+      apiToken,
       event: getEventData(config.eventFilePath),
     });
   } catch (error: unknown) {
@@ -177,6 +191,7 @@ export const platformRunner = async () => {
 
     await sendResultToAPI({
       success: false,
+      apiToken,
       event: getEventData(config.eventFilePath),
     });
 
