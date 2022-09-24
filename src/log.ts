@@ -33,6 +33,10 @@ const renderLog = (entry: LogEntry) => {
     logPrefix.push(`[${entry.type}]`);
   }
 
+  if (entry.type === 'error') {
+    logPrefix.push(`❌`);
+  }
+
   log(...logPrefix, ...entry.content);
 };
 

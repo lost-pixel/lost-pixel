@@ -70,7 +70,7 @@ type ApiPayloads =
 export const sendToAPI = async <T extends Record<string, unknown>>(
   parameters: ApiPayloads,
 ): Promise<T> => {
-  log.process('info', `Sending to API [${parameters.action}]`);
+  log.process('info', `✈️  Sending to API [${parameters.action}]`);
 
   try {
     const response = await apiClient.post(
@@ -94,18 +94,18 @@ export const sendToAPI = async <T extends Record<string, unknown>>(
 
     const outdatedApiRequest = response?.headers?.['x-api-version-warning'];
 
-    if (outdatedApiRequest) {
+    if (outdatedApiRequest && parameters.action === 'init') {
       log.process(
         'info',
         [
           '~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~',
-          `~~ ${outdatedApiRequest}`,
+          `~~ ⚠️  ${outdatedApiRequest}`,
           '~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~',
         ].join('\n'),
       );
     }
 
-    log.process('info', `Successfully sent to API [${parameters.action}]`);
+    log.process('info', `✅ Successfully sent to API [${parameters.action}]`);
 
     return response.data as T;
   } catch (error: unknown) {
