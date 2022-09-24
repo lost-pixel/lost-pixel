@@ -32,7 +32,8 @@ import { CustomProjectConfig } from 'lost-pixel';
 
 export const config: CustomProjectConfig = {
   ladleShots: {
-    ladleUrl: 'http://localhost:61000',
+  // IP should be localhost when running locally & 172.17.0.1 when running in GitHub action
+    baseUrl: 'http://172.17.0.1:61000',
   },
   generateOnly: true,
   failOnDifference: true,
@@ -43,7 +44,7 @@ export const config: CustomProjectConfig = {
 
 ### Page shots
 
-Page screenshots presume any frontend application that can run in browser. This example uses Next.js
+Page screenshots presume any frontend application that can run in the browser. This example uses Next.js
 
 {% code title="lost-pixel.config.ts" %}
 
@@ -59,6 +60,8 @@ export const config: CustomProjectConfig = {
       { path: '/fetch', name: 'fetch-static-props' },
       { path: '/client-fetch', name: 'fetch-client' },
     ],
+    // IP should be localhost when running locally & 172.17.0.1 when running in GitHub action
+
     baseUrl: 'http://localhost:3000',
   },
   generateOnly: true,
@@ -82,10 +85,13 @@ export const config: CustomProjectConfig = {
       { path: '/app', name: 'app' },
       { path: '/next-app', name: 'next-app' },
     ],
-    baseUrl: 'http://localhost:3000',
+    // IP should be localhost when running locally & 172.17.0.1 when running in GitHub action
+    baseUrl: 'http://172.17.0.1:3000',
+
   },
   ladleShots: {
-    ladleUrl: 'http://localhost:61000',
+    // IP should be localhost when running locally & 172.17.0.1 when running in GitHub action
+    ladleUrl: 'http://172.17.0.1:61000',
   },
   generateOnly: true,
 };

@@ -13,11 +13,14 @@ coverY: 0
 2. Add lost-pixel [configuration file](../../setup/project-configuration/modes.md#ladle)
 3. Add action file in the root of your project. In `.github/workflows/ci.yml`
 
-   ```
-   on: [push]
-   jobs:
-     build:
-       runs-on: ubuntu-latest
+
+    {% code overflow="wrap" %}
+    ```
+    on: [push]
+    jobs:
+      build:
+        runs-on: ubuntu-latest
+
 
        steps:
          - name: Checkout
@@ -40,9 +43,9 @@ coverY: 0
 
          - name: Lost Pixel
            uses: lost-pixel/lost-pixel@v2.21.0
-   ```
+    ```
+    {% endcode %}
 
-   This action file will run on every commit and will **build & serve Ladle** before running Lost Pixel visual regression checks on it.&#x20;
 
 4. _(Optional)_ Add [automatic PR for easy baseline update](../../recipes/automatic-baseline-update-pr.md)
 
