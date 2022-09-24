@@ -57,7 +57,6 @@ if (version) {
     log.process('info', '✅ Config successfully initialized');
   } else {
     await configure();
-    log.process('info', 'Successfully loaded the configuration!');
 
     if (config.generateOnly) {
       log.process('info', `🚀 Starting Lost Pixel in 'generateOnly' mode`);

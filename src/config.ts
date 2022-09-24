@@ -431,6 +431,12 @@ const loadProjectConfig = async (): Promise<CustomProjectConfig> => {
       // eslint-disable-next-line @typescript-eslint/no-require-imports, @typescript-eslint/no-var-requires
       require(`${configFileNameBase}.js`) as CustomProjectConfig;
 
+    log.process(
+      'info',
+      '✅ Successfully loaded the configuration from:',
+      `${configFileNameBase}.js`,
+    );
+
     return projectConfig;
   }
 
@@ -439,6 +445,12 @@ const loadProjectConfig = async (): Promise<CustomProjectConfig> => {
       const imported = (await loadTSProjectConfigFile(
         `${configFileNameBase}.ts`,
       )) as CustomProjectConfig;
+
+      log.process(
+        'info',
+        '✅ Successfully loaded the configuration from:',
+        `${configFileNameBase}.ts`,
+      );
 
       return imported;
     } catch (error: unknown) {
