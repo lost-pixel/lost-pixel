@@ -6,4 +6,4 @@ branding:
   color: 'purple'
 runs:
   using: 'docker'
-  image: 'Dockerfile'
+  image: 'docker://lostpixel/lost-pixel:v2.21.0'
