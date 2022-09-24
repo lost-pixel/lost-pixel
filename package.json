@@ -105,7 +105,8 @@
       "@typescript-eslint/ban-ts-comment": "off",
       "n/prefer-global/process": "off",
       "n/file-extension-in-import": "off",
-      "no-lone-blocks": "off"
+      "no-lone-blocks": "off",
+      "capitalized-comments": "off"
     }
   }
 }
