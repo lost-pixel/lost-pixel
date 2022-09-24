@@ -1,9 +1,10 @@
 import path from 'node:path';
 import kebabCase from 'lodash.kebabcase';
-import { BrowserContext } from 'playwright';
+import type { BrowserContext } from 'playwright';
 import { readFileSync } from 'fs-extra';
-import { ShotItem } from '../shots/shots';
+import type { ShotItem } from '../types';
 import { config } from '../config';
+import type { Mask } from '../config';
 import { getBrowser } from '../utils';
 import { log } from '../log';
 
@@ -12,11 +13,13 @@ export type StoryParameters = {
     disable?: boolean;
     threshold?: number;
     waitBeforeScreenshot?: number;
+    mask?: Mask[];
   };
   viewport?: {
     width?: number;
     height?: number;
   };
+  fileName?: string;
 };
 
 export type Story = {
@@ -33,12 +36,12 @@ export type Story = {
   };
 };
 
-interface StorybookClientApi {
+type StorybookClientApi = {
   raw?: () => Story[];
   storyStore?: {
     cacheAllCSFFiles: () => Promise<void>;
   };
-}
+};
 
 type StoriesJson = {
   v: number;
@@ -137,6 +140,7 @@ export const collectStoriesViaWindowApi = async (
             return Object.keys(parameters).reduce<T>((acc, key: keyof T) => {
               // @ts-expect-error FIXME
               acc[key] = parseParameters(parameters[key], level + 1);
+
               return acc;
             }, {});
           }
@@ -148,16 +152,22 @@ export const collectStoriesViaWindowApi = async (
           const { __STORYBOOK_CLIENT_API__: api } = window as WindowObject;
 
           if (api.raw) {
-            const stories: Story[] = api.raw().map((item) => ({
-              id: item.id,
-              kind: item.kind,
-              story: item.story,
-              parameters: parseParameters(
+            const stories: Story[] = api.raw().map((item) => {
+              const parameters = parseParameters(
                 item.parameters as Record<string, unknown>,
-              ) as Story['parameters'],
-            }));
+              ) as Story['parameters'];
+
+              return {
+                id: item.id,
+                kind: item.kind,
+                story: item.story,
+                importPath: parameters?.fileName,
+                parameters,
+              };
+            });
 
             resolve({ stories });
+
             return;
           }
 
@@ -184,12 +194,14 @@ export const collectStoriesViaStoriesJson = async (
   if (storiesJsonUrl.startsWith('file://')) {
     try {
       const file = readFileSync(storiesJsonUrl.slice(7));
+
       storiesJson = JSON.parse(file.toString()) as StoriesJson;
     } catch {
       throw new Error(`Cannot load file ${storiesJsonUrl}`);
     }
   } else {
     const result = await context.request.get(storiesJsonUrl);
+
     storiesJson = (await result.json()) as StoriesJson;
   }
 
@@ -209,7 +221,9 @@ export const collectStories = async (url: string) => {
   try {
     log('Trying to collect stories via window object');
     const result = await collectStoriesViaWindowApi(context, url);
+
     await browser.close();
+
     return result;
   } catch {
     log('Fallback to /stories.json');
@@ -217,7 +231,9 @@ export const collectStories = async (url: string) => {
 
   try {
     const result = await collectStoriesViaStoriesJson(context, url);
+
     await browser.close();
+
     return result;
   } catch (error: unknown) {
     await browser.close();
@@ -251,6 +267,7 @@ const generateBrowserConfig = (story: Story) => {
 export const generateStorybookShotItems = (
   baseUrl: string,
   stories: Story[],
+  mask?: Mask[],
 ): ShotItem[] => {
   const iframeUrl = getIframeUrl(getStoryBookUrl(baseUrl));
 
@@ -275,6 +292,7 @@ export const generateStorybookShotItems = (
         shotMode: 'storybook',
         id: story.id,
         shotName: story.shotName,
+        importPath: story.importPath,
         url: `${iframeUrl}?id=${story.id}&viewMode=story`,
         filePathBaseline: path.join(config.imagePathBaseline, fileNameWithExt),
         filePathCurrent: path.join(config.imagePathCurrent, fileNameWithExt),
@@ -287,6 +305,7 @@ export const generateStorybookShotItems = (
         waitBeforeScreenshot:
           story.parameters?.lostpixel?.waitBeforeScreenshot ??
           config.waitBeforeScreenshot,
+        mask: [...(mask ?? []), ...(story.parameters?.lostpixel?.mask ?? [])],
       };
     });
 

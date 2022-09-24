@@ -1,10 +1,35 @@
 import path from 'node:path';
-import { config, PageScreenshotParameter } from '../config';
-import { ShotItem } from '../shots/shots';
+import axios from 'axios';
+import { z } from 'zod';
+import { log } from '../log';
+import { config } from '../config';
+import type { PageScreenshotParameter, Mask } from '../config';
+import type { ShotItem } from '../types';
+
+const generateBrowserConfig = (page: PageScreenshotParameter) => {
+  const browserConfig = config.configureBrowser?.({
+    ...page,
+    shotMode: 'page',
+  });
+
+  if (page.viewport && browserConfig) {
+    browserConfig.viewport = browserConfig.viewport ?? {
+      width: 1280,
+      height: 720,
+    };
+    browserConfig.viewport = {
+      ...browserConfig.viewport,
+      ...page.viewport,
+    };
+  }
+
+  return browserConfig;
+};
 
 export const generatePageShotItems = (
   pages: PageScreenshotParameter[],
-  pageUrl: string,
+  baseUrl: string,
+  mask?: Mask[],
 ): ShotItem[] => {
   const names = pages.map((page) => page.name);
   const uniqueNames = new Set(names);
@@ -20,14 +45,70 @@ export const generatePageShotItems = (
       shotName: config.shotNameGenerator
         ? config.shotNameGenerator({ ...page, shotMode: 'page' })
         : page.name,
-      url: path.join(pageUrl, page.path),
+      url: path.join(baseUrl, page.path),
       filePathBaseline: `${path.join(config.imagePathBaseline, page.name)}.png`,
       filePathCurrent: `${path.join(config.imagePathCurrent, page.name)}.png`,
       filePathDifference: `${path.join(
         config.imagePathDifference,
         page.name,
       )}.png`,
-      threshold: 0,
+      browserConfig: generateBrowserConfig(page),
+      threshold: page.threshold ?? config.threshold,
+      waitBeforeScreenshot:
+        page.waitBeforeScreenshot ?? config.waitBeforeScreenshot,
+      mask: [...(mask ?? []), ...(page.mask ?? [])],
     };
   });
+};
+
+export const getPagesFromExternalLoader = async () => {
+  try {
+    if (!config.pageShots?.pagesJsonUrl) {
+      return [];
+    }
+
+    log('Loading pages via external loader file supplied in pagesJsonUrl');
+
+    const { data: pages } = await axios.get<PageScreenshotParameter[]>(
+      config.pageShots.pagesJsonUrl,
+    );
+    const pagesArraySchema = z.array(
+      z.object({
+        path: z.string(),
+        name: z.string(),
+        waitBeforeScreenshot: z.number().optional(),
+        threshold: z.number().optional(),
+        mask: z
+          .array(
+            z.object({
+              selector: z.string(),
+            }),
+          )
+          .optional(),
+        viewport: z
+          .object({
+            width: z.string(),
+            height: z.string(),
+          })
+          .optional(),
+      }),
+    );
+
+    const validatePages = pagesArraySchema.safeParse(pages);
+
+    if (validatePages.success) {
+      return pages;
+    }
+
+    log('Error validating the loaded pages structure');
+    log(validatePages.error);
+
+    return [];
+  } catch (error: unknown) {
+    if (axios.isAxiosError(error)) {
+      log(`Error when fetching data: ${error.message}`);
+    }
+
+    return [];
+  }
 };

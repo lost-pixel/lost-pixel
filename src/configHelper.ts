@@ -1,4 +1,4 @@
-import { Service } from 'ts-node';
+import type { Service } from 'ts-node';
 import { log } from './log';
 
 let tsNodeService: Service;
@@ -13,6 +13,9 @@ export const setupTsNode = async (): Promise<Service> => {
 
     tsNodeService = tsNode.register({
       transpileOnly: true,
+      compilerOptions: {
+        module: 'commonjs',
+      },
     });
 
     return tsNodeService;
@@ -37,6 +40,7 @@ export const loadTSProjectConfigFile = async (
 
   // eslint-disable-next-line @typescript-eslint/no-require-imports, @typescript-eslint/no-var-requires, @typescript-eslint/no-unsafe-assignment
   const imported: Record<string, unknown> = require(configFilepath);
+
   tsNodeService.enabled(false);
 
   return imported?.default ?? imported?.config;

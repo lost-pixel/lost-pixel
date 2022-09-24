@@ -7,29 +7,38 @@ import {
   collectStories,
   generateStorybookShotItems,
 } from './crawler/storybook';
-import { generatePageShotItems } from './crawler/pageScreenshots';
+import {
+  generatePageShotItems,
+  getPagesFromExternalLoader,
+} from './crawler/pageScreenshots';
 import { log } from './log';
-import { ShotItem, takeScreenShots } from './shots/shots';
-import { removeFilesInFolder } from './utils';
+import { takeScreenShots } from './shots/shots';
+import { readDirIntoShotItems, removeFilesInFolder } from './utils';
 import { launchStaticWebServer } from './crawler/utils';
+import type { ShotItem } from './types';
 
 export const createShots = async () => {
   const {
     ladleShots,
     storybookShots,
     pageShots,
+    customShots,
     imagePathCurrent,
     imagePathDifference,
   } = config;
   let storybookShotItems: ShotItem[] = [];
   let pageShotItems: ShotItem[] = [];
   let ladleShotItems: ShotItem[] = [];
+  let customShotItems: ShotItem[] = [];
 
   removeFilesInFolder(imagePathCurrent);
   removeFilesInFolder(imagePathDifference);
 
   if (ladleShots) {
-    const { ladleUrl } = ladleShots;
+    const { ladleUrl, mask } = ladleShots;
+
+    log(`\n=== [Ladle Mode] ${ladleUrl} ===\n`);
+
     const collection = await collectLadleStories(ladleUrl);
 
     if (!collection || collection.length === 0) {
@@ -38,7 +47,7 @@ export const createShots = async () => {
 
     log(`Found ${collection.length} ladle stories`);
 
-    ladleShotItems = generateLadleShotItems(ladleUrl, collection);
+    ladleShotItems = generateLadleShotItems(ladleUrl, collection, mask);
 
     log(`Prepared ${ladleShotItems.length} ladle stories for screenshots`);
 
@@ -48,7 +57,9 @@ export const createShots = async () => {
   }
 
   if (storybookShots) {
-    const { storybookUrl } = storybookShots;
+    const { storybookUrl, mask } = storybookShots;
+
+    log(`\n=== [Storybook Mode] ${storybookUrl} ===\n`);
 
     let storybookWebUrl = storybookUrl;
     let localServer;
@@ -58,6 +69,7 @@ export const createShots = async () => {
       !storybookUrl.startsWith('https://')
     ) {
       const staticWebServer = await launchStaticWebServer(storybookUrl);
+
       storybookWebUrl = staticWebServer.url;
       localServer = staticWebServer.server;
     }
@@ -74,6 +86,7 @@ export const createShots = async () => {
       storybookShotItems = generateStorybookShotItems(
         storybookWebUrl,
         collection.stories,
+        mask,
       );
 
       log(`Prepared ${storybookShotItems.length} stories for screenshots`);
@@ -89,14 +102,34 @@ export const createShots = async () => {
   }
 
   if (pageShots) {
-    const { pages, pageUrl } = pageShots;
+    const { pages: pagesFromConfig, baseUrl, mask } = pageShots;
 
-    pageShotItems = generatePageShotItems(pages, pageUrl);
+    const pagesFromLoader = await getPagesFromExternalLoader();
+
+    const pages = [...pagesFromConfig, ...pagesFromLoader];
+
+    log(`\n=== [Page Mode] ${baseUrl} ===\n`);
+
+    pageShotItems = generatePageShotItems(pages, baseUrl, mask);
     log(`Prepared ${pageShotItems.length} pages for screenshots`);
 
     await takeScreenShots(pageShotItems);
     log('Screenshots done!');
   }
 
-  return [...storybookShotItems, ...pageShotItems, ...ladleShotItems];
+  if (customShots) {
+    const { currentShotsPath } = customShots;
+
+    log(`\n=== [Custom Mode] ${currentShotsPath} ===\n`);
+
+    customShotItems = readDirIntoShotItems(currentShotsPath);
+    log(`Found ${customShotItems.length} custom shots`);
+  }
+
+  return [
+    ...storybookShotItems,
+    ...pageShotItems,
+    ...ladleShotItems,
+    ...customShotItems,
+  ];
 };

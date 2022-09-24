@@ -12,12 +12,12 @@ As outlined in [modes](project-configuration/modes.md) Lost Pixel can run in dif
 Here's an example of a full workflow file that builds the Storybook before continuing with Lost Pixel. To make it run you just need to place `vis-reg-test.yml` into `.github/workflows` at the root for your project. This will execute the Lost Pixel visual regression tests on every commit:
 
 {% code title="vis-reg-test.yml" %}
+
 ```yaml
 on: [push]
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
 
     steps:
@@ -39,4 +39,5 @@ jobs:
       - name: Lost Pixel
         uses: lost-pixel/lost-pixel@v2.21.0
 ```
+
 {% endcode %}

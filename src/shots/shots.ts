@@ -1,23 +1,11 @@
 import path from 'node:path';
-import { Browser, BrowserContextOptions } from 'playwright';
 import { mapLimit } from 'async';
+import type { Browser } from 'playwright';
 import { log } from '../log';
 import { getBrowser, sleep } from '../utils';
-import { config, ShotMode } from '../config';
+import { config } from '../config';
+import type { ShotItem } from '../types';
 import { resizeViewportToFullscreen, waitForNetworkRequests } from './utils';
-
-export type ShotItem = {
-  shotMode: ShotMode;
-  id: string;
-  shotName: string;
-  url: string;
-  filePathBaseline: string;
-  filePathCurrent: string;
-  filePathDifference: string;
-  browserConfig?: BrowserContextOptions;
-  threshold: number;
-  waitBeforeScreenshot?: number;
-};
 
 const takeScreenShot = async ({
   browser,
@@ -27,9 +15,10 @@ const takeScreenShot = async ({
   browser: Browser;
   shotItem: ShotItem;
   logger: (message: string, ...rest: unknown[]) => void;
-}) => {
+}): Promise<boolean> => {
   const context = await browser.newContext(shotItem.browserConfig);
   const page = await context.newPage();
+  let success = false;
 
   page.on('pageerror', (exception) => {
     logger('[pageerror] Uncaught exception:', exception);
@@ -38,12 +27,17 @@ const takeScreenShot = async ({
   page.on('console', async (message) => {
     const values = [];
 
-    for (const arg of message.args()) {
-      // eslint-disable-next-line no-await-in-loop
-      values.push(await arg.jsonValue());
+    try {
+      for (const arg of message.args()) {
+        // eslint-disable-next-line no-await-in-loop
+        values.push(await arg.jsonValue());
+      }
+    } catch (error: unknown) {
+      logger(`[console] Error while collecting console output`, error);
     }
 
     const logMessage = `[console] ${String(values.shift())}`;
+
     logger(logMessage, ...values);
   });
 
@@ -85,6 +79,8 @@ const takeScreenShot = async ({
 
   let fullScreenMode = true;
 
+  await sleep(shotItem?.waitBeforeScreenshot ?? config.waitBeforeScreenshot);
+
   try {
     await resizeViewportToFullscreen({ page });
     fullScreenMode = false;
@@ -92,13 +88,20 @@ const takeScreenShot = async ({
     log(`Could not resize viewport to fullscreen: ${shotItem.shotName}`);
   }
 
-  await sleep(shotItem?.waitBeforeScreenshot ?? config.waitBeforeScreenshot);
+  try {
+    await page.screenshot({
+      path: shotItem.filePathCurrent,
+      fullPage: fullScreenMode,
+      animations: 'disabled',
+      mask: shotItem.mask
+        ? shotItem.mask.map((mask) => page.locator(mask.selector))
+        : [],
+    });
 
-  await page.screenshot({
-    path: shotItem.filePathCurrent,
-    fullPage: fullScreenMode,
-    animations: 'disabled',
-  });
+    success = true;
+  } catch (error: unknown) {
+    logger('Error when taking screenshot', error);
+  }
 
   await context.close();
 
@@ -108,6 +111,7 @@ const takeScreenShot = async ({
     const dirname = path.dirname(videoPath);
     const ext = videoPath.split('.').pop() ?? 'webm';
     const newVideoPath = `${dirname}/${shotItem.shotName}.${ext}`;
+
     await page.video()?.saveAs(newVideoPath);
     await page.video()?.delete();
 
@@ -115,6 +119,8 @@ const takeScreenShot = async ({
       `Video of '${shotItem.shotName}' recorded and saved to '${newVideoPath}`,
     );
   }
+
+  return success;
 };
 
 export const takeScreenShots = async (shotItems: ShotItem[]) => {
@@ -133,13 +139,20 @@ export const takeScreenShots = async (shotItems: ShotItem[]) => {
       logger(`Taking screenshot of '${shotItem.shotName}'`);
 
       const startTime = Date.now();
-      await takeScreenShot({ browser, shotItem, logger });
+
+      const result = await takeScreenShot({ browser, shotItem, logger });
       const endTime = Date.now();
       const elapsedTime = Number((endTime - startTime) / 1000).toFixed(3);
 
-      logger(
-        `Screenshot of '${shotItem.shotName}' taken and saved to '${shotItem.filePathCurrent}' in ${elapsedTime}s`,
-      );
+      if (result) {
+        logger(
+          `Screenshot of '${shotItem.shotName}' taken and saved to '${shotItem.filePathCurrent}' in ${elapsedTime}s`,
+        );
+      } else {
+        logger(
+          `Screenshot of '${shotItem.shotName}' failed and took ${elapsedTime}s`,
+        );
+      }
     },
   );
 

@@ -6,8 +6,8 @@
   "scripts": {
     "storybook": "start-storybook -p 6006",
     "build-storybook": "build-storybook",
-    "lost-pixel:update": "npx run lost-pixel-action update",
-    "lost-pixel:run": "npx run lost-pixel-action"
+    "lost-pixel:update": "npx run lost-pixel update",
+    "lost-pixel:run": "npx run lost-pixel"
   },
   "author": "Chris Kalmar",
   "license": "MIT",

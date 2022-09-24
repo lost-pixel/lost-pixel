@@ -1,4 +1,4 @@
-import { CustomProjectConfig } from '../src/config';
+import type { CustomProjectConfig } from '../src/config';
 
 export const config: CustomProjectConfig = {
   storybookShots: {

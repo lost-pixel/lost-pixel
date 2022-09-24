@@ -6,6 +6,17 @@
     "@typescript-eslint/no-explicit-any": "error",
     "prefer-const": "error",
     "@typescript-eslint/no-var-requires": "off",
-    "no-console": "error"
+    "no-console": "error",
+    "@typescript-eslint/padding-line-between-statements": [
+      "error",
+      { "blankLine": "always", "prev": ["const", "let"], "next": "*" },
+      {
+        "blankLine": "any",
+        "prev": ["const", "let"],
+        "next": ["const", "let"]
+      },
+      { "blankLine": "always", "prev": ["*"], "next": ["if", "return"] },
+      { "blankLine": "always", "prev": ["*"], "next": ["try"] }
+    ]
   }
 }

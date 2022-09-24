@@ -1,7 +1,7 @@
 import { existsSync } from 'node:fs';
 import path from 'node:path';
 import get from 'lodash.get';
-import { BrowserContextOptions, Page } from 'playwright';
+import type { BrowserContextOptions, Page } from 'playwright';
 import { loadTSProjectConfigFile } from './configHelper';
 import { log } from './log';
 
@@ -27,6 +27,11 @@ type BaseConfig = {
      * @default 'storybook-static'
      */
     storybookUrl: string;
+
+    /**
+     * Define areas for all stories where differences will be ignored
+     */
+    mask?: Mask[];
   };
 
   /**
@@ -38,6 +43,11 @@ type BaseConfig = {
      * @default 'http://localhost:61000'
      */
     ladleUrl: string;
+
+    /**
+     * Define areas for all stories where differences will be ignored
+     */
+    mask?: Mask[];
   };
 
   /**
@@ -48,11 +58,30 @@ type BaseConfig = {
      * Paths to take screenshots of
      */
     pages: PageScreenshotParameter[];
+    /**
+     * Url that must return a JSON compatible with `PageScreenshotParameter[]`. It is useful when you want to autogenerate the pages that you want to run lost-pixel on. Can be used together with `pages` as both are composed into a single run.
+     */
+    pagesJsonUrl?: string;
 
     /**
-     * URL of the running application
+     * Base URL of the running application (e.g. http://localhost:3000)
      */
-    pageUrl: string;
+    baseUrl: string;
+
+    /**
+     * Define areas for all pages where differences will be ignored
+     */
+    mask?: Mask[];
+  };
+
+  /**
+   * Enable Custom mode
+   */
+  customShots?: {
+    /**
+     * Path to current shots folder
+     */
+    currentShotsPath: string;
   };
 
   /**
@@ -145,13 +174,64 @@ type BaseConfig = {
   setPendingStatusCheck: boolean;
 };
 
-export type PageScreenshotParameter = {
-  id: string;
-  path: string;
-  name: string;
+export type Mask = {
+  /**
+   * CSS selector for the element to mask
+   * Examples:
+   * - `#my-id`: Selects the element with the id `my-id`
+   * - `.my-class`: Selects all elements with the class `my-class`
+   * - `div`: Selects all `div` elements
+   * - `div.my-class`: Selects all `div` elements with the class `my-class`
+   * - `li:nth-child(2n)`: Selects all even `li` elements
+   * - `[data-testid="hero-banner"]`: Selects all elements with the attribute `data-testid` set to `hero-banner`
+   * - `div > p`: Selects all `p` elements that are direct children of a `div` element
+   */
+  selector: string;
 };
 
-export type ShotMode = 'storybook' | 'ladle' | 'page';
+export type PageScreenshotParameter = {
+  /**
+   * Path to the page to take a screenshot of (e.g. /login)
+   */
+  path: string;
+
+  /**
+   * Unique name for the page
+   */
+  name: string;
+
+  /**
+   * Time to wait before taking a screenshot
+   * @default 1_000
+   */
+  waitBeforeScreenshot?: number;
+
+  /**
+   * Threshold for the difference between the baseline and current image
+   *
+   * Values between 0 and 1 are interpreted as percentage of the image size
+   *
+   * Values greater or equal to 1 are interpreted as pixel count.
+   * @default 0
+   */
+  threshold?: number;
+
+  /**
+   * Define a custom viewport for the page
+   * @default { width: 1280, height: 720 }
+   */
+  viewport?: {
+    width?: number;
+    height?: number;
+  };
+
+  /**
+   * Define areas for the page where differences will be ignored
+   */
+  mask?: Mask[];
+};
+
+export type ShotMode = 'storybook' | 'ladle' | 'page' | 'custom';
 
 type StoryLike = {
   shotMode: ShotMode;
@@ -393,6 +473,7 @@ const configFileNameBase = path.join(
 const loadProjectConfig = async (): Promise<CustomProjectConfig> => {
   log('Loading project configuration...');
   log('Current working directory:', process.cwd());
+
   if (process.env.LOST_PIXEL_CONFIG_DIR) {
     log('Defined configuration directory:', process.env.LOST_PIXEL_CONFIG_DIR);
   }
@@ -403,6 +484,7 @@ const loadProjectConfig = async (): Promise<CustomProjectConfig> => {
     const projectConfig =
       // eslint-disable-next-line @typescript-eslint/no-require-imports, @typescript-eslint/no-var-requires
       require(`${configFileNameBase}.js`) as CustomProjectConfig;
+
     return projectConfig;
   }
 
@@ -411,6 +493,7 @@ const loadProjectConfig = async (): Promise<CustomProjectConfig> => {
       const imported = (await loadTSProjectConfigFile(
         `${configFileNameBase}.ts`,
       )) as CustomProjectConfig;
+
       return imported;
     } catch (error: unknown) {
       log(error);
@@ -442,7 +525,12 @@ export const configure = async (customProjectConfig?: CustomProjectConfig) => {
   };
 
   // Default to Storybook mode if no mode is defined
-  if (!config.storybookShots && !config.pageShots && !config.ladleShots) {
+  if (
+    !config.storybookShots &&
+    !config.pageShots &&
+    !config.ladleShots &&
+    !config.customShots
+  ) {
     config.storybookShots = {
       storybookUrl: 'storybook-static',
     };

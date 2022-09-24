@@ -49,6 +49,7 @@ describe(compareImages, () => {
       'fixtures/current/banner1.png',
       'fixtures/test-results/banner1.png',
     );
+
     expect(result1.isWithinThreshold).toBe(false);
     expect(result1.pixelDifference).toBeGreaterThan(50_000);
 
@@ -70,6 +71,7 @@ describe(compareImages, () => {
       'fixtures/current/banner2.png',
       'fixtures/test-results/banner2.png',
     );
+
     expect(result2.isWithinThreshold).toBe(false);
     expect(result2.pixelDifference).toBeGreaterThan(350_000);
 
@@ -91,6 +93,7 @@ describe(compareImages, () => {
       'fixtures/current/banner3.png',
       'fixtures/test-results/banner3.png',
     );
+
     expect(result3.isWithinThreshold).toBe(false);
     expect(result3.pixelDifference).toBeGreaterThan(40_000);
 
@@ -114,6 +117,7 @@ describe(compareImages, () => {
       'fixtures/current/banner1.png',
       'fixtures/test-results/banner1.png',
     );
+
     expect(result1.isWithinThreshold).toBe(true);
     expect(result1.pixelDifference).toBeGreaterThan(50_000);
 
@@ -123,6 +127,7 @@ describe(compareImages, () => {
       'fixtures/current/banner2.png',
       'fixtures/test-results/banner2.png',
     );
+
     expect(result2.isWithinThreshold).toBe(true);
     expect(result2.pixelDifference).toBeGreaterThan(350_000);
 
@@ -132,6 +137,7 @@ describe(compareImages, () => {
       'fixtures/current/banner3.png',
       'fixtures/test-results/banner3.png',
     );
+
     expect(result3.isWithinThreshold).toBe(true);
     expect(result3.pixelDifference).toBeGreaterThan(40_000);
   }, 12_000);

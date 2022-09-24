@@ -6,11 +6,20 @@ import { hideBin } from 'yargs/helpers';
 import fs from 'fs-extra';
 import { log } from './log';
 import { runner } from './runner';
+import { getVersion } from './utils';
+import { sendFinalizeToAPI } from './sendFinalize';
 
-type CommandArgs = ['init-js', 'init-ts'];
+type CommandArgs = ['init-js', 'init-ts', 'finalize'];
 
 const args = yargs(hideBin(process.argv)).parse();
+// @ts-expect-error TBD
 const commandArgs = args._ as CommandArgs;
+
+const version = getVersion();
+
+if (version) {
+  log(`Version: ${version}`);
+}
 
 (async () => {
   if (commandArgs.includes('init-js')) {
@@ -45,6 +54,8 @@ const commandArgs = args._ as CommandArgs;
       modifiedFile,
     );
     log('✅ Config successfully initialized');
+  } else if (commandArgs.includes('finalize')) {
+    await sendFinalizeToAPI();
   } else {
     await runner();
   }

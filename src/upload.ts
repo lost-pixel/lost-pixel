@@ -2,7 +2,7 @@ import { Client as MinioClient } from 'minio';
 import { log, logMemory } from './log';
 import { config } from './config';
 import { sendToAPI } from './api';
-import { Comparison, UploadFile, WebhookEvent } from './types';
+import type { Comparison, UploadFile, WebhookEvent } from './types';
 
 let minio: MinioClient;
 
@@ -32,6 +32,7 @@ export const uploadFile = async ({
   return new Promise((resolve, reject) => {
     if (config.generateOnly) {
       reject(new Error('Generate only mode'));
+
       return;
     }
 
@@ -57,10 +58,16 @@ export const sendResultToAPI = async ({
   success,
   comparisons,
   event,
+  durations,
 }: {
   success: boolean;
   comparisons?: Comparison[];
   event?: WebhookEvent;
+  durations?: {
+    runDuration: number;
+    shotsCreationDuration: number;
+    differenceComparisonsDuration: number;
+  };
 }) => {
   if (config.generateOnly) {
     return;
@@ -81,5 +88,6 @@ export const sendResultToAPI = async ({
     comparisons: comparisons ?? [],
     success,
     log: logMemory,
+    durations,
   });
 };
