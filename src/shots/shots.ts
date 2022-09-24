@@ -24,22 +24,23 @@ const takeScreenShot = async ({
     logger('[pageerror] Uncaught exception:', exception);
   });
 
-  page.on('console', async (message) => {
-    const values = [];
+  // Skip browser console output
+  // page.on('console', async (message) => {
+  //   const values = [];
 
-    try {
-      for (const arg of message.args()) {
-        // eslint-disable-next-line no-await-in-loop
-        values.push(await arg.jsonValue());
-      }
-    } catch (error: unknown) {
-      logger(`[console] Error while collecting console output`, error);
-    }
+  //   try {
+  //     for (const arg of message.args()) {
+  //       // eslint-disable-next-line no-await-in-loop
+  //       values.push(await arg.jsonValue());
+  //     }
+  //   } catch (error: unknown) {
+  //     logger(`[console] Error while collecting console output`, error);
+  //   }
 
-    const logMessage = `[console] ${String(values.shift())}`;
+  //   const logMessage = `[console] ${String(values.shift())}`;
 
-    logger(logMessage, ...values);
-  });
+  //   logger(logMessage, ...values);
+  // });
 
   try {
     await page.goto(shotItem.url);
