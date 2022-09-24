@@ -17,8 +17,6 @@ import { log } from './log';
 export const runner = async () => {
   const executionStart = process.hrtime();
 
-  log.process('info', `🚀 Starting Lost Pixel in 'generateOnly' mode`);
-
   try {
     if (isUpdateMode()) {
       log.process(
@@ -109,11 +107,7 @@ export const runner = async () => {
   }
 };
 
-export const platformRunner = async () => {
-  const executionStart = process.hrtime();
-
-  log.process('info', `🚀 Starting Lost Pixel in 'platform' mode`);
-
+export const getPlatformApiToken = async () => {
   if (!config.apiKey) {
     log.process(
       'error',
@@ -130,12 +124,10 @@ export const platformRunner = async () => {
     process.exit(1);
   }
 
-  let apiToken: string;
-
   try {
     const result = await getApiToken();
 
-    apiToken = result.apiToken;
+    return result.apiToken;
   } catch (error: unknown) {
     if (error instanceof Error) {
       log.process('error', error.message);
@@ -145,6 +137,10 @@ export const platformRunner = async () => {
 
     process.exit(1);
   }
+};
+
+export const platformRunner = async (apiToken: string) => {
+  const executionStart = process.hrtime();
 
   try {
     if (config.setPendingStatusCheck) {
