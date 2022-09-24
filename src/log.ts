@@ -1,4 +1,4 @@
-import { ShotMode } from './types';
+import type { ShotMode } from './types';
 
 type LogEntry = {
   timestamp: Date;

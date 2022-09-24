@@ -4,7 +4,7 @@ import get from 'lodash.get';
 import type { BrowserContextOptions, Page } from 'playwright';
 import { loadTSProjectConfigFile } from './configHelper';
 import { log } from './log';
-import { ShotMode } from './types';
+import type { ShotMode } from './types';
 
 type BaseConfig = {
   /**

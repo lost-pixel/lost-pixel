@@ -1,6 +1,6 @@
 import type { Page, Request } from 'playwright';
 import { config } from '../config';
-import { log } from '../log';
+import type { log } from '../log';
 
 const checkIgnoreUrls = (url: string, ignoreUrls: string[]) => {
   for (const ignoreUrl of ignoreUrls) {
