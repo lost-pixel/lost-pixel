@@ -1,10 +1,10 @@
 import axios from 'axios';
 import { log, logMemory } from './log';
-import type { LogMemory } from './log';
+// import type { LogMemory } from './log';
 import { config } from './config';
 import type { WebhookEvent } from './types';
 
-type ApiAction = 'getApiToken' | 'init' | 'next' | 'finalize';
+type ApiAction = 'getApiToken' | 'init' | 'finalize' | 'prepareUpload';
 
 export const apiClient = axios.create({
   headers: {
@@ -16,8 +16,9 @@ export const apiClient = axios.create({
 const apiRoutes: Record<ApiAction, string> = {
   getApiToken: '/auth/get-api-token',
   init: '/app/init',
-  next: '/app/next',
+  // next: '/app/next',
   finalize: '/app/finalize',
+  prepareUpload: '/file/prepare-upload',
 };
 
 type ApiPayloadGetApiToken = {
@@ -33,19 +34,19 @@ type ApiPayloadInit = {
   commit: string;
 };
 
-type ApiPayloadNext = {
-  projectId: string;
-  branchName: string;
-  repoOwner: string;
-  repoName: string;
-  commit: string;
-  buildId: string;
-  buildNumber: string;
-  branchRef: string;
-  buildMeta?: WebhookEvent;
-  success: boolean;
-  log: LogMemory;
-};
+// type ApiPayloadNext = {
+//   projectId: string;
+//   branchName: string;
+//   repoOwner: string;
+//   repoName: string;
+//   commit: string;
+//   buildId: string;
+//   buildNumber: string;
+//   branchRef: string;
+//   buildMeta?: WebhookEvent;
+//   success: boolean;
+//   log: LogMemory;
+// };
 
 type ApiPayloadFinalize = {
   projectId: string;
@@ -53,6 +54,13 @@ type ApiPayloadFinalize = {
   repoOwner: string;
   repoName: string;
   commit: string;
+};
+
+type ApiPayloadPrepareUpload = {
+  branchName: string;
+  commit: string;
+  buildNumber: string;
+  fileHashes: string[];
 };
 
 type ApiPayload<A extends ApiAction, P extends Record<string, unknown>> = {
@@ -64,8 +72,9 @@ type ApiPayload<A extends ApiAction, P extends Record<string, unknown>> = {
 type ApiPayloads =
   | ApiPayload<'getApiToken', ApiPayloadGetApiToken>
   | ApiPayload<'init', ApiPayloadInit>
-  | ApiPayload<'next', ApiPayloadNext>
-  | ApiPayload<'finalize', ApiPayloadFinalize>;
+  // | ApiPayload<'next', ApiPayloadNext>
+  | ApiPayload<'finalize', ApiPayloadFinalize>
+  | ApiPayload<'prepareUpload', ApiPayloadPrepareUpload>;
 
 export const sendToAPI = async <T extends Record<string, unknown>>(
   parameters: ApiPayloads,
