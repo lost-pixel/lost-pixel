@@ -114,6 +114,14 @@ export const platformRunner = async () => {
 
   log.process('info', `🚀 Starting Lost Pixel in 'platform' mode`);
 
+  if (!config.apiKey) {
+    log.process(
+      'error',
+      `Running Lost Pixel in 'platform' mode requires an API key`,
+    );
+    process.exit(1);
+  }
+
   if (isUpdateMode()) {
     log.process(
       'error',
