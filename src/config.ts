@@ -314,7 +314,7 @@ export type ProjectConfig = {
   beforeScreenshot?: (page: Page, input: StoryLike) => Promise<void>;
 };
 
-type GenerateOnlyModeProjectConfig = Omit<
+export type GenerateOnlyModeProjectConfig = Omit<
   ProjectConfig,
   | 'lostPixelProjectId'
   | 'ciBuildId'

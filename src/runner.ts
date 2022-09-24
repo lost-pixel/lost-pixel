@@ -10,11 +10,10 @@ import {
   parseHrtimeToSeconds,
   removeFilesInFolder,
 } from './utils';
-import { config } from './config';
-import { getApiToken, sendInitToAPI, sendResultToAPI } from './api';
+import type { FullConfig, PlatformModeConfig } from './config';
 import { log } from './log';
 
-export const runner = async () => {
+export const runner = async (config: FullConfig) => {
   const executionStart = process.hrtime();
 
   try {
@@ -107,7 +106,7 @@ export const runner = async () => {
   }
 };
 
-export const getPlatformApiToken = async () => {
+export const getPlatformApiToken = async (config: PlatformModeConfig) => {
   if (!config.apiKey) {
     log.process(
       'error',
@@ -125,7 +124,7 @@ export const getPlatformApiToken = async () => {
   }
 
   try {
-    const result = await getApiToken();
+    const result = await getApiToken(config);
 
     return result.apiToken;
   } catch (error: unknown) {
@@ -139,12 +138,15 @@ export const getPlatformApiToken = async () => {
   }
 };
 
-export const platformRunner = async (apiToken: string) => {
+export const platformRunner = async (
+  config: PlatformModeConfig,
+  apiToken: string,
+) => {
   const executionStart = process.hrtime();
 
   try {
     if (config.setPendingStatusCheck) {
-      await sendInitToAPI(apiToken);
+      await sendInitToAPI(config, apiToken);
     }
 
     log.process('info', '📂 Creating shot folders');

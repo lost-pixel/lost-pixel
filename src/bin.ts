@@ -61,16 +61,16 @@ if (version) {
     if (config.generateOnly) {
       log.process('info', `🚀 Starting Lost Pixel in 'generateOnly' mode`);
 
-      await runner();
+      await runner(config);
     } else {
       log.process('info', `🚀 Starting Lost Pixel in 'platform' mode`);
 
-      const apiToken = await getPlatformApiToken();
+      const apiToken = await getPlatformApiToken(config);
 
       if (commandArgs.includes('finalize')) {
-        await sendFinalizeToAPI(apiToken);
+        await sendFinalizeToAPI(config, apiToken);
       } else {
-        await platformRunner(apiToken);
+        await platformRunner(config, apiToken);
       }
     }
   }
