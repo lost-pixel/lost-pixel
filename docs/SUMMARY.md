@@ -33,3 +33,7 @@
 ## More
 
 * [Telemetry data](more/telemetry-data.md)
+
+## ⚙ API reference
+
+* [lost-pixel.config.js|ts](api-reference/lost-pixel.config.js-or-ts.md)
