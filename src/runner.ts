@@ -121,7 +121,6 @@ export const platformRunner = async () => {
   try {
     const result = await getApiToken();
     const { apiToken } = result;
-    console.log(apiToken);
 
     if (config.setPendingStatusCheck) {
       await sendInitToAPI(apiToken);
@@ -133,6 +132,7 @@ export const platformRunner = async () => {
     createShotsFolders();
 
     log.process('info', 'Creating shots');
+    // TODO
     // const shotItems = await createShots();
 
     const createShotsStop = process.hrtime(createShotsStart);
@@ -154,6 +154,7 @@ export const platformRunner = async () => {
       event: getEventData(config.eventFilePath),
     });
   } catch (error: unknown) {
+    // TODO
     // const executionStop = process.hrtime(executionStart);
 
     if (error instanceof Error) {
