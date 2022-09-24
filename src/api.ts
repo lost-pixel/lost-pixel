@@ -78,6 +78,7 @@ type ApiPayloads =
   | ApiPayload<'prepareUpload', ApiPayloadPrepareUpload>;
 
 export const sendToAPI = async <T extends Record<string, unknown>>(
+  config: PlatformModeConfig,
   parameters: ApiPayloads,
 ): Promise<T> => {
   log.process('info', `⚡️ Sending to API [${parameters.action}]`);
@@ -136,7 +137,7 @@ export const sendToAPI = async <T extends Record<string, unknown>>(
 };
 
 export const getApiToken = async (config: PlatformModeConfig) => {
-  return sendToAPI<{ apiToken: string }>({
+  return sendToAPI<{ apiToken: string }>(config, {
     action: 'getApiToken',
     payload: {
       apiKey: config.apiKey ?? 'undefined',
@@ -151,7 +152,7 @@ export const sendInitToAPI = async (
 ) => {
   const [repoOwner, repoName] = config.repository.split('/');
 
-  return sendToAPI({
+  return sendToAPI(config, {
     action: 'init',
     apiToken,
     payload: {
@@ -206,7 +207,7 @@ export const sendFinalizeToAPI = async (
 ) => {
   const [repoOwner, repoName] = config.repository.split('/');
 
-  return sendToAPI({
+  return sendToAPI(config, {
     action: 'finalize',
     apiToken,
     payload: {
@@ -224,16 +225,17 @@ export const prepareUpload = async (
   apiToken: string,
   fileHashes: string[],
 ) => {
-  // allowPlatformModeOnly(config);
-
-  return sendToAPI<{ requiredFileHashes: string[]; uploadToken: string }>({
-    action: 'prepareUpload',
-    apiToken,
-    payload: {
-      branchName: config.commitRefName,
-      commit: config.commitHash,
-      buildNumber: config.ciBuildNumber,
-      fileHashes,
+  return sendToAPI<{ requiredFileHashes: string[]; uploadToken: string }>(
+    config,
+    {
+      action: 'prepareUpload',
+      apiToken,
+      payload: {
+        branchName: config.commitRefName,
+        commit: config.commitHash,
+        buildNumber: config.ciBuildNumber,
+        fileHashes,
+      },
     },
-  });
+  );
 };
