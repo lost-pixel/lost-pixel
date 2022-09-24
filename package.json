@@ -106,7 +106,8 @@
       "n/prefer-global/process": "off",
       "n/file-extension-in-import": "off",
       "no-lone-blocks": "off",
-      "capitalized-comments": "off"
+      "capitalized-comments": "off",
+      "unicorn/prefer-ternary": "off"
     }
   }
 }
