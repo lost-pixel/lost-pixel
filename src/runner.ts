@@ -5,12 +5,19 @@ import { createShots } from './createShots';
 import {
   createShotsFolders,
   exitProcess,
-  getEventData,
+  // getEventData,
+  hashFile,
   isUpdateMode,
   parseHrtimeToSeconds,
   removeFilesInFolder,
 } from './utils';
 import type { FullConfig, PlatformModeConfig } from './config';
+import {
+  getApiToken,
+  prepareUpload,
+  sendInitToAPI,
+  // sendResultToAPI,
+} from './api';
 import { log } from './log';
 
 export const runner = async (config: FullConfig) => {
@@ -155,8 +162,22 @@ export const platformRunner = async (
     createShotsFolders();
 
     log.process('info', '📸 Creating shots');
-    // TODO
-    // const shotItems = await createShots();
+    const shotItems = await createShots();
+
+    const fileHashes = shotItems.map((shotItem) =>
+      hashFile(shotItem.filePathCurrent),
+    );
+
+    const { requiredFileHashes } = await prepareUpload(
+      config,
+      apiToken,
+      fileHashes,
+    );
+
+    log.process(
+      'info',
+      `🏙  ${shotItems.length} shot(s) in total. ${requiredFileHashes.length} shot(s) will be uploaded.`,
+    );
 
     const createShotsStop = process.hrtime(createShotsStart);
 
@@ -172,11 +193,11 @@ export const platformRunner = async (
       `⏱  Lost Pixel run took ${parseHrtimeToSeconds(executionStop)} seconds`,
     );
 
-    await sendResultToAPI({
-      success: true,
-      apiToken,
-      event: getEventData(config.eventFilePath),
-    });
+    // await sendResultToAPI({
+    //   success: true,
+    //   apiToken,
+    //   event: getEventData(config.eventFilePath),
+    // });
   } catch (error: unknown) {
     // TODO
     // const executionStop = process.hrtime(executionStart);
@@ -187,11 +208,11 @@ export const platformRunner = async (
       log.process('error', error);
     }
 
-    await sendResultToAPI({
-      success: false,
-      apiToken,
-      event: getEventData(config.eventFilePath),
-    });
+    // await sendResultToAPI({
+    //   success: false,
+    //   apiToken,
+    //   event: getEventData(config.eventFilePath),
+    // });
 
     process.exit(1);
   }
