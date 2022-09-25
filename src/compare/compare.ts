@@ -4,6 +4,7 @@ import { compare as odiffCompare } from 'odiff-bin';
 import { PNG } from 'pngjs';
 import { config } from '../config';
 import { resizeImage } from './utils';
+import { log } from '../log';
 
 export const checkThreshold = (
   threshold: number,
@@ -116,6 +117,8 @@ export const compareImagesViaOdiff = async (
       failOnLayoutDiff: false,
     },
   );
+
+  log(JSON.stringify(result, null, 2));
 
   if (result.match) {
     return {
