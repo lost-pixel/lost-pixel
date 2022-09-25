@@ -115,6 +115,12 @@ type BaseConfig = {
   compareConcurrency: number;
 
   /**
+   * Which comparison method to use
+   * @default 'pixelmatch'
+   */
+  compareEngine: 'pixelmatch' | 'odiff';
+
+  /**
    * Timeouts for various stages of the test
    */
   timeouts: {
@@ -415,6 +421,7 @@ const defaultConfig: BaseConfig = {
   imagePathDifference: '.lostpixel/difference/',
   shotConcurrency: 5,
   compareConcurrency: 10,
+  compareEngine: 'pixelmatch',
   timeouts: {
     fetchStories: 30_000,
     loadState: 30_000,
