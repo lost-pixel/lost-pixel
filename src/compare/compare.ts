@@ -3,7 +3,6 @@ import pixelmatch from 'pixelmatch';
 import { compare as odiffCompare } from 'odiff-bin';
 import { PNG } from 'pngjs';
 import { config } from '../config';
-import { log } from '../log';
 import { resizeImage } from './utils';
 
 export const checkThreshold = (
@@ -165,8 +164,6 @@ export const compareImages = async (
       differenceShotPath,
     );
   }
-
-  log('info', 'Using odiff for image comparison');
 
   return compareImagesViaOdiff(
     threshold,

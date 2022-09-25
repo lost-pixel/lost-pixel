@@ -6,7 +6,9 @@ import { config } from './config';
 import type { ShotItem } from './types';
 
 export const checkDifferences = async (shotItems: ShotItem[]) => {
-  log(`Comparing ${shotItems.length} screenshots`);
+  log(
+    `Comparing ${shotItems.length} screenshots using '${config.compareEngine}' as compare engine`,
+  );
 
   const total = shotItems.length;
   let differenceCount = 0;
