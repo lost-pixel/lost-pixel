@@ -1,3 +1,5 @@
+import { createReadStream } from 'node:fs';
+import FormData from 'form-data';
 import axios from 'axios';
 import { log } from './log';
 // import { log, logMemory } from './log';
@@ -5,7 +7,12 @@ import { log } from './log';
 import type { PlatformModeConfig } from './config';
 // import type { WebhookEvent } from './types';
 
-type ApiAction = 'getApiToken' | 'init' | 'finalize' | 'prepareUpload';
+type ApiAction =
+  | 'getApiToken'
+  | 'init'
+  | 'finalize'
+  | 'prepareUpload'
+  | 'uploadShot';
 
 export const apiClient = axios.create({
   headers: {
@@ -20,6 +27,7 @@ const apiRoutes: Record<ApiAction, string> = {
   // next: '/app/next',
   finalize: '/app/finalize',
   prepareUpload: '/file/prepare-upload',
+  uploadShot: '/file/upload-shot',
 };
 
 type ApiPayloadGetApiToken = {
@@ -86,7 +94,8 @@ type ApiPayloads =
   | ApiPayload<'init', ApiPayloadInit>
   // | ApiPayload<'next', ApiPayloadNext>
   | ApiPayload<'finalize', ApiPayloadFinalize>
-  | ApiPayload<'prepareUpload', ApiPayloadPrepareUpload>;
+  | ApiPayload<'prepareUpload', ApiPayloadPrepareUpload>
+  | ApiPayload<'uploadShot', ApiPayloadUploadShot, 'file'>;
 
 export const sendToAPI = async <T extends Record<string, unknown>>(
   config: PlatformModeConfig,
@@ -265,4 +274,31 @@ export const prepareUpload = async (
       },
     },
   );
+};
+
+export const uploadShot = async (
+  config: PlatformModeConfig,
+  apiToken: string,
+  uploadToken: string,
+  name: string,
+  file: string,
+) => {
+  return sendToAPI<{
+    success: true;
+    details: {
+      projectIdentifier: string;
+      commit: string;
+      buildNumber: string;
+      branchName: string;
+      name: string;
+    };
+  }>(config, {
+    action: 'uploadShot',
+    apiToken,
+    payload: {
+      uploadToken,
+      name,
+      file,
+    },
+  });
 };
