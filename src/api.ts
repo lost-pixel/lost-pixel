@@ -78,15 +78,10 @@ type ApiPayloadUploadShot = {
   file: string;
 };
 
-type ApiPayload<
-  A extends ApiAction,
-  P extends Record<string, unknown>,
-  F = undefined,
-> = {
+type ApiPayload<A extends ApiAction, P extends Record<string, unknown>> = {
   action: A;
   apiToken?: string;
   payload: P;
-  fileKey?: F;
 };
 
 type ApiPayloads =
@@ -95,23 +90,24 @@ type ApiPayloads =
   // | ApiPayload<'next', ApiPayloadNext>
   | ApiPayload<'finalize', ApiPayloadFinalize>
   | ApiPayload<'prepareUpload', ApiPayloadPrepareUpload>
-  | ApiPayload<'uploadShot', ApiPayloadUploadShot, 'file'>;
+  | ApiPayload<'uploadShot', ApiPayloadUploadShot>;
 
 export const sendToAPI = async <T extends Record<string, unknown>>(
   config: PlatformModeConfig,
   parameters: ApiPayloads,
+  fileKey?: string,
 ): Promise<T> => {
   log.process('info', `⚡️ Sending to API [${parameters.action}]`);
 
   try {
     let payload: ApiPayloads['payload'] | FormData = parameters.payload;
 
-    if (parameters.fileKey) {
+    if (fileKey) {
       const form = new FormData();
 
       for (const [key, element] of Object.entries(parameters.payload)) {
-        if (key === parameters.fileKey) {
-          form.append(key, createReadStream(element));
+        if (key === fileKey) {
+          form.append(key, createReadStream(element as string));
         } else {
           form.append(key, element);
         }
