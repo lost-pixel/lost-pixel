@@ -16,11 +16,11 @@ import {
   getApiToken,
   prepareUpload,
   sendInitToAPI,
-  uploadShot,
   // sendResultToAPI,
 } from './api';
 import { log } from './log';
 import type { ShotItem } from './types';
+import { uploadRequiredShots } from './upload';
 
 export const runner = async (config: FullConfig) => {
   const executionStart = process.hrtime();
@@ -166,6 +166,13 @@ export const platformRunner = async (
     log.process('info', '📸 Creating shots');
     const shotItems = await createShots();
 
+    const createShotsStop = process.hrtime(createShotsStart);
+
+    log.process(
+      'info',
+      `⏱  Creating shots took ${parseHrtimeToSeconds(createShotsStop)} seconds`,
+    );
+
     const fileHashMap = new Map<string, ShotItem>();
     const fileHashes = shotItems.map((shotItem) => {
       const hash = hashFile(shotItem.filePathCurrent);
@@ -186,42 +193,12 @@ export const platformRunner = async (
       `🏙  ${shotItems.length} shot(s) in total. ${requiredFileHashes.length} shot(s) will be uploaded.`,
     );
 
-    if (requiredFileHashes.length > 0) {
-      log.process('info', '📤 Uploading shots');
-
-      const uploadStart = process.hrtime();
-
-      const uploadPromises = requiredFileHashes.map(async (hash) => {
-        const shotItem = fileHashMap.get(hash);
-
-        if (!shotItem) {
-          throw new Error(`Could not find shot item for hash ${hash}`);
-        }
-
-        return uploadShot(
-          config,
-          apiToken,
-          uploadToken,
-          shotItem.shotName,
-          shotItem.filePathCurrent,
-        );
-      });
-
-      await Promise.all(uploadPromises);
-
-      const uploadStop = process.hrtime(uploadStart);
-
-      log.process(
-        'info',
-        `📤 Uploading shots took ${parseHrtimeToSeconds(uploadStop)} seconds`,
-      );
-    }
-
-    const createShotsStop = process.hrtime(createShotsStart);
-
-    log.process(
-      'info',
-      `⏱  Creating shots took ${parseHrtimeToSeconds(createShotsStop)} seconds`,
+    await uploadRequiredShots(
+      config,
+      apiToken,
+      uploadToken,
+      requiredFileHashes,
+      fileHashMap,
     );
 
     const executionStop = process.hrtime(executionStart);
