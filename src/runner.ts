@@ -16,9 +16,11 @@ import {
   getApiToken,
   prepareUpload,
   sendInitToAPI,
+  uploadShot,
   // sendResultToAPI,
 } from './api';
 import { log } from './log';
+import type { ShotItem } from './types';
 
 export const runner = async (config: FullConfig) => {
   const executionStart = process.hrtime();
@@ -164,11 +166,16 @@ export const platformRunner = async (
     log.process('info', '📸 Creating shots');
     const shotItems = await createShots();
 
-    const fileHashes = shotItems.map((shotItem) =>
-      hashFile(shotItem.filePathCurrent),
-    );
+    const fileHashMap = new Map<string, ShotItem>();
+    const fileHashes = shotItems.map((shotItem) => {
+      const hash = hashFile(shotItem.filePathCurrent);
 
-    const { requiredFileHashes } = await prepareUpload(
+      fileHashMap.set(hash, shotItem);
+
+      return hash;
+    });
+
+    const { requiredFileHashes, uploadToken } = await prepareUpload(
       config,
       apiToken,
       fileHashes,
@@ -178,6 +185,37 @@ export const platformRunner = async (
       'info',
       `🏙  ${shotItems.length} shot(s) in total. ${requiredFileHashes.length} shot(s) will be uploaded.`,
     );
+
+    if (requiredFileHashes.length > 0) {
+      log.process('info', '📤 Uploading shots');
+
+      const uploadStart = process.hrtime();
+
+      const uploadPromises = requiredFileHashes.map(async (hash) => {
+        const shotItem = fileHashMap.get(hash);
+
+        if (!shotItem) {
+          throw new Error(`Could not find shot item for hash ${hash}`);
+        }
+
+        return uploadShot(
+          config,
+          apiToken,
+          uploadToken,
+          shotItem.shotName,
+          shotItem.filePathCurrent,
+        );
+      });
+
+      await Promise.all(uploadPromises);
+
+      const uploadStop = process.hrtime(uploadStart);
+
+      log.process(
+        'info',
+        `📤 Uploading shots took ${parseHrtimeToSeconds(uploadStop)} seconds`,
+      );
+    }
 
     const createShotsStop = process.hrtime(createShotsStart);
 
