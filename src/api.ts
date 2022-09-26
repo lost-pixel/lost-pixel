@@ -64,10 +64,21 @@ type ApiPayloadPrepareUpload = {
   fileHashes: string[];
 };
 
-type ApiPayload<A extends ApiAction, P extends Record<string, unknown>> = {
+type ApiPayloadUploadShot = {
+  uploadToken: string;
+  name: string;
+  file: string;
+};
+
+type ApiPayload<
+  A extends ApiAction,
+  P extends Record<string, unknown>,
+  F = undefined,
+> = {
   action: A;
   apiToken?: string;
   payload: P;
+  fileKey?: F;
 };
 
 type ApiPayloads =
@@ -84,9 +95,25 @@ export const sendToAPI = async <T extends Record<string, unknown>>(
   log.process('info', `⚡️ Sending to API [${parameters.action}]`);
 
   try {
+    let payload: ApiPayloads['payload'] | FormData = parameters.payload;
+
+    if (parameters.fileKey) {
+      const form = new FormData();
+
+      for (const [key, element] of Object.entries(parameters.payload)) {
+        if (key === parameters.fileKey) {
+          form.append(key, createReadStream(element));
+        } else {
+          form.append(key, element);
+        }
+      }
+
+      payload = form;
+    }
+
     const response = await apiClient.post(
       `${config.lostPixelPlatform}${apiRoutes[parameters.action]}`,
-      parameters.payload,
+      payload,
       {
         headers: {
           Authorization: `Bearer ${parameters.apiToken ?? ''}`,
