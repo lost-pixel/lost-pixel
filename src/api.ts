@@ -288,13 +288,17 @@ export const uploadShot = async (
       branchName: string;
       name: string;
     };
-  }>(config, {
-    action: 'uploadShot',
-    apiToken,
-    payload: {
-      uploadToken,
-      name,
-      file,
+  }>(
+    config,
+    {
+      action: 'uploadShot',
+      apiToken,
+      payload: {
+        uploadToken,
+        name,
+        file,
+      },
     },
-  });
+    'file',
+  );
 };
