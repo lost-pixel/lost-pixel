@@ -2,7 +2,7 @@ import { existsSync } from 'node:fs';
 import path from 'node:path';
 import get from 'lodash.get';
 import type { BrowserContextOptions, Page } from 'playwright';
-import { loadTSProjectConfigFile } from './configHelper';
+import { loadProjectConfigFile } from './configHelper';
 import { log } from './log';
 
 type BaseConfig = {
@@ -486,14 +486,14 @@ const loadProjectConfig = async (): Promise<CustomProjectConfig> => {
     if (existsSync(configFile)) {
 
       try {
-        const imported = (await loadTSProjectConfigFile(
+        const imported = (await loadProjectConfigFile(
           configFile
         )) as CustomProjectConfig;
 
         return imported;
       } catch (error: unknown) {
         log(error);
-        log('Failed to load TypeScript configuration file');
+        log(`Failed to load ${configFile} configuration file`);
         process.exit(1);
       }
     }

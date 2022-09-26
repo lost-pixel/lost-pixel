@@ -1,6 +1,6 @@
 import { bundleRequire } from 'bundle-require'
 
-export const loadTSProjectConfigFile = async (
+export const loadProjectConfigFile = async (
   configFilepath: string,
 ): Promise<unknown> => {
   const { mod } = await bundleRequire({
