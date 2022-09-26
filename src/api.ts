@@ -96,8 +96,11 @@ export const sendToAPI = async <T extends Record<string, unknown>>(
   config: PlatformModeConfig,
   parameters: ApiPayloads,
   fileKey?: string,
+  customLogger?: ReturnType<typeof log.item>,
 ): Promise<T> => {
-  log.process('info', `⚡️ Sending to API [${parameters.action}]`);
+  const logger = customLogger?.process ?? log.process;
+
+  logger('info', `⚡️ Sending to API [${parameters.action}]`);
 
   try {
     let payload: ApiPayloads['payload'] | FormData = parameters.payload;
@@ -127,7 +130,7 @@ export const sendToAPI = async <T extends Record<string, unknown>>(
     );
 
     if (response.status !== 200 && response.status !== 201) {
-      log.process(
+      logger(
         'error',
         `Error: Failed to send to API [${parameters.action}]. Status: ${response.status} ${response.statusText}`,
       );
@@ -138,7 +141,7 @@ export const sendToAPI = async <T extends Record<string, unknown>>(
     const outdatedApiRequest = response?.headers?.['x-api-version-warning'];
 
     if (outdatedApiRequest && parameters.action === 'init') {
-      log.process(
+      logger(
         'info',
         [
           '~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~',
@@ -148,20 +151,16 @@ export const sendToAPI = async <T extends Record<string, unknown>>(
       );
     }
 
-    log.process('info', `🤘 Successfully sent to API [${parameters.action}]`);
+    logger('info', `🤘 Successfully sent to API [${parameters.action}]`);
 
     return response.data as T;
   } catch (error: unknown) {
     if (axios.isAxiosError(error)) {
-      log.process(
-        'error',
-        'API response: ',
-        error.response?.data || error.message,
-      );
+      logger('error', 'API response: ', error.response?.data || error.message);
     } else if (error instanceof Error) {
-      log.process('error', error.message);
+      logger('error', error.message);
     } else {
-      log.process('error', error);
+      logger('error', error);
     }
 
     process.exit(1);
@@ -278,6 +277,7 @@ export const uploadShot = async (
   uploadToken: string,
   name: string,
   file: string,
+  logger?: ReturnType<typeof log.item>,
 ) => {
   return sendToAPI<{
     success: true;
@@ -300,5 +300,6 @@ export const uploadShot = async (
       },
     },
     'file',
+    logger,
   );
 };

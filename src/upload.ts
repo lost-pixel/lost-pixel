@@ -18,15 +18,22 @@ export const uploadRequiredShots = async (
 
     const uploadStart = process.hrtime();
 
-    await mapLimit<string, void>(
-      requiredFileHashes,
+    await mapLimit<[number, string], void>(
+      requiredFileHashes.entries(),
       MEDIA_UPLOAD_CONCURRENCY,
-      async (hash: string) => {
+      async ([index, hash]: [number, string]) => {
         const shotItem = fileHashMap.get(hash);
 
         if (!shotItem) {
           throw new Error(`Could not find shot item for hash ${hash}`);
         }
+
+        const logger = log.item({
+          shotMode: shotItem.shotMode,
+          uniqueItemId: shotItem.shotName,
+          itemIndex: index,
+          totalItems: requiredFileHashes.length,
+        });
 
         await uploadShot(
           config,
@@ -34,6 +41,7 @@ export const uploadRequiredShots = async (
           uploadToken,
           shotItem.shotName,
           shotItem.filePathCurrent,
+          logger,
         );
       },
     );
