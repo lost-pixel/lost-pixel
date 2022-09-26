@@ -124,6 +124,8 @@ export const compareImagesViaOdiff = async (
         baselineShotPath,
         currentShotPath,
         differenceShotPath,
+        sizebaselineShotPath: readFileSync(baselineShotPath).length,
+        sizecurrentShotPath: readFileSync(currentShotPath).length,
       },
       null,
       2,
