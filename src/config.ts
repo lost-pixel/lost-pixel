@@ -480,26 +480,33 @@ const loadProjectConfig = async (): Promise<CustomProjectConfig> => {
 
   log('Looking for configuration file:', `${configFileNameBase}.(js|ts)`);
 
-  const configFiles = [`${configFileNameBase}.ts`, `${configFileNameBase}.js`];
+  const configFiles = [
+    `${configFileNameBase}.ts`,
+    `${configFileNameBase}.js`,
+  ].filter((file) => existsSync(file));
 
-  for (const configFile of configFiles) {
-    if (existsSync(configFile)) {
-      try {
-        const imported = (await loadProjectConfigFile(
-          configFile,
-        )) as CustomProjectConfig;
-
-        return imported;
-      } catch (error: unknown) {
-        log(error);
-        log(`Failed to load ${configFile} configuration file`);
-        process.exit(1);
-      }
-    }
+  if (configFiles.length > 1) {
+    log('Found multiple config files, taking: ', configFiles[0]);
   }
 
-  log("Couldn't find project config file 'lostpixel.config.(js|ts)'");
-  process.exit(1);
+  if (configFiles.length === 0) {
+    log("Couldn't find project config file 'lostpixel.config.(js|ts)'");
+    process.exit(1);
+  }
+
+  const configFile = configFiles[0];
+
+  try {
+    const imported = (await loadProjectConfigFile(
+      configFile,
+    )) as CustomProjectConfig;
+
+    return imported;
+  } catch (error: unknown) {
+    log(error);
+    log(`Failed to load ${configFile} configuration file`);
+    process.exit(1);
+  }
 };
 
 export const configure = async (customProjectConfig?: CustomProjectConfig) => {
