@@ -484,10 +484,9 @@ const loadProjectConfig = async (): Promise<CustomProjectConfig> => {
 
   for (const configFile of configFiles) {
     if (existsSync(configFile)) {
-
       try {
         const imported = (await loadProjectConfigFile(
-          configFile
+          configFile,
         )) as CustomProjectConfig;
 
         return imported;
