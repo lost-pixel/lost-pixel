@@ -435,7 +435,7 @@ const loadProjectConfig = async (): Promise<CustomProjectConfig> => {
 
     log.process(
       'info',
-      '✅ Successfully loaded the configuration from:',
+      '✅ Successfully loaded configuration from:',
       `${configFileNameBase}.js`,
     );
 
@@ -450,7 +450,7 @@ const loadProjectConfig = async (): Promise<CustomProjectConfig> => {
 
       log.process(
         'info',
-        '✅ Successfully loaded the configuration from:',
+        '✅ Successfully loaded configuration from:',
         `${configFileNameBase}.ts`,
       );
 
