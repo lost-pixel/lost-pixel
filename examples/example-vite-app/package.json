@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
-    "preview": "vite preview",
+    "preview": "npx serve dist -p 61001",
     "lost-pixel": "lost-pixel",
     "lost-pixel:update": "lost-pixel update"
   },

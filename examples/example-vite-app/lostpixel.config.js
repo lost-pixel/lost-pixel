@@ -3,7 +3,7 @@ export const config = {
     pages: [
       { path: '/', name: 'app' },
     ],
-    baseUrl: 'http://localhost:5173',
+    baseUrl: 'http://localhost:61001',
   },
   generateOnly: true,
   failOnDifference: true,
