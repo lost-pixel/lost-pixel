@@ -19,7 +19,7 @@
     "build-example-vite": "cd examples/example-vite-app && npm ci && npm run build",
     "run-example-next-js-pages": "cd examples/example-next-js-pages && npm run start",
     "run-example-ladle": "cd examples/example-ladle && npm run serve",
-    "run-example-vite": "cd examples/example-vite-app && npm ci && npm run preview",
+    "run-example-vite": "cd examples/example-vite-app && npm ci && npm run build && npm run preview",
     "test-on-examples": "./test-on-examples.sh",
     "lint": "xo && tsc --noEmit && eslint '*/**/*.ts'",
     "lint-fix": "tsc --noEmit && eslint '*/**/*.ts' --fix && xo --fix",
