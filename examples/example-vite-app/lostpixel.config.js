@@ -1,7 +1,7 @@
 export const config = {
   pageShots: {
     pages: [
-      { path: '/', name: 'app' },
+      { path: '', name: 'app' },
     ],
     baseUrl: 'http://localhost:61001',
   },
