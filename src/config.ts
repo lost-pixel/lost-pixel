@@ -115,7 +115,7 @@ type BaseConfig = {
   compareConcurrency: number;
 
   /**
-   * Which comparison method to use
+   * Which comparison engine to use for diffing images
    * @default 'pixelmatch'
    */
   compareEngine: 'pixelmatch' | 'odiff';
