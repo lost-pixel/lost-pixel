@@ -13,7 +13,7 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: 16.x
-          cache: "npm"
+          cache: 'npm'
 
       - name: Install dependencies
         run: |
@@ -35,6 +35,9 @@ jobs:
       - name: Build Example Ladle
         run: npm run build-example-ladle
 
+      - name: Build Example Vite
+        run: npm run build-example-vite
+
       - name: Test
         run: npm run test
 
@@ -46,6 +49,9 @@ jobs:
 
       - name: Run Example Ladle
         run: npm run run-example-ladle &
+
+      - name: Run Example Vite
+        run: npm run run-example-vite &
 
       - name: Test on examples
         run: npm run test-on-examples
