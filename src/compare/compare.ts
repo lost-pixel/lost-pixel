@@ -118,21 +118,6 @@ export const compareImagesViaOdiff = async (
     },
   );
 
-  log(
-    JSON.stringify(
-      {
-        baselineShotPath,
-        currentShotPath,
-        differenceShotPath,
-        sizebaselineShotPath: readFileSync(baselineShotPath).length,
-        sizecurrentShotPath: readFileSync(currentShotPath).length,
-      },
-      null,
-      2,
-    ),
-  );
-  log(JSON.stringify(result, null, 2));
-
   if (result.match) {
     return {
       pixelDifference: 0,
