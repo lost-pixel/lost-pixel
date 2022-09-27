@@ -504,7 +504,7 @@ const loadProjectConfig = async (): Promise<CustomProjectConfig> => {
     return imported;
   } catch (error: unknown) {
     log(error);
-    log(`Failed to load ${configFile} configuration file`);
+    log(`Failed to load configuration file: ${configFile}`);
     process.exit(1);
   }
 };
