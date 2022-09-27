@@ -4,7 +4,6 @@ import { compare as odiffCompare } from 'odiff-bin';
 import { PNG } from 'pngjs';
 import { config } from '../config';
 import { resizeImage } from './utils';
-import { log } from '../log';
 
 export const checkThreshold = (
   threshold: number,
