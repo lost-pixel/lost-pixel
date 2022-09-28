@@ -2,7 +2,7 @@ import { existsSync } from 'node:fs';
 import path from 'node:path';
 import get from 'lodash.get';
 import type { BrowserContextOptions, Page } from 'playwright';
-import { loadTSProjectConfigFile } from './configHelper';
+import { loadProjectConfigFile } from './configHelper';
 import { log } from './log';
 
 type BaseConfig = {
@@ -487,30 +487,33 @@ const loadProjectConfig = async (): Promise<CustomProjectConfig> => {
 
   log('Looking for configuration file:', `${configFileNameBase}.(js|ts)`);
 
-  if (existsSync(`${configFileNameBase}.js`)) {
-    const projectConfig =
-      // eslint-disable-next-line @typescript-eslint/no-require-imports, @typescript-eslint/no-var-requires
-      require(`${configFileNameBase}.js`) as CustomProjectConfig;
+  const configFiles = [
+    `${configFileNameBase}.ts`,
+    `${configFileNameBase}.js`,
+  ].filter((file) => existsSync(file));
 
-    return projectConfig;
+  if (configFiles.length > 1) {
+    log('Found multiple config files, taking: ', configFiles[0]);
   }
 
-  if (existsSync(`${configFileNameBase}.ts`)) {
-    try {
-      const imported = (await loadTSProjectConfigFile(
-        `${configFileNameBase}.ts`,
-      )) as CustomProjectConfig;
-
-      return imported;
-    } catch (error: unknown) {
-      log(error);
-      log('Failed to load TypeScript configuration file');
-      process.exit(1);
-    }
+  if (configFiles.length === 0) {
+    log("Couldn't find project config file 'lostpixel.config.(js|ts)'");
+    process.exit(1);
   }
 
-  log("Couldn't find project config file 'lostpixel.config.js'");
-  process.exit(1);
+  const configFile = configFiles[0];
+
+  try {
+    const imported = (await loadProjectConfigFile(
+      configFile,
+    )) as CustomProjectConfig;
+
+    return imported;
+  } catch (error: unknown) {
+    log(error);
+    log(`Failed to load configuration file: ${configFile}`);
+    process.exit(1);
+  }
 };
 
 export const configure = async (customProjectConfig?: CustomProjectConfig) => {
