@@ -11,6 +11,8 @@ COPY package-lock.json .
 
 RUN npm install --ignore-scripts
 RUN npm run build
+# Ensure odiff binary is present and linked correctly, --ignore-scripts ignores post-install which is needed by odiff
+RUN cd node_modules/odiff-bin && npm run postinstall
 
 
 # Run Stage

@@ -1,6 +1,8 @@
 import { readFileSync, writeFileSync } from 'node:fs';
 import pixelmatch from 'pixelmatch';
+import { compare as odiffCompare } from 'odiff-bin';
 import { PNG } from 'pngjs';
+import { config } from '../config';
 import { resizeImage } from './utils';
 
 export const checkThreshold = (
@@ -17,7 +19,7 @@ export const checkThreshold = (
   return pixelDifference <= threshold;
 };
 
-export const compareImages = async (
+export const compareImagesViaPixelmatch = async (
   threshold: number,
   baselineShotPath: string,
   currentShotPath: string,
@@ -94,4 +96,79 @@ export const compareImages = async (
     pixelDifferencePercentage: pixelDifference / pixelsTotal,
     isWithinThreshold: true,
   };
+};
+
+export const compareImagesViaOdiff = async (
+  threshold: number,
+  baselineShotPath: string,
+  currentShotPath: string,
+  differenceShotPath: string,
+): Promise<{
+  pixelDifference: number;
+  pixelDifferencePercentage: number;
+  isWithinThreshold: boolean;
+}> => {
+  const result = await odiffCompare(
+    baselineShotPath,
+    currentShotPath,
+    differenceShotPath,
+    {
+      failOnLayoutDiff: false,
+    },
+  );
+
+  if (result.match) {
+    return {
+      pixelDifference: 0,
+      pixelDifferencePercentage: 0,
+      isWithinThreshold: true,
+    };
+  }
+
+  if (result.reason === 'pixel-diff') {
+    let isWithinThreshold = true;
+
+    // Treat theshold as percentage
+    if (threshold < 1) {
+      isWithinThreshold = result.diffPercentage <= threshold;
+    } else {
+      // Treat threshold as absolute value
+      isWithinThreshold = result.diffCount <= threshold;
+    }
+
+    return {
+      pixelDifference: Number(result.diffCount),
+      pixelDifferencePercentage: Number(result.diffPercentage / 100),
+      isWithinThreshold,
+    };
+  }
+
+  throw new Error("Couldn't compare images");
+};
+
+export const compareImages = async (
+  threshold: number,
+  baselineShotPath: string,
+  currentShotPath: string,
+  differenceShotPath: string,
+): Promise<{
+  pixelDifference: number;
+  pixelDifferencePercentage: number;
+  isWithinThreshold: boolean;
+}> => {
+  if (config.compareEngine === 'pixelmatch') {
+    return compareImagesViaPixelmatch(
+      threshold,
+      baselineShotPath,
+      currentShotPath,
+      differenceShotPath,
+    );
+  }
+
+  return compareImagesViaOdiff(
+    threshold,
+    baselineShotPath,
+    currentShotPath,
+    differenceShotPath,
+  );
 };
