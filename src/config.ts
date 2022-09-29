@@ -80,6 +80,8 @@ type BaseConfig = {
   customShots?: {
     /**
      * Path to current shots folder
+     *
+     * This path cannot be the same as the `imagePathCurrent` path
      */
     currentShotsPath: string;
   };
@@ -464,6 +466,19 @@ const checkConfig = () => {
       `Error: Missing required configuration properties: ${missingProps.join(
         ', ',
       )}`,
+    );
+    process.exit(1);
+  }
+
+  if (
+    config.customShots?.currentShotsPath &&
+    path.relative(
+      path.resolve(config.imagePathCurrent),
+      path.resolve(config.customShots.currentShotsPath),
+    ) === ''
+  ) {
+    log(
+      `Error: 'customShots.currentShotsPath' cannot be equal to 'imagePathCurrent'`,
     );
     process.exit(1);
   }
