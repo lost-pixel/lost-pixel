@@ -17,20 +17,20 @@ export const collect = async () => {
   const current = getImageList(config.imagePathCurrent);
   const difference = getImageList(config.imagePathDifference);
 
-  if (baseline === null && current === null) {
+  if (baseline.length === 0 && current.length === 0) {
     throw new Error(
       'Error: No baseline or current images found. Check paths configuration.',
     );
   }
 
-  log(`Found ${baseline?.length ?? 0} baseline images`);
-  log(`Found ${current?.length ?? 0} current images`);
-  log(`Found ${difference?.length ?? 0} difference images`);
+  log(`Found ${baseline.length} baseline images`);
+  log(`Found ${current.length} current images`);
+  log(`Found ${difference.length} difference images`);
 
   const files = {
-    baseline: baseline ?? [],
-    current: current ?? [],
-    difference: difference ?? [],
+    baseline,
+    current,
+    difference,
   };
 
   const changes = getChanges(files);
