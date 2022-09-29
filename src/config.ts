@@ -80,6 +80,8 @@ type BaseConfig = {
   customShots?: {
     /**
      * Path to current shots folder
+     *
+     * This path cannot be the same as the `imagePathCurrent` path
      */
     currentShotsPath: string;
   };
