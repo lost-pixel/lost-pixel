@@ -13,8 +13,12 @@ export const collect = async () => {
 
   log('Collecting files');
 
+  const customCurrent = config.customShots?.currentShotsPath
+    ? getImageList(config.customShots?.currentShotsPath)
+    : [];
+
   const baseline = getImageList(config.imagePathBaseline);
-  const current = getImageList(config.imagePathCurrent);
+  const current = [...getImageList(config.imagePathCurrent), ...customCurrent];
   const difference = getImageList(config.imagePathDifference);
 
   if (baseline.length === 0 && current.length === 0) {
