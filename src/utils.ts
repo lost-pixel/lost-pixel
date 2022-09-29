@@ -230,7 +230,7 @@ export const prepareComparisonList = ({
   return [comparisonList, uploadList];
 };
 
-export const getImageList = (path: string): string[] | undefined => {
+export const getImageList = (path: string): string[] => {
   try {
     const files = readdirSync(path);
 
@@ -238,7 +238,7 @@ export const getImageList = (path: string): string[] | undefined => {
   } catch (error: unknown) {
     log(error);
 
-    return undefined;
+    return [];
   }
 };
 
