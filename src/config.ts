@@ -469,6 +469,19 @@ const checkConfig = () => {
     );
     process.exit(1);
   }
+
+  if (
+    config.customShots?.currentShotsPath &&
+    path.relative(
+      path.resolve(config.imagePathCurrent),
+      path.resolve(config.customShots.currentShotsPath),
+    ) === ''
+  ) {
+    log(
+      `Error: 'customShots.currentShotsPath' cannot be equal to 'imagePathCurrent'`,
+    );
+    process.exit(1);
+  }
 };
 
 const configDirBase = process.env.LOST_PIXEL_CONFIG_DIR ?? process.cwd();
