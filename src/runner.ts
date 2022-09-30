@@ -19,6 +19,8 @@ import { log } from './log';
 export const runner = async () => {
   const executionStart = process.hrtime();
 
+  log('running before config');
+
   await configure();
   log('Successfully loaded the configuration!');
 
