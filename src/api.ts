@@ -12,7 +12,8 @@ type ApiAction =
   | 'init'
   | 'finalize'
   | 'prepareUpload'
-  | 'uploadShot';
+  | 'uploadShot'
+  | 'processShots';
 
 export const apiClient = axios.create({
   headers: {
@@ -28,6 +29,7 @@ const apiRoutes: Record<ApiAction, string> = {
   finalize: '/app/finalize',
   prepareUpload: '/file/prepare-upload',
   uploadShot: '/file/upload-shot',
+  processShots: '/app/process-shots',
 };
 
 type ApiPayloadGetApiToken = {
@@ -78,6 +80,10 @@ type ApiPayloadUploadShot = {
   file: string;
 };
 
+type ApiPayloadProcessShots = {
+  uploadToken: string;
+};
+
 type ApiPayload<A extends ApiAction, P extends Record<string, unknown>> = {
   action: A;
   apiToken?: string;
@@ -90,7 +96,8 @@ type ApiPayloads =
   // | ApiPayload<'next', ApiPayloadNext>
   | ApiPayload<'finalize', ApiPayloadFinalize>
   | ApiPayload<'prepareUpload', ApiPayloadPrepareUpload>
-  | ApiPayload<'uploadShot', ApiPayloadUploadShot>;
+  | ApiPayload<'uploadShot', ApiPayloadUploadShot>
+  | ApiPayload<'processShots', ApiPayloadProcessShots>;
 
 export const sendToAPI = async <T extends Record<string, unknown>>(
   config: PlatformModeConfig,
@@ -302,4 +309,18 @@ export const uploadShot = async (
     'file',
     logger,
   );
+};
+
+export const processShots = async (
+  config: PlatformModeConfig,
+  apiToken: string,
+  uploadToken: string,
+) => {
+  return sendToAPI<{ success: true }>(config, {
+    action: 'processShots',
+    apiToken,
+    payload: {
+      uploadToken,
+    },
+  });
 };
