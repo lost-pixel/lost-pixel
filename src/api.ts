@@ -71,7 +71,10 @@ type ApiPayloadPrepareUpload = {
   branchName: string;
   commit: string;
   buildNumber: string;
-  fileHashes: string[];
+  currentShots: Array<{
+    name: string;
+    hash: string;
+  }>;
 };
 
 type ApiPayloadUploadShot = {
@@ -261,7 +264,10 @@ export const sendFinalizeToAPI = async (
 export const prepareUpload = async (
   config: PlatformModeConfig,
   apiToken: string,
-  fileHashes: string[],
+  currentShots: Array<{
+    name: string;
+    hash: string;
+  }>,
 ) => {
   return sendToAPI<{ requiredFileHashes: string[]; uploadToken: string }>(
     config,
@@ -272,7 +278,7 @@ export const prepareUpload = async (
         branchName: config.commitRefName,
         commit: config.commitHash,
         buildNumber: config.ciBuildNumber,
-        fileHashes,
+        currentShots,
       },
     },
   );
