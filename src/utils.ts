@@ -138,9 +138,9 @@ export const prepareComparisonList = ({
   const comparisonList: Comparison[] = [];
   const uploadList: UploadFile[] = [];
 
-  for (const fileName of changes.addition) {
+  for (const file of changes.addition) {
     const afterFile = extendFileName({
-      fileName,
+      fileName: file.name,
       extension: 'after',
     });
     const type = 'ADDITION';
@@ -148,23 +148,24 @@ export const prepareComparisonList = ({
     comparisonList.push({
       type,
       afterImageUrl: [baseUrl, afterFile].join('/'),
-      path: join(config.imagePathBaseline, fileName),
-      name: fileName,
+      path: join(config.imagePathBaseline, file.name),
+      name: file.name,
     });
 
+    // Current shot
     uploadList.push(
       createUploadItem({
         uploadFileName: afterFile,
-        path: config.imagePathCurrent,
-        fileName,
+        path: file.path, // Path depends on `currentShotsPath` setting
+        fileName: file.name,
         type,
       }),
     );
   }
 
-  for (const fileName of changes.deletion) {
+  for (const file of changes.deletion) {
     const beforeFile = extendFileName({
-      fileName,
+      fileName: file.name,
       extension: 'before',
     });
     const type = 'DELETION';
@@ -172,31 +173,31 @@ export const prepareComparisonList = ({
     comparisonList.push({
       type,
       beforeImageUrl: [baseUrl, beforeFile].join('/'),
-      path: join(config.imagePathBaseline, fileName),
-      name: fileName,
+      path: join(config.imagePathBaseline, file.name),
+      name: file.name,
     });
 
     uploadList.push(
       createUploadItem({
         uploadFileName: beforeFile,
         path: config.imagePathBaseline,
-        fileName,
+        fileName: file.name,
         type,
       }),
     );
   }
 
-  for (const fileName of changes.difference) {
+  for (const file of changes.difference) {
     const beforeFile = extendFileName({
-      fileName,
+      fileName: file.name,
       extension: 'before',
     });
     const afterFile = extendFileName({
-      fileName,
+      fileName: file.name,
       extension: 'after',
     });
     const differenceFile = extendFileName({
-      fileName,
+      fileName: file.name,
       extension: 'difference',
     });
     const type = 'DIFFERENCE';
@@ -206,27 +207,30 @@ export const prepareComparisonList = ({
       beforeImageUrl: [baseUrl, beforeFile].join('/'),
       afterImageUrl: [baseUrl, afterFile].join('/'),
       differenceImageUrl: [baseUrl, differenceFile].join('/'),
-      path: join(config.imagePathBaseline, fileName),
-      name: fileName,
+      path: join(config.imagePathBaseline, file.name),
+      name: file.name,
     });
 
     uploadList.push(
+      // Baseline shot
       createUploadItem({
         uploadFileName: beforeFile,
         path: config.imagePathBaseline,
-        fileName,
+        fileName: file.name,
         type,
       }),
+      // Current shot
       createUploadItem({
         uploadFileName: afterFile,
-        path: config.imagePathCurrent,
-        fileName,
+        path: file.path, // Path depends on `currentShotsPath` setting
+        fileName: file.name,
         type,
       }),
+      // Difference shot
       createUploadItem({
         uploadFileName: differenceFile,
         path: config.imagePathDifference,
-        fileName,
+        fileName: file.name,
         type,
       }),
     );
