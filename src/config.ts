@@ -487,7 +487,7 @@ const checkConfig = () => {
 const configDirBase = process.env.LOST_PIXEL_CONFIG_DIR ?? process.cwd();
 
 const configFileNameBase = path.join(
-  configDirBase.startsWith('/') ? '' : process.cwd(),
+  path.isAbsolute(configDirBase) ? '' : process.cwd(),
   configDirBase,
   'lostpixel.config',
 );
