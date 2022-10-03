@@ -15,6 +15,7 @@ import type { FullConfig, PlatformModeConfig } from './config';
 import {
   getApiToken,
   prepareUpload,
+  processShots,
   sendInitToAPI,
   // sendResultToAPI,
 } from './api';
@@ -174,18 +175,21 @@ export const platformRunner = async (
     );
 
     const fileHashMap = new Map<string, ShotItem>();
-    const fileHashes = shotItems.map((shotItem) => {
+    const fileNamesWithHashes = shotItems.map((shotItem) => {
       const hash = hashFile(shotItem.filePathCurrent);
 
       fileHashMap.set(hash, shotItem);
 
-      return hash;
+      return {
+        name: shotItem.shotName,
+        hash,
+      };
     });
 
     const { requiredFileHashes, uploadToken } = await prepareUpload(
       config,
       apiToken,
-      fileHashes,
+      fileNamesWithHashes,
     );
 
     log.process(
@@ -200,6 +204,8 @@ export const platformRunner = async (
       requiredFileHashes,
       fileHashMap,
     );
+
+    await processShots(config, apiToken, uploadToken);
 
     const executionStop = process.hrtime(executionStart);
 
