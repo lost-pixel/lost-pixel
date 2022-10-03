@@ -16,12 +16,20 @@ beforeAll(async () => {
   });
 });
 
+const customShotsPath = 'custom';
+
 describe(getChanges, () => {
   it('should reflect no difference', () => {
     expect(
       getChanges({
-        baseline: ['a.png', 'b.png'],
-        current: ['a.png', 'b.png'],
+        baseline: [
+          { name: 'a.png', path: customShotsPath },
+          { name: 'b.png', path: customShotsPath },
+        ],
+        current: [
+          { name: 'a.png', path: customShotsPath },
+          { name: 'b.png', path: customShotsPath },
+        ],
         difference: [],
       }),
     ).toEqual({
@@ -32,8 +40,14 @@ describe(getChanges, () => {
 
     expect(
       getChanges({
-        baseline: ['a.png', 'b.png'],
-        current: ['b.png', 'a.png'],
+        baseline: [
+          { name: 'a.png', path: customShotsPath },
+          { name: 'b.png', path: customShotsPath },
+        ],
+        current: [
+          { name: 'b.png', path: customShotsPath },
+          { name: 'a.png', path: customShotsPath },
+        ],
         difference: [],
       }),
     ).toEqual({
@@ -46,27 +60,49 @@ describe(getChanges, () => {
   it('should highlight added files', () => {
     expect(
       getChanges({
-        baseline: ['a.png', 'b.png'],
-        current: ['a.png', 'b.png', 'd.png', 'c.png'],
+        baseline: [
+          { name: 'a.png', path: customShotsPath },
+          { name: 'b.png', path: customShotsPath },
+        ],
+        current: [
+          { name: 'a.png', path: customShotsPath },
+          { name: 'b.png', path: customShotsPath },
+          { name: 'd.png', path: customShotsPath },
+          { name: 'c.png', path: customShotsPath },
+        ],
         difference: [],
       }),
     ).toEqual({
       difference: [],
       deletion: [],
-      addition: ['c.png', 'd.png'],
+      addition: [
+        { name: 'c.png', path: customShotsPath },
+        { name: 'd.png', path: customShotsPath },
+      ],
     });
   });
 
   it('should highlight removed files', () => {
     expect(
       getChanges({
-        baseline: ['a.png', 'b.png', 'c.png', 'd.png'],
-        current: ['a.png', 'd.png'],
+        baseline: [
+          { name: 'a.png', path: customShotsPath },
+          { name: 'b.png', path: customShotsPath },
+          { name: 'c.png', path: customShotsPath },
+          { name: 'd.png', path: customShotsPath },
+        ],
+        current: [
+          { name: 'a.png', path: customShotsPath },
+          { name: 'd.png', path: customShotsPath },
+        ],
         difference: [],
       }),
     ).toEqual({
       difference: [],
-      deletion: ['b.png', 'c.png'],
+      deletion: [
+        { name: 'b.png', path: customShotsPath },
+        { name: 'c.png', path: customShotsPath },
+      ],
       addition: [],
     });
   });
@@ -74,12 +110,18 @@ describe(getChanges, () => {
   it('should highlight changed files', () => {
     expect(
       getChanges({
-        baseline: ['a.png', 'b.png'],
-        current: ['a.png', 'b.png'],
-        difference: ['b.png'],
+        baseline: [
+          { name: 'a.png', path: customShotsPath },
+          { name: 'b.png', path: customShotsPath },
+        ],
+        current: [
+          { name: 'a.png', path: customShotsPath },
+          { name: 'b.png', path: customShotsPath },
+        ],
+        difference: [{ name: 'b.png', path: customShotsPath }],
       }),
     ).toEqual({
-      difference: ['b.png'],
+      difference: [{ name: 'b.png', path: customShotsPath }],
       deletion: [],
       addition: [],
     });
@@ -88,14 +130,24 @@ describe(getChanges, () => {
   it('should highlight added/remove/changed files', () => {
     expect(
       getChanges({
-        baseline: ['a.png', 'b.png'],
-        current: ['a.png', 'd.png', 'c.png'],
-        difference: ['a.png'],
+        baseline: [
+          { name: 'a.png', path: customShotsPath },
+          { name: 'b.png', path: customShotsPath },
+        ],
+        current: [
+          { name: 'a.png', path: customShotsPath },
+          { name: 'd.png', path: customShotsPath },
+          { name: 'c.png', path: customShotsPath },
+        ],
+        difference: [{ name: 'a.png', path: customShotsPath }],
       }),
     ).toEqual({
-      difference: ['a.png'],
-      deletion: ['b.png'],
-      addition: ['c.png', 'd.png'],
+      difference: [{ name: 'a.png', path: customShotsPath }],
+      deletion: [{ name: 'b.png', path: customShotsPath }],
+      addition: [
+        { name: 'c.png', path: customShotsPath },
+        { name: 'd.png', path: customShotsPath },
+      ],
     });
   });
 });
@@ -103,8 +155,14 @@ describe(getChanges, () => {
 describe(prepareComparisonList, () => {
   it('should return empty list if no changes found', () => {
     const changes = getChanges({
-      baseline: ['a.png', 'b.png'],
-      current: ['a.png', 'b.png'],
+      baseline: [
+        { name: 'a.png', path: customShotsPath },
+        { name: 'b.png', path: customShotsPath },
+      ],
+      current: [
+        { name: 'a.png', path: customShotsPath },
+        { name: 'b.png', path: customShotsPath },
+      ],
       difference: [],
     });
 
@@ -118,9 +176,16 @@ describe(prepareComparisonList, () => {
 
   it('should build comparisons', () => {
     const changes = getChanges({
-      baseline: ['a.png', 'b.png'],
-      current: ['a.png', 'd.png', 'c.png'],
-      difference: ['a.png'],
+      baseline: [
+        { name: 'a.png', path: customShotsPath },
+        { name: 'b.png', path: customShotsPath },
+      ],
+      current: [
+        { name: 'a.png', path: customShotsPath },
+        { name: 'd.png', path: customShotsPath },
+        { name: 'c.png', path: customShotsPath },
+      ],
+      difference: [{ name: 'a.png', path: customShotsPath }],
     });
 
     expect(
@@ -159,21 +224,21 @@ describe(prepareComparisonList, () => {
       ],
       [
         {
-          filePath: join(config.imagePathCurrent, 'c.png'),
+          filePath: join(customShotsPath, 'c.png'),
           metaData: {
             'content-type': 'image/png',
             'x-amz-acl': 'public-read',
-            original: join(config.imagePathCurrent, 'c.png'),
+            original: join(customShotsPath, 'c.png'),
             type: 'ADDITION',
           },
           uploadPath: 'lorem-ipsum/456/c.after.png',
         },
         {
-          filePath: join(config.imagePathCurrent, 'd.png'),
+          filePath: join(customShotsPath, 'd.png'),
           metaData: {
             'content-type': 'image/png',
             'x-amz-acl': 'public-read',
-            original: join(config.imagePathCurrent, 'd.png'),
+            original: join(customShotsPath, 'd.png'),
             type: 'ADDITION',
           },
           uploadPath: 'lorem-ipsum/456/d.after.png',
@@ -199,11 +264,11 @@ describe(prepareComparisonList, () => {
           uploadPath: 'lorem-ipsum/456/a.before.png',
         },
         {
-          filePath: join(config.imagePathCurrent, 'a.png'),
+          filePath: join(customShotsPath, 'a.png'),
           metaData: {
             'content-type': 'image/png',
             'x-amz-acl': 'public-read',
-            original: join(config.imagePathCurrent, 'a.png'),
+            original: join(customShotsPath, 'a.png'),
             type: 'DIFFERENCE',
           },
           uploadPath: 'lorem-ipsum/456/a.after.png',
