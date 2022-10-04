@@ -10,5 +10,5 @@ export const loadProjectConfigFile = async (
     filepath: configFilepath,
   });
 
-  return mod?.default ?? mod?.config;
+  return mod?.default ?? mod?.config ?? mod;
 };
