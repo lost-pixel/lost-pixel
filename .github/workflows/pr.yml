@@ -36,13 +36,18 @@ jobs:
       - name: Test
         run: npm run test
 
+      - name: Set Docker tag
+        run: echo DOCKER_TAG=$(echo pr-${GITHUB_SHA:0:8}) >> $GITHUB_ENV
+
       - name: Publish to Registry
         uses: elgohr/Publish-Docker-Github-Action@a0b8f0e2d777562c13523b9a4d9480bae383486b
+        env:
+          RELEASE_VERSION: '${{ env.DOCKER_TAG }}'
         with:
           name: lostpixel/lost-pixel-pr-build
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
-          tags: 'pr-${{ env.GITHUB_SHA }}'
+          tags: '${{ env.DOCKER_TAG }}'
           buildoptions: '--compress --force-rm'
 
       - name: Slack Notification
@@ -57,6 +62,6 @@ jobs:
             {
               attachments: [{
                 color: '${{ job.status }}' === 'success' ? 'good' : '${{ job.status }}' === 'failure' ? 'danger' : 'warning',
-                text: `${process.env.AS_WORKFLOW}\n${process.env.AS_JOB} (${process.env.AS_COMMIT}) of ${process.env.AS_REPO} by ${process.env.AS_AUTHOR} ${{ job.status }}\n\nlostpixel/lost-pixel-pr-build@pr-${process.env.GITHUB_SHA}`
+                text: `${process.env.AS_WORKFLOW}\n${process.env.AS_JOB} (${process.env.AS_COMMIT}) of ${process.env.AS_REPO}@${process.env.AS_REF} by ${process.env.AS_AUTHOR} ${{ job.status }}\n\nlostpixel/lost-pixel-pr-build@${process.env.DOCKER_TAG}`
               }]
             }
