@@ -3,9 +3,11 @@
 <div align="center">
   <h1>Lost Pixel</h1>
   <h2>Holistic visual regression testing solution </h2>  
-  <a href="https://www.npmjs.com/package/lost-pixel"><img src="https://img.shields.io/npm/v/lost-pixel?style=plastic" /></a>
+  <a href="https://www.npmjs.com/package/lost-pixel"><img src="https://img.shields.io/npm/v/lost-pixel?style=plastic" /></a> 
   <a href="https://github.com/lost-pixel/lost-pixel/blob/main/docs/contributing.md"><img src="https://img.shields.io/badge/PRs-welcome-brightgreen.svg" /></a>
   <a href="https://github.com/lost-pixel/lost-pixel/blob/main/LICENSE"><img src="https://img.shields.io/github/license/lost-pixel/lost-pixel" /></a>
+  <a href="https://discord.gg/WqVjk49g9m"><img src="https://img.shields.io/badge/chat-discord-blue?style=flat&logo=discord" alt="discord chat"></a>
+  <a href="https://twitter.com/lostpixel_app"><img src="https://img.shields.io/twitter/follow/lostpixel_app?style=social" alt="twitter profile"></a>
   <br />
   <br />
   <a href="https://docs.lost-pixel.com/user-docs">Documentation</a>
@@ -225,7 +227,7 @@ jobs:
 </details>
 
 ---
-
+  
 ## Support 👨🏼‍💻
 
 ### Ask a question about Lost Pixel
@@ -245,6 +247,15 @@ If you see an error message or run into an issue, help us with creating a bug re
 If Lost Pixel at the moment doesn't support some mode or does not have a feature we would appreciate your thoughts!
 
 🆕 [**Submit feature request**](https://github.com/lost-pixel/lost-pixel/issues/new?assignees=&labels=kind%2Ffeature&template=feature.yml)
+  
+
+### Community 
+Want to chat about visual regression testing with likeminded people? We've started a community! Discuss your pipelines, tools, testing strategy, get faster support!
+
+<div align='center'>  <a href="https://discord.gg/WqVjk49g9m"><img width='400px' src='https://user-images.githubusercontent.com/29632358/194254174-aad8e9f1-1f1e-4f21-ab36-7fb63eb51696.png'> </div>
+   
+<h4 align='center'> <a href="https://discord.gg/WqVjk49g9m">Join our Discord</a></div>
+
 
 ---
 
