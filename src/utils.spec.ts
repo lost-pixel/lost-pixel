@@ -172,11 +172,11 @@ describe(prepareComparisonList, () => {
   it('should return empty list if no changes found', () => {
     const changes = getChanges({
       baseline: [
-        { name: 'a.png', path: customShotsPath },
-        { name: 'b.png', path: customShotsPath },
+        { name: 'a.png', path: baselineShotsPath },
+        { name: 'b.png', path: baselineShotsPath },
       ],
       current: [
-        { name: 'a.png', path: customShotsPath },
+        { name: 'a.png', path: currentShotsPath },
         { name: 'b.png', path: customShotsPath },
       ],
       difference: [],
@@ -193,15 +193,20 @@ describe(prepareComparisonList, () => {
   it('should build comparisons', () => {
     const changes = getChanges({
       baseline: [
-        { name: 'a.png', path: customShotsPath },
-        { name: 'b.png', path: customShotsPath },
+        { name: 'a.png', path: baselineShotsPath },
+        { name: 'b.png', path: baselineShotsPath },
+        { name: 'e.png', path: baselineShotsPath },
       ],
       current: [
-        { name: 'a.png', path: customShotsPath },
-        { name: 'd.png', path: customShotsPath },
-        { name: 'c.png', path: customShotsPath },
+        { name: 'a.png', path: currentShotsPath },
+        { name: 'd.png', path: currentShotsPath },
+        { name: 'c.png', path: currentShotsPath },
+        { name: 'e.png', path: customShotsPath },
       ],
-      difference: [{ name: 'a.png', path: customShotsPath }],
+      difference: [
+        { name: 'a.png', path: differenceShotsPath },
+        { name: 'e.png', path: differenceShotsPath },
+      ],
     });
 
     expect(
@@ -214,19 +219,19 @@ describe(prepareComparisonList, () => {
         {
           afterImageUrl: 'https://s3/c.after.png',
           type: 'ADDITION',
-          path: '.lostpixel/baseline/c.png',
+          path: join(baselineShotsPath, 'c.png'),
           name: 'c.png',
         },
         {
           afterImageUrl: 'https://s3/d.after.png',
           type: 'ADDITION',
-          path: '.lostpixel/baseline/d.png',
+          path: join(baselineShotsPath, 'd.png'),
           name: 'd.png',
         },
         {
           beforeImageUrl: 'https://s3/b.before.png',
           type: 'DELETION',
-          path: '.lostpixel/baseline/b.png',
+          path: join(baselineShotsPath, 'b.png'),
           name: 'b.png',
         },
         {
@@ -234,49 +239,17 @@ describe(prepareComparisonList, () => {
           beforeImageUrl: 'https://s3/a.before.png',
           differenceImageUrl: 'https://s3/a.difference.png',
           type: 'DIFFERENCE',
-          path: '.lostpixel/baseline/a.png',
+          path: join(baselineShotsPath, 'a.png'),
           name: 'a.png',
         },
-      ],
-      [
         {
-          filePath: join(customShotsPath, 'c.png'),
-          metaData: {
-            'content-type': 'image/png',
-            'x-amz-acl': 'public-read',
-            original: join(customShotsPath, 'c.png'),
-            type: 'ADDITION',
-          },
-          uploadPath: 'lorem-ipsum/456/c.after.png',
+          afterImageUrl: 'https://s3/e.after.png',
+          beforeImageUrl: 'https://s3/e.before.png',
+          differenceImageUrl: 'https://s3/e.difference.png',
+          name: 'e.png',
+          path: join(baselineShotsPath, 'e.png'),
+          type: 'DIFFERENCE',
         },
-        {
-          filePath: join(customShotsPath, 'd.png'),
-          metaData: {
-            'content-type': 'image/png',
-            'x-amz-acl': 'public-read',
-            original: join(customShotsPath, 'd.png'),
-            type: 'ADDITION',
-          },
-          uploadPath: 'lorem-ipsum/456/d.after.png',
-        },
-        {
-          filePath: join(config.imagePathBaseline, 'b.png'),
-          metaData: {
-            'content-type': 'image/png',
-            'x-amz-acl': 'public-read',
-            original: join(config.imagePathBaseline, 'b.png'),
-            type: 'DELETION',
-          },
-          uploadPath: 'lorem-ipsum/456/b.before.png',
-        },
-        {
-          filePath: join(config.imagePathBaseline, 'a.png'),
-          metaData: {
-            'content-type': 'image/png',
-            'x-amz-acl': 'public-read',
-            original: join(config.imagePathBaseline, 'a.png'),
-            type: 'DIFFERENCE',
-          },
           uploadPath: 'lorem-ipsum/456/a.before.png',
         },
         {
