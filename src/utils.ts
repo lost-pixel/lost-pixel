@@ -38,6 +38,18 @@ type FilenameWithAllPaths = {
   pathCurrent?: string;
 };
 
+export type Files = {
+  baseline: FilenameWithPath[];
+  current: FilenameWithPath[];
+  difference: FilenameWithPath[];
+};
+
+export type Changes = {
+  difference: FilenameWithAllPaths[];
+  deletion: FilenameWithAllPaths[];
+  addition: FilenameWithAllPaths[];
+};
+
 const POST_HOG_API_KEY = 'phc_RDNnzvANh1mNm9JKogF9UunG3Ky02YCxWP9gXScKShk';
 
 export const isUpdateMode = (): boolean => {
@@ -51,21 +63,14 @@ export const isUpdateMode = (): boolean => {
   );
 };
 
-export type Files = {
-  baseline: FilenameWithPath[];
-  current: FilenameWithPath[];
-  difference: FilenameWithPath[];
-};
-
-export type Changes = {
-  difference: FilenameWithPath[];
-  deletion: FilenameWithPath[];
-  addition: FilenameWithPath[];
-};
-
 export const getChanges = (files: Files): Changes => {
   return {
-    difference: files.difference.sort((a, b) => a.name.localeCompare(b.name)),
+    difference: files.difference
+      .map((file) => ({
+        ...file,
+        pathCurrent: files.current.find(({ name }) => name === file.name)?.path, // Keep track of custom shots path
+      }))
+      .sort((a, b) => a.name.localeCompare(b.name)),
     deletion: files.baseline
       .filter(
         (file1) => !files.current.some((file2) => file1.name === file2.name),
