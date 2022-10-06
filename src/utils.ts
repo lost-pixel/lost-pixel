@@ -171,7 +171,7 @@ export const prepareComparisonList = ({
     uploadList.push(
       createUploadItem({
         uploadFileName: afterFile,
-        path: file.path, // Path depends on `currentShotsPath` setting
+        path: file.path,
         fileName: file.name,
         type,
       }),
@@ -237,7 +237,7 @@ export const prepareComparisonList = ({
       // Current shot
       createUploadItem({
         uploadFileName: afterFile,
-        path: file.path, // Path depends on `currentShotsPath` setting
+        path: file.pathCurrent ?? file.path, // Path depends on `currentShotsPath` setting
         fileName: file.name,
         type,
       }),
