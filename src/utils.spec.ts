@@ -5,7 +5,8 @@ import {
   prepareComparisonList,
   readDirIntoShotItems,
 } from './utils';
-import { config, configure } from './config';
+import type { Changes } from './utils';
+import { configure } from './config';
 import { defaultTestConfig } from './testUtils';
 
 beforeAll(async () => {
@@ -16,95 +17,168 @@ beforeAll(async () => {
   });
 });
 
+const baselineShotsPath = '.lostpixel/baseline';
+const currentShotsPath = '.lostpixel/current';
+const differenceShotsPath = '.lostpixel/difference';
+const customShotsPath = '.lostpixel/custom';
+
 describe(getChanges, () => {
   it('should reflect no difference', () => {
     expect(
       getChanges({
-        baseline: ['a.png', 'b.png'],
-        current: ['a.png', 'b.png'],
+        baseline: [
+          { name: 'a.png', path: baselineShotsPath },
+          { name: 'b.png', path: baselineShotsPath },
+        ],
+        current: [
+          { name: 'a.png', path: currentShotsPath },
+          { name: 'b.png', path: customShotsPath },
+        ],
         difference: [],
       }),
     ).toEqual({
       difference: [],
       deletion: [],
       addition: [],
-    });
+    } as Changes);
 
     expect(
       getChanges({
-        baseline: ['a.png', 'b.png'],
-        current: ['b.png', 'a.png'],
+        baseline: [
+          { name: 'a.png', path: baselineShotsPath },
+          { name: 'b.png', path: baselineShotsPath },
+        ],
+        current: [
+          { name: 'b.png', path: currentShotsPath },
+          { name: 'a.png', path: customShotsPath },
+        ],
         difference: [],
       }),
     ).toEqual({
       difference: [],
       deletion: [],
       addition: [],
-    });
+    } as Changes);
   });
 
   it('should highlight added files', () => {
     expect(
       getChanges({
-        baseline: ['a.png', 'b.png'],
-        current: ['a.png', 'b.png', 'd.png', 'c.png'],
+        baseline: [
+          { name: 'a.png', path: baselineShotsPath },
+          { name: 'b.png', path: baselineShotsPath },
+        ],
+        current: [
+          { name: 'a.png', path: currentShotsPath },
+          { name: 'b.png', path: customShotsPath },
+          { name: 'd.png', path: currentShotsPath },
+          { name: 'c.png', path: customShotsPath },
+        ],
         difference: [],
       }),
     ).toEqual({
       difference: [],
       deletion: [],
-      addition: ['c.png', 'd.png'],
-    });
+      addition: [
+        { name: 'c.png', path: customShotsPath },
+        { name: 'd.png', path: currentShotsPath },
+      ],
+    } as Changes);
   });
 
   it('should highlight removed files', () => {
     expect(
       getChanges({
-        baseline: ['a.png', 'b.png', 'c.png', 'd.png'],
-        current: ['a.png', 'd.png'],
+        baseline: [
+          { name: 'a.png', path: baselineShotsPath },
+          { name: 'b.png', path: baselineShotsPath },
+          { name: 'c.png', path: baselineShotsPath },
+          { name: 'd.png', path: baselineShotsPath },
+        ],
+        current: [
+          { name: 'a.png', path: currentShotsPath },
+          { name: 'd.png', path: customShotsPath },
+        ],
         difference: [],
       }),
     ).toEqual({
       difference: [],
-      deletion: ['b.png', 'c.png'],
+      deletion: [
+        { name: 'b.png', path: baselineShotsPath },
+        { name: 'c.png', path: baselineShotsPath },
+      ],
       addition: [],
-    });
+    } as Changes);
   });
 
   it('should highlight changed files', () => {
     expect(
       getChanges({
-        baseline: ['a.png', 'b.png'],
-        current: ['a.png', 'b.png'],
-        difference: ['b.png'],
+        baseline: [
+          { name: 'a.png', path: baselineShotsPath },
+          { name: 'b.png', path: baselineShotsPath },
+        ],
+        current: [
+          { name: 'a.png', path: currentShotsPath },
+          { name: 'b.png', path: customShotsPath },
+        ],
+        difference: [{ name: 'b.png', path: differenceShotsPath }],
       }),
     ).toEqual({
-      difference: ['b.png'],
+      difference: [
+        {
+          name: 'b.png',
+          pathCurrent: customShotsPath,
+          path: differenceShotsPath,
+        },
+      ],
       deletion: [],
       addition: [],
-    });
+    } as Changes);
   });
 
   it('should highlight added/remove/changed files', () => {
     expect(
       getChanges({
-        baseline: ['a.png', 'b.png'],
-        current: ['a.png', 'd.png', 'c.png'],
-        difference: ['a.png'],
+        baseline: [
+          { name: 'a.png', path: baselineShotsPath },
+          { name: 'b.png', path: baselineShotsPath },
+        ],
+        current: [
+          { name: 'a.png', path: currentShotsPath },
+          { name: 'd.png', path: currentShotsPath },
+          { name: 'c.png', path: customShotsPath },
+        ],
+        difference: [{ name: 'a.png', path: differenceShotsPath }],
       }),
     ).toEqual({
-      difference: ['a.png'],
-      deletion: ['b.png'],
-      addition: ['c.png', 'd.png'],
-    });
+      difference: [
+        {
+          name: 'a.png',
+          path: differenceShotsPath,
+          pathCurrent: currentShotsPath,
+        },
+      ],
+      deletion: [{ name: 'b.png', path: baselineShotsPath }],
+      addition: [
+        { name: 'c.png', path: customShotsPath },
+        { name: 'd.png', path: currentShotsPath },
+      ],
+    } as Changes);
   });
 });
 
 describe(prepareComparisonList, () => {
   it('should return empty list if no changes found', () => {
     const changes = getChanges({
-      baseline: ['a.png', 'b.png'],
-      current: ['a.png', 'b.png'],
+      baseline: [
+        { name: 'a.png', path: baselineShotsPath },
+        { name: 'b.png', path: baselineShotsPath },
+      ],
+      current: [
+        { name: 'a.png', path: currentShotsPath },
+        { name: 'b.png', path: customShotsPath },
+      ],
       difference: [],
     });
 
@@ -118,9 +192,21 @@ describe(prepareComparisonList, () => {
 
   it('should build comparisons', () => {
     const changes = getChanges({
-      baseline: ['a.png', 'b.png'],
-      current: ['a.png', 'd.png', 'c.png'],
-      difference: ['a.png'],
+      baseline: [
+        { name: 'a.png', path: baselineShotsPath },
+        { name: 'b.png', path: baselineShotsPath },
+        { name: 'e.png', path: baselineShotsPath },
+      ],
+      current: [
+        { name: 'a.png', path: currentShotsPath },
+        { name: 'd.png', path: currentShotsPath },
+        { name: 'c.png', path: currentShotsPath },
+        { name: 'e.png', path: customShotsPath },
+      ],
+      difference: [
+        { name: 'a.png', path: differenceShotsPath },
+        { name: 'e.png', path: differenceShotsPath },
+      ],
     });
 
     expect(
@@ -133,19 +219,19 @@ describe(prepareComparisonList, () => {
         {
           afterImageUrl: 'https://s3/c.after.png',
           type: 'ADDITION',
-          path: '.lostpixel/baseline/c.png',
+          path: join(baselineShotsPath, 'c.png'),
           name: 'c.png',
         },
         {
           afterImageUrl: 'https://s3/d.after.png',
           type: 'ADDITION',
-          path: '.lostpixel/baseline/d.png',
+          path: join(baselineShotsPath, 'd.png'),
           name: 'd.png',
         },
         {
           beforeImageUrl: 'https://s3/b.before.png',
           type: 'DELETION',
-          path: '.lostpixel/baseline/b.png',
+          path: join(baselineShotsPath, 'b.png'),
           name: 'b.png',
         },
         {
@@ -153,70 +239,108 @@ describe(prepareComparisonList, () => {
           beforeImageUrl: 'https://s3/a.before.png',
           differenceImageUrl: 'https://s3/a.difference.png',
           type: 'DIFFERENCE',
-          path: '.lostpixel/baseline/a.png',
+          path: join(baselineShotsPath, 'a.png'),
           name: 'a.png',
+        },
+        {
+          afterImageUrl: 'https://s3/e.after.png',
+          beforeImageUrl: 'https://s3/e.before.png',
+          differenceImageUrl: 'https://s3/e.difference.png',
+          name: 'e.png',
+          path: join(baselineShotsPath, 'e.png'),
+          type: 'DIFFERENCE',
         },
       ],
       [
         {
-          filePath: join(config.imagePathCurrent, 'c.png'),
+          filePath: join(currentShotsPath, 'c.png'),
           metaData: {
             'content-type': 'image/png',
             'x-amz-acl': 'public-read',
-            original: join(config.imagePathCurrent, 'c.png'),
+            original: join(currentShotsPath, 'c.png'),
             type: 'ADDITION',
           },
           uploadPath: 'lorem-ipsum/456/c.after.png',
         },
         {
-          filePath: join(config.imagePathCurrent, 'd.png'),
+          filePath: join(currentShotsPath, 'd.png'),
           metaData: {
             'content-type': 'image/png',
             'x-amz-acl': 'public-read',
-            original: join(config.imagePathCurrent, 'd.png'),
+            original: join(currentShotsPath, 'd.png'),
             type: 'ADDITION',
           },
           uploadPath: 'lorem-ipsum/456/d.after.png',
         },
         {
-          filePath: join(config.imagePathBaseline, 'b.png'),
+          filePath: join(baselineShotsPath, 'b.png'),
           metaData: {
             'content-type': 'image/png',
             'x-amz-acl': 'public-read',
-            original: join(config.imagePathBaseline, 'b.png'),
+            original: join(baselineShotsPath, 'b.png'),
             type: 'DELETION',
           },
           uploadPath: 'lorem-ipsum/456/b.before.png',
         },
         {
-          filePath: join(config.imagePathBaseline, 'a.png'),
+          filePath: join(baselineShotsPath, 'a.png'),
           metaData: {
             'content-type': 'image/png',
             'x-amz-acl': 'public-read',
-            original: join(config.imagePathBaseline, 'a.png'),
+            original: join(baselineShotsPath, 'a.png'),
             type: 'DIFFERENCE',
           },
           uploadPath: 'lorem-ipsum/456/a.before.png',
         },
         {
-          filePath: join(config.imagePathCurrent, 'a.png'),
+          filePath: join(currentShotsPath, 'a.png'),
           metaData: {
             'content-type': 'image/png',
             'x-amz-acl': 'public-read',
-            original: join(config.imagePathCurrent, 'a.png'),
+            original: join(currentShotsPath, 'a.png'),
             type: 'DIFFERENCE',
           },
           uploadPath: 'lorem-ipsum/456/a.after.png',
         },
         {
-          filePath: join(config.imagePathDifference, 'a.png'),
+          filePath: join(differenceShotsPath, 'a.png'),
           metaData: {
             'content-type': 'image/png',
             'x-amz-acl': 'public-read',
-            original: join(config.imagePathDifference, 'a.png'),
+            original: join(differenceShotsPath, 'a.png'),
             type: 'DIFFERENCE',
           },
           uploadPath: 'lorem-ipsum/456/a.difference.png',
+        },
+        {
+          filePath: join(baselineShotsPath, 'e.png'),
+          metaData: {
+            'content-type': 'image/png',
+            'x-amz-acl': 'public-read',
+            original: join(baselineShotsPath, 'e.png'),
+            type: 'DIFFERENCE',
+          },
+          uploadPath: 'lorem-ipsum/456/e.before.png',
+        },
+        {
+          filePath: join(customShotsPath, 'e.png'),
+          metaData: {
+            'content-type': 'image/png',
+            'x-amz-acl': 'public-read',
+            original: join(customShotsPath, 'e.png'),
+            type: 'DIFFERENCE',
+          },
+          uploadPath: 'lorem-ipsum/456/e.after.png',
+        },
+        {
+          filePath: join(differenceShotsPath, 'e.png'),
+          metaData: {
+            'content-type': 'image/png',
+            'x-amz-acl': 'public-read',
+            original: join(differenceShotsPath, 'e.png'),
+            type: 'DIFFERENCE',
+          },
+          uploadPath: 'lorem-ipsum/456/e.difference.png',
         },
       ],
     ]);
