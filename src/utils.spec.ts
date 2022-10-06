@@ -250,27 +250,97 @@ describe(prepareComparisonList, () => {
           path: join(baselineShotsPath, 'e.png'),
           type: 'DIFFERENCE',
         },
-          uploadPath: 'lorem-ipsum/456/a.before.png',
-        },
+      ],
+      [
         {
-          filePath: join(customShotsPath, 'a.png'),
+          filePath: join(currentShotsPath, 'c.png'),
           metaData: {
             'content-type': 'image/png',
             'x-amz-acl': 'public-read',
-            original: join(customShotsPath, 'a.png'),
+            original: join(currentShotsPath, 'c.png'),
+            type: 'ADDITION',
+          },
+          uploadPath: 'lorem-ipsum/456/c.after.png',
+        },
+        {
+          filePath: join(currentShotsPath, 'd.png'),
+          metaData: {
+            'content-type': 'image/png',
+            'x-amz-acl': 'public-read',
+            original: join(currentShotsPath, 'd.png'),
+            type: 'ADDITION',
+          },
+          uploadPath: 'lorem-ipsum/456/d.after.png',
+        },
+        {
+          filePath: join(baselineShotsPath, 'b.png'),
+          metaData: {
+            'content-type': 'image/png',
+            'x-amz-acl': 'public-read',
+            original: join(baselineShotsPath, 'b.png'),
+            type: 'DELETION',
+          },
+          uploadPath: 'lorem-ipsum/456/b.before.png',
+        },
+        {
+          filePath: join(baselineShotsPath, 'a.png'),
+          metaData: {
+            'content-type': 'image/png',
+            'x-amz-acl': 'public-read',
+            original: join(baselineShotsPath, 'a.png'),
+            type: 'DIFFERENCE',
+          },
+          uploadPath: 'lorem-ipsum/456/a.before.png',
+        },
+        {
+          filePath: join(currentShotsPath, 'a.png'),
+          metaData: {
+            'content-type': 'image/png',
+            'x-amz-acl': 'public-read',
+            original: join(currentShotsPath, 'a.png'),
             type: 'DIFFERENCE',
           },
           uploadPath: 'lorem-ipsum/456/a.after.png',
         },
         {
-          filePath: join(config.imagePathDifference, 'a.png'),
+          filePath: join(differenceShotsPath, 'a.png'),
           metaData: {
             'content-type': 'image/png',
             'x-amz-acl': 'public-read',
-            original: join(config.imagePathDifference, 'a.png'),
+            original: join(differenceShotsPath, 'a.png'),
             type: 'DIFFERENCE',
           },
           uploadPath: 'lorem-ipsum/456/a.difference.png',
+        },
+        {
+          filePath: join(baselineShotsPath, 'e.png'),
+          metaData: {
+            'content-type': 'image/png',
+            'x-amz-acl': 'public-read',
+            original: join(baselineShotsPath, 'e.png'),
+            type: 'DIFFERENCE',
+          },
+          uploadPath: 'lorem-ipsum/456/e.before.png',
+        },
+        {
+          filePath: join(customShotsPath, 'e.png'),
+          metaData: {
+            'content-type': 'image/png',
+            'x-amz-acl': 'public-read',
+            original: join(customShotsPath, 'e.png'),
+            type: 'DIFFERENCE',
+          },
+          uploadPath: 'lorem-ipsum/456/e.after.png',
+        },
+        {
+          filePath: join(differenceShotsPath, 'e.png'),
+          metaData: {
+            'content-type': 'image/png',
+            'x-amz-acl': 'public-read',
+            original: join(differenceShotsPath, 'e.png'),
+            type: 'DIFFERENCE',
+          },
+          uploadPath: 'lorem-ipsum/456/e.difference.png',
         },
       ],
     ]);
