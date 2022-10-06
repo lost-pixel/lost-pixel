@@ -5,7 +5,8 @@ import {
   prepareComparisonList,
   readDirIntoShotItems,
 } from './utils';
-import { config, configure } from './config';
+import type { Changes } from './utils';
+import { configure } from './config';
 import { defaultTestConfig } from './testUtils';
 
 beforeAll(async () => {
@@ -16,18 +17,21 @@ beforeAll(async () => {
   });
 });
 
-const customShotsPath = 'custom';
+const baselineShotsPath = '.lostpixel/baseline';
+const currentShotsPath = '.lostpixel/current';
+const differenceShotsPath = '.lostpixel/difference';
+const customShotsPath = '.lostpixel/custom';
 
 describe(getChanges, () => {
   it('should reflect no difference', () => {
     expect(
       getChanges({
         baseline: [
-          { name: 'a.png', path: customShotsPath },
-          { name: 'b.png', path: customShotsPath },
+          { name: 'a.png', path: baselineShotsPath },
+          { name: 'b.png', path: baselineShotsPath },
         ],
         current: [
-          { name: 'a.png', path: customShotsPath },
+          { name: 'a.png', path: currentShotsPath },
           { name: 'b.png', path: customShotsPath },
         ],
         difference: [],
@@ -36,16 +40,16 @@ describe(getChanges, () => {
       difference: [],
       deletion: [],
       addition: [],
-    });
+    } as Changes);
 
     expect(
       getChanges({
         baseline: [
-          { name: 'a.png', path: customShotsPath },
-          { name: 'b.png', path: customShotsPath },
+          { name: 'a.png', path: baselineShotsPath },
+          { name: 'b.png', path: baselineShotsPath },
         ],
         current: [
-          { name: 'b.png', path: customShotsPath },
+          { name: 'b.png', path: currentShotsPath },
           { name: 'a.png', path: customShotsPath },
         ],
         difference: [],
@@ -54,20 +58,20 @@ describe(getChanges, () => {
       difference: [],
       deletion: [],
       addition: [],
-    });
+    } as Changes);
   });
 
   it('should highlight added files', () => {
     expect(
       getChanges({
         baseline: [
-          { name: 'a.png', path: customShotsPath },
-          { name: 'b.png', path: customShotsPath },
+          { name: 'a.png', path: baselineShotsPath },
+          { name: 'b.png', path: baselineShotsPath },
         ],
         current: [
-          { name: 'a.png', path: customShotsPath },
+          { name: 'a.png', path: currentShotsPath },
           { name: 'b.png', path: customShotsPath },
-          { name: 'd.png', path: customShotsPath },
+          { name: 'd.png', path: currentShotsPath },
           { name: 'c.png', path: customShotsPath },
         ],
         difference: [],
@@ -77,22 +81,22 @@ describe(getChanges, () => {
       deletion: [],
       addition: [
         { name: 'c.png', path: customShotsPath },
-        { name: 'd.png', path: customShotsPath },
+        { name: 'd.png', path: currentShotsPath },
       ],
-    });
+    } as Changes);
   });
 
   it('should highlight removed files', () => {
     expect(
       getChanges({
         baseline: [
-          { name: 'a.png', path: customShotsPath },
-          { name: 'b.png', path: customShotsPath },
-          { name: 'c.png', path: customShotsPath },
-          { name: 'd.png', path: customShotsPath },
+          { name: 'a.png', path: baselineShotsPath },
+          { name: 'b.png', path: baselineShotsPath },
+          { name: 'c.png', path: baselineShotsPath },
+          { name: 'd.png', path: baselineShotsPath },
         ],
         current: [
-          { name: 'a.png', path: customShotsPath },
+          { name: 'a.png', path: currentShotsPath },
           { name: 'd.png', path: customShotsPath },
         ],
         difference: [],
@@ -100,55 +104,67 @@ describe(getChanges, () => {
     ).toEqual({
       difference: [],
       deletion: [
-        { name: 'b.png', path: customShotsPath },
-        { name: 'c.png', path: customShotsPath },
+        { name: 'b.png', path: baselineShotsPath },
+        { name: 'c.png', path: baselineShotsPath },
       ],
       addition: [],
-    });
+    } as Changes);
   });
 
   it('should highlight changed files', () => {
     expect(
       getChanges({
         baseline: [
-          { name: 'a.png', path: customShotsPath },
-          { name: 'b.png', path: customShotsPath },
+          { name: 'a.png', path: baselineShotsPath },
+          { name: 'b.png', path: baselineShotsPath },
         ],
         current: [
-          { name: 'a.png', path: customShotsPath },
+          { name: 'a.png', path: currentShotsPath },
           { name: 'b.png', path: customShotsPath },
         ],
-        difference: [{ name: 'b.png', path: customShotsPath }],
+        difference: [{ name: 'b.png', path: differenceShotsPath }],
       }),
     ).toEqual({
-      difference: [{ name: 'b.png', path: customShotsPath }],
+      difference: [
+        {
+          name: 'b.png',
+          pathCurrent: customShotsPath,
+          path: differenceShotsPath,
+        },
+      ],
       deletion: [],
       addition: [],
-    });
+    } as Changes);
   });
 
   it('should highlight added/remove/changed files', () => {
     expect(
       getChanges({
         baseline: [
-          { name: 'a.png', path: customShotsPath },
-          { name: 'b.png', path: customShotsPath },
+          { name: 'a.png', path: baselineShotsPath },
+          { name: 'b.png', path: baselineShotsPath },
         ],
         current: [
-          { name: 'a.png', path: customShotsPath },
-          { name: 'd.png', path: customShotsPath },
+          { name: 'a.png', path: currentShotsPath },
+          { name: 'd.png', path: currentShotsPath },
           { name: 'c.png', path: customShotsPath },
         ],
-        difference: [{ name: 'a.png', path: customShotsPath }],
+        difference: [{ name: 'a.png', path: differenceShotsPath }],
       }),
     ).toEqual({
-      difference: [{ name: 'a.png', path: customShotsPath }],
-      deletion: [{ name: 'b.png', path: customShotsPath }],
+      difference: [
+        {
+          name: 'a.png',
+          path: differenceShotsPath,
+          pathCurrent: currentShotsPath,
+        },
+      ],
+      deletion: [{ name: 'b.png', path: baselineShotsPath }],
       addition: [
         { name: 'c.png', path: customShotsPath },
-        { name: 'd.png', path: customShotsPath },
+        { name: 'd.png', path: currentShotsPath },
       ],
-    });
+    } as Changes);
   });
 });
 
