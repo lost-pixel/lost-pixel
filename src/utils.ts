@@ -17,7 +17,6 @@ import { log } from './log';
 import type {
   Comparison,
   ComparisonType,
-  FilenameWithPath,
   ShotItem,
   UploadFile,
   WebhookEvent,
@@ -26,6 +25,17 @@ import type {
 type ParsedYargs = {
   _: ['update'];
   m: 'update';
+};
+
+type FilenameWithPath = {
+  name: string;
+  path: string;
+};
+
+type FilenameWithAllPaths = {
+  name: string;
+  path: string;
+  pathCurrent?: string;
 };
 
 const POST_HOG_API_KEY = 'phc_RDNnzvANh1mNm9JKogF9UunG3Ky02YCxWP9gXScKShk';

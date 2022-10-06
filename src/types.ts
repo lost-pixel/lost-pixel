@@ -45,8 +45,3 @@ export type ShotItem = {
     selector: string;
   }>;
 };
-
-export type FilenameWithPath = {
-  name: string;
-  path: string;
-};
