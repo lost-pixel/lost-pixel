@@ -85,6 +85,13 @@ type ApiPayloadUploadShot = {
 
 type ApiPayloadProcessShots = {
   uploadToken: string;
+  config: {
+    threshold?: number;
+    shots?: Array<{
+      name: string;
+      threshold?: number;
+    }>;
+  };
 };
 
 type ApiPayload<A extends ApiAction, P extends Record<string, unknown>> = {
@@ -321,12 +328,17 @@ export const processShots = async (
   config: PlatformModeConfig,
   apiToken: string,
   uploadToken: string,
+  shotsConfig?: ApiPayloadProcessShots['config']['shots'],
 ) => {
   return sendToAPI<{ success: true }>(config, {
     action: 'processShots',
     apiToken,
     payload: {
       uploadToken,
+      config: {
+        shots: shotsConfig,
+        threshold: config.threshold,
+      },
     },
   });
 };
