@@ -83,14 +83,16 @@ type ApiPayloadUploadShot = {
   file: string;
 };
 
+export type ShotConfig = {
+  name: string;
+  threshold?: number;
+};
+
 type ApiPayloadProcessShots = {
   uploadToken: string;
   config: {
     threshold?: number;
-    shots?: Array<{
-      name: string;
-      threshold?: number;
-    }>;
+    shots?: ShotConfig[];
   };
 };
 

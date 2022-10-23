@@ -17,6 +17,7 @@ import {
   prepareUpload,
   processShots,
   sendInitToAPI,
+  ShotConfig,
   // sendResultToAPI,
 } from './api';
 import { log } from './log';
@@ -212,7 +213,10 @@ export const platformRunner = async (
       fileHashMap,
     );
 
-    await processShots(config, apiToken, uploadToken);
+    // TODO: read in thresholds of indivdual shot configs
+    const shotsConfig: ShotConfig[] = [];
+
+    await processShots(config, apiToken, uploadToken, shotsConfig);
 
     const executionStop = process.hrtime(executionStart);
 
