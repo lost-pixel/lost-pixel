@@ -181,7 +181,7 @@ export const platformRunner = async (
       fileHashMap.set(hash, shotItem);
 
       return {
-        name: shotItem.shotName,
+        name: `${shotItem.shotMode}/${shotItem.shotName}`,
         hash,
       };
     });
@@ -194,7 +194,14 @@ export const platformRunner = async (
 
     log.process(
       'info',
-      `🏙  ${shotItems.length} shot(s) in total. ${requiredFileHashes.length} shot(s) will be uploaded.`,
+      [
+        `🏙 `,
+        `${shotItems.length} shot(s) in total.`,
+        `${
+          shotItems.length - requiredFileHashes.length
+        } shot(s) already exist on platform.`,
+        `${requiredFileHashes.length} shot(s) will be uploaded.`,
+      ].join(' '),
     );
 
     await uploadRequiredShots(
