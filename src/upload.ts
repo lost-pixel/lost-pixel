@@ -39,7 +39,7 @@ export const uploadRequiredShots = async (
           config,
           apiToken,
           uploadToken,
-          shotItem.shotName,
+          `${shotItem.shotMode}/${shotItem.shotName}`,
           shotItem.filePathCurrent,
           logger,
         );
