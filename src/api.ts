@@ -25,7 +25,6 @@ export const apiClient = axios.create({
 const apiRoutes: Record<ApiAction, string> = {
   getApiToken: '/auth/get-api-token',
   init: '/app/init',
-  // next: '/app/next',
   finalize: '/app/finalize',
   prepareUpload: '/file/prepare-upload',
   uploadShot: '/file/upload-shot',
@@ -42,20 +41,6 @@ type ApiPayloadInit = {
   branchName: string;
   buildNumber: string;
 };
-
-// type ApiPayloadNext = {
-//   projectId: string;
-//   branchName: string;
-//   repoOwner: string;
-//   repoName: string;
-//   commit: string;
-//   buildId: string;
-//   buildNumber: string;
-//   branchRef: string;
-//   buildMeta?: WebhookEvent;
-//   success: boolean;
-//   log: LogMemory;
-// };
 
 type ApiPayloadFinalize = {
   projectId: string;
@@ -103,7 +88,6 @@ type ApiPayload<A extends ApiAction, P extends Record<string, unknown>> = {
 type ApiPayloads =
   | ApiPayload<'getApiToken', ApiPayloadGetApiToken>
   | ApiPayload<'init', ApiPayloadInit>
-  // | ApiPayload<'next', ApiPayloadNext>
   | ApiPayload<'finalize', ApiPayloadFinalize>
   | ApiPayload<'prepareUpload', ApiPayloadPrepareUpload>
   | ApiPayload<'uploadShot', ApiPayloadUploadShot>
@@ -208,42 +192,6 @@ export const sendInitToAPI = async (
     },
   });
 };
-
-// export const sendResultToAPI = async ({
-//   config,
-//   success,
-//   apiToken,
-//   event,
-// }: {
-//   config: PlatformModeConfig,
-//   success: boolean;
-//   apiToken: string;
-//   event?: WebhookEvent;
-// }) => {
-//   if (config.generateOnly) {
-//     return;
-//   }
-
-//   const [repoOwner, repoName] = config.repository.split('/');
-
-//   return sendToAPI({
-//     action: 'next',
-//     apiToken,
-//     payload: {
-//       projectId: config.lostPixelProjectId,
-//       buildId: config.ciBuildId,
-//       buildNumber: config.ciBuildNumber,
-//       branchRef: config.commitRef,
-//       branchName: config.commitRefName,
-//       repoOwner,
-//       repoName,
-//       commit: config.commitHash,
-//       buildMeta: event,
-//       success,
-//       log: logMemory,
-//     },
-//   });
-// };
 
 export const sendFinalizeToAPI = async (
   config: PlatformModeConfig,

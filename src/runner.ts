@@ -12,14 +12,8 @@ import {
   removeFilesInFolder,
 } from './utils';
 import type { FullConfig, PlatformModeConfig } from './config';
-import {
-  getApiToken,
-  prepareUpload,
-  processShots,
-  sendInitToAPI,
-  ShotConfig,
-  // sendResultToAPI,
-} from './api';
+import type { ShotConfig } from './api';
+import { getApiToken, prepareUpload, processShots, sendInitToAPI } from './api';
 import { log } from './log';
 import type { ShotItem } from './types';
 import { uploadRequiredShots } from './upload';
@@ -224,12 +218,6 @@ export const platformRunner = async (
       'info',
       `⏱  Lost Pixel run took ${parseHrtimeToSeconds(executionStop)} seconds`,
     );
-
-    // await sendResultToAPI({
-    //   success: true,
-    //   apiToken,
-    //   event: getEventData(config.eventFilePath),
-    // });
   } catch (error: unknown) {
     // TODO
     // const executionStop = process.hrtime(executionStart);
