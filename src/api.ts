@@ -1,9 +1,8 @@
 import { createReadStream } from 'node:fs';
 import FormData from 'form-data';
 import axios from 'axios';
-import { log } from './log';
-// import { log, logMemory } from './log';
-// import type { LogMemory } from './log';
+import { log, logMemory } from './log';
+import type { LogMemory } from './log';
 import type { PlatformModeConfig } from './config';
 // import type { WebhookEvent } from './types';
 
@@ -77,6 +76,7 @@ type ApiPayloadProcessShots = {
     threshold?: number;
     shots?: ShotConfig[];
   };
+  log: LogMemory;
 };
 
 type ApiPayload<A extends ApiAction, P extends Record<string, unknown>> = {
@@ -290,6 +290,7 @@ export const processShots = async (
         shots: shotsConfig,
         threshold: config.threshold,
       },
+      log: logMemory,
     },
   });
 };
