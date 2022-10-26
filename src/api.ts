@@ -38,11 +38,9 @@ type ApiPayloadGetApiToken = {
 };
 
 type ApiPayloadInit = {
-  projectId: string;
-  branchName: string;
-  repoOwner: string;
-  repoName: string;
   commit: string;
+  branchName: string;
+  buildNumber: string;
 };
 
 // type ApiPayloadNext = {
@@ -200,17 +198,13 @@ export const sendInitToAPI = async (
   config: PlatformModeConfig,
   apiToken: string,
 ) => {
-  const [repoOwner, repoName] = config.repository.split('/');
-
   return sendToAPI(config, {
     action: 'init',
     apiToken,
     payload: {
-      projectId: config.lostPixelProjectId,
-      branchName: config.commitRefName,
-      repoOwner,
-      repoName,
       commit: config.commitHash,
+      branchName: config.commitRefName,
+      buildNumber: config.ciBuildNumber,
     },
   });
 };
