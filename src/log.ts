@@ -1,7 +1,10 @@
 import type { ShotMode } from './types';
 
+type LogLevel = 'info' | 'error' | 'warn' | 'debug';
+
 type LogEntry = {
   timestamp: Date;
+  level: LogLevel;
   item?: {
     shotMode: ShotMode;
     uniqueItemId: string;
@@ -9,7 +12,7 @@ type LogEntry = {
     totalItems: number;
   };
   source: 'process' | 'browser';
-  type: 'info' | 'console' | 'network' | 'timeout' | 'error';
+  context: 'general' | 'api' | 'console' | 'network' | 'timeout' | 'config';
   content: unknown[];
 };
 
@@ -18,7 +21,7 @@ export type LogMemory = LogEntry[];
 export const logMemory: LogMemory = [];
 
 const renderLog = (entry: LogEntry) => {
-  if (entry.source === 'browser' && entry.type === 'console') {
+  if (entry.source === 'browser' && entry.context === 'console') {
     return;
   }
 
@@ -29,11 +32,11 @@ const renderLog = (entry: LogEntry) => {
     logPrefix.push(`[${entry.item.itemIndex + 1}/${entry.item.totalItems}]`);
   }
 
-  if (entry.type !== 'info') {
-    logPrefix.push(`[${entry.type}]`);
+  if (!['general', 'api', 'config'].includes(entry.context)) {
+    logPrefix.push(`[${entry.context}]`);
   }
 
-  if (entry.type === 'error') {
+  if (entry.level === 'error') {
     logPrefix.push(`❌`);
   }
 
@@ -42,24 +45,34 @@ const renderLog = (entry: LogEntry) => {
 
 export const log = {
   item: (item: LogEntry['item']) => ({
-    process(type: LogEntry['type'], ...content: unknown[]) {
+    process(
+      level: LogEntry['level'],
+      context: LogEntry['context'],
+      ...content: unknown[]
+    ) {
       const entry: LogEntry = {
         timestamp: new Date(),
+        level,
         item,
         source: 'process',
-        type,
+        context,
         content,
       };
 
       logMemory.push(entry);
       renderLog(entry);
     },
-    browser(type: LogEntry['type'], ...content: unknown[]) {
+    browser(
+      level: LogEntry['level'],
+      context: LogEntry['context'],
+      ...content: unknown[]
+    ) {
       const entry: LogEntry = {
         timestamp: new Date(),
+        level,
         item,
         source: 'browser',
-        type,
+        context,
         content,
       };
 
@@ -67,22 +80,32 @@ export const log = {
       renderLog(entry);
     },
   }),
-  process(type: LogEntry['type'], ...content: unknown[]) {
+  process(
+    level: LogEntry['level'],
+    context: LogEntry['context'],
+    ...content: unknown[]
+  ) {
     const entry: LogEntry = {
       timestamp: new Date(),
+      level,
       source: 'process',
-      type,
+      context,
       content,
     };
 
     logMemory.push(entry);
     renderLog(entry);
   },
-  browser(type: LogEntry['type'], ...content: unknown[]) {
+  browser(
+    level: LogEntry['level'],
+    context: LogEntry['context'],
+    ...content: unknown[]
+  ) {
     const entry: LogEntry = {
       timestamp: new Date(),
+      level,
       source: 'browser',
-      type,
+      context,
       content,
     };
 
