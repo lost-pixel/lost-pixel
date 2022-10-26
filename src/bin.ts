@@ -19,12 +19,12 @@ const commandArgs = args._ as CommandArgs;
 const version = getVersion();
 
 if (version) {
-  log.process('info', `Version: ${version}`);
+  log.process('info', 'general', `Version: ${version}`);
 }
 
 (async () => {
   if (commandArgs.includes('init-js')) {
-    log.process('info', 'Initializing javascript lost-pixel config');
+    log.process('info', 'general', 'Initializing javascript lost-pixel config');
 
     await fs.copy(
       path.join(
@@ -35,9 +35,9 @@ if (version) {
       ),
       path.join(process.cwd(), './lostpixel.config.js'),
     );
-    log.process('info', '✅ Config successfully initialized');
+    log.process('info', 'general', '✅ Config successfully initialized');
   } else if (commandArgs.includes('init-ts')) {
-    log.process('info', 'Initializing typescript lost-pixel config');
+    log.process('info', 'general', 'Initializing typescript lost-pixel config');
 
     // Replace local type resolution with module resolution
     const file = fs.readFileSync(
@@ -54,16 +54,24 @@ if (version) {
       path.join(process.cwd(), './lostpixel.config.ts'),
       modifiedFile,
     );
-    log.process('info', '✅ Config successfully initialized');
+    log.process('info', 'general', '✅ Config successfully initialized');
   } else {
     await configure();
 
     if (config.generateOnly) {
-      log.process('info', `🚀 Starting Lost Pixel in 'generateOnly' mode`);
+      log.process(
+        'info',
+        'general',
+        `🚀 Starting Lost Pixel in 'generateOnly' mode`,
+      );
 
       await runner(config);
     } else {
-      log.process('info', `🚀 Starting Lost Pixel in 'platform' mode`);
+      log.process(
+        'info',
+        'general',
+        `🚀 Starting Lost Pixel in 'platform' mode`,
+      );
 
       const apiToken = await getPlatformApiToken(config);
 

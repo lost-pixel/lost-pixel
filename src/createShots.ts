@@ -34,7 +34,7 @@ export const createShots = async () => {
   if (ladleShots) {
     const { ladleUrl, mask } = ladleShots;
 
-    log.process('info', `\n=== [Ladle Mode] ${ladleUrl} ===\n`);
+    log.process('info', 'general', `\n=== [Ladle Mode] ${ladleUrl} ===\n`);
 
     const collection = await collectLadleStories(ladleUrl);
 
@@ -42,24 +42,29 @@ export const createShots = async () => {
       throw new Error('Error: Stories not found');
     }
 
-    log.process('info', `Found ${collection.length} ladle stories`);
+    log.process('info', 'general', `Found ${collection.length} ladle stories`);
 
     ladleShotItems = generateLadleShotItems(ladleUrl, collection, mask);
 
     log.process(
       'info',
+      'general',
       `Prepared ${ladleShotItems.length} ladle stories for screenshots`,
     );
 
     await takeScreenShots(ladleShotItems);
 
-    log.process('info', 'Screenshots done!');
+    log.process('info', 'general', 'Screenshots done!');
   }
 
   if (storybookShots) {
     const { storybookUrl, mask } = storybookShots;
 
-    log.process('info', `\n=== [Storybook Mode] ${storybookUrl} ===\n`);
+    log.process(
+      'info',
+      'general',
+      `\n=== [Storybook Mode] ${storybookUrl} ===\n`,
+    );
 
     let storybookWebUrl = storybookUrl;
     let localServer;
@@ -81,7 +86,11 @@ export const createShots = async () => {
         throw new Error('Error: Stories not found');
       }
 
-      log.process('info', `Found ${collection.stories.length} stories`);
+      log.process(
+        'info',
+        'general',
+        `Found ${collection.stories.length} stories`,
+      );
 
       storybookShotItems = generateStorybookShotItems(
         storybookWebUrl,
@@ -91,6 +100,7 @@ export const createShots = async () => {
 
       log.process(
         'info',
+        'general',
         `Prepared ${storybookShotItems.length} stories for screenshots`,
       );
 
@@ -101,31 +111,40 @@ export const createShots = async () => {
       throw error;
     }
 
-    log.process('info', 'Screenshots done!');
+    log.process('info', 'general', 'Screenshots done!');
   }
 
   if (pageShots) {
     const { pages, baseUrl, mask } = pageShots;
 
-    log.process('info', `\n=== [Page Mode] ${baseUrl} ===\n`);
+    log.process('info', 'general', `\n=== [Page Mode] ${baseUrl} ===\n`);
 
     pageShotItems = generatePageShotItems(pages, baseUrl, mask);
     log.process(
       'info',
+      'general',
       `Prepared ${pageShotItems.length} pages for screenshots`,
     );
 
     await takeScreenShots(pageShotItems);
-    log.process('info', 'Screenshots done!');
+    log.process('info', 'general', 'Screenshots done!');
   }
 
   if (customShots) {
     const { currentShotsPath } = customShots;
 
-    log.process('info', `\n=== [Custom Mode] ${currentShotsPath} ===\n`);
+    log.process(
+      'info',
+      'general',
+      `\n=== [Custom Mode] ${currentShotsPath} ===\n`,
+    );
 
     customShotItems = readDirIntoShotItems(currentShotsPath);
-    log.process('info', `Found ${customShotItems.length} custom shots`);
+    log.process(
+      'info',
+      'general',
+      `Found ${customShotItems.length} custom shots`,
+    );
   }
 
   return [

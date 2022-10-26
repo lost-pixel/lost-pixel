@@ -101,7 +101,7 @@ export const sendToAPI = async <T extends Record<string, unknown>>(
 ): Promise<T> => {
   const logger = customLogger?.process ?? log.process;
 
-  logger('info', `⚡️ Sending to API [${parameters.action}]`);
+  logger('info', 'api', `⚡️ Sending to API [${parameters.action}]`);
 
   try {
     let payload: ApiPayloads['payload'] | FormData = parameters.payload;
@@ -133,6 +133,7 @@ export const sendToAPI = async <T extends Record<string, unknown>>(
     if (response.status !== 200 && response.status !== 201) {
       logger(
         'error',
+        'api',
         `Error: Failed to send to API [${parameters.action}]. Status: ${response.status} ${response.statusText}`,
       );
 
@@ -144,6 +145,7 @@ export const sendToAPI = async <T extends Record<string, unknown>>(
     if (outdatedApiRequest && parameters.action === 'init') {
       logger(
         'info',
+        'api',
         [
           '~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~',
           `~~ ⚠️  ${outdatedApiRequest}`,
@@ -152,16 +154,21 @@ export const sendToAPI = async <T extends Record<string, unknown>>(
       );
     }
 
-    logger('info', `🤘 Successfully sent to API [${parameters.action}]`);
+    logger('info', 'api', `🤘 Successfully sent to API [${parameters.action}]`);
 
     return response.data as T;
   } catch (error: unknown) {
     if (axios.isAxiosError(error)) {
-      logger('error', 'API response: ', error.response?.data || error.message);
+      logger(
+        'error',
+        'api',
+        'API response: ',
+        error.response?.data || error.message,
+      );
     } else if (error instanceof Error) {
-      logger('error', error.message);
+      logger('error', 'api', error.message);
     } else {
-      logger('error', error);
+      logger('error', 'api', error);
     }
 
     process.exit(1);

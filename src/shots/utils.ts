@@ -35,7 +35,7 @@ export const waitForNetworkRequests = async ({
     const timeoutId = setTimeout(() => {
       const pendingUrls = [...requests].map((request) => request.url());
 
-      logger.process('network', 'Pending requests:', pendingUrls);
+      logger.process('info', 'network', 'Pending requests:', pendingUrls);
 
       cleanup();
       reject(new Error('Timeout'));
@@ -52,7 +52,7 @@ export const waitForNetworkRequests = async ({
         clearTimeout(lastRequestTimeoutId);
         requestCounter++;
         requests.add(request);
-        logger.process('network', `+ ${request.url()}`);
+        logger.process('info', 'network', `+ ${request.url()}`);
       }
     };
 
@@ -72,7 +72,7 @@ export const waitForNetworkRequests = async ({
               response?.statusText() ?? 'unknown'
             }`;
 
-        logger.process('network', `- ${request.url()} [${statusText}]`);
+        logger.process('info', 'network', `- ${request.url()} [${statusText}]`);
       }
 
       lastRequestTimeoutId = setTimeout(() => {

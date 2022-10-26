@@ -14,7 +14,7 @@ export const uploadRequiredShots = async (
   fileHashMap: Map<string, ShotItem>,
 ) => {
   if (requiredFileHashes.length > 0) {
-    log.process('info', '📤 Uploading shots');
+    log.process('info', 'api', '📤 Uploading shots');
 
     const uploadStart = process.hrtime();
 
@@ -50,6 +50,7 @@ export const uploadRequiredShots = async (
 
     log.process(
       'info',
+      'api',
       `📤 Uploading shots took ${parseHrtimeToSeconds(uploadStop)} seconds`,
     );
   }

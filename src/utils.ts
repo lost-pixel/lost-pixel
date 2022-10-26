@@ -89,7 +89,7 @@ export const getImageList = (path: string): string[] | undefined => {
 
     return files.filter((name) => name.endsWith('.png'));
   } catch (error: unknown) {
-    log.process('error', error);
+    log.process('error', 'general', error);
 
     return undefined;
   }
@@ -104,7 +104,7 @@ export const getEventData = (path?: string): WebhookEvent | undefined => {
     // eslint-disable-next-line @typescript-eslint/no-require-imports, @typescript-eslint/no-unsafe-return
     return require(path);
   } catch (error: unknown) {
-    log.process('error', error);
+    log.process('error', 'general', error);
 
     return undefined;
   }
@@ -140,7 +140,7 @@ export const sleep = async (ms: number) =>
 export const removeFilesInFolder = (path: string) => {
   const files = readdirSync(path);
 
-  log.process('info', `Removing ${files.length} files from ${path}`);
+  log.process('info', 'general', `Removing ${files.length} files from ${path}`);
 
   for (const file of files) {
     const filePath = join(path, file);
@@ -205,7 +205,7 @@ export const sendTelemetryData = async (properties: {
   const id: string = uuid();
 
   try {
-    log.process('info', 'Sending anonymized telemetry data.');
+    log.process('info', 'general', 'Sending anonymized telemetry data.');
 
     const version = getVersion() as string;
     const modes = [];
@@ -234,7 +234,7 @@ export const sendTelemetryData = async (properties: {
 
     await client.shutdownAsync();
   } catch (error: unknown) {
-    log.process('error', 'Error when sending telemetry data', error);
+    log.process('error', 'general', 'Error when sending telemetry data', error);
   }
 };
 

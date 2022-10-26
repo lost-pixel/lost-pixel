@@ -25,31 +25,37 @@ export const runner = async (config: FullConfig) => {
     if (isUpdateMode()) {
       log.process(
         'info',
+        'general',
         'Running lost-pixel in update mode. Baseline screenshots will be updated',
       );
     }
 
-    log.process('info', '📂 Creating shot folders');
+    log.process('info', 'general', '📂 Creating shot folders');
     const createShotsStart = process.hrtime();
 
     createShotsFolders();
 
-    log.process('info', '📸 Creating shots');
+    log.process('info', 'general', '📸 Creating shots');
     const shotItems = await createShots();
 
     const createShotsStop = process.hrtime(createShotsStart);
 
     log.process(
       'info',
+      'general',
       `Creating shots took ${parseHrtimeToSeconds(createShotsStop)} seconds`,
     );
 
     if (config.generateOnly && shotItems.length === 0) {
-      log.process('info', `👋 Exiting process with nothing to compare.`);
+      log.process(
+        'info',
+        'general',
+        `👋 Exiting process with nothing to compare.`,
+      );
       exitProcess({ shotsNumber: shotItems.length });
     }
 
-    log.process('info', '🔍 Checking differences');
+    log.process('info', 'general', '🔍 Checking differences');
     const checkDifferenceStart = process.hrtime();
     const { differenceCount, noBaselinesCount } = await checkDifferences(
       shotItems,
@@ -66,6 +72,7 @@ export const runner = async (config: FullConfig) => {
     ) {
       log.process(
         'info',
+        'general',
         `👋 Exiting process with ${differenceCount} found differences & ${noBaselinesCount} baselines to update`,
       );
 
@@ -78,6 +85,7 @@ export const runner = async (config: FullConfig) => {
 
     log.process(
       'info',
+      'general',
       `⏱ Checking differences took ${parseHrtimeToSeconds(
         checkDifferenceStop,
       )} seconds`,
@@ -87,6 +95,7 @@ export const runner = async (config: FullConfig) => {
 
     log.process(
       'info',
+      'general',
       `⏱ Lost Pixel run took ${parseHrtimeToSeconds(executionStop)} seconds`,
     );
 
@@ -99,9 +108,9 @@ export const runner = async (config: FullConfig) => {
     const executionStop = process.hrtime(executionStart);
 
     if (error instanceof Error) {
-      log.process('error', error.message);
+      log.process('error', 'general', error.message);
     } else {
-      log.process('error', error);
+      log.process('error', 'general', error);
     }
 
     exitProcess({
@@ -115,6 +124,7 @@ export const getPlatformApiToken = async (config: PlatformModeConfig) => {
   if (!config.apiKey) {
     log.process(
       'error',
+      'general',
       `Running Lost Pixel in 'platform' mode requires an API key`,
     );
     process.exit(1);
@@ -123,6 +133,7 @@ export const getPlatformApiToken = async (config: PlatformModeConfig) => {
   if (isUpdateMode()) {
     log.process(
       'error',
+      'general',
       `Running Lost Pixel in 'update' mode requires the 'generateOnly' option to be set to true`,
     );
     process.exit(1);
@@ -134,9 +145,9 @@ export const getPlatformApiToken = async (config: PlatformModeConfig) => {
     return result.apiToken;
   } catch (error: unknown) {
     if (error instanceof Error) {
-      log.process('error', error.message);
+      log.process('error', 'general', error.message);
     } else {
-      log.process('error', error);
+      log.process('error', 'general', error);
     }
 
     process.exit(1);
@@ -154,18 +165,19 @@ export const platformRunner = async (
       await sendInitToAPI(config, apiToken);
     }
 
-    log.process('info', '📂 Creating shot folders');
+    log.process('info', 'general', '📂 Creating shot folders');
     const createShotsStart = process.hrtime();
 
     createShotsFolders();
 
-    log.process('info', '📸 Creating shots');
+    log.process('info', 'general', '📸 Creating shots');
     const shotItems = await createShots();
 
     const createShotsStop = process.hrtime(createShotsStart);
 
     log.process(
       'info',
+      'general',
       `⏱  Creating shots took ${parseHrtimeToSeconds(createShotsStop)} seconds`,
     );
 
@@ -189,6 +201,7 @@ export const platformRunner = async (
 
     log.process(
       'info',
+      'general',
       [
         `🏙 `,
         `${shotItems.length} shot(s) in total.`,
@@ -216,6 +229,7 @@ export const platformRunner = async (
 
     log.process(
       'info',
+      'general',
       `⏱  Lost Pixel run took ${parseHrtimeToSeconds(executionStop)} seconds`,
     );
   } catch (error: unknown) {
@@ -223,9 +237,9 @@ export const platformRunner = async (
     // const executionStop = process.hrtime(executionStart);
 
     if (error instanceof Error) {
-      log.process('error', error.message);
+      log.process('error', 'general', error.message);
     } else {
-      log.process('error', error);
+      log.process('error', 'general', error);
     }
 
     // await sendResultToAPI({

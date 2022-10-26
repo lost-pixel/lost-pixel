@@ -394,6 +394,7 @@ const checkConfig = () => {
   if (missingProps.length > 0) {
     log.process(
       'error',
+      'config',
       `Error: Missing required configuration properties: ${missingProps.join(
         ', ',
       )}`,
@@ -411,12 +412,13 @@ const configFileNameBase = path.join(
 );
 
 const loadProjectConfig = async (): Promise<CustomProjectConfig> => {
-  log.process('info', 'Loading project configuration...');
-  log.process('info', 'Current working directory:', process.cwd());
+  log.process('info', 'config', 'Loading project configuration...');
+  log.process('info', 'config', 'Current working directory:', process.cwd());
 
   if (process.env.LOST_PIXEL_CONFIG_DIR) {
     log.process(
       'info',
+      'config',
       'Defined configuration directory:',
       process.env.LOST_PIXEL_CONFIG_DIR,
     );
@@ -424,6 +426,7 @@ const loadProjectConfig = async (): Promise<CustomProjectConfig> => {
 
   log.process(
     'info',
+    'config',
     'Looking for configuration file:',
     `${configFileNameBase}.(js|ts)`,
   );
@@ -435,6 +438,7 @@ const loadProjectConfig = async (): Promise<CustomProjectConfig> => {
 
     log.process(
       'info',
+      'config',
       '✅ Successfully loaded configuration from:',
       `${configFileNameBase}.js`,
     );
@@ -450,20 +454,26 @@ const loadProjectConfig = async (): Promise<CustomProjectConfig> => {
 
       log.process(
         'info',
+        'config',
         '✅ Successfully loaded configuration from:',
         `${configFileNameBase}.ts`,
       );
 
       return imported;
     } catch (error: unknown) {
-      log.process('error', error);
-      log.process('error', 'Failed to load TypeScript configuration file');
+      log.process('error', 'config', error);
+      log.process(
+        'error',
+        'config',
+        'Failed to load TypeScript configuration file',
+      );
       process.exit(1);
     }
   }
 
   log.process(
     'error',
+    'config',
     "Couldn't find project config file 'lostpixel.config.js'",
   );
   process.exit(1);

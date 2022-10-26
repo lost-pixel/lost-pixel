@@ -219,14 +219,18 @@ export const collectStories = async (url: string) => {
   const context = await browser.newContext();
 
   try {
-    log.process('info', 'Trying to collect stories via window object');
+    log.process(
+      'info',
+      'general',
+      'Trying to collect stories via window object',
+    );
     const result = await collectStoriesViaWindowApi(context, url);
 
     await browser.close();
 
     return result;
   } catch {
-    log.process('info', 'Fallback to /stories.json');
+    log.process('info', 'general', 'Fallback to /stories.json');
   }
 
   try {

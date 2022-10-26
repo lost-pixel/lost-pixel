@@ -7,7 +7,7 @@ export const collect = async () => {
     return;
   }
 
-  log.process('info', 'Collecting files');
+  log.process('info', 'general', 'Collecting files');
 
   const baseline = getImageList(config.imagePathBaseline);
   const current = getImageList(config.imagePathCurrent);
@@ -18,8 +18,16 @@ export const collect = async () => {
     );
   }
 
-  log.process('info', `Found ${baseline?.length ?? 0} baseline images`);
-  log.process('info', `Found ${current?.length ?? 0} current images`);
+  log.process(
+    'info',
+    'general',
+    `Found ${baseline?.length ?? 0} baseline images`,
+  );
+  log.process(
+    'info',
+    'general',
+    `Found ${current?.length ?? 0} current images`,
+  );
 
   return {
     baseline: baseline ?? [],
