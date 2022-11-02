@@ -1,6 +1,6 @@
 import execa from 'execa';
 import shell from 'shelljs';
-import yargs from 'yargs';
+
 import { hideBin } from 'yargs/helpers';
 // Import { log } from '../log';
 
@@ -33,6 +33,7 @@ export const downloadImageIfNotExistent = async ({
   const doesImageExist = await isLostPixelImageDownloaded({
     version,
   });
+
   if (!doesImageExist) {
     await execa('docker', ['pull', `lostpixel/lost-pixel:v${version}`]);
   }
@@ -55,6 +56,7 @@ export const executeDockerRun = async ({ version }: { version: string }) => {
     '$PWD:/workspace',
     `--platform linux/amd64`,
     '-e WORKSPACE=/workspace',
+    '-e DOCKER=1',
     `-e LOST_PIXEL_CONFIG_DIR=${argv.configDir}`,
     `lostpixel/lost-pixel:v${version}`,
   ];

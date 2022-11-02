@@ -21,6 +21,7 @@
     "@storybook/addon-links": "^6.5.9",
     "@storybook/html": "^6.5.9",
     "babel-loader": "^8.2.3",
-    "lost-pixel": "^1.12.1"
+    "lost-pixel": "^2.17.0",
+    "ts-node": "^10.9.1"
   }
 }
