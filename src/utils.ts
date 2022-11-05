@@ -191,6 +191,7 @@ export const readDirIntoShotItems = (path: string): ShotItem[] => {
         filePathCurrent: join(path, fileNameWithExt),
         filePathDifference: join(config.imagePathDifference, fileNameWithExt),
         url: fileName,
+        // TODO: custom shots take thresholds only from config - not possible to source configs from individual story
         threshold: config.threshold,
       };
     });
