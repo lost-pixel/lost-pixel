@@ -220,8 +220,10 @@ export const platformRunner = async (
       fileHashMap,
     );
 
-    // TODO: read in thresholds of indivdual shot configs
-    const shotsConfig: ShotConfig[] = [];
+    const shotsConfig: ShotConfig[] = shotItems.map((shotItem) => ({
+      name: shotItem.shotName,
+      threshold: shotItem.threshold,
+    }));
 
     await processShots(config, apiToken, uploadToken, shotsConfig);
 
