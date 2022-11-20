@@ -12,7 +12,8 @@ type ApiAction =
   | 'finalize'
   | 'prepareUpload'
   | 'uploadShot'
-  | 'processShots';
+  | 'processShots'
+  | 'recordLogs';
 
 export const apiClient = axios.create({
   headers: {
@@ -28,6 +29,7 @@ const apiRoutes: Record<ApiAction, string> = {
   prepareUpload: '/file/prepare-upload',
   uploadShot: '/file/upload-shot',
   processShots: '/app/process-shots',
+  recordLogs: '/app/record-logs',
 };
 
 type ApiPayloadGetApiToken = {
@@ -79,6 +81,13 @@ type ApiPayloadProcessShots = {
   log: LogMemory;
 };
 
+type ApiPayloadRecordLogs = {
+  commit: string;
+  branchName: string;
+  buildNumber: string;
+  log: LogMemory;
+};
+
 type ApiPayload<A extends ApiAction, P extends Record<string, unknown>> = {
   action: A;
   apiToken?: string;
@@ -91,7 +100,8 @@ type ApiPayloads =
   | ApiPayload<'finalize', ApiPayloadFinalize>
   | ApiPayload<'prepareUpload', ApiPayloadPrepareUpload>
   | ApiPayload<'uploadShot', ApiPayloadUploadShot>
-  | ApiPayload<'processShots', ApiPayloadProcessShots>;
+  | ApiPayload<'processShots', ApiPayloadProcessShots>
+  | ApiPayload<'recordLogs', ApiPayloadRecordLogs>;
 
 export const sendToAPI = async <T extends Record<string, unknown>>(
   config: PlatformModeConfig,
@@ -290,6 +300,22 @@ export const processShots = async (
         shots: shotsConfig,
         threshold: config.threshold,
       },
+      log: logMemory,
+    },
+  });
+};
+
+export const sendRecordLogsToAPI = async (
+  config: PlatformModeConfig,
+  apiToken: string,
+) => {
+  return sendToAPI(config, {
+    action: 'recordLogs',
+    apiToken,
+    payload: {
+      branchName: config.commitRefName,
+      buildNumber: config.ciBuildNumber,
+      commit: config.commitHash,
       log: logMemory,
     },
   });
