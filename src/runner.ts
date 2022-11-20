@@ -13,7 +13,13 @@ import {
 } from './utils';
 import type { FullConfig, PlatformModeConfig } from './config';
 import type { ShotConfig } from './api';
-import { getApiToken, prepareUpload, processShots, sendInitToAPI } from './api';
+import {
+  getApiToken,
+  prepareUpload,
+  processShots,
+  sendInitToAPI,
+  sendRecordLogsToAPI,
+} from './api';
 import { log } from './log';
 import type { ShotItem } from './types';
 import { uploadRequiredShots } from './upload';
@@ -235,20 +241,15 @@ export const platformRunner = async (
       `⏱  Lost Pixel run took ${parseHrtimeToSeconds(executionStop)} seconds`,
     );
   } catch (error: unknown) {
-    // TODO
-    // const executionStop = process.hrtime(executionStart);
-
     if (error instanceof Error) {
       log.process('error', 'general', error.message);
     } else {
       log.process('error', 'general', error);
     }
 
-    // await sendResultToAPI({
-    //   success: false,
-    //   apiToken,
-    //   event: getEventData(config.eventFilePath),
-    // });
+    log.process('info', 'general', '🪵  Sending logs to platform.');
+
+    await sendRecordLogsToAPI(config, apiToken);
 
     process.exit(1);
   }
