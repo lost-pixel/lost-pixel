@@ -4,7 +4,6 @@ import axios from 'axios';
 import { log, logMemory } from './log';
 import type { LogMemory } from './log';
 import type { PlatformModeConfig } from './config';
-// import type { WebhookEvent } from './types';
 
 type ApiAction =
   | 'getApiToken'
@@ -44,11 +43,10 @@ type ApiPayloadInit = {
 };
 
 type ApiPayloadFinalize = {
-  projectId: string;
+  projectIdentifier: string;
   branchName: string;
-  repoOwner: string;
-  repoName: string;
   commit: string;
+  buildNumber: string;
 };
 
 type ApiPayloadPrepareUpload = {
@@ -214,17 +212,14 @@ export const sendFinalizeToAPI = async (
   config: PlatformModeConfig,
   apiToken: string,
 ) => {
-  const [repoOwner, repoName] = config.repository.split('/');
-
   return sendToAPI(config, {
     action: 'finalize',
     apiToken,
     payload: {
-      projectId: config.lostPixelProjectId,
+      projectIdentifier: config.lostPixelProjectId,
       branchName: config.commitRefName,
-      repoOwner,
-      repoName,
       commit: config.commitHash,
+      buildNumber: config.ciBuildNumber,
     },
   });
 };
