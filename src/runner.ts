@@ -58,7 +58,7 @@ export const runner = async (config: FullConfig) => {
         'general',
         `👋 Exiting process with nothing to compare.`,
       );
-      exitProcess({ shotsNumber: shotItems.length });
+      await exitProcess({ shotsNumber: shotItems.length });
     }
 
     log.process('info', 'general', '🔍 Checking differences');
@@ -83,7 +83,7 @@ export const runner = async (config: FullConfig) => {
       );
 
       if (config.generateOnly) {
-        exitProcess({ shotsNumber: shotItems.length });
+        await exitProcess({ shotsNumber: shotItems.length });
       }
     }
 
@@ -105,7 +105,7 @@ export const runner = async (config: FullConfig) => {
       `⏱ Lost Pixel run took ${parseHrtimeToSeconds(executionStop)} seconds`,
     );
 
-    exitProcess({
+    await exitProcess({
       shotsNumber: shotItems.length,
       runDuration: Number(parseHrtimeToSeconds(executionStop)),
       exitCode: 0,
@@ -119,7 +119,7 @@ export const runner = async (config: FullConfig) => {
       log.process('error', 'general', error);
     }
 
-    exitProcess({
+    await exitProcess({
       runDuration: Number(parseHrtimeToSeconds(executionStop)),
       error,
     });

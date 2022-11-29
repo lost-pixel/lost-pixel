@@ -245,7 +245,7 @@ export const parseHrtimeToSeconds = (hrtime: [number, number]) => {
   return seconds;
 };
 
-export const exitProcess = (properties: {
+export const exitProcess = async (properties: {
   runDuration?: number;
   shotsNumber?: number;
   error?: unknown;
@@ -254,7 +254,7 @@ export const exitProcess = (properties: {
   if (process.env.LOST_PIXEL_DISABLE_TELEMETRY === '1') {
     process.exit(properties.exitCode ?? 1);
   } else {
-    sendTelemetryData(properties).finally(() => {
+    await sendTelemetryData(properties).finally(() => {
       process.exit(properties.exitCode ?? 1);
     });
   }
