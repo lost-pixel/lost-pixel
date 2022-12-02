@@ -372,11 +372,10 @@ const defaultConfig: BaseConfig = {
 };
 
 const githubConfigDefaults: Partial<ProjectConfig> = {
-  ciBuildId: process.env.GITHUB_RUN_ID,
-  ciBuildNumber: process.env.GITHUB_RUN_NUMBER,
+  ciBuildId: process.env.CI_BUILD_ID,
+  ciBuildNumber: process.env.CI_BUILD_NUMBER,
   repository: process.env.REPOSITORY,
-  commitRef: process.env.GITHUB_REF,
-  commitRefName: process.env.GITHUB_REF_NAME,
+  commitRefName: process.env.COMMIT_REF_NAME,
   commitHash: process.env.COMMIT_HASH,
 };
 
