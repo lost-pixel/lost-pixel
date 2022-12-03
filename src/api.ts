@@ -179,7 +179,11 @@ export const sendToAPI = async <T extends Record<string, unknown>>(
       logger('error', 'api', error);
     }
 
-    process.exit(1);
+    if (parameters.action === 'getApiToken') {
+      process.exit(1);
+    }
+
+    throw error;
   }
 };
 
