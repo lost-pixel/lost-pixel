@@ -167,6 +167,19 @@ export const platformRunner = async (
   const executionStart = process.hrtime();
 
   try {
+    log.process(
+      'info',
+      'general',
+      [
+        '📀 Using details:',
+        `ciBuildId = ${config.ciBuildId}`,
+        `ciBuildNumber = ${config.ciBuildNumber}`,
+        `repository = ${config.repository}`,
+        `commitRefName = ${config.commitRefName}`,
+        `commitHash = ${config.commitHash}`,
+      ].join('\n   - '),
+    );
+
     if (config.setPendingStatusCheck) {
       await sendInitToAPI(config, apiToken);
     }
