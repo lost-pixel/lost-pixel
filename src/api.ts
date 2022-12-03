@@ -150,7 +150,11 @@ export const sendToAPI = async <T extends Record<string, unknown>>(
 
     const outdatedApiRequest = response?.headers?.['x-api-version-warning'];
 
-    if (outdatedApiRequest && parameters.action === 'init') {
+    if (
+      outdatedApiRequest &&
+      (parameters.action === 'prepareUpload' ||
+        parameters.action === 'finalize')
+    ) {
       logger(
         'info',
         'api',
