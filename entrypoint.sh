@@ -11,9 +11,11 @@ export REPOSITORY=${GITHUB_REPOSITORY:-$REPOSITORY}
 if [ "$GITHUB_EVENT_NAME" = "pull_request" ]; then
   export COMMIT_REF_NAME=${GITHUB_HEAD_REF:-$COMMIT_REF_NAME}
 
-  PR_COMMIT_SHA=$(cat $EVENT_PATH | jq -r ".after")
+  if [ -f "$EVENT_PATH" ]; then
+    PR_COMMIT_SHA=$(cat $EVENT_PATH | jq -r ".after")
+  fi
 
-  if [ "$PR_COMMIT_SHA" = "null" ]; then
+  if [ -z ${PR_COMMIT_SHA} ] || [ "$PR_COMMIT_SHA" = "null" ]; then
     export COMMIT_HASH=${GITHUB_SHA:-$COMMIT_HASH}
   else
     export COMMIT_HASH=${PR_COMMIT_SHA:-$COMMIT_HASH}
