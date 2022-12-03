@@ -12,7 +12,7 @@ if [ "$GITHUB_EVENT_NAME" = "pull_request" ]; then
   export COMMIT_REF_NAME=${GITHUB_HEAD_REF:-$COMMIT_REF_NAME}
 
   if [ -f "$EVENT_PATH" ]; then
-    PR_COMMIT_SHA=$(cat $EVENT_PATH | jq -r ".after")
+    PR_COMMIT_SHA=$(cat $EVENT_PATH | grep -oP '(?<="after": ")[^"]*')
   fi
 
   if [ -z ${PR_COMMIT_SHA} ] || [ "$PR_COMMIT_SHA" = "null" ]; then
