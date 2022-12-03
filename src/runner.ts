@@ -260,7 +260,7 @@ export const platformRunner = async (
       log.process('error', 'general', error);
     }
 
-    log.process('info', 'general', '🪵 Sending logs to platform.');
+    log.process('info', 'general', '🪵  Sending logs to platform.');
 
     await sendRecordLogsToAPI(config, apiToken);
 
