@@ -264,11 +264,6 @@ export type ProjectConfig = {
   repository: string;
 
   /**
-   * Git branch name (e.g. 'refs/heads/main')
-   */
-  commitRef: string;
-
-  /**
    * Git branch name (e.g. 'main')
    */
   commitRefName: string;
@@ -321,7 +316,6 @@ export type GenerateOnlyModeProjectConfig = Omit<
   | 'ciBuildId'
   | 'ciBuildNumber'
   | 'repository'
-  | 'commitRef'
   | 'commitRefName'
   | 'commitHash'
 > &
@@ -334,7 +328,6 @@ const requiredConfigProps: Array<keyof ProjectConfig> = [
   'ciBuildId',
   'ciBuildNumber',
   'repository',
-  'commitRef',
   'commitRefName',
   'commitHash',
 ];
