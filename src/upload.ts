@@ -18,15 +18,19 @@ export const uploadRequiredShots = async (
 
     const uploadStart = process.hrtime();
 
+    const requiredShotItems = extendedShotItems.filter((shotItem) =>
+      requiredFileHashes.includes(shotItem.hash),
+    );
+
     await mapLimit<[number, ExtendedShotItem], void>(
-      extendedShotItems.entries(),
+      requiredShotItems.entries(),
       MEDIA_UPLOAD_CONCURRENCY,
       async ([index, shotItem]: [number, ExtendedShotItem]) => {
         const logger = log.item({
           shotMode: shotItem.shotMode,
           uniqueItemId: shotItem.shotName,
           itemIndex: index,
-          totalItems: requiredFileHashes.length,
+          totalItems: requiredShotItems.length,
         });
 
         await uploadShot(
