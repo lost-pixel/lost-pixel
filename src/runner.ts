@@ -21,7 +21,7 @@ import {
   sendRecordLogsToAPI,
 } from './api';
 import { log } from './log';
-import type { ShotItem } from './types';
+import type { ExtendedShotItem } from './types';
 import { uploadRequiredShots } from './upload';
 
 export const runner = async (config: FullConfig) => {
@@ -200,22 +200,19 @@ export const platformRunner = async (
       `⏱  Creating shots took ${parseHrtimeToSeconds(createShotsStop)} seconds`,
     );
 
-    const fileHashMap = new Map<string, ShotItem>();
-    const fileNamesWithHashes = shotItems.map((shotItem) => {
-      const hash = hashFile(shotItem.filePathCurrent);
-
-      fileHashMap.set(hash, shotItem);
-
-      return {
-        name: `${shotItem.shotMode}/${shotItem.shotName}`,
-        hash,
-      };
-    });
+    const extendedShotItems: ExtendedShotItem[] = shotItems.map((shotItem) => ({
+      ...shotItem,
+      uniqueName: `${shotItem.shotMode}/${shotItem.shotName}`,
+      hash: hashFile(shotItem.filePathCurrent),
+    }));
 
     const { requiredFileHashes, uploadToken } = await prepareUpload(
       config,
       apiToken,
-      fileNamesWithHashes,
+      extendedShotItems.map((shotItem) => ({
+        name: shotItem.uniqueName,
+        hash: shotItem.hash,
+      })),
     );
 
     log.process(
@@ -236,7 +233,7 @@ export const platformRunner = async (
       apiToken,
       uploadToken,
       requiredFileHashes,
-      fileHashMap,
+      extendedShotItems,
     );
 
     const shotsConfig: ShotConfig[] = shotItems.map((shotItem) => ({

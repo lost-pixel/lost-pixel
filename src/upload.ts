@@ -1,7 +1,7 @@
 import { mapLimit } from 'async';
 import { MEDIA_UPLOAD_CONCURRENCY } from './config';
 import type { PlatformModeConfig } from './config';
-import type { ShotItem } from './types';
+import type { ExtendedShotItem } from './types';
 import { uploadShot } from './api';
 import { log } from './log';
 import { parseHrtimeToSeconds } from './utils';
@@ -11,23 +11,17 @@ export const uploadRequiredShots = async (
   apiToken: string,
   uploadToken: string,
   requiredFileHashes: string[],
-  fileHashMap: Map<string, ShotItem>,
+  extendedShotItems: ExtendedShotItem[],
 ) => {
   if (requiredFileHashes.length > 0) {
     log.process('info', 'api', '📤 Uploading shots');
 
     const uploadStart = process.hrtime();
 
-    await mapLimit<[number, string], void>(
-      requiredFileHashes.entries(),
+    await mapLimit<[number, ExtendedShotItem], void>(
+      extendedShotItems.entries(),
       MEDIA_UPLOAD_CONCURRENCY,
-      async ([index, hash]: [number, string]) => {
-        const shotItem = fileHashMap.get(hash);
-
-        if (!shotItem) {
-          throw new Error(`Could not find shot item for hash ${hash}`);
-        }
-
+      async ([index, shotItem]: [number, ExtendedShotItem]) => {
         const logger = log.item({
           shotMode: shotItem.shotMode,
           uniqueItemId: shotItem.shotName,

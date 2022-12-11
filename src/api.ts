@@ -235,7 +235,7 @@ export const sendFinalizeToAPI = async (
 export const prepareUpload = async (
   config: PlatformModeConfig,
   apiToken: string,
-  currentShots: Array<{
+  shotNamesWithHashes: Array<{
     name: string;
     hash: string;
   }>,
@@ -249,7 +249,7 @@ export const prepareUpload = async (
         branchName: config.commitRefName,
         commit: config.commitHash,
         buildNumber: config.ciBuildNumber,
-        currentShots,
+        currentShots: shotNamesWithHashes,
       },
     },
   );

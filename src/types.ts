@@ -39,3 +39,8 @@ export type ShotItem = {
     selector: string;
   }>;
 };
+
+export type ExtendedShotItem = ShotItem & {
+  uniqueName: string;
+  hash: string;
+};
