@@ -32,7 +32,7 @@ const apiRoutes: Record<ApiAction, string> = {
 };
 
 type ApiPayloadGetApiToken = {
-  apiKey: string;
+  apiKey: string; // TODO: remove after migration
   projectIdentifier: string;
 };
 
@@ -134,6 +134,7 @@ export const sendToAPI = async <T extends Record<string, unknown>>(
       {
         headers: {
           Authorization: `Bearer ${parameters.apiToken ?? ''}`,
+          'x-api-key': config.apiKey ?? 'undefined',
         },
       },
     );
