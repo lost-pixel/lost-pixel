@@ -32,7 +32,6 @@ const apiRoutes: Record<ApiAction, string> = {
 };
 
 type ApiPayloadGetApiToken = {
-  apiKey: string; // TODO: remove after migration
   projectId: string;
 };
 
@@ -196,7 +195,6 @@ export const getApiToken = async (config: PlatformModeConfig) => {
   return sendToAPI<{ apiToken: string }>(config, {
     action: 'getApiToken',
     payload: {
-      apiKey: config.apiKey ?? 'undefined',
       projectId: config.lostPixelProjectId,
     },
   });
