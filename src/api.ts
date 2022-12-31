@@ -33,7 +33,7 @@ const apiRoutes: Record<ApiAction, string> = {
 
 type ApiPayloadGetApiToken = {
   apiKey: string; // TODO: remove after migration
-  projectIdentifier: string;
+  projectId: string;
 };
 
 type ApiPayloadInit = {
@@ -43,7 +43,7 @@ type ApiPayloadInit = {
 };
 
 type ApiPayloadFinalize = {
-  projectIdentifier: string;
+  projectId: string;
   branchName: string;
   commit: string;
   buildNumber: string;
@@ -197,7 +197,7 @@ export const getApiToken = async (config: PlatformModeConfig) => {
     action: 'getApiToken',
     payload: {
       apiKey: config.apiKey ?? 'undefined',
-      projectIdentifier: config.lostPixelProjectId,
+      projectId: config.lostPixelProjectId,
     },
   });
 };
@@ -225,7 +225,7 @@ export const sendFinalizeToAPI = async (
     action: 'finalize',
     apiToken,
     payload: {
-      projectIdentifier: config.lostPixelProjectId,
+      projectId: config.lostPixelProjectId,
       branchName: config.commitRefName,
       commit: config.commitHash,
       buildNumber: config.ciBuildNumber,
@@ -267,7 +267,7 @@ export const uploadShot = async (
   return sendToAPI<{
     success: true;
     details: {
-      projectIdentifier: string;
+      projectId: string;
       commit: string;
       buildNumber: string;
       branchName: string;
