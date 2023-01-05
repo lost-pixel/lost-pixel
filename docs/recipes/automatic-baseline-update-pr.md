@@ -36,7 +36,7 @@ jobs:
 
       - name: Lost Pixel
         id: lp
-        uses: lost-pixel/lost-pixel@v2.24.0
+        uses: lost-pixel/lost-pixel@v2.24.1
         env:
           LOST_PIXEL_MODE: update
       - name: Create Pull Request

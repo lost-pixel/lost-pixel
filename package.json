@@ -1,6 +1,6 @@
 {
   "name": "lost-pixel",
-  "version": "2.24.0",
+  "version": "2.24.1",
   "description": "GitHub Action for Lost Pixel integration",
   "main": "dist/",
   "bin": "dist/bin.js",
