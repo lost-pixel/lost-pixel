@@ -12,7 +12,7 @@ export const collect = async () => {
   const baseline = getImageList(config.imagePathBaseline);
   const current = getImageList(config.imagePathCurrent);
 
-  if (baseline === null && current === null) {
+  if (baseline.length === 0 && current.length === 0) {
     throw new Error(
       'Error: No baseline or current images found. Check paths configuration.',
     );

@@ -8,6 +8,10 @@ Like other tests in software development (e.g., unit and integration tests), vis
 
 Visual regression tests do not replace unit and integration tests. They complement them and improve the quality of your delivery.
 
+{% embed url="https://stackonfire.com/visual-regression-testing-101" %}
+Blogpost that can get you a fundamental understanding of visual regression tests
+{% endembed %}
+
 Especially the fact that the user interface is what your customers will see makes it even more important to have these quality checks in place.
 
 Any developer must be confident that an introduced code change will not break the app. Manually visiting your app's page (and state) to check if everything is rendered correctly is neither pleasant nor effective. This is a process of the past.
@@ -29,6 +33,10 @@ If your team has designers and UX people, it could be of great value to review c
 #### Big Engineering Teams
 
 In bigger engineering teams, it is impossible to know and remember each change to the UI introduced by each developer. With good visual regression tests, developers stop worrying about what they might have broken on the other end of the application.
+
+{% embed url="https://stackonfire.com/visual-regression-testing-101#heading-use-cases" %}
+Case studies on visual regression testing
+{% endembed %}
 
 ### Guides: Jump right in
 

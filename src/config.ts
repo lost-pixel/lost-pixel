@@ -2,7 +2,7 @@ import { existsSync } from 'node:fs';
 import path from 'node:path';
 import get from 'lodash.get';
 import type { BrowserContextOptions, Page } from 'playwright-core';
-import { loadTSProjectConfigFile } from './configHelper';
+import { loadProjectConfigFile } from './configHelper';
 import { log } from './log';
 import type { ShotMode } from './types';
 
@@ -64,6 +64,10 @@ type BaseConfig = {
      * Paths to take screenshots of
      */
     pages: PageScreenshotParameter[];
+    /**
+     * Url that must return a JSON compatible with `PageScreenshotParameter[]`. It is useful when you want to autogenerate the pages that you want to run lost-pixel on. Can be used together with `pages` as both are composed into a single run.
+     */
+    pagesJsonUrl?: string;
 
     /**
      * Base URL of the running application (e.g. http://localhost:3000)
@@ -82,6 +86,8 @@ type BaseConfig = {
   customShots?: {
     /**
      * Path to current shots folder
+     *
+     * This path cannot be the same as the `imagePathCurrent` path
      */
     currentShotsPath: string;
   };
@@ -115,6 +121,12 @@ type BaseConfig = {
    * @default 10
    */
   compareConcurrency: number;
+
+  /**
+   * Which comparison engine to use for diffing images
+   * @default 'pixelmatch'
+   */
+  compareEngine: 'pixelmatch' | 'odiff';
 
   /**
    * Timeouts for various stages of the test
@@ -352,6 +364,7 @@ const defaultConfig: BaseConfig = {
   imagePathDifference: '.lostpixel/difference/',
   shotConcurrency: 5,
   compareConcurrency: 10,
+  compareEngine: 'pixelmatch',
   timeouts: {
     fetchStories: 30_000,
     loadState: 30_000,
@@ -393,12 +406,27 @@ const checkConfig = () => {
     );
     process.exit(1);
   }
+
+  if (
+    config.customShots?.currentShotsPath &&
+    path.relative(
+      path.resolve(config.imagePathCurrent),
+      path.resolve(config.customShots.currentShotsPath),
+    ) === ''
+  ) {
+    log.process(
+      'error',
+      'config',
+      `Error: 'customShots.currentShotsPath' cannot be equal to 'imagePathCurrent'`,
+    );
+    process.exit(1);
+  }
 };
 
 const configDirBase = process.env.LOST_PIXEL_CONFIG_DIR ?? process.cwd();
 
 const configFileNameBase = path.join(
-  configDirBase.startsWith('/') ? '' : process.cwd(),
+  path.isAbsolute(configDirBase) ? '' : process.cwd(),
   configDirBase,
   'lostpixel.config',
 );
@@ -423,52 +451,46 @@ const loadProjectConfig = async (): Promise<CustomProjectConfig> => {
     `${configFileNameBase}.(js|ts)`,
   );
 
-  if (existsSync(`${configFileNameBase}.js`)) {
-    const projectConfig =
-      // eslint-disable-next-line @typescript-eslint/no-require-imports, @typescript-eslint/no-var-requires
-      require(`${configFileNameBase}.js`) as CustomProjectConfig;
+  const configFiles = [
+    `${configFileNameBase}.ts`,
+    `${configFileNameBase}.js`,
+  ].filter((file) => existsSync(file));
 
+  if (configFiles.length > 1) {
     log.process(
       'info',
       'config',
-      '✅ Successfully loaded configuration from:',
-      `${configFileNameBase}.js`,
+      '🔍 Found multiple config files, taking:',
+      configFiles[0],
     );
-
-    return projectConfig;
   }
 
-  if (existsSync(`${configFileNameBase}.ts`)) {
-    try {
-      const imported = (await loadTSProjectConfigFile(
-        `${configFileNameBase}.ts`,
-      )) as CustomProjectConfig;
-
-      log.process(
-        'info',
-        'config',
-        '✅ Successfully loaded configuration from:',
-        `${configFileNameBase}.ts`,
-      );
-
-      return imported;
-    } catch (error: unknown) {
-      log.process('error', 'config', error);
-      log.process(
-        'error',
-        'config',
-        'Failed to load TypeScript configuration file',
-      );
-      process.exit(1);
-    }
+  if (configFiles.length === 0) {
+    log.process(
+      'error',
+      'config',
+      "Couldn't find project config file 'lostpixel.config.(js|ts)'",
+    );
+    process.exit(1);
   }
 
-  log.process(
-    'error',
-    'config',
-    "Couldn't find project config file 'lostpixel.config.js'",
-  );
-  process.exit(1);
+  const configFile = configFiles[0];
+
+  try {
+    const imported = (await loadProjectConfigFile(
+      configFile,
+    )) as CustomProjectConfig;
+
+    return imported;
+  } catch (error: unknown) {
+    log.process('error', 'config', error);
+    log.process(
+      'error',
+      'config',
+      `Failed to load configuration file: ${configFile}`,
+    );
+    process.exit(1);
+  }
 };
 
 export const configure = async (customProjectConfig?: CustomProjectConfig) => {

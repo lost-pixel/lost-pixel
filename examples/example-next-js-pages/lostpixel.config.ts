@@ -12,11 +12,9 @@ export const config: CustomProjectConfig = {
         mask: [{ selector: 'code' }, { selector: 'h2' }],
       },
       { path: '/next-app', name: 'next-app' },
-      { path: '/next-app?name=App', name: 'next-app-with-query-param' },
-      { path: '/fetch', name: 'fetch-static-props' },
-      { path: '/client-fetch', name: 'fetch-client' },
     ],
     baseUrl: 'http://localhost:3000',
+    pagesJsonUrl:'http://localhost:3000/lost-pixel.json'
   },
   generateOnly: true,
   failOnDifference: true,

@@ -29,3 +29,11 @@
 * [lost-pixel-example-next-js](https://github.com/lost-pixel/lost-pixel-examples/tree/main/example-next-js-pages)
 * [lost-pixel-example-storybook](https://github.com/lost-pixel/lost-pixel-examples/tree/main/example-storybook-v6.5-storystore-v7)
 * [lost-pixel-example-ladle](https://github.com/lost-pixel/lost-pixel-examples/tree/main/example-ladle)
+
+## More
+
+* [Telemetry data](more/telemetry-data.md)
+
+## ⚙ API reference
+
+* [lost-pixel.config.js|ts](api-reference/lost-pixel.config.js-or-ts.md)

@@ -24,6 +24,29 @@ type ParsedYargs = {
   m: 'update';
 };
 
+type FilenameWithPath = {
+  name: string;
+  path: string;
+};
+
+type FilenameWithAllPaths = {
+  name: string;
+  path: string;
+  pathCurrent?: string;
+};
+
+export type Files = {
+  baseline: FilenameWithPath[];
+  current: FilenameWithPath[];
+  difference: FilenameWithPath[];
+};
+
+export type Changes = {
+  difference: FilenameWithAllPaths[];
+  deletion: FilenameWithAllPaths[];
+  addition: FilenameWithAllPaths[];
+};
+
 const POST_HOG_API_KEY = 'phc_RDNnzvANh1mNm9JKogF9UunG3Ky02YCxWP9gXScKShk';
 
 export const isUpdateMode = (): boolean => {
@@ -37,27 +60,24 @@ export const isUpdateMode = (): boolean => {
   );
 };
 
-export type Files = {
-  baseline: string[];
-  current: string[];
-  difference: string[];
-};
-
-export type Changes = {
-  difference: string[];
-  deletion: string[];
-  addition: string[];
-};
-
 export const getChanges = (files: Files): Changes => {
   return {
-    difference: files.difference.sort(),
+    difference: files.difference
+      .map((file) => ({
+        ...file,
+        pathCurrent: files.current.find(({ name }) => name === file.name)?.path, // Keep track of custom shots path
+      }))
+      .sort((a, b) => a.name.localeCompare(b.name)),
     deletion: files.baseline
-      .filter((file) => !files.current.includes(file))
-      .sort(),
+      .filter(
+        (file1) => !files.current.some((file2) => file1.name === file2.name),
+      )
+      .sort((a, b) => a.name.localeCompare(b.name)),
     addition: files.current
-      .filter((file) => !files.baseline.includes(file))
-      .sort(),
+      .filter(
+        (file1) => !files.baseline.some((file2) => file1.name === file2.name),
+      )
+      .sort((a, b) => a.name.localeCompare(b.name)),
   };
 };
 
@@ -83,15 +103,20 @@ export const extendFileName = ({ fileName, extension }: ExtendFileName) => {
   return parts.join('.');
 };
 
-export const getImageList = (path: string): string[] | undefined => {
+export const getImageList = (path: string): FilenameWithPath[] => {
   try {
     const files = readdirSync(path);
 
-    return files.filter((name) => name.endsWith('.png'));
+    return files
+      .filter((name) => name.endsWith('.png'))
+      .map((name) => ({
+        name,
+        path,
+      }));
   } catch (error: unknown) {
     log.process('error', 'general', error);
 
-    return undefined;
+    return [];
   }
 };
 
