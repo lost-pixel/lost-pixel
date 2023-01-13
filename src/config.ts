@@ -400,9 +400,7 @@ const checkConfig = () => {
     log.process(
       'error',
       'config',
-      `Error: Missing required configuration properties: ${missingProps.join(
-        ', ',
-      )}`,
+      `Error: Missing required config properties: ${missingProps.join(', ')}`,
     );
     process.exit(1);
   }
@@ -432,14 +430,14 @@ const configFileNameBase = path.join(
 );
 
 const loadProjectConfig = async (): Promise<CustomProjectConfig> => {
-  log.process('info', 'config', 'Loading project configuration...');
+  log.process('info', 'config', 'Loading project config ...');
   log.process('info', 'config', 'Current working directory:', process.cwd());
 
   if (process.env.LOST_PIXEL_CONFIG_DIR) {
     log.process(
       'info',
       'config',
-      'Defined configuration directory:',
+      'Defined config directory:',
       process.env.LOST_PIXEL_CONFIG_DIR,
     );
   }
@@ -450,7 +448,7 @@ const loadProjectConfig = async (): Promise<CustomProjectConfig> => {
   log.process(
     'info',
     'config',
-    'Looking for configuration file:',
+    'Looking for config file:',
     `${configFileNameBase}.(${configExtensionsString})`,
   );
 
@@ -488,11 +486,7 @@ const loadProjectConfig = async (): Promise<CustomProjectConfig> => {
     return imported;
   } catch (error: unknown) {
     log.process('error', 'config', error);
-    log.process(
-      'error',
-      'config',
-      `Failed to load configuration file: ${configFile}`,
-    );
+    log.process('error', 'config', `Failed to load config file: ${configFile}`);
     process.exit(1);
   }
 };
