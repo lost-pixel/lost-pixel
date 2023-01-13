@@ -444,34 +444,38 @@ const loadProjectConfig = async (): Promise<CustomProjectConfig> => {
     );
   }
 
+  const configExtensions = ['ts', 'js', 'cjs', 'mjs'];
+  const configExtensionsString = configExtensions.join('|');
+
   log.process(
     'info',
     'config',
     'Looking for configuration file:',
-    `${configFileNameBase}.(js|ts)`,
+    `${configFileNameBase}.(${configExtensionsString})`,
   );
 
-  const configFiles = [
-    `${configFileNameBase}.ts`,
-    `${configFileNameBase}.js`,
-  ].filter((file) => existsSync(file));
-
-  if (configFiles.length > 1) {
-    log.process(
-      'info',
-      'config',
-      '🔍 Found multiple config files, taking:',
-      configFiles[0],
-    );
-  }
+  const configFiles = configExtensions
+    .map((ext) => `${configFileNameBase}.${ext}`)
+    .filter((file) => existsSync(file));
 
   if (configFiles.length === 0) {
     log.process(
       'error',
       'config',
-      "Couldn't find project config file 'lostpixel.config.(js|ts)'",
+      `Couldn't find project config file 'lostpixel.config.(${configExtensionsString})'`,
     );
     process.exit(1);
+  }
+
+  if (configFiles.length > 1) {
+    log.process(
+      'info',
+      'config',
+      '✅ Found multiple config files, taking:',
+      configFiles[0],
+    );
+  } else {
+    log.process('info', 'config', '✅ Found config file:', configFiles[0]);
   }
 
   const configFile = configFiles[0];
