@@ -12,6 +12,7 @@ import { chromium, firefox, webkit } from 'playwright';
 import type { BrowserType } from 'playwright';
 import yargs from 'yargs';
 import { hideBin } from 'yargs/helpers';
+import os from 'os-utils';
 import { config } from './config';
 import { log } from './log';
 import type {
@@ -431,6 +432,24 @@ export const exitProcess = async (properties: {
   } else {
     return sendTelemetryData(properties).finally(() => {
       process.exit(properties.exitCode ?? 1);
+    });
+  }
+};
+
+export const logPerformance = () => {
+  if (process.env.LOST_PIXEL_LOG_PERFORMANCE) {
+    log(
+      '[Performance monitor] \n\n',
+      `Platform: ${os.platform()} \n`,
+      `CPU count: ${os.cpuCount()} \n`,
+      `Free memory: ${os.freemem()} \n`,
+      `Free memory(%): ${os.freememPercentage()} \n`,
+    );
+    os.cpuUsage((v) => {
+      log(`[Performance monitor] CPU Usage (%): ${v})`);
+    });
+    os.cpuFree((v) => {
+      log(`[Performance monitor] CPU free: ${v})`);
     });
   }
 };

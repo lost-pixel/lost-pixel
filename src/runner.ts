@@ -8,6 +8,7 @@ import {
   exitProcess,
   getEventData,
   isUpdateMode,
+  logPerformance,
   parseHrtimeToSeconds,
   removeFilesInFolder,
 } from './utils';
@@ -46,6 +47,7 @@ export const runner = async () => {
     createShotsFolders();
 
     log('Creating shots');
+    logPerformance();
     const shotItems = await createShots();
 
     const createShotsStop = process.hrtime(createShotsStart);
@@ -58,6 +60,8 @@ export const runner = async () => {
     }
 
     log('Checking differences');
+    logPerformance();
+
     const checkDifferenceStart = process.hrtime();
     const { differenceCount, noBaselinesCount } = await checkDifferences(
       shotItems,
@@ -101,6 +105,7 @@ export const runner = async () => {
       });
     }
 
+    logPerformance();
     const comparisons = await collect();
 
     await sendResultToAPI({

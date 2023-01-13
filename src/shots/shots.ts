@@ -2,7 +2,7 @@ import path from 'node:path';
 import { mapLimit } from 'async';
 import type { Browser } from 'playwright';
 import { log } from '../log';
-import { getBrowser, sleep } from '../utils';
+import { getBrowser, sleep, logPerformance } from '../utils';
 import { config } from '../config';
 import type { ShotItem } from '../types';
 import { resizeViewportToFullscreen, waitForNetworkRequests } from './utils';
@@ -98,6 +98,7 @@ const takeScreenShot = async ({
         ? shotItem.mask.map((mask) => page.locator(mask.selector))
         : [],
     });
+    logPerformance();
 
     success = true;
   } catch (error: unknown) {
