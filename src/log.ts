@@ -25,6 +25,10 @@ const renderLog = (entry: LogEntry) => {
     return;
   }
 
+  if (entry.source === 'browser' && entry.context === 'network') {
+    return;
+  }
+
   const { log } = console;
   const logPrefix = [];
 
