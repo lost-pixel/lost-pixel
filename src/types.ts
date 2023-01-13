@@ -3,7 +3,7 @@ import type {
   CheckSuiteRequestedEvent,
   CheckRunRerequestedEvent,
 } from '@octokit/webhooks-types';
-import type { BrowserContextOptions } from 'playwright';
+import type { BrowserContextOptions } from 'playwright-core';
 
 export type ShotMode = 'storybook' | 'ladle' | 'page' | 'custom';
 

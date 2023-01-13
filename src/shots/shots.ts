@@ -1,6 +1,6 @@
 import path from 'node:path';
 import { mapLimit } from 'async';
-import type { Browser } from 'playwright';
+import type { Browser } from 'playwright-core';
 import { log } from '../log';
 import { getBrowser, sleep } from '../utils';
 import { config } from '../config';

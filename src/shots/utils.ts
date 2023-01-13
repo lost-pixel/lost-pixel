@@ -1,4 +1,4 @@
-import type { Page, Request } from 'playwright';
+import type { Page, Request } from 'playwright-core';
 import { config } from '../config';
 import type { log } from '../log';
 

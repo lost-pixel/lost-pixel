@@ -1,6 +1,6 @@
 import path from 'node:path';
 import kebabCase from 'lodash.kebabcase';
-import type { BrowserContext } from 'playwright';
+import type { BrowserContext } from 'playwright-core';
 import { readFileSync } from 'fs-extra';
 import type { ShotItem } from '../types';
 import { config } from '../config';

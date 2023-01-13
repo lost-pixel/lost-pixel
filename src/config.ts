@@ -1,7 +1,7 @@
 import { existsSync } from 'node:fs';
 import path from 'node:path';
 import get from 'lodash.get';
-import type { BrowserContextOptions, Page } from 'playwright';
+import type { BrowserContextOptions, Page } from 'playwright-core';
 import { loadTSProjectConfigFile } from './configHelper';
 import { log } from './log';
 import type { ShotMode } from './types';
