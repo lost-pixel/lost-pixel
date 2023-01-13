@@ -39,7 +39,6 @@ echo
 cd $WORKSPACE
 
 if [ "$INPUT_FINALIZE" = "true" ] || [ "$INPUT_FINALIZE" = "1" ]; then
-  TS_NODE_COMPILER_OPTIONS='{"module":"commonjs"}' \
   CI_BUILD_ID=$CI_BUILD_ID \
   CI_BUILD_NUMBER=$CI_BUILD_NUMBER \
   EVENT_PATH=$EVENT_PATH \
@@ -48,7 +47,6 @@ if [ "$INPUT_FINALIZE" = "true" ] || [ "$INPUT_FINALIZE" = "1" ]; then
   REPOSITORY=$REPOSITORY \
   lost-pixel finalize $@
 else
-  TS_NODE_COMPILER_OPTIONS='{"module":"commonjs"}' \
   CI_BUILD_ID=$CI_BUILD_ID \
   CI_BUILD_NUMBER=$CI_BUILD_NUMBER \
   EVENT_PATH=$EVENT_PATH \
