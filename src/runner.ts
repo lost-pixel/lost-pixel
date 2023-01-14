@@ -91,7 +91,7 @@ export const runner = async (config: FullConfig) => {
     log.process(
       'info',
       'general',
-      `⏱ Checking differences took ${parseHrtimeToSeconds(
+      `⏱  Checking differences took ${parseHrtimeToSeconds(
         checkDifferenceStop,
       )} seconds`,
     );
@@ -101,7 +101,7 @@ export const runner = async (config: FullConfig) => {
     log.process(
       'info',
       'general',
-      `⏱ Lost Pixel run took ${parseHrtimeToSeconds(executionStop)} seconds`,
+      `⏱  Lost Pixel run took ${parseHrtimeToSeconds(executionStop)} seconds`,
     );
 
     await exitProcess({
