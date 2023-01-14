@@ -29,7 +29,7 @@ coverY: 0
         - name: Setup Node
           uses: actions/setup-node@v3
           with:
-            node-version: 16.x
+            node-version: 18.x
             cache: "npm"
 
         - name: Install dependencies
