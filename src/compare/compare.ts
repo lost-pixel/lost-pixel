@@ -98,7 +98,7 @@ export const compareImagesViaPixelmatch = async (
   };
 };
 
-export const compareImagesViaOdiff = async (
+const compareImagesViaOdiff = async (
   threshold: number,
   baselineShotPath: string,
   currentShotPath: string,

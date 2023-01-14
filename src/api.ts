@@ -17,7 +17,7 @@ type ApiAction =
 
 const version = getVersion();
 
-export const apiClient = axios.create({
+const apiClient = axios.create({
   headers: {
     'Content-type': 'application/json',
     'x-api-version': '3',
@@ -104,7 +104,7 @@ type ApiPayloads =
   | ApiPayload<'processShots', ApiPayloadProcessShots>
   | ApiPayload<'recordLogs', ApiPayloadRecordLogs>;
 
-export const sendToAPI = async <T extends Record<string, unknown>>(
+const sendToAPI = async <T extends Record<string, unknown>>(
   config: PlatformModeConfig,
   parameters: ApiPayloads,
   fileKey?: string,

@@ -35,7 +35,7 @@ type FilenameWithAllPaths = {
   pathCurrent?: string;
 };
 
-export type Files = {
+type Files = {
   baseline: FilenameWithPath[];
   current: FilenameWithPath[];
   difference: FilenameWithPath[];
@@ -103,23 +103,6 @@ export const extendFileName = ({ fileName, extension }: ExtendFileName) => {
   return parts.join('.');
 };
 
-export const getImageList = (path: string): FilenameWithPath[] => {
-  try {
-    const files = readdirSync(path);
-
-    return files
-      .filter((name) => name.endsWith('.png'))
-      .map((name) => ({
-        name,
-        path,
-      }));
-  } catch (error: unknown) {
-    log.process('error', 'general', error);
-
-    return [];
-  }
-};
-
 export const createShotsFolders = () => {
   const paths = [
     config.imagePathBaseline,
@@ -181,7 +164,7 @@ export const getVersion = (): string | void => {
   } catch {}
 };
 
-export const fileNameWithoutExtension = (fileName: string): string => {
+const fileNameWithoutExtension = (fileName: string): string => {
   return fileName.split('.').slice(0, -1).join('.');
 };
 
@@ -207,7 +190,7 @@ export const readDirIntoShotItems = (path: string): ShotItem[] => {
     });
 };
 
-export const sendTelemetryData = async (properties: {
+const sendTelemetryData = async (properties: {
   runDuration?: number;
   shotsNumber?: number;
   error?: unknown;

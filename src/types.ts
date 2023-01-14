@@ -1,27 +1,6 @@
-import type {
-  PullRequestEvent,
-  CheckSuiteRequestedEvent,
-  CheckRunRerequestedEvent,
-} from '@octokit/webhooks-types';
 import type { BrowserContextOptions } from 'playwright-core';
 
 export type ShotMode = 'storybook' | 'ladle' | 'page' | 'custom';
-
-export type WebhookEvent =
-  | PullRequestEvent
-  | CheckSuiteRequestedEvent
-  | CheckRunRerequestedEvent;
-
-export type ComparisonType = 'ADDITION' | 'DELETION' | 'DIFFERENCE';
-
-export type Comparison = {
-  beforeImageUrl?: string;
-  afterImageUrl?: string;
-  differenceImageUrl?: string;
-  type: ComparisonType;
-  path: string;
-  name: string;
-};
 
 export type ShotItem = {
   shotMode: ShotMode;
