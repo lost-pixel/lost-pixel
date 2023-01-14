@@ -46,7 +46,7 @@ coverY: 0
 {% endcontent-ref %}
 
 {% hint style="info" %}
-Note that your `lostpixel.config.js|ts|cjs|mjs` should point to the correct r**elative path to built storybook** or to **served storybook url**
+Note that your `lostpixel.config.js|ts|cjs|mjs` should point to the correct **relative path to built storybook** or to **served storybook url**
 {% endhint %}
 
 After writing your first stories you can adopt the visual regression testing by following [_visual regression testing_ workflow](../testing-workflow-github-actions.md)
