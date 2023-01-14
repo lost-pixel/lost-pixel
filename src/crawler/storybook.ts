@@ -229,8 +229,9 @@ export const collectStories = async (url: string) => {
     await browser.close();
 
     return result;
-  } catch {
+  } catch (error: unknown) {
     log.process('info', 'general', 'Fallback to /stories.json');
+    log.process('error', 'general', error);
   }
 
   try {
