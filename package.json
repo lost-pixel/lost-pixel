@@ -80,7 +80,7 @@
     "@types/jest": "29.1.0",
     "@types/lodash.get": "4.4.7",
     "@types/lodash.kebabcase": "4.1.7",
-    "@types/minio": "7.0.13",
+    "@types/minio": "7.0.15",
     "@types/pixelmatch": "5.2.4",
     "@types/pngjs": "6.0.1",
     "@types/serve-handler": "6.1.1",
