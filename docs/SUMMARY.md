@@ -4,10 +4,13 @@
 
 ## ⚙ Setup
 
-- [Project Configuration](setup/project-configuration/README.md)
-  - [Modes](setup/project-configuration/modes.md)
-  - [Baseline images](setup/project-configuration/baseline-images.md)
-- [Integrating With GitHub Actions](setup/integrating-with-github-actions.md)
+
+* [Project Configuration](setup/project-configuration/README.md)
+  * [Modes](setup/project-configuration/modes.md)
+  * [Baseline images](setup/project-configuration/baseline-images.md)
+* [Integrating With GitHub Actions](setup/integrating-with-github-actions.md)
+* [⏯ Lost Pixel Platform](setup/lost-pixel-platform.md)
+
 
 ## 👨🏫 Guides
 
@@ -36,4 +39,6 @@
 
 ## ⚙ API reference
 
-- [lost-pixel.config.js|ts|cjs|mjs](api-reference/lost-pixel.config.js-or-ts.md)
+* [lost-pixel.config.js|ts](api-reference/lost-pixel.config.js-or-ts.md)
+* [PageScreenshotParameter](api-reference/pagescreenshotparameter.md)
+* [Mask](api-reference/mask.md)
