@@ -13,39 +13,39 @@ coverY: 0
 2. Add lost-pixel [configuration file](../../setup/project-configuration/modes.md#ladle)
 3. Add action file in the root of your project. In `.github/workflows/ci.yml`
 
+   {% code overflow="wrap" %}
 
-    {% code overflow="wrap" %}
-    ```
-    on: [push]
-    jobs:
-      build:
-        runs-on: ubuntu-latest
+   ```
+   on: [push]
+   jobs:
+     build:
+       runs-on: ubuntu-latest
 
 
-       steps:
-         - name: Checkout
-           uses: actions/checkout@v2
+      steps:
+        - name: Checkout
+          uses: actions/checkout@v3
 
-         - name: Setup Node
-           uses: actions/setup-node@v2
-           with:
-             node-version: 16.x
-             cache: "npm"
+        - name: Setup Node
+          uses: actions/setup-node@v3
+          with:
+            node-version: 16.x
+            cache: "npm"
 
-         - name: Install dependencies
-           run: npm install
+        - name: Install dependencies
+          run: npm install
 
-         - name: Build ladle
-           run: npm run build
+        - name: Build ladle
+          run: npm run build
 
-         - name: Serve ladle
-           run: npm run serve &
+        - name: Serve ladle
+          run: npm run serve &
 
-         - name: Lost Pixel
-           uses: lost-pixel/lost-pixel@v3.0.1
-    ```
-    {% endcode %}
+        - name: Lost Pixel
+          uses: lost-pixel/lost-pixel@v3.0.1
+   ```
 
+   {% endcode %}
 
 4. _(Optional)_ Add [automatic PR for easy baseline update](../../recipes/automatic-baseline-update-pr.md)
 

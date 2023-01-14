@@ -85,10 +85,10 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Setup Node
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v3
         with:
           node-version: 16.x
           cache: 'npm'
@@ -147,10 +147,10 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Setup Node
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v3
         with:
           node-version: 16.x
           cache: 'npm'
@@ -204,10 +204,10 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Setup Node
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v3
         with:
           node-version: 16.x
           cache: 'npm'
@@ -228,7 +228,7 @@ jobs:
 </details>
 
 ---
-  
+
 ## Support 👨🏼‍💻
 
 ### Ask a question about Lost Pixel
@@ -248,15 +248,14 @@ If you see an error message or run into an issue, help us with creating a bug re
 If Lost Pixel at the moment doesn't support some mode or does not have a feature we would appreciate your thoughts!
 
 🆕 [**Submit feature request**](https://github.com/lost-pixel/lost-pixel/issues/new?assignees=&labels=kind%2Ffeature&template=feature.yml)
-  
 
-### Community 
+### Community
+
 Want to chat about visual regression testing with likeminded people? We've started a community! Discuss your pipelines, tools, testing strategy, get faster support!
 
 <div align='center'>  <a href="https://discord.gg/WqVjk49g9m"><img width='400px' src='https://user-images.githubusercontent.com/29632358/194254174-aad8e9f1-1f1e-4f21-ab36-7fb63eb51696.png'> </div>
    
 <h4 align='center'> <a href="https://discord.gg/WqVjk49g9m">Join our Discord</a></div>
-
 
 ---
 
