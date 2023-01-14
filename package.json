@@ -21,6 +21,7 @@
     "run-example-ladle": "cd examples/example-ladle && npm run serve",
     "run-example-vite": "cd examples/example-vite-app && npm run preview",
     "test-on-examples": "./test-on-examples.sh",
+    "unused-exports": "ts-prune --error --ignore 'src/index.ts'",
     "lint": "xo && tsc --noEmit && eslint '*/**/*.ts'",
     "lint-fix": "tsc --noEmit && eslint '*/**/*.ts' --fix && xo --fix",
     "lint-staged": "lint-staged",
@@ -96,6 +97,7 @@
     "prettier": "2.7.1",
     "rimraf": "3.0.2",
     "ts-jest": "29.0.1",
+    "ts-prune": "0.10.3",
     "typescript": "4.8.4",
     "xo": "0.52.3"
   },
