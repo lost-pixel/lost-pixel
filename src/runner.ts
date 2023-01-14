@@ -5,7 +5,6 @@ import { createShots } from './createShots';
 import {
   createShotsFolders,
   exitProcess,
-  // getEventData,
   hashFile,
   isUpdateMode,
   parseHrtimeToSeconds,

@@ -17,7 +17,7 @@ import yargs from 'yargs';
 import { hideBin } from 'yargs/helpers';
 import { config } from './config';
 import { log } from './log';
-import type { ShotItem, WebhookEvent } from './types';
+import type { ShotItem } from './types';
 
 type ParsedYargs = {
   _: ['update'];
@@ -117,21 +117,6 @@ export const getImageList = (path: string): FilenameWithPath[] => {
     log.process('error', 'general', error);
 
     return [];
-  }
-};
-
-export const getEventData = (path?: string): WebhookEvent | undefined => {
-  if (!path) {
-    return undefined;
-  }
-
-  try {
-    // eslint-disable-next-line @typescript-eslint/no-require-imports, @typescript-eslint/no-unsafe-return
-    return require(path);
-  } catch (error: unknown) {
-    log.process('error', 'general', error);
-
-    return undefined;
   }
 };
 
