@@ -22,6 +22,7 @@ if (version) {
   log.process('info', 'general', `Version: ${version}`);
 }
 
+// eslint-disable-next-line unicorn/prefer-top-level-await
 (async () => {
   if (commandArgs.includes('init-js')) {
     log.process('info', 'general', 'Initializing javascript lost-pixel config');

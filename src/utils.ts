@@ -144,14 +144,21 @@ export const removeFilesInFolder = (path: string) => {
 
 export const getBrowser = (): BrowserType => {
   switch (config.browser) {
-    case 'chromium':
+    case 'chromium': {
       return chromium;
-    case 'firefox':
+    }
+
+    case 'firefox': {
       return firefox;
-    case 'webkit':
+    }
+
+    case 'webkit': {
       return webkit;
-    default:
+    }
+
+    default: {
       return chromium;
+    }
   }
 };
 
