@@ -8,6 +8,7 @@
   * [Modes](setup/project-configuration/modes.md)
   * [Baseline images](setup/project-configuration/baseline-images.md)
 * [Integrating With GitHub Actions](setup/integrating-with-github-actions.md)
+* [⏯ Lost Pixel Platform](setup/lost-pixel-platform.md)
 
 ## 👨🏫 Guides
 
