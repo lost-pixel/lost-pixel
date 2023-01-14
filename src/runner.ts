@@ -227,13 +227,13 @@ export const platformRunner = async (
       ].join(' '),
     );
 
-    await uploadRequiredShots(
+    await uploadRequiredShots({
       config,
       apiToken,
       uploadToken,
       requiredFileHashes,
       extendedShotItems,
-    );
+    });
 
     const shotsConfig: ShotConfig[] = shotItems.map((shotItem) => ({
       name: shotItem.shotName,

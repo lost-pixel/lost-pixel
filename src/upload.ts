@@ -6,13 +6,19 @@ import { uploadShot } from './api';
 import { log } from './log';
 import { parseHrtimeToSeconds } from './utils';
 
-export const uploadRequiredShots = async (
-  config: PlatformModeConfig,
-  apiToken: string,
-  uploadToken: string,
-  requiredFileHashes: string[],
-  extendedShotItems: ExtendedShotItem[],
-) => {
+export const uploadRequiredShots = async ({
+  config,
+  apiToken,
+  uploadToken,
+  requiredFileHashes,
+  extendedShotItems,
+}: {
+  config: PlatformModeConfig;
+  apiToken: string;
+  uploadToken: string;
+  requiredFileHashes: string[];
+  extendedShotItems: ExtendedShotItem[];
+}) => {
   if (requiredFileHashes.length > 0) {
     log.process('info', 'api', '📤 Uploading shots');
 
@@ -33,14 +39,14 @@ export const uploadRequiredShots = async (
           totalItems: requiredShotItems.length,
         });
 
-        await uploadShot(
+        await uploadShot({
           config,
           apiToken,
           uploadToken,
-          `${shotItem.shotMode}/${shotItem.shotName}`,
-          shotItem.filePathCurrent,
+          name: `${shotItem.shotMode}/${shotItem.shotName}`,
+          file: shotItem.filePathCurrent,
           logger,
-        );
+        });
       },
     );
 

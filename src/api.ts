@@ -258,14 +258,21 @@ export const prepareUpload = async (
   );
 };
 
-export const uploadShot = async (
-  config: PlatformModeConfig,
-  apiToken: string,
-  uploadToken: string,
-  name: string,
-  file: string,
-  logger?: ReturnType<typeof log.item>,
-) => {
+export const uploadShot = async ({
+  config,
+  apiToken,
+  uploadToken,
+  name,
+  file,
+  logger,
+}: {
+  config: PlatformModeConfig;
+  apiToken: string;
+  uploadToken: string;
+  name: string;
+  file: string;
+  logger?: ReturnType<typeof log.item>;
+}) => {
   return sendToAPI<{
     success: true;
     details: {
