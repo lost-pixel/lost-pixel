@@ -4,6 +4,7 @@ import axios from 'axios';
 import { log, logMemory } from './log';
 import type { LogMemory } from './log';
 import type { PlatformModeConfig } from './config';
+import { getVersion } from './utils';
 
 type ApiAction =
   | 'getApiToken'
@@ -14,10 +15,13 @@ type ApiAction =
   | 'processShots'
   | 'recordLogs';
 
+const version = getVersion();
+
 export const apiClient = axios.create({
   headers: {
     'Content-type': 'application/json',
     'x-api-version': '3',
+    'x-client-version': version ?? 'unknown',
   },
 });
 
