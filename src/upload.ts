@@ -1,93 +1,63 @@
-import { Client as MinioClient } from 'minio';
-import { log, logMemory } from './log';
-import { config } from './config';
-import { sendToAPI } from './api';
-import type { Comparison, UploadFile, WebhookEvent } from './types';
+import { mapLimit } from 'async';
+import { MEDIA_UPLOAD_CONCURRENCY } from './config';
+import type { PlatformModeConfig } from './config';
+import type { ExtendedShotItem } from './types';
+import { uploadShot } from './api';
+import { log } from './log';
+import { parseHrtimeToSeconds } from './utils';
 
-let minio: MinioClient;
+export const uploadRequiredShots = async ({
+  config,
+  apiToken,
+  uploadToken,
+  requiredFileHashes,
+  extendedShotItems,
+}: {
+  config: PlatformModeConfig;
+  apiToken: string;
+  uploadToken: string;
+  requiredFileHashes: string[];
+  extendedShotItems: ExtendedShotItem[];
+}) => {
+  if (requiredFileHashes.length > 0) {
+    log.process('info', 'api', '📤 Uploading shots');
 
-export const uploadFile = async ({
-  uploadPath,
-  filePath,
-  metaData,
-}: UploadFile) => {
-  if (config.generateOnly) {
-    return;
-  }
+    const uploadStart = process.hrtime();
 
-  log(`Uploading '${filePath}' to '${uploadPath}'`);
+    const requiredShotItems = extendedShotItems.filter((shotItem) =>
+      requiredFileHashes.includes(shotItem.hash),
+    );
 
-  if (!minio) {
-    minio = new MinioClient({
-      endPoint: config.s3.endPoint,
-      region: config.s3.region ?? undefined,
-      accessKey: config.s3.accessKey,
-      secretKey: config.s3.secretKey,
-      sessionToken: config.s3.sessionToken ?? undefined,
-      port: config.s3.port ? Number(config.s3.port) : 443,
-      useSSL: config.s3.ssl,
-    });
-  }
+    await mapLimit<[number, ExtendedShotItem], void>(
+      requiredShotItems.entries(),
+      MEDIA_UPLOAD_CONCURRENCY,
+      async ([index, shotItem]: [number, ExtendedShotItem]) => {
+        const logger = log.item({
+          shotMode: shotItem.shotMode,
+          uniqueItemId: shotItem.shotName,
+          itemIndex: index,
+          totalItems: requiredShotItems.length,
+        });
 
-  return new Promise((resolve, reject) => {
-    if (config.generateOnly) {
-      reject(new Error('Generate only mode'));
-
-      return;
-    }
-
-    minio.fPutObject(
-      config.s3.bucketName,
-      uploadPath,
-      filePath,
-      metaData,
-      (error, objectInfo) => {
-        if (error) {
-          log(`Error uploading '${filePath}' to '${uploadPath}'`);
-          log(error);
-          reject(error);
-        } else {
-          resolve(objectInfo);
-        }
+        await uploadShot({
+          config,
+          apiToken,
+          uploadToken,
+          name: `${shotItem.shotMode}/${shotItem.shotName}`,
+          file: shotItem.filePathCurrent,
+          logger,
+        });
       },
     );
-  });
-};
 
-export const sendResultToAPI = async ({
-  success,
-  comparisons,
-  event,
-  durations,
-}: {
-  success: boolean;
-  comparisons?: Comparison[];
-  event?: WebhookEvent;
-  durations?: {
-    runDuration: number;
-    shotsCreationDuration: number;
-    differenceComparisonsDuration: number;
-  };
-}) => {
-  if (config.generateOnly) {
-    return;
+    const uploadStop = process.hrtime(uploadStart);
+
+    log.process(
+      'info',
+      'api',
+      `📤 Uploading shots took ${parseHrtimeToSeconds(uploadStop)} seconds`,
+    );
   }
 
-  const [repoOwner, repoName] = config.repository.split('/');
-
-  return sendToAPI('result', {
-    projectId: config.lostPixelProjectId,
-    buildId: config.ciBuildId,
-    buildNumber: config.ciBuildNumber,
-    branchRef: config.commitRef,
-    branchName: config.commitRefName,
-    repoOwner,
-    repoName,
-    commit: config.commitHash,
-    buildMeta: event,
-    comparisons: comparisons ?? [],
-    success,
-    log: logMemory,
-    durations,
-  });
+  return true;
 };

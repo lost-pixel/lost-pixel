@@ -30,6 +30,7 @@ export const generateLadleShotItems = (
         config.imagePathDifference,
         ladleStory.story,
       )}.png`,
+      // TODO: ladle takes thresholds only from config - not possible to source configs from individual story
       threshold: config.threshold,
       mask: mask ?? [],
     };

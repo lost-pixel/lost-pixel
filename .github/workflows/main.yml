@@ -7,18 +7,19 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Setup Node
         uses: actions/setup-node@v3
         with:
-          node-version: 16.x
-          cache: "npm"
+          node-version: 18.x
+          cache: 'npm'
 
       - name: Install dependencies
         run: |
           npm install
           npm -g install jest
+          npx playwright install
 
       - name: Lint
         run: npm run lint
@@ -35,6 +36,9 @@ jobs:
       - name: Build Example Ladle
         run: npm run build-example-ladle
 
+      - name: Build Example Vite
+        run: npm run build-example-vite
+
       - name: Test
         run: npm run test
 
@@ -46,6 +50,9 @@ jobs:
 
       - name: Run Example Ladle
         run: npm run run-example-ladle &
+
+      - name: Run Example Vite
+        run: npm run run-example-vite &
 
       - name: Test on examples
         run: npm run test-on-examples

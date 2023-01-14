@@ -5,9 +5,10 @@ import yargs from 'yargs';
 import { hideBin } from 'yargs/helpers';
 import fs from 'fs-extra';
 import { log } from './log';
-import { runner } from './runner';
+import { getPlatformApiToken, platformRunner, runner } from './runner';
 import { getVersion } from './utils';
-import { sendFinalizeToAPI } from './sendFinalize';
+import { sendFinalizeToAPI } from './api';
+import { config, configure } from './config';
 
 type CommandArgs = ['init-js', 'init-ts', 'finalize'];
 
@@ -18,12 +19,13 @@ const commandArgs = args._ as CommandArgs;
 const version = getVersion();
 
 if (version) {
-  log(`Version: ${version}`);
+  log.process('info', 'general', `Version: ${version}`);
 }
 
+// eslint-disable-next-line unicorn/prefer-top-level-await
 (async () => {
   if (commandArgs.includes('init-js')) {
-    log('Initializing javascript lost-pixel config');
+    log.process('info', 'general', 'Initializing javascript lost-pixel config');
 
     await fs.copy(
       path.join(
@@ -34,9 +36,9 @@ if (version) {
       ),
       path.join(process.cwd(), './lostpixel.config.js'),
     );
-    log('✅ Config successfully initialized');
+    log.process('info', 'general', '✅ Config successfully initialized');
   } else if (commandArgs.includes('init-ts')) {
-    log('Initializing typescript lost-pixel config');
+    log.process('info', 'general', 'Initializing typescript lost-pixel config');
 
     // Replace local type resolution with module resolution
     const file = fs.readFileSync(
@@ -53,10 +55,32 @@ if (version) {
       path.join(process.cwd(), './lostpixel.config.ts'),
       modifiedFile,
     );
-    log('✅ Config successfully initialized');
-  } else if (commandArgs.includes('finalize')) {
-    await sendFinalizeToAPI();
+    log.process('info', 'general', '✅ Config successfully initialized');
   } else {
-    await runner();
+    await configure();
+
+    if (config.generateOnly) {
+      log.process(
+        'info',
+        'general',
+        `🚀 Starting Lost Pixel in 'generateOnly' mode`,
+      );
+
+      await runner(config);
+    } else {
+      log.process(
+        'info',
+        'general',
+        `🚀 Starting Lost Pixel in 'platform' mode`,
+      );
+
+      const apiToken = await getPlatformApiToken(config);
+
+      if (commandArgs.includes('finalize')) {
+        await sendFinalizeToAPI(config, apiToken);
+      } else {
+        await platformRunner(config, apiToken);
+      }
+    }
   }
 })();

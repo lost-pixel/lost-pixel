@@ -67,7 +67,11 @@ export const getPagesFromExternalLoader = async () => {
       return [];
     }
 
-    log('Loading pages via external loader file supplied in pagesJsonUrl');
+    log.browser(
+      'info',
+      'general',
+      'Loading pages via external loader file supplied in pagesJsonUrl',
+    );
 
     const { data: pages } = await axios.get<PageScreenshotParameter[]>(
       config.pageShots.pagesJsonUrl,
@@ -100,13 +104,21 @@ export const getPagesFromExternalLoader = async () => {
       return pages;
     }
 
-    log('Error validating the loaded pages structure');
-    log(validatePages.error);
+    log.browser(
+      'error',
+      'general',
+      'Error validating the loaded pages structure',
+    );
+    log.browser('error', 'general', validatePages.error);
 
     return [];
   } catch (error: unknown) {
     if (axios.isAxiosError(error)) {
-      log(`Error when fetching data: ${error.message}`);
+      log.browser(
+        'error',
+        'network',
+        `Error when fetching data: ${error.message}`,
+      );
     }
 
     return [];

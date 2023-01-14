@@ -4,6 +4,10 @@ author: 'Chris Kalmar'
 branding:
   icon: 'image'
   color: 'purple'
+inputs:
+  FINALIZE:
+    description: 'Finalize run in a monorepo setup'
+    required: false
 runs:
   using: 'docker'
-  image: 'Dockerfile'
+  image: 'docker://lostpixel/lost-pixel:v3.0.3'

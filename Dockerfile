@@ -1,6 +1,6 @@
 # Build Stage
 
-FROM node:16-alpine as builder
+FROM node:18.13.0-alpine as builder
 
 WORKDIR /app
 
@@ -11,11 +11,13 @@ COPY package-lock.json .
 
 RUN npm install --ignore-scripts
 RUN npm run build
+# Ensure odiff binary is present and linked correctly, --ignore-scripts ignores post-install which is needed by odiff
+RUN cd node_modules/odiff-bin && npm run postinstall
 
 
 # Run Stage
 
-FROM mcr.microsoft.com/playwright:v1.25.2-focal AS runner
+FROM mcr.microsoft.com/playwright:v1.29.2-focal AS runner
 # Check available tags: https://mcr.microsoft.com/en-us/product/playwright/tags
 
 ENV NODE_ENV=production
