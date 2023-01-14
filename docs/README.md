@@ -1,6 +1,6 @@
 # 🖼 What is Lost Pixel?
 
-Lost Pixel is a tool to run visual regression tests on your software project. Currently supported modes include: Storybook(link tbd), Ladle(link tbd) and Page Screenshots(link tbd)
+Lost Pixel is a tool to run visual regression tests on your software project. Currently supported modes include: [Storybook](https://storybook.js.org/), [Ladle](https://ladle.dev/) and Page Screenshots.
 
 Like other tests in software development (e.g., unit and integration tests), visual regression tests exist to detect regressions after changes to the code base have been made. In this case, the focus is on the visual aspect of unintended changes.
 
