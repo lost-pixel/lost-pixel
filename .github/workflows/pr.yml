@@ -20,6 +20,7 @@ jobs:
         run: |
           npm install
           npm -g install jest
+          npx playwright install
 
       - name: Lint
         run: npm run lint
