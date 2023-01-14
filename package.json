@@ -27,7 +27,7 @@
     "prepare": "husky install",
     "release": "np --no-publish",
     "version": "./update-versions.sh",
-    "dev": "tsx src/bin",
+    "dev": "ts-node src/bin",
     "start": "NODE_ENV=production node dist/bin.js"
   },
   "lint-staged": {
@@ -68,6 +68,7 @@
     "pngjs": "6.0.0",
     "posthog-node": "2.2.3",
     "serve-handler": "6.1.5",
+    "ts-node": "10.9.1",
     "uuid": "9.0.0",
     "yargs": "17.6.2",
     "zod": "3.20.2"
@@ -95,7 +96,6 @@
     "prettier": "2.7.1",
     "rimraf": "3.0.2",
     "ts-jest": "29.0.1",
-    "tsx": "3.9.0",
     "typescript": "4.8.4",
     "xo": "0.52.3"
   },
