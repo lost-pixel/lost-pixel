@@ -76,7 +76,7 @@
   "devDependencies": {
     "@types/async": "3.2.15",
     "@types/fs-extra": "9.0.13",
-    "@types/jest": "29.1.0",
+    "@types/jest": "29.2.5",
     "@types/lodash.get": "4.4.7",
     "@types/lodash.kebabcase": "4.1.7",
     "@types/pixelmatch": "5.2.4",
@@ -89,7 +89,7 @@
     "eslint-config-prettier": "8.5.0",
     "eslint-plugin-unicorn": "43.0.2",
     "husky": "8.0.1",
-    "jest": "29.1.1",
+    "jest": "29.3.1",
     "lint-staged": "13.0.3",
     "prettier": "2.7.1",
     "rimraf": "3.0.2",
