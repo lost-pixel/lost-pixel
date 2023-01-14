@@ -17,7 +17,7 @@ RUN cd node_modules/odiff-bin && npm run postinstall
 
 # Run Stage
 
-FROM mcr.microsoft.com/playwright:v1.25.2-focal AS runner
+FROM mcr.microsoft.com/playwright:v1.29.2-focal AS runner
 # Check available tags: https://mcr.microsoft.com/en-us/product/playwright/tags
 
 ENV NODE_ENV=production

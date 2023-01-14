@@ -1,6 +1,6 @@
 import path from 'node:path';
 import { mapLimit } from 'async';
-import type { Browser } from 'playwright';
+import type { Browser } from 'playwright-core';
 import { log } from '../log';
 import { getBrowser, sleep } from '../utils';
 import { config } from '../config';
@@ -14,41 +14,47 @@ const takeScreenShot = async ({
 }: {
   browser: Browser;
   shotItem: ShotItem;
-  logger: (message: string, ...rest: unknown[]) => void;
+  logger: ReturnType<typeof log.item>;
 }): Promise<boolean> => {
   const context = await browser.newContext(shotItem.browserConfig);
   const page = await context.newPage();
   let success = false;
 
   page.on('pageerror', (exception) => {
-    logger('[pageerror] Uncaught exception:', exception);
+    logger.browser('error', 'general', 'Uncaught exception:', exception);
   });
 
-  // Skip browser console output
-  // page.on('console', async (message) => {
-  //   const values = [];
+  page.on('console', async (message) => {
+    const values = [];
 
-  //   try {
-  //     for (const arg of message.args()) {
-  //       // eslint-disable-next-line no-await-in-loop
-  //       values.push(await arg.jsonValue());
-  //     }
-  //   } catch (error: unknown) {
-  //     logger(`[console] Error while collecting console output`, error);
-  //   }
+    try {
+      for (const arg of message.args()) {
+        // eslint-disable-next-line no-await-in-loop
+        values.push(await arg.jsonValue());
+      }
+    } catch (error: unknown) {
+      logger.browser(
+        'error',
+        'console',
+        'Error while collecting console output',
+        error,
+      );
+    }
 
-  //   const logMessage = `[console] ${String(values.shift())}`;
-
-  //   logger(logMessage, ...values);
-  // });
+    logger.browser('info', 'console', String(values.shift()), ...values);
+  });
 
   try {
     await page.goto(shotItem.url);
   } catch (error: unknown) {
     if (error instanceof Error && error.name === 'TimeoutError') {
-      logger(`Timeout while loading page: ${shotItem.url}`);
+      logger.process(
+        'error',
+        'timeout',
+        `Timeout while loading page: ${shotItem.url}`,
+      );
     } else {
-      logger('Page loading failed', error);
+      logger.process('error', 'general', 'Page loading failed', error);
     }
   }
 
@@ -57,7 +63,11 @@ const takeScreenShot = async ({
       timeout: config.timeouts.loadState,
     });
   } catch {
-    logger(`Timeout while waiting for page load state: ${shotItem.url}`);
+    logger.process(
+      'error',
+      'timeout',
+      `Timeout while waiting for page load state: ${shotItem.url}`,
+    );
   }
 
   try {
@@ -67,7 +77,11 @@ const takeScreenShot = async ({
       ignoreUrls: ['/__webpack_hmr'],
     });
   } catch {
-    logger(`Timeout while waiting for all network requests: ${shotItem.url}`);
+    logger.process(
+      'error',
+      'timeout',
+      `Timeout while waiting for all network requests: ${shotItem.url}`,
+    );
   }
 
   if (config.beforeScreenshot) {
@@ -86,7 +100,11 @@ const takeScreenShot = async ({
     await resizeViewportToFullscreen({ page });
     fullScreenMode = false;
   } catch {
-    log(`Could not resize viewport to fullscreen: ${shotItem.shotName}`);
+    logger.process(
+      'error',
+      'general',
+      `Could not resize viewport to fullscreen: ${shotItem.shotName}`,
+    );
   }
 
   try {
@@ -101,7 +119,7 @@ const takeScreenShot = async ({
 
     success = true;
   } catch (error: unknown) {
-    logger('Error when taking screenshot', error);
+    logger.process('error', 'general', 'Error when taking screenshot', error);
   }
 
   await context.close();
@@ -116,7 +134,9 @@ const takeScreenShot = async ({
     await page.video()?.saveAs(newVideoPath);
     await page.video()?.delete();
 
-    logger(
+    logger.process(
+      'info',
+      'general',
       `Video of '${shotItem.shotName}' recorded and saved to '${newVideoPath}`,
     );
   }
@@ -133,11 +153,18 @@ export const takeScreenShots = async (shotItems: ShotItem[]) => {
     config.shotConcurrency,
     async (item: [number, ShotItem]) => {
       const [index, shotItem] = item;
-      const logger = (message: string, ...rest: unknown[]) => {
-        log(`[${index + 1}/${total}] ${message}`, ...rest);
-      };
+      const logger = log.item({
+        shotMode: shotItem.shotMode,
+        uniqueItemId: shotItem.shotName,
+        itemIndex: index,
+        totalItems: total,
+      });
 
-      logger(`Taking screenshot of '${shotItem.shotName}'`);
+      logger.process(
+        'info',
+        'general',
+        `Taking screenshot of '${shotItem.shotName}'`,
+      );
 
       const startTime = Date.now();
 
@@ -146,11 +173,15 @@ export const takeScreenShots = async (shotItems: ShotItem[]) => {
       const elapsedTime = Number((endTime - startTime) / 1000).toFixed(3);
 
       if (result) {
-        logger(
+        logger.process(
+          'info',
+          'general',
           `Screenshot of '${shotItem.shotName}' taken and saved to '${shotItem.filePathCurrent}' in ${elapsedTime}s`,
         );
       } else {
-        logger(
+        logger.process(
+          'info',
+          'general',
           `Screenshot of '${shotItem.shotName}' failed and took ${elapsedTime}s`,
         );
       }

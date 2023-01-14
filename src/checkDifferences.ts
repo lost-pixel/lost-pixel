@@ -6,7 +6,9 @@ import { config } from './config';
 import type { ShotItem } from './types';
 
 export const checkDifferences = async (shotItems: ShotItem[]) => {
-  log(
+  log.process(
+    'info',
+    'general',
     `Comparing ${shotItems.length} screenshots using '${config.compareEngine}' as compare engine`,
   );
 
@@ -20,7 +22,14 @@ export const checkDifferences = async (shotItems: ShotItem[]) => {
     async (item: [number, ShotItem]) => {
       const [index, shotItem] = item;
       const logger = (message: string) => {
-        log(`[${index + 1}/${total}] ${message}`);
+        log
+          .item({
+            shotMode: shotItem.shotMode,
+            uniqueItemId: shotItem.shotName,
+            itemIndex: index,
+            totalItems: total,
+          })
+          .process('info', 'general', message);
       };
 
       logger(`Comparing '${shotItem.id}'`);
@@ -69,7 +78,7 @@ export const checkDifferences = async (shotItems: ShotItem[]) => {
     },
   );
 
-  log('Comparison done!');
+  log.process('info', 'general', 'Comparison done!');
 
   return { differenceCount, noBaselinesCount };
 };
