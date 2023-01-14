@@ -82,7 +82,7 @@
     "@types/pixelmatch": "5.2.4",
     "@types/pngjs": "6.0.1",
     "@types/serve-handler": "6.1.1",
-    "@types/uuid": "8.3.4",
+    "@types/uuid": "9.0.0",
     "@typescript-eslint/eslint-plugin": "5.48.1",
     "@typescript-eslint/parser": "5.48.1",
     "eslint": "8.31.0",
