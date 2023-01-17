@@ -51,7 +51,7 @@
 <hr/>
 <div align="center">
  <h3><a href="https://app.lost-pixel.com">🚀 Start using platform for free 🚀</a></h3>
- <h3> <a href="https://docs.lost-pixel.com/user-docs/lost-pixel-platform">📚 Platform documentation 📚</a></h3>
+ <h3> <a href="https://docs.lost-pixel.com/user-docs/setup/lost-pixel-platform">📚 Platform documentation 📚</a></h3>
 </div>
 
 <hr/>
