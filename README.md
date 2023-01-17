@@ -43,12 +43,17 @@
 | ---------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------- |
 | ![ezgif-5-e71eb0773d](https://user-images.githubusercontent.com/29632358/185067771-03467437-badd-466b-ad6c-60d7183d99ae.gif) | ![ezgif-5-43091ece5d](https://user-images.githubusercontent.com/29632358/185067989-3f2d818b-c01f-4304-97f6-77295b1970d9.gif) |
 
-- **lost-pixel-platform** (_closed BETA_) - the UI and CI helpers that allow you to use lost-pixel's managed version. This includes specified regression UI, collaboration with team members and easy approval/rejection process for the snapshots. Configure it just once and enjoy hassle free visual regression tests integrated into your GitHub actions pipeline.
+- **lost-pixel-platform** (_open BETA_) - the UI and CI helpers that allow you to use lost-pixel's managed version. This includes specified regression UI, collaboration with team members and easy approval/rejection process for the snapshots. Configure it just once and enjoy hassle free visual regression tests integrated into your GitHub actions pipeline.
+
+![image](https://user-images.githubusercontent.com/29632358/212987360-5ab920a1-a2a0-4d0e-9433-37bba5ba91ad.png)
+
 
 <hr/>
 <div align="center">
- <h3> <a href="https://tally.so/r/3xXRoo">🚀 Get the platform beta invite 🚀</a></h3>
+ <h3><a href="https://app.lost-pixel.com">🚀 Start using platform for free 🚀</a></h3>
+ <h3> <a href="https://docs.lost-pixel.com/user-docs/lost-pixel-platform">📚 Platform documentation 📚</a></h3>
 </div>
+
 <hr/>
 
 ## Quick start ⚡
