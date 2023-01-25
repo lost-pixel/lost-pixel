@@ -2,7 +2,7 @@ import { existsSync } from 'node:fs';
 import path from 'node:path';
 import get from 'lodash.get';
 import type { BrowserContextOptions, Page } from 'playwright-core';
-import { loadProjectConfigFile } from './configHelper';
+import { loadProjectConfigFile, loadTSProjectConfigFile } from './configHelper';
 import { log } from './log';
 import type { ShotMode } from './types';
 
@@ -484,10 +484,58 @@ const loadProjectConfig = async (): Promise<CustomProjectConfig> => {
     )) as CustomProjectConfig;
 
     return imported;
-  } catch (error: unknown) {
-    log.process('error', 'config', error);
-    log.process('error', 'config', `Failed to load config file: ${configFile}`);
-    process.exit(1);
+  } catch {
+    log.process(
+      'error',
+      'config',
+      'Loading config using ESBuild failed, using fallback option',
+    );
+
+    try {
+      if (existsSync(`${configFileNameBase}.js`)) {
+        const projectConfig =
+          // eslint-disable-next-line @typescript-eslint/no-require-imports, @typescript-eslint/no-var-requires
+          require(`${configFileNameBase}.js`) as CustomProjectConfig;
+
+        log.process(
+          'info',
+          'config',
+          '✅ Successfully loaded configuration from:',
+          `${configFileNameBase}.js`,
+        );
+
+        return projectConfig;
+      }
+
+      if (existsSync(`${configFileNameBase}.ts`)) {
+        const imported = (await loadTSProjectConfigFile(
+          configFile,
+        )) as CustomProjectConfig;
+
+        log.process(
+          'info',
+          'config',
+          '✅ Successfully loaded configuration from:',
+          `${configFileNameBase}.ts`,
+        );
+
+        return imported;
+      }
+
+      log.process(
+        'error',
+        'config',
+        "Couldn't find project config file 'lostpixel.config.js'",
+      );
+      process.exit(1);
+    } catch {
+      log.process(
+        'error',
+        'config',
+        `Failed to load config file: ${configFile}`,
+      );
+      process.exit(1);
+    }
   }
 };
 
