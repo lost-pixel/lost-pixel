@@ -11,6 +11,9 @@ export const loadProjectConfigFile = async (
     config?: unknown;
   }>({
     filepath: configFilepath,
+    esbuildOptions: {
+      logLevel: 'silent',
+    },
   });
 
   return mod?.default ?? mod?.config ?? mod;
@@ -18,7 +21,7 @@ export const loadProjectConfigFile = async (
 
 let tsNodeService: Service;
 
-export const setupTsNode = async (): Promise<Service> => {
+const setupTsNode = async (): Promise<Service> => {
   if (tsNodeService) {
     return tsNodeService;
   }
@@ -42,12 +45,10 @@ export const setupTsNode = async (): Promise<Service> => {
         'config',
         `Please install "ts-node" to use a TypeScript configuration file`,
       );
-      // @ts-expect-error Error type definition is missing 'message'
-      log(error.message);
       process.exit(1);
     }
 
-    throw error;
+    process.exit(1);
   }
 };
 
