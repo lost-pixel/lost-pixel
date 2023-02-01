@@ -243,19 +243,20 @@ export const prepareUpload = async (
     hash: string;
   }>,
 ) => {
-  return sendToAPI<{ requiredFileHashes: string[]; uploadToken: string }>(
-    config,
-    {
-      action: 'prepareUpload',
-      apiToken,
-      payload: {
-        branchName: config.commitRefName,
-        commit: config.commitHash,
-        buildNumber: config.ciBuildNumber,
-        currentShots: shotNamesWithHashes,
-      },
+  return sendToAPI<{
+    requiredFileHashes: string[];
+    uploadToken: string;
+    uploadUrl: string;
+  }>(config, {
+    action: 'prepareUpload',
+    apiToken,
+    payload: {
+      branchName: config.commitRefName,
+      commit: config.commitHash,
+      buildNumber: config.ciBuildNumber,
+      currentShots: shotNamesWithHashes,
     },
-  );
+  });
 };
 
 export const uploadShot = async ({

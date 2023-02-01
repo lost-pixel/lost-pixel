@@ -205,7 +205,7 @@ export const platformRunner = async (
       hash: hashFile(shotItem.filePathCurrent),
     }));
 
-    const { requiredFileHashes, uploadToken } = await prepareUpload(
+    const { requiredFileHashes, uploadToken, uploadUrl } = await prepareUpload(
       config,
       apiToken,
       extendedShotItems.map((shotItem) => ({
