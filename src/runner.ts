@@ -231,6 +231,7 @@ export const platformRunner = async (
       config,
       apiToken,
       uploadToken,
+      uploadUrl,
       requiredFileHashes,
       extendedShotItems,
     });

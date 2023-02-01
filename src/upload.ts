@@ -10,12 +10,14 @@ export const uploadRequiredShots = async ({
   config,
   apiToken,
   uploadToken,
+  uploadUrl,
   requiredFileHashes,
   extendedShotItems,
 }: {
   config: PlatformModeConfig;
   apiToken: string;
   uploadToken: string;
+  uploadUrl: string;
   requiredFileHashes: string[];
   extendedShotItems: ExtendedShotItem[];
 }) => {
@@ -43,6 +45,7 @@ export const uploadRequiredShots = async ({
           config,
           apiToken,
           uploadToken,
+          uploadUrl,
           name: `${shotItem.shotMode}/${shotItem.shotName}`,
           file: shotItem.filePathCurrent,
           logger,

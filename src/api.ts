@@ -263,6 +263,7 @@ export const uploadShot = async ({
   config,
   apiToken,
   uploadToken,
+  uploadUrl,
   name,
   file,
   logger,
@@ -270,6 +271,7 @@ export const uploadShot = async ({
   config: PlatformModeConfig;
   apiToken: string;
   uploadToken: string;
+  uploadUrl: string;
   name: string;
   file: string;
   logger?: ReturnType<typeof log.item>;
@@ -284,7 +286,10 @@ export const uploadShot = async ({
       name: string;
     };
   }>(
-    config,
+    {
+      ...config,
+      lostPixelPlatform: uploadUrl,
+    },
     {
       action: 'uploadShot',
       apiToken,
