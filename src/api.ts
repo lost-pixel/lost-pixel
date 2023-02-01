@@ -322,14 +322,31 @@ export const sendRecordLogsToAPI = async (
   config: PlatformModeConfig,
   apiToken: string,
 ) => {
-  return sendToAPI(config, {
-    action: 'recordLogs',
-    apiToken,
-    payload: {
-      branchName: config.commitRefName,
-      buildNumber: config.ciBuildNumber,
-      commit: config.commitHash,
-      log: logMemory,
-    },
-  });
+  try {
+    await sendToAPI(config, {
+      action: 'recordLogs',
+      apiToken,
+      payload: {
+        branchName: config.commitRefName,
+        buildNumber: config.ciBuildNumber,
+        commit: config.commitHash,
+        log: logMemory,
+      },
+    });
+  } catch (error: unknown) {
+    if (axios.isAxiosError(error)) {
+      log.process(
+        'error',
+        'api',
+        'API response: ',
+        error.response?.data || error.message,
+      );
+    } else if (error instanceof Error) {
+      log.process('error', 'api', error.message);
+    } else {
+      log.process('error', 'api', error);
+    }
+
+    log.process('error', 'api', 'Error: Failed to send logs to API');
+  }
 };
