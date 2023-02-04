@@ -223,7 +223,7 @@ export const platformRunner = async (
         `${
           shotItems.length - requiredFileHashes.length
         } shot(s) already exist on platform.`,
-        `${requiredFileHashes.length} shot(s) will be uploaded.`,
+        `${requiredFileHashes.length} shot(s) will be uploaded at ${uploadUrl}.`,
       ].join(' '),
     );
 
