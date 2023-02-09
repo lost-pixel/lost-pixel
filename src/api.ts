@@ -157,13 +157,11 @@ const sendToAPI = async <T extends Record<string, unknown>>(
           retryDelay(retryCount) {
             const delay = Math.round(2 ** retryCount * 5000 * Math.random());
 
-            if (retryCount > 1) {
-              logger(
-                'info',
-                'api',
-                `🔄 Retry attempt ${retryCount} in ${delay}ms [${parameters.action}]`,
-              );
-            }
+            logger(
+              'info',
+              'api',
+              `🔄 Retry attempt ${retryCount} in ${delay}ms [${parameters.action}]`,
+            );
 
             return delay;
           },
