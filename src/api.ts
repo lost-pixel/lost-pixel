@@ -28,13 +28,13 @@ const apiClient = axios.create({
 axiosRetry(apiClient, {
   shouldResetTimeout: true,
   retries: 3,
-  retryDelay(retryCount) {
-    const delay = retryCount * 5000 * Math.random();
+  // retryDelay(retryCount) {
+  //   const delay = 2 ** retryCount * 5000 * Math.random();
 
-    // logger('info', 'api', `🔄 Retry attempt ${retryCount} in ${delay}ms`);
+  //   // logger('info', 'api', `🔄 Retry attempt ${retryCount} in ${delay}ms`);
 
-    return delay;
-  },
+  //   return delay;
+  // },
   retryCondition(error: AxiosError) {
     return (
       !error.response ||
@@ -42,6 +42,14 @@ axiosRetry(apiClient, {
       error.response.status === 0
     );
   },
+  // onRetry(retryCount, _error, config) {
+  //   log.process(
+  //     'info',
+  //     'api',
+  //     `🔄 Retry attempt ${retryCount} for ${config.url}`,
+  //   );
+  //   console.log(config);
+  // },
 });
 
 const apiRoutes: Record<ApiAction, string> = {
@@ -159,6 +167,19 @@ const sendToAPI = async <T extends Record<string, unknown>>(
           Authorization: `Bearer ${parameters.apiToken ?? ''}`,
           'x-api-key': config.apiKey ?? 'undefined',
           'Content-type': fileKey ? undefined : 'application/json',
+        },
+        'axios-retry': {
+          retryDelay(retryCount) {
+            const delay = Math.round(2 ** retryCount * 5000 * Math.random());
+
+            logger(
+              'info',
+              'api',
+              `🔄 Retry attempt ${retryCount} in ${delay}ms`,
+            );
+
+            return delay;
+          },
         },
       },
     );
