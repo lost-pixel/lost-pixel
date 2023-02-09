@@ -19,7 +19,6 @@ const version = getVersion();
 
 const apiClient = axios.create({
   headers: {
-    'Content-type': 'application/json',
     'x-api-version': '3',
     'x-client-version': version ?? 'unknown',
   },
@@ -138,6 +137,7 @@ const sendToAPI = async <T extends Record<string, unknown>>(
         headers: {
           Authorization: `Bearer ${parameters.apiToken ?? ''}`,
           'x-api-key': config.apiKey ?? 'undefined',
+          'Content-type': fileKey ? undefined : 'application/json',
         },
       },
     );
