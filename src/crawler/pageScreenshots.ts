@@ -1,5 +1,5 @@
 import path from 'node:path';
-import axios from 'axios';
+import axios, { isAxiosError } from 'axios';
 import { z } from 'zod';
 import { log } from '../log';
 import { config } from '../config';
@@ -113,7 +113,7 @@ export const getPagesFromExternalLoader = async () => {
 
     return [];
   } catch (error: unknown) {
-    if (axios.isAxiosError(error)) {
+    if (isAxiosError(error)) {
       log.browser(
         'error',
         'network',

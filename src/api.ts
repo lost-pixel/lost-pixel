@@ -173,7 +173,9 @@ const sendToAPI = async <T extends Record<string, unknown>>(
       process.exit(1);
     }
 
-    const outdatedApiRequest = response?.headers?.['x-api-version-warning'];
+    const outdatedApiRequest = response?.headers?.[
+      'x-api-version-warning'
+    ] as string;
 
     if (
       outdatedApiRequest &&
@@ -195,7 +197,7 @@ const sendToAPI = async <T extends Record<string, unknown>>(
 
     return response.data as T;
   } catch (error: unknown) {
-    if (axios.isAxiosError(error)) {
+    if (isAxiosError(error)) {
       logger(
         'error',
         'api',
@@ -361,7 +363,7 @@ export const sendRecordLogsToAPI = async (
       },
     });
   } catch (error: unknown) {
-    if (axios.isAxiosError(error)) {
+    if (isAxiosError(error)) {
       log.process(
         'error',
         'api',
