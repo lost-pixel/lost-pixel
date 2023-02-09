@@ -28,13 +28,6 @@ const apiClient = axios.create({
 axiosRetry(apiClient, {
   shouldResetTimeout: true,
   retries: 3,
-  // retryDelay(retryCount) {
-  //   const delay = 2 ** retryCount * 5000 * Math.random();
-
-  //   // logger('info', 'api', `🔄 Retry attempt ${retryCount} in ${delay}ms`);
-
-  //   return delay;
-  // },
   retryCondition(error: AxiosError) {
     return (
       !error.response ||
@@ -42,14 +35,6 @@ axiosRetry(apiClient, {
       error.response.status === 0
     );
   },
-  // onRetry(retryCount, _error, config) {
-  //   log.process(
-  //     'info',
-  //     'api',
-  //     `🔄 Retry attempt ${retryCount} for ${config.url}`,
-  //   );
-  //   console.log(config);
-  // },
 });
 
 const apiRoutes: Record<ApiAction, string> = {
