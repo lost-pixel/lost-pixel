@@ -1,6 +1,7 @@
 import { createReadStream } from 'node:fs';
 import FormData from 'form-data';
-import axios from 'axios';
+import axios, { type AxiosError, isAxiosError } from 'axios';
+import axiosRetry from 'axios-retry';
 import { log, logMemory } from './log';
 import type { LogMemory } from './log';
 import type { PlatformModeConfig } from './config';
@@ -21,6 +22,25 @@ const apiClient = axios.create({
   headers: {
     'x-api-version': '3',
     'x-client-version': version ?? 'unknown',
+  },
+});
+
+axiosRetry(apiClient, {
+  shouldResetTimeout: true,
+  retries: 3,
+  retryDelay(retryCount) {
+    const delay = retryCount * 5000 * Math.random();
+
+    // logger('info', 'api', `🔄 Retry attempt ${retryCount} in ${delay}ms`);
+
+    return delay;
+  },
+  retryCondition(error: AxiosError) {
+    return (
+      !error.response ||
+      (error.response.status >= 500 && error.response.status <= 599) ||
+      error.response.status === 0
+    );
   },
 });
 
@@ -134,6 +154,7 @@ const sendToAPI = async <T extends Record<string, unknown>>(
       `${config.lostPixelPlatform}${apiRoutes[parameters.action]}`,
       payload,
       {
+        timeout: 2000,
         headers: {
           Authorization: `Bearer ${parameters.apiToken ?? ''}`,
           'x-api-key': config.apiKey ?? 'undefined',
