@@ -25,18 +25,6 @@ const apiClient = axios.create({
   },
 });
 
-axiosRetry(apiClient, {
-  shouldResetTimeout: true,
-  retries: 3,
-  retryCondition(error: AxiosError) {
-    return (
-      !error.response ||
-      (error.response.status >= 500 && error.response.status <= 599) ||
-      error.response.status === 0
-    );
-  },
-});
-
 const apiRoutes: Record<ApiAction, string> = {
   getApiToken: '/auth/get-api-token',
   init: '/app/init',
