@@ -1,7 +1,7 @@
 import { createReadStream } from 'node:fs';
 import FormData from 'form-data';
 import axios, { type AxiosError, isAxiosError } from 'axios';
-import axiosRetry from 'axios-retry';
+import { retry } from 'async';
 import { log, logMemory } from './log';
 import type { LogMemory } from './log';
 import type { PlatformModeConfig } from './config';
@@ -115,46 +115,61 @@ const sendToAPI = async <T extends Record<string, unknown>>(
   logger('info', 'api', `⚡️ Sending to API [${parameters.action}]`);
 
   try {
-    let payload: ApiPayloads['payload'] | FormData = parameters.payload;
+    const apiCall = async () => {
+      let payload: ApiPayloads['payload'] | FormData = parameters.payload;
 
-    if (fileKey) {
-      const form = new FormData();
+      if (fileKey) {
+        const form = new FormData();
 
-      for (const [key, element] of Object.entries(parameters.payload)) {
-        if (key === fileKey) {
-          form.append(key, createReadStream(element as string));
-        } else {
-          form.append(key, element);
+        for (const [key, element] of Object.entries(parameters.payload)) {
+          if (key === fileKey) {
+            form.append(key, createReadStream(element as string));
+          } else {
+            form.append(key, element);
+          }
         }
+
+        payload = form;
       }
 
-      payload = form;
-    }
-
-    const response = await apiClient.post(
-      `${config.lostPixelPlatform}${apiRoutes[parameters.action]}`,
-      payload,
-      {
-        timeout: 2000,
-        headers: {
-          Authorization: `Bearer ${parameters.apiToken ?? ''}`,
-          'x-api-key': config.apiKey ?? 'undefined',
-          'Content-type': fileKey ? undefined : 'application/json',
-        },
-        'axios-retry': {
-          retryDelay(retryCount) {
-            const delay = Math.round(2 ** retryCount * 5000 * Math.random());
-
-            logger(
-              'info',
-              'api',
-              `🔄 Retry attempt ${retryCount} in ${delay}ms [${parameters.action}]`,
-            );
-
-            return delay;
+      return apiClient.post(
+        `${config.lostPixelPlatform}${apiRoutes[parameters.action]}`,
+        payload,
+        {
+          headers: {
+            Authorization: `Bearer ${parameters.apiToken ?? ''}`,
+            'x-api-key': config.apiKey ?? 'undefined',
+            'Content-type': fileKey
+              ? 'multipart/form-data'
+              : 'application/json',
           },
         },
+      );
+    };
+
+    const response = await retry(
+      {
+        times: 3,
+        interval(retryCount) {
+          const delay = Math.round(2 ** retryCount * 3000 * Math.random());
+
+          logger(
+            'info',
+            'api',
+            `🔄 Retry attempt ${retryCount} in ${delay}ms [${parameters.action}]`,
+          );
+
+          return delay;
+        },
+        errorFilter(error: AxiosError) {
+          return (
+            !error.response ||
+            (error.response.status >= 500 && error.response.status <= 599) ||
+            error.response.status === 0
+          );
+        },
       },
+      apiCall,
     );
 
     if (response.status !== 200 && response.status !== 201) {
