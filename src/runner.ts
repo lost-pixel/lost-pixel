@@ -205,7 +205,7 @@ export const platformRunner = async (
       hash: hashFile(shotItem.filePathCurrent),
     }));
 
-    const { requiredFileHashes, uploadToken } = await prepareUpload(
+    const { requiredFileHashes, uploadToken, uploadUrl } = await prepareUpload(
       config,
       apiToken,
       extendedShotItems.map((shotItem) => ({
@@ -223,7 +223,7 @@ export const platformRunner = async (
         `${
           shotItems.length - requiredFileHashes.length
         } shot(s) already exist on platform.`,
-        `${requiredFileHashes.length} shot(s) will be uploaded.`,
+        `${requiredFileHashes.length} shot(s) will be uploaded at ${uploadUrl}.`,
       ].join(' '),
     );
 
@@ -231,6 +231,7 @@ export const platformRunner = async (
       config,
       apiToken,
       uploadToken,
+      uploadUrl,
       requiredFileHashes,
       extendedShotItems,
     });
