@@ -18,6 +18,7 @@
   <a href="https://github.com/lost-pixel/lost-pixel-examples">Examples</a>
   <br />
   <br />
+
 </div>
 <div align='center'>  <a href="https://www.youtube.com/watch?v=8Ws28rQymkE"><img width='400px' src='https://user-images.githubusercontent.com/29632358/187195828-92e2a8fd-0bd5-4b66-bb82-596f5688dc4d.png'> </div>
 <h4 align='center'> <a href="https://www.youtube.com/watch?v=8Ws28rQymkE">Quick start video</a></div>
@@ -44,8 +45,8 @@
 | ![ezgif-5-e71eb0773d](https://user-images.githubusercontent.com/29632358/185067771-03467437-badd-466b-ad6c-60d7183d99ae.gif) | ![ezgif-5-43091ece5d](https://user-images.githubusercontent.com/29632358/185067989-3f2d818b-c01f-4304-97f6-77295b1970d9.gif) |
 
 - **lost-pixel-platform** (_open BETA_) - the UI and CI helpers that allow you to use lost-pixel's managed version. This includes specified regression UI, collaboration with team members and easy approval/rejection process for the snapshots. Configure it just once and enjoy hassle free visual regression tests integrated into your GitHub actions pipeline.
-
-![image](https://user-images.githubusercontent.com/29632358/212987360-5ab920a1-a2a0-4d0e-9433-37bba5ba91ad.png)
+  
+https://user-images.githubusercontent.com/29632358/222420960-57924da4-d0bf-4478-9322-fc68686485b6.mp4
 
 
 <hr/>
