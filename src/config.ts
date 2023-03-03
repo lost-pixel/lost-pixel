@@ -183,7 +183,7 @@ type BaseConfig = {
    * Whether to set the GitHub status check on process start or not
    *
    * Setting this option to `true` makes only sense if the repository settings have pending status checks disabled
-   * @default 'false'
+   * @default false
    */
   setPendingStatusCheck: boolean;
 
