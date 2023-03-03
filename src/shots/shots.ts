@@ -2,7 +2,7 @@ import path from 'node:path';
 import { mapLimit } from 'async';
 import type { Browser } from 'playwright-core';
 import { log } from '../log';
-import { getBrowser, sleep } from '../utils';
+import { getBrowser, hashFile, sleep } from '../utils';
 import { config } from '../config';
 import type { ShotItem } from '../types';
 import { resizeViewportToFullscreen, waitForNetworkRequests } from './utils';
@@ -107,15 +107,44 @@ const takeScreenShot = async ({
     );
   }
 
+  let retryCount = 0;
+  let lastShotHash;
+
   try {
-    await page.screenshot({
-      path: shotItem.filePathCurrent,
-      fullPage: fullScreenMode,
-      animations: 'disabled',
-      mask: shotItem.mask
-        ? shotItem.mask.map((mask) => page.locator(mask.selector))
-        : [],
-    });
+    while (retryCount <= config.flakynessRetries) {
+      // eslint-disable-next-line no-await-in-loop
+      await page.screenshot({
+        path: shotItem.filePathCurrent,
+        fullPage: fullScreenMode,
+        animations: 'disabled',
+        mask: shotItem.mask
+          ? shotItem.mask.map((mask) => page.locator(mask.selector))
+          : [],
+      });
+
+      const currentShotHash = hashFile(shotItem.filePathCurrent);
+
+      if (lastShotHash) {
+        logger.process(
+          'info',
+          'general',
+          `Screenshot of '${shotItem.shotName}' taken (Retry ${retryCount}). Hash: ${currentShotHash} - Previous hash: ${lastShotHash}`,
+        );
+
+        if (lastShotHash === currentShotHash) {
+          break;
+        }
+      }
+
+      lastShotHash = currentShotHash;
+
+      if (retryCount < config.flakynessRetries) {
+        // eslint-disable-next-line no-await-in-loop
+        await sleep(config.waitBetweenFlakynessRetries);
+      }
+
+      retryCount++;
+    }
 
     success = true;
   } catch (error: unknown) {

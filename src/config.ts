@@ -183,9 +183,21 @@ type BaseConfig = {
    * Whether to set the GitHub status check on process start or not
    *
    * Setting this option to `true` makes only sense if the repository settings have pending status checks disabled
-   * @default 'false'
+   * @default false
    */
   setPendingStatusCheck: boolean;
+
+  /**
+   * How often to retry a shot for a stable result
+   * @default 3
+   */
+  flakynessRetries: number;
+
+  /**
+   * Time to wait between flakyness retries
+   * @default 2_000
+   */
+  waitBetweenFlakynessRetries: number;
 };
 
 export type Mask = {
@@ -375,6 +387,8 @@ const defaultConfig: BaseConfig = {
   waitForLastRequest: 1000,
   threshold: 0,
   setPendingStatusCheck: false,
+  flakynessRetries: 3,
+  waitBetweenFlakynessRetries: 2000,
 };
 
 const githubConfigDefaults: Partial<ProjectConfig> = {
