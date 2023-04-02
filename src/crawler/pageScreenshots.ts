@@ -90,11 +90,12 @@ export const generatePageShotItems = (
       return {
         ...shotItem,
         id: `${page.name}[${sizeLabel}]`,
-        shotName: `${page.name}[${sizeLabel}]`,
-        viewport: {
-          width: breakpoint,
-        },
-        breakpointId: page.name,
+        shotName: page.name,
+        breakpoint,
+        browserConfig: generateBrowserConfig({
+          ...page,
+          viewport: { width: breakpoint },
+        }),
       };
     });
   });

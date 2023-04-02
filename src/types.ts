@@ -19,8 +19,9 @@ export type ShotItem = {
   }>;
   viewport?: {
     width: number;
+    height: number;
   };
-  breakpointId?: string;
+  breakpoint?: number;
 };
 
 export type ExtendedShotItem = ShotItem & {
