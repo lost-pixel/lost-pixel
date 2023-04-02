@@ -38,6 +38,18 @@ type BaseConfig = {
      * Define areas for all stories where differences will be ignored
      */
     mask?: Mask[];
+
+    /**
+     * Define custom breakpoints for storybook tests
+     * @default []
+     * @example
+     * [
+     *  { width: 320, height: 480 },
+     * { width: 768, height: 1024 },
+     * { width: 1280, height: 720 },
+     * ]
+     */
+    breakpoints?: Breakpoint[];
   };
 
   /**
@@ -54,6 +66,18 @@ type BaseConfig = {
      * Define areas for all stories where differences will be ignored
      */
     mask?: Mask[];
+
+    /**
+     * Define custom breakpoints for ladle tests
+     * @default []
+     * @example
+     * [
+     *  { width: 320, height: 480 },
+     * { width: 768, height: 1024 },
+     * { width: 1280, height: 720 },
+     * ]
+     */
+    breakpoints?: Breakpoint[];
   };
 
   /**
@@ -78,6 +102,18 @@ type BaseConfig = {
      * Define areas for all pages where differences will be ignored
      */
     mask?: Mask[];
+
+    /**
+     * Define custom breakpoints for pages tests
+     * @default []
+     * @example
+     * [
+     *  { width: 320, height: 480 },
+     * { width: 768, height: 1024 },
+     * { width: 1280, height: 720 },
+     * ]
+     */
+    breakpoints?: Breakpoint[];
   };
 
   /**
@@ -90,6 +126,18 @@ type BaseConfig = {
      * This path cannot be the same as the `imagePathCurrent` path
      */
     currentShotsPath: string;
+
+    /**
+     * Define custom breakpoints for custom shots tests
+     * @default []
+     * @example
+     * [
+     *  { width: 320, height: 480 },
+     * { width: 768, height: 1024 },
+     * { width: 1280, height: 720 },
+     * ]
+     */
+    breakpoints?: Breakpoint[];
   };
 
   /**
@@ -97,6 +145,18 @@ type BaseConfig = {
    * @default '.lostpixel/baseline/'
    */
   imagePathBaseline: string;
+
+  /**
+   * Define custom breakpoints for all tests
+   * @default []
+   * @example
+   * [
+   *  { width: 320, height: 480 },
+   * { width: 768, height: 1024 },
+   * { width: 1280, height: 720 },
+   * ]
+   */
+  breakpoints?: Breakpoint[];
 
   /**
    * Path to the current image folder
@@ -215,6 +275,17 @@ export type Mask = {
   selector: string;
 };
 
+export type Breakpoint = {
+  /**
+   * Width of the viewport
+   */
+  width?: number;
+  /**
+   * Height of the viewport
+   */
+  height?: number;
+};
+
 export type PageScreenshotParameter = {
   /**
    * Path to the page to take a screenshot of (e.g. /login)
@@ -241,6 +312,18 @@ export type PageScreenshotParameter = {
    * @default 0
    */
   threshold?: number;
+
+  /**
+   * Define custom breakpoints for individual page
+   * @default []
+   * @example
+   * [
+   *  { width: 320, height: 480 },
+   * { width: 768, height: 1024 },
+   * { width: 1280, height: 720 },
+   * ]
+   */
+  breakpoints?: Breakpoint[];
 
   /**
    * Define a custom viewport for the page

@@ -118,7 +118,7 @@ export const createShots = async () => {
   }
 
   if (pageShots) {
-    const { pages: pagesFromConfig, baseUrl, mask } = pageShots;
+    const { pages: pagesFromConfig, baseUrl, mask, breakpoints } = pageShots;
 
     const pagesFromLoader = await getPagesFromExternalLoader();
 
@@ -126,7 +126,7 @@ export const createShots = async () => {
 
     log.process('info', 'general', `\n=== [Page Mode] ${baseUrl} ===\n`);
 
-    pageShotItems = generatePageShotItems(pages, baseUrl, mask);
+    pageShotItems = generatePageShotItems(pages, baseUrl, mask, breakpoints);
     log.process(
       'info',
       'general',

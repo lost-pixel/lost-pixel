@@ -2,9 +2,10 @@ import path from 'node:path';
 import axios, { isAxiosError } from 'axios';
 import { z } from 'zod';
 import { log } from '../log';
-import { config } from '../config';
+import { config, type Breakpoint } from '../config';
 import type { PageScreenshotParameter, Mask } from '../config';
 import type { ShotItem } from '../types';
+import { selectBreakpoints, generateSizeLabel } from '../shots/utils';
 
 const generateBrowserConfig = (page: PageScreenshotParameter) => {
   const browserConfig = config.configureBrowser?.({
@@ -30,6 +31,7 @@ export const generatePageShotItems = (
   pages: PageScreenshotParameter[],
   baseUrl: string,
   mask?: Mask[],
+  modeBreakpoints?: Breakpoint[],
 ): ShotItem[] => {
   const names = pages.map((page) => page.name);
   const uniqueNames = new Set(names);
@@ -38,8 +40,24 @@ export const generatePageShotItems = (
     throw new Error('Error: Page names must be unique');
   }
 
-  return pages.map((page) => {
-    return {
+  return pages.flatMap((page) => {
+    const configLevelBreakpoints = config.breakpoints ?? [];
+    const shotBreakpoints = page.breakpoints ?? [];
+
+    // pick the correct breakpoints based on their specificity. The order is:
+    // 1. page level breakpoints
+    // 2. mode level breakpoints
+    // 3. config level breakpoints
+
+    const breakpoints = selectBreakpoints(
+      configLevelBreakpoints,
+      modeBreakpoints,
+      shotBreakpoints,
+    );
+
+    // if no breakpoints are defined, we can return the shot item directly
+
+    const shotItem: ShotItem = {
       shotMode: 'page',
       id: page.name,
       shotName: config.shotNameGenerator
@@ -58,6 +76,31 @@ export const generatePageShotItems = (
         page.waitBeforeScreenshot ?? config.waitBeforeScreenshot,
       mask: [...(mask ?? []), ...(page.mask ?? [])],
     };
+
+    if (!breakpoints || breakpoints.length === 0) {
+      return shotItem;
+    }
+
+    // if breakpoints are defined, we need to create a shot item for each breakpoint
+    // and append the breakpoint dimensions to the shot name
+
+    return breakpoints.map((breakpoint) => {
+      const width = breakpoint.width ?? 0;
+      const height = breakpoint.height ?? 0;
+
+      const sizeLabel = generateSizeLabel(breakpoint);
+
+      return {
+        ...shotItem,
+        id: `${page.name}[${sizeLabel}]`,
+        name: `${page.name}[${sizeLabel}]`,
+        viewport: {
+          width,
+          height,
+        },
+        breakpointId: page.name,
+      };
+    });
   });
 };
 

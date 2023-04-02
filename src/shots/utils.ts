@@ -1,5 +1,5 @@
 import type { Page, Request } from 'playwright-core';
-import { config } from '../config';
+import { config, type Breakpoint } from '../config';
 import type { log } from '../log';
 
 const checkIgnoreUrls = (url: string, ignoreUrls: string[]) => {
@@ -129,4 +129,31 @@ export const resizeViewportToFullscreen = async ({ page }: { page: Page }) => {
     width: Math.max(page.viewportSize()?.width ?? 800, viewport.width),
     height: viewport.height,
   });
+};
+
+export const selectBreakpoints = (
+  topLevelBreakpoints?: Breakpoint[],
+  modeBreakpoints?: Breakpoint[],
+  shotBreakpoints?: Breakpoint[],
+): Breakpoint[] | undefined => {
+  if (shotBreakpoints && shotBreakpoints.length > 0) {
+    return shotBreakpoints;
+  }
+
+  if (modeBreakpoints && modeBreakpoints.length > 0) {
+    return modeBreakpoints;
+  }
+
+  return topLevelBreakpoints;
+};
+
+export const generateSizeLabel = (breakpoint: Breakpoint): string => {
+  const width = breakpoint.width ?? 0;
+  const height = breakpoint.height ?? 0;
+  const widthLabel = width > 0 ? `w${width}px` : '';
+  const heightLabel = height > 0 ? `h${height}px` : '';
+  const separator = widthLabel && heightLabel ? '_' : '';
+  const sizeLabel = `${widthLabel}${separator}${heightLabel}`;
+
+  return sizeLabel;
 };
