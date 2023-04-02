@@ -2,7 +2,7 @@ import path from 'node:path';
 import axios, { isAxiosError } from 'axios';
 import { z } from 'zod';
 import { log } from '../log';
-import { config, type Breakpoint } from '../config';
+import { config } from '../config';
 import type { PageScreenshotParameter, Mask } from '../config';
 import type { ShotItem } from '../types';
 import { selectBreakpoints, generateSizeLabel } from '../shots/utils';
@@ -31,7 +31,7 @@ export const generatePageShotItems = (
   pages: PageScreenshotParameter[],
   baseUrl: string,
   mask?: Mask[],
-  modeBreakpoints?: Breakpoint[],
+  modeBreakpoints?: number[],
 ): ShotItem[] => {
   const names = pages.map((page) => page.name);
   const uniqueNames = new Set(names);
@@ -85,18 +85,14 @@ export const generatePageShotItems = (
     // and append the breakpoint dimensions to the shot name
 
     return breakpoints.map((breakpoint) => {
-      const width = breakpoint.width ?? 0;
-      const height = breakpoint.height ?? 0;
-
       const sizeLabel = generateSizeLabel(breakpoint);
 
       return {
         ...shotItem,
         id: `${page.name}[${sizeLabel}]`,
-        name: `${page.name}[${sizeLabel}]`,
+        shotName: `${page.name}[${sizeLabel}]`,
         viewport: {
-          width,
-          height,
+          width: breakpoint,
         },
         breakpointId: page.name,
       };

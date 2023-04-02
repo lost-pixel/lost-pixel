@@ -49,7 +49,7 @@ type BaseConfig = {
      * { width: 1280, height: 720 },
      * ]
      */
-    breakpoints?: Breakpoint[];
+    breakpoints?: number[];
   };
 
   /**
@@ -77,7 +77,7 @@ type BaseConfig = {
      * { width: 1280, height: 720 },
      * ]
      */
-    breakpoints?: Breakpoint[];
+    breakpoints?: number[];
   };
 
   /**
@@ -113,7 +113,7 @@ type BaseConfig = {
      * { width: 1280, height: 720 },
      * ]
      */
-    breakpoints?: Breakpoint[];
+    breakpoints?: number[];
   };
 
   /**
@@ -137,7 +137,7 @@ type BaseConfig = {
      * { width: 1280, height: 720 },
      * ]
      */
-    breakpoints?: Breakpoint[];
+    breakpoints?: number[];
   };
 
   /**
@@ -156,7 +156,7 @@ type BaseConfig = {
    * { width: 1280, height: 720 },
    * ]
    */
-  breakpoints?: Breakpoint[];
+  breakpoints?: number[];
 
   /**
    * Path to the current image folder
@@ -275,17 +275,6 @@ export type Mask = {
   selector: string;
 };
 
-export type Breakpoint = {
-  /**
-   * Width of the viewport
-   */
-  width?: number;
-  /**
-   * Height of the viewport
-   */
-  height?: number;
-};
-
 export type PageScreenshotParameter = {
   /**
    * Path to the page to take a screenshot of (e.g. /login)
@@ -323,7 +312,7 @@ export type PageScreenshotParameter = {
    * { width: 1280, height: 720 },
    * ]
    */
-  breakpoints?: Breakpoint[];
+  breakpoints?: number[];
 
   /**
    * Define a custom viewport for the page

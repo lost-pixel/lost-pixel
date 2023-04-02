@@ -19,7 +19,6 @@ export type ShotItem = {
   }>;
   viewport?: {
     width: number;
-    height: number;
   };
   breakpointId?: string;
 };

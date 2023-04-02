@@ -1,5 +1,5 @@
 import type { Page, Request } from 'playwright-core';
-import { config, type Breakpoint } from '../config';
+import { config } from '../config';
 import type { log } from '../log';
 
 const checkIgnoreUrls = (url: string, ignoreUrls: string[]) => {
@@ -132,10 +132,10 @@ export const resizeViewportToFullscreen = async ({ page }: { page: Page }) => {
 };
 
 export const selectBreakpoints = (
-  topLevelBreakpoints?: Breakpoint[],
-  modeBreakpoints?: Breakpoint[],
-  shotBreakpoints?: Breakpoint[],
-): Breakpoint[] | undefined => {
+  topLevelBreakpoints?: number[],
+  modeBreakpoints?: number[],
+  shotBreakpoints?: number[],
+): number[] | undefined => {
   if (shotBreakpoints && shotBreakpoints.length > 0) {
     return shotBreakpoints;
   }
@@ -147,13 +147,10 @@ export const selectBreakpoints = (
   return topLevelBreakpoints;
 };
 
-export const generateSizeLabel = (breakpoint: Breakpoint): string => {
-  const width = breakpoint.width ?? 0;
-  const height = breakpoint.height ?? 0;
-  const widthLabel = width > 0 ? `w${width}px` : '';
-  const heightLabel = height > 0 ? `h${height}px` : '';
-  const separator = widthLabel && heightLabel ? '_' : '';
-  const sizeLabel = `${widthLabel}${separator}${heightLabel}`;
+export const generateSizeLabel = (breakpoint: number): string => {
+  const widthLabel = breakpoint > 0 ? `w${breakpoint}px` : '';
+
+  const sizeLabel = `${widthLabel}${widthLabel}`;
 
   return sizeLabel;
 };
