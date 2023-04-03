@@ -1,5 +1,6 @@
-import { Page, Request } from 'playwright';
+import type { Page, Request } from 'playwright-core';
 import { config } from '../config';
+import type { log } from '../log';
 
 const checkIgnoreUrls = (url: string, ignoreUrls: string[]) => {
   for (const ignoreUrl of ignoreUrls) {
@@ -20,7 +21,7 @@ export const waitForNetworkRequests = async ({
   ignoreUrls = [],
 }: {
   page: Page;
-  logger: (message: string, ...rest: unknown[]) => void;
+  logger: ReturnType<typeof log.item>;
   timeout?: number;
   waitForFirstRequest?: number;
   waitForLastRequest?: number;
@@ -34,7 +35,7 @@ export const waitForNetworkRequests = async ({
     const timeoutId = setTimeout(() => {
       const pendingUrls = [...requests].map((request) => request.url());
 
-      logger('Pending requests:', pendingUrls);
+      logger.process('info', 'network', 'Pending requests:', pendingUrls);
 
       cleanup();
       reject(new Error('Timeout'));
@@ -51,7 +52,7 @@ export const waitForNetworkRequests = async ({
         clearTimeout(lastRequestTimeoutId);
         requestCounter++;
         requests.add(request);
-        logger(`[network] + ${request.url()}`);
+        logger.browser('info', 'network', `+ ${request.url()}`);
       }
     };
 
@@ -71,7 +72,7 @@ export const waitForNetworkRequests = async ({
               response?.statusText() ?? 'unknown'
             }`;
 
-        logger(`[network] - ${request.url()} [${statusText}]`);
+        logger.browser('info', 'network', `- ${request.url()} [${statusText}]`);
       }
 
       lastRequestTimeoutId = setTimeout(() => {

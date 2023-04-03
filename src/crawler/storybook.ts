@@ -1,9 +1,10 @@
 import path from 'node:path';
 import kebabCase from 'lodash.kebabcase';
-import { BrowserContext } from 'playwright';
+import type { BrowserContext } from 'playwright-core';
 import { readFileSync } from 'fs-extra';
-import { ShotItem } from '../types';
+import type { ShotItem } from '../types';
 import { config } from '../config';
+import type { Mask } from '../config';
 import { getBrowser } from '../utils';
 import { log } from '../log';
 
@@ -12,6 +13,7 @@ export type StoryParameters = {
     disable?: boolean;
     threshold?: number;
     waitBeforeScreenshot?: number;
+    mask?: Mask[];
   };
   viewport?: {
     width?: number;
@@ -34,12 +36,12 @@ export type Story = {
   };
 };
 
-interface StorybookClientApi {
+type StorybookClientApi = {
   raw?: () => Story[];
   storyStore?: {
     cacheAllCSFFiles: () => Promise<void>;
   };
-}
+};
 
 type StoriesJson = {
   v: number;
@@ -217,14 +219,19 @@ export const collectStories = async (url: string) => {
   const context = await browser.newContext();
 
   try {
-    log('Trying to collect stories via window object');
+    log.process(
+      'info',
+      'general',
+      'Trying to collect stories via window object',
+    );
     const result = await collectStoriesViaWindowApi(context, url);
 
     await browser.close();
 
     return result;
-  } catch {
-    log('Fallback to /stories.json');
+  } catch (error: unknown) {
+    log.process('info', 'general', 'Fallback to /stories.json');
+    log.process('error', 'general', error);
   }
 
   try {
@@ -265,6 +272,7 @@ const generateBrowserConfig = (story: Story) => {
 export const generateStorybookShotItems = (
   baseUrl: string,
   stories: Story[],
+  mask?: Mask[],
 ): ShotItem[] => {
   const iframeUrl = getIframeUrl(getStoryBookUrl(baseUrl));
 
@@ -302,6 +310,7 @@ export const generateStorybookShotItems = (
         waitBeforeScreenshot:
           story.parameters?.lostpixel?.waitBeforeScreenshot ??
           config.waitBeforeScreenshot,
+        mask: [...(mask ?? []), ...(story.parameters?.lostpixel?.mask ?? [])],
       };
     });
 

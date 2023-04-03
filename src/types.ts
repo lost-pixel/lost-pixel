@@ -1,33 +1,6 @@
-import { ItemBucketMetadata } from 'minio';
-import {
-  PullRequestEvent,
-  CheckSuiteRequestedEvent,
-  CheckRunRerequestedEvent,
-} from '@octokit/webhooks-types';
-import { BrowserContextOptions } from 'playwright';
-import { ShotMode } from './config';
+import type { BrowserContextOptions } from 'playwright-core';
 
-export type WebhookEvent =
-  | PullRequestEvent
-  | CheckSuiteRequestedEvent
-  | CheckRunRerequestedEvent;
-
-export type ComparisonType = 'ADDITION' | 'DELETION' | 'DIFFERENCE';
-
-export type Comparison = {
-  beforeImageUrl?: string;
-  afterImageUrl?: string;
-  differenceImageUrl?: string;
-  type: ComparisonType;
-  path: string;
-  name: string;
-};
-
-export type UploadFile = {
-  uploadPath: string;
-  filePath: string;
-  metaData: ItemBucketMetadata;
-};
+export type ShotMode = 'storybook' | 'ladle' | 'page' | 'custom';
 
 export type ShotItem = {
   shotMode: ShotMode;
@@ -41,4 +14,12 @@ export type ShotItem = {
   threshold: number;
   waitBeforeScreenshot?: number;
   importPath?: string;
+  mask?: Array<{
+    selector: string;
+  }>;
+};
+
+export type ExtendedShotItem = ShotItem & {
+  uniqueName: string;
+  hash: string;
 };

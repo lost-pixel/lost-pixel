@@ -1,5 +1,5 @@
 import { existsSync, mkdirSync } from 'node:fs';
-import { checkThreshold, compareImages } from './compare';
+import { checkThreshold, compareImagesViaPixelmatch } from './compare';
 
 beforeAll(() => {
   if (!existsSync('fixtures/test-results')) {
@@ -26,10 +26,10 @@ describe(checkThreshold, () => {
   });
 });
 
-describe(compareImages, () => {
+describe(compareImagesViaPixelmatch, () => {
   it('should recognize identic images', async () => {
     expect(
-      await compareImages(
+      await compareImagesViaPixelmatch(
         0,
         'fixtures/baseline/banner.png',
         'fixtures/baseline/banner.png',
@@ -43,7 +43,7 @@ describe(compareImages, () => {
   });
 
   it('should recoginze differences in images', async () => {
-    const result1 = await compareImages(
+    const result1 = await compareImagesViaPixelmatch(
       0,
       'fixtures/baseline/banner.png',
       'fixtures/current/banner1.png',
@@ -54,7 +54,7 @@ describe(compareImages, () => {
     expect(result1.pixelDifference).toBeGreaterThan(50_000);
 
     expect(
-      await compareImages(
+      await compareImagesViaPixelmatch(
         0,
         'fixtures/difference/banner1.png',
         'fixtures/test-results/banner1.png',
@@ -65,7 +65,7 @@ describe(compareImages, () => {
       isWithinThreshold: true,
     });
 
-    const result2 = await compareImages(
+    const result2 = await compareImagesViaPixelmatch(
       0,
       'fixtures/baseline/banner.png',
       'fixtures/current/banner2.png',
@@ -76,7 +76,7 @@ describe(compareImages, () => {
     expect(result2.pixelDifference).toBeGreaterThan(350_000);
 
     expect(
-      await compareImages(
+      await compareImagesViaPixelmatch(
         0,
         'fixtures/difference/banner2.png',
         'fixtures/test-results/banner2.png',
@@ -87,7 +87,7 @@ describe(compareImages, () => {
       isWithinThreshold: true,
     });
 
-    const result3 = await compareImages(
+    const result3 = await compareImagesViaPixelmatch(
       0,
       'fixtures/baseline/banner.png',
       'fixtures/current/banner3.png',
@@ -98,7 +98,7 @@ describe(compareImages, () => {
     expect(result3.pixelDifference).toBeGreaterThan(40_000);
 
     expect(
-      await compareImages(
+      await compareImagesViaPixelmatch(
         0,
         'fixtures/difference/banner3.png',
         'fixtures/test-results/banner3.png',
@@ -111,7 +111,7 @@ describe(compareImages, () => {
   }, 12_000);
 
   it('should accept differences in images within a given threshold', async () => {
-    const result1 = await compareImages(
+    const result1 = await compareImagesViaPixelmatch(
       0.4,
       'fixtures/baseline/banner.png',
       'fixtures/current/banner1.png',
@@ -121,7 +121,7 @@ describe(compareImages, () => {
     expect(result1.isWithinThreshold).toBe(true);
     expect(result1.pixelDifference).toBeGreaterThan(50_000);
 
-    const result2 = await compareImages(
+    const result2 = await compareImagesViaPixelmatch(
       400_000,
       'fixtures/baseline/banner.png',
       'fixtures/current/banner2.png',
@@ -131,7 +131,7 @@ describe(compareImages, () => {
     expect(result2.isWithinThreshold).toBe(true);
     expect(result2.pixelDifference).toBeGreaterThan(350_000);
 
-    const result3 = await compareImages(
+    const result3 = await compareImagesViaPixelmatch(
       50_000,
       'fixtures/baseline/banner.png',
       'fixtures/current/banner3.png',

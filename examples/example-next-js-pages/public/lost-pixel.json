@@ -1,0 +1,5 @@
+[
+  { "path": "/next-app?name=App", "name": "next-app-with-query-param" },
+  { "path": "/fetch", "name": "fetch-static-props" },
+  { "path": "/client-fetch", "name": "fetch-client" }
+]

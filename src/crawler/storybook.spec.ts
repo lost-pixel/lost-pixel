@@ -1,5 +1,3 @@
-/* eslint-disable no-lone-blocks */
-
 import { createShotsFolders, getBrowser } from '../utils';
 import { configure } from '../config';
 import { defaultTestConfig } from '../testUtils';

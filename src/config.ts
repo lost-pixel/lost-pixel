@@ -1,9 +1,10 @@
 import { existsSync } from 'node:fs';
 import path from 'node:path';
 import get from 'lodash.get';
-import { BrowserContextOptions, Page } from 'playwright';
-import { loadTSProjectConfigFile } from './configHelper';
+import type { BrowserContextOptions, Page } from 'playwright-core';
+import { loadProjectConfigFile, loadTSProjectConfigFile } from './configHelper';
 import { log } from './log';
+import type { ShotMode } from './types';
 
 type BaseConfig = {
   /**
@@ -14,9 +15,14 @@ type BaseConfig = {
 
   /**
    * URL of the Lost Pixel API endpoint
-   * @default 'https://app.lost-pixel.com/api/callback'
+   * @default 'https://api.lost-pixel.com'
    */
-  lostPixelUrl: string;
+  lostPixelPlatform: string;
+
+  /**
+   * API key for the Lost Pixel platform
+   */
+  apiKey?: string;
 
   /**
    * Enable Storybook mode
@@ -27,6 +33,11 @@ type BaseConfig = {
      * @default 'storybook-static'
      */
     storybookUrl: string;
+
+    /**
+     * Define areas for all stories where differences will be ignored
+     */
+    mask?: Mask[];
   };
 
   /**
@@ -38,6 +49,11 @@ type BaseConfig = {
      * @default 'http://localhost:61000'
      */
     ladleUrl: string;
+
+    /**
+     * Define areas for all stories where differences will be ignored
+     */
+    mask?: Mask[];
   };
 
   /**
@@ -48,11 +64,20 @@ type BaseConfig = {
      * Paths to take screenshots of
      */
     pages: PageScreenshotParameter[];
+    /**
+     * Url that must return a JSON compatible with `PageScreenshotParameter[]`. It is useful when you want to autogenerate the pages that you want to run lost-pixel on. Can be used together with `pages` as both are composed into a single run.
+     */
+    pagesJsonUrl?: string;
 
     /**
-     * URL of the running application
+     * Base URL of the running application (e.g. http://localhost:3000)
      */
-    pageUrl: string;
+    baseUrl: string;
+
+    /**
+     * Define areas for all pages where differences will be ignored
+     */
+    mask?: Mask[];
   };
 
   /**
@@ -61,6 +86,8 @@ type BaseConfig = {
   customShots?: {
     /**
      * Path to current shots folder
+     *
+     * This path cannot be the same as the `imagePathCurrent` path
      */
     currentShotsPath: string;
   };
@@ -94,6 +121,12 @@ type BaseConfig = {
    * @default 10
    */
   compareConcurrency: number;
+
+  /**
+   * Which comparison engine to use for diffing images
+   * @default 'pixelmatch'
+   */
+  compareEngine: 'pixelmatch' | 'odiff';
 
   /**
    * Timeouts for various stages of the test
@@ -150,18 +183,79 @@ type BaseConfig = {
    * Whether to set the GitHub status check on process start or not
    *
    * Setting this option to `true` makes only sense if the repository settings have pending status checks disabled
-   * @default 'false'
+   * @default false
    */
   setPendingStatusCheck: boolean;
+
+  /**
+   * How often to retry a shot for a stable result
+   * @default 3
+   */
+  flakynessRetries: number;
+
+  /**
+   * Time to wait between flakyness retries
+   * @default 2_000
+   */
+  waitBetweenFlakynessRetries: number;
+};
+
+export type Mask = {
+  /**
+   * CSS selector for the element to mask
+   * Examples:
+   * - `#my-id`: Selects the element with the id `my-id`
+   * - `.my-class`: Selects all elements with the class `my-class`
+   * - `div`: Selects all `div` elements
+   * - `div.my-class`: Selects all `div` elements with the class `my-class`
+   * - `li:nth-child(2n)`: Selects all even `li` elements
+   * - `[data-testid="hero-banner"]`: Selects all elements with the attribute `data-testid` set to `hero-banner`
+   * - `div > p`: Selects all `p` elements that are direct children of a `div` element
+   */
+  selector: string;
 };
 
 export type PageScreenshotParameter = {
-  id: string;
+  /**
+   * Path to the page to take a screenshot of (e.g. /login)
+   */
   path: string;
-  name: string;
-};
 
-export type ShotMode = 'storybook' | 'ladle' | 'page' | 'custom';
+  /**
+   * Unique name for the page
+   */
+  name: string;
+
+  /**
+   * Time to wait before taking a screenshot
+   * @default 1_000
+   */
+  waitBeforeScreenshot?: number;
+
+  /**
+   * Threshold for the difference between the baseline and current image
+   *
+   * Values between 0 and 1 are interpreted as percentage of the image size
+   *
+   * Values greater or equal to 1 are interpreted as pixel count.
+   * @default 0
+   */
+  threshold?: number;
+
+  /**
+   * Define a custom viewport for the page
+   * @default { width: 1280, height: 720 }
+   */
+  viewport?: {
+    width?: number;
+    height?: number;
+  };
+
+  /**
+   * Define areas for the page where differences will be ignored
+   */
+  mask?: Mask[];
+};
 
 type StoryLike = {
   shotMode: ShotMode;
@@ -194,11 +288,6 @@ export type ProjectConfig = {
   repository: string;
 
   /**
-   * Git branch name (e.g. 'refs/heads/main')
-   */
-  commitRef: string;
-
-  /**
    * Git branch name (e.g. 'main')
    */
   commitRefName: string;
@@ -217,56 +306,6 @@ export type ProjectConfig = {
    * Flag that decides if process should exit if a difference is found
    */
   failOnDifference?: boolean;
-
-  /**
-   * S3 configuration
-   */
-  s3: {
-    /**
-     * S3 endpoint
-     */
-    endPoint: string;
-
-    /**
-     * S3 server port number
-     */
-    port?: number;
-
-    /**
-     * Use SSL
-     */
-    ssl?: boolean;
-
-    /**
-     * S3 region
-     */
-    region?: string;
-
-    /**
-     * S3 access key
-     */
-    accessKey: string;
-
-    /**
-     * S3 secret key
-     */
-    secretKey: string;
-
-    /**
-     * S3 session token
-     */
-    sessionToken?: string;
-
-    /**
-     * S3 bucket name
-     */
-    bucketName: string;
-
-    /**
-     * S3 base URL
-     */
-    baseUrl?: string;
-  };
 
   /**
    * File path to event.json file
@@ -294,37 +333,27 @@ export type ProjectConfig = {
   beforeScreenshot?: (page: Page, input: StoryLike) => Promise<void>;
 };
 
-type GenerateOnlyModeProjectConfig = Omit<
+export type GenerateOnlyModeProjectConfig = Omit<
   ProjectConfig,
   | 'lostPixelProjectId'
   | 'ciBuildId'
   | 'ciBuildId'
   | 'ciBuildNumber'
   | 'repository'
-  | 'commitRef'
   | 'commitRefName'
   | 'commitHash'
-  | 's3'
-> & {
-  generateOnly: true;
-};
+> &
+  Partial<Pick<ProjectConfig, 'lostPixelProjectId'>> & {
+    generateOnly: true;
+  };
 
 const requiredConfigProps: Array<keyof ProjectConfig> = [
   'lostPixelProjectId',
   'ciBuildId',
   'ciBuildNumber',
   'repository',
-  'commitRef',
   'commitRefName',
   'commitHash',
-  's3',
-];
-
-const requiredS3ConfigProps: Array<keyof ProjectConfig['s3']> = [
-  'endPoint',
-  'accessKey',
-  'secretKey',
-  'bucketName',
 ];
 
 export const MEDIA_UPLOAD_CONCURRENCY = 10;
@@ -333,18 +362,21 @@ export type FullConfig =
   | (BaseConfig & ProjectConfig)
   | (BaseConfig & GenerateOnlyModeProjectConfig);
 
+export type PlatformModeConfig = BaseConfig & ProjectConfig;
+
 export type CustomProjectConfig =
   | (Partial<BaseConfig> & GenerateOnlyModeProjectConfig)
   | (Partial<BaseConfig> & ProjectConfig);
 
 const defaultConfig: BaseConfig = {
   browser: 'chromium',
-  lostPixelUrl: 'https://app.lost-pixel.com/api/callback',
+  lostPixelPlatform: 'https://api.lost-pixel.com',
   imagePathBaseline: '.lostpixel/baseline/',
   imagePathCurrent: '.lostpixel/current/',
   imagePathDifference: '.lostpixel/difference/',
   shotConcurrency: 5,
   compareConcurrency: 10,
+  compareEngine: 'pixelmatch',
   timeouts: {
     fetchStories: 30_000,
     loadState: 30_000,
@@ -355,14 +387,15 @@ const defaultConfig: BaseConfig = {
   waitForLastRequest: 1000,
   threshold: 0,
   setPendingStatusCheck: false,
+  flakynessRetries: 3,
+  waitBetweenFlakynessRetries: 2000,
 };
 
 const githubConfigDefaults: Partial<ProjectConfig> = {
-  ciBuildId: process.env.GITHUB_RUN_ID,
-  ciBuildNumber: process.env.GITHUB_RUN_NUMBER,
+  ciBuildId: process.env.CI_BUILD_ID,
+  ciBuildNumber: process.env.CI_BUILD_NUMBER,
   repository: process.env.REPOSITORY,
-  commitRef: process.env.GITHUB_REF,
-  commitRefName: process.env.GITHUB_REF_NAME,
+  commitRefName: process.env.COMMIT_REF_NAME,
   commitHash: process.env.COMMIT_HASH,
 };
 
@@ -371,22 +404,32 @@ export let config: FullConfig;
 const checkConfig = () => {
   const missingProps: string[] = [];
 
-  const requiredProps = [
-    ...requiredConfigProps,
-    ...requiredS3ConfigProps.map((prop) => `s3.${prop}`),
-  ];
-
-  for (const prop of requiredProps) {
+  for (const prop of requiredConfigProps) {
     if (!get(config, prop)) {
       missingProps.push(prop);
     }
   }
 
   if (missingProps.length > 0) {
-    log(
-      `Error: Missing required configuration properties: ${missingProps.join(
-        ', ',
-      )}`,
+    log.process(
+      'error',
+      'config',
+      `Error: Missing required config properties: ${missingProps.join(', ')}`,
+    );
+    process.exit(1);
+  }
+
+  if (
+    config.customShots?.currentShotsPath &&
+    path.relative(
+      path.resolve(config.imagePathCurrent),
+      path.resolve(config.customShots.currentShotsPath),
+    ) === ''
+  ) {
+    log.process(
+      'error',
+      'config',
+      `Error: 'customShots.currentShotsPath' cannot be equal to 'imagePathCurrent'`,
     );
     process.exit(1);
   }
@@ -395,45 +438,119 @@ const checkConfig = () => {
 const configDirBase = process.env.LOST_PIXEL_CONFIG_DIR ?? process.cwd();
 
 const configFileNameBase = path.join(
-  configDirBase.startsWith('/') ? '' : process.cwd(),
+  path.isAbsolute(configDirBase) ? '' : process.cwd(),
   configDirBase,
   'lostpixel.config',
 );
 
 const loadProjectConfig = async (): Promise<CustomProjectConfig> => {
-  log('Loading project configuration...');
-  log('Current working directory:', process.cwd());
+  log.process('info', 'config', 'Loading project config ...');
+  log.process('info', 'config', 'Current working directory:', process.cwd());
 
   if (process.env.LOST_PIXEL_CONFIG_DIR) {
-    log('Defined configuration directory:', process.env.LOST_PIXEL_CONFIG_DIR);
+    log.process(
+      'info',
+      'config',
+      'Defined config directory:',
+      process.env.LOST_PIXEL_CONFIG_DIR,
+    );
   }
 
-  log('Looking for configuration file:', `${configFileNameBase}.(js|ts)`);
+  const configExtensions = ['ts', 'js', 'cjs', 'mjs'];
+  const configExtensionsString = configExtensions.join('|');
 
-  if (existsSync(`${configFileNameBase}.js`)) {
-    const projectConfig =
-      // eslint-disable-next-line @typescript-eslint/no-require-imports, @typescript-eslint/no-var-requires
-      require(`${configFileNameBase}.js`) as CustomProjectConfig;
+  log.process(
+    'info',
+    'config',
+    'Looking for config file:',
+    `${configFileNameBase}.(${configExtensionsString})`,
+  );
 
-    return projectConfig;
+  const configFiles = configExtensions
+    .map((ext) => `${configFileNameBase}.${ext}`)
+    .filter((file) => existsSync(file));
+
+  if (configFiles.length === 0) {
+    log.process(
+      'error',
+      'config',
+      `Couldn't find project config file 'lostpixel.config.(${configExtensionsString})'`,
+    );
+    process.exit(1);
   }
 
-  if (existsSync(`${configFileNameBase}.ts`)) {
+  if (configFiles.length > 1) {
+    log.process(
+      'info',
+      'config',
+      '✅ Found multiple config files, taking:',
+      configFiles[0],
+    );
+  } else {
+    log.process('info', 'config', '✅ Found config file:', configFiles[0]);
+  }
+
+  const configFile = configFiles[0];
+
+  try {
+    const imported = (await loadProjectConfigFile(
+      configFile,
+    )) as CustomProjectConfig;
+
+    return imported;
+  } catch {
+    log.process(
+      'error',
+      'config',
+      'Loading config using ESBuild failed, using fallback option',
+    );
+
     try {
-      const imported = (await loadTSProjectConfigFile(
-        `${configFileNameBase}.ts`,
-      )) as CustomProjectConfig;
+      if (existsSync(`${configFileNameBase}.js`)) {
+        const projectConfig =
+          // eslint-disable-next-line @typescript-eslint/no-require-imports, @typescript-eslint/no-var-requires
+          require(`${configFileNameBase}.js`) as CustomProjectConfig;
 
-      return imported;
-    } catch (error: unknown) {
-      log(error);
-      log('Failed to load TypeScript configuration file');
+        log.process(
+          'info',
+          'config',
+          '✅ Successfully loaded configuration from:',
+          `${configFileNameBase}.js`,
+        );
+
+        return projectConfig;
+      }
+
+      if (existsSync(`${configFileNameBase}.ts`)) {
+        const imported = (await loadTSProjectConfigFile(
+          configFile,
+        )) as CustomProjectConfig;
+
+        log.process(
+          'info',
+          'config',
+          '✅ Successfully loaded configuration from:',
+          `${configFileNameBase}.ts`,
+        );
+
+        return imported;
+      }
+
+      log.process(
+        'error',
+        'config',
+        "Couldn't find project config file 'lostpixel.config.js'",
+      );
+      process.exit(1);
+    } catch {
+      log.process(
+        'error',
+        'config',
+        `Failed to load config file: ${configFile}`,
+      );
       process.exit(1);
     }
   }
-
-  log("Couldn't find project config file 'lostpixel.config.js'");
-  process.exit(1);
 };
 
 export const configure = async (customProjectConfig?: CustomProjectConfig) => {

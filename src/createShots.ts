@@ -7,12 +7,15 @@ import {
   collectStories,
   generateStorybookShotItems,
 } from './crawler/storybook';
-import { generatePageShotItems } from './crawler/pageScreenshots';
+import {
+  generatePageShotItems,
+  getPagesFromExternalLoader,
+} from './crawler/pageScreenshots';
 import { log } from './log';
 import { takeScreenShots } from './shots/shots';
 import { readDirIntoShotItems, removeFilesInFolder } from './utils';
 import { launchStaticWebServer } from './crawler/utils';
-import { ShotItem } from './types';
+import type { ShotItem } from './types';
 
 export const createShots = async () => {
   const {
@@ -32,9 +35,9 @@ export const createShots = async () => {
   removeFilesInFolder(imagePathDifference);
 
   if (ladleShots) {
-    const { ladleUrl } = ladleShots;
+    const { ladleUrl, mask } = ladleShots;
 
-    log(`\n=== [Ladle Mode] ${ladleUrl} ===\n`);
+    log.process('info', 'general', `\n=== [Ladle Mode] ${ladleUrl} ===\n`);
 
     const collection = await collectLadleStories(ladleUrl);
 
@@ -42,21 +45,29 @@ export const createShots = async () => {
       throw new Error('Error: Stories not found');
     }
 
-    log(`Found ${collection.length} ladle stories`);
+    log.process('info', 'general', `Found ${collection.length} ladle stories`);
 
-    ladleShotItems = generateLadleShotItems(ladleUrl, collection);
+    ladleShotItems = generateLadleShotItems(ladleUrl, collection, mask);
 
-    log(`Prepared ${ladleShotItems.length} ladle stories for screenshots`);
+    log.process(
+      'info',
+      'general',
+      `Prepared ${ladleShotItems.length} ladle stories for screenshots`,
+    );
 
     await takeScreenShots(ladleShotItems);
 
-    log('Screenshots done!');
+    log.process('info', 'general', 'Screenshots done!');
   }
 
   if (storybookShots) {
-    const { storybookUrl } = storybookShots;
+    const { storybookUrl, mask } = storybookShots;
 
-    log(`\n=== [Storybook Mode] ${storybookUrl} ===\n`);
+    log.process(
+      'info',
+      'general',
+      `\n=== [Storybook Mode] ${storybookUrl} ===\n`,
+    );
 
     let storybookWebUrl = storybookUrl;
     let localServer;
@@ -78,14 +89,23 @@ export const createShots = async () => {
         throw new Error('Error: Stories not found');
       }
 
-      log(`Found ${collection.stories.length} stories`);
+      log.process(
+        'info',
+        'general',
+        `Found ${collection.stories.length} stories`,
+      );
 
       storybookShotItems = generateStorybookShotItems(
         storybookWebUrl,
         collection.stories,
+        mask,
       );
 
-      log(`Prepared ${storybookShotItems.length} stories for screenshots`);
+      log.process(
+        'info',
+        'general',
+        `Prepared ${storybookShotItems.length} stories for screenshots`,
+      );
 
       await takeScreenShots(storybookShotItems);
       localServer?.close();
@@ -94,28 +114,44 @@ export const createShots = async () => {
       throw error;
     }
 
-    log('Screenshots done!');
+    log.process('info', 'general', 'Screenshots done!');
   }
 
   if (pageShots) {
-    const { pages, pageUrl } = pageShots;
+    const { pages: pagesFromConfig, baseUrl, mask } = pageShots;
 
-    log(`\n=== [Page Mode] ${pageUrl} ===\n`);
+    const pagesFromLoader = await getPagesFromExternalLoader();
 
-    pageShotItems = generatePageShotItems(pages, pageUrl);
-    log(`Prepared ${pageShotItems.length} pages for screenshots`);
+    const pages = [...(pagesFromConfig || []), ...(pagesFromLoader || [])];
+
+    log.process('info', 'general', `\n=== [Page Mode] ${baseUrl} ===\n`);
+
+    pageShotItems = generatePageShotItems(pages, baseUrl, mask);
+    log.process(
+      'info',
+      'general',
+      `Prepared ${pageShotItems.length} pages for screenshots`,
+    );
 
     await takeScreenShots(pageShotItems);
-    log('Screenshots done!');
+    log.process('info', 'general', 'Screenshots done!');
   }
 
   if (customShots) {
     const { currentShotsPath } = customShots;
 
-    log(`\n=== [Custom Mode] ${currentShotsPath} ===\n`);
+    log.process(
+      'info',
+      'general',
+      `\n=== [Custom Mode] ${currentShotsPath} ===\n`,
+    );
 
     customShotItems = readDirIntoShotItems(currentShotsPath);
-    log(`Found ${customShotItems.length} custom shots`);
+    log.process(
+      'info',
+      'general',
+      `Found ${customShotItems.length} custom shots`,
+    );
   }
 
   return [

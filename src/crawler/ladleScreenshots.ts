@@ -1,12 +1,14 @@
 import path from 'node:path';
 import axios from 'axios';
 import { config } from '../config';
-import { ShotItem } from '../types';
-import { Story } from './storybook';
+import type { Mask } from '../config';
+import type { ShotItem } from '../types';
+import type { Story } from './storybook';
 
 export const generateLadleShotItems = (
   ladleUrl: string,
   ladleStories: Story[],
+  mask?: Mask[],
 ): ShotItem[] => {
   return ladleStories.map((ladleStory) => {
     return {
@@ -28,7 +30,9 @@ export const generateLadleShotItems = (
         config.imagePathDifference,
         ladleStory.story,
       )}.png`,
-      threshold: 0,
+      // TODO: ladle takes thresholds only from config - not possible to source configs from individual story
+      threshold: config.threshold,
+      mask: mask ?? [],
     };
   });
 };

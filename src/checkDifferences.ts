@@ -1,12 +1,16 @@
 import { existsSync } from 'node:fs';
 import { mapLimit } from 'async';
 import { compareImages } from './compare/compare';
-import { ShotItem } from './types';
 import { log } from './log';
 import { config } from './config';
+import type { ShotItem } from './types';
 
 export const checkDifferences = async (shotItems: ShotItem[]) => {
-  log(`Comparing ${shotItems.length} screenshots`);
+  log.process(
+    'info',
+    'general',
+    `Comparing ${shotItems.length} screenshots using '${config.compareEngine}' as compare engine`,
+  );
 
   const total = shotItems.length;
   let differenceCount = 0;
@@ -18,7 +22,14 @@ export const checkDifferences = async (shotItems: ShotItem[]) => {
     async (item: [number, ShotItem]) => {
       const [index, shotItem] = item;
       const logger = (message: string) => {
-        log(`[${index + 1}/${total}] ${message}`);
+        log
+          .item({
+            shotMode: shotItem.shotMode,
+            uniqueItemId: shotItem.shotName,
+            itemIndex: index,
+            totalItems: total,
+          })
+          .process('info', 'general', message);
       };
 
       logger(`Comparing '${shotItem.id}'`);
@@ -67,7 +78,7 @@ export const checkDifferences = async (shotItems: ShotItem[]) => {
     },
   );
 
-  log('Comparison done!');
+  log.process('info', 'general', 'Comparison done!');
 
   return { differenceCount, noBaselinesCount };
 };

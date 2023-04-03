@@ -1,9 +1,27 @@
+import { bundleRequire } from 'bundle-require';
+
 import type { Service } from 'ts-node';
 import { log } from './log';
 
+export const loadProjectConfigFile = async (
+  configFilepath: string,
+): Promise<unknown> => {
+  const { mod } = await bundleRequire<{
+    default?: unknown;
+    config?: unknown;
+  }>({
+    filepath: configFilepath,
+    esbuildOptions: {
+      logLevel: 'silent',
+    },
+  });
+
+  return mod?.default ?? mod?.config ?? mod;
+};
+
 let tsNodeService: Service;
 
-export const setupTsNode = async (): Promise<Service> => {
+const setupTsNode = async (): Promise<Service> => {
   if (tsNodeService) {
     return tsNodeService;
   }
@@ -22,13 +40,15 @@ export const setupTsNode = async (): Promise<Service> => {
   } catch (error: unknown) {
     // @ts-expect-error Error type definition is missing 'code'
     if (['ERR_MODULE_NOT_FOUND', 'MODULE_NOT_FOUND'].includes(error.code)) {
-      log(`Please install "ts-node" to use a TypeScript configuration file`);
-      // @ts-expect-error Error type definition is missing 'message'
-      log(error.message);
+      log.process(
+        'error',
+        'config',
+        `Please install "ts-node" to use a TypeScript configuration file`,
+      );
       process.exit(1);
     }
 
-    throw error;
+    process.exit(1);
   }
 };
 

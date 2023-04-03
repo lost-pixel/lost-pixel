@@ -4,27 +4,50 @@ import {
   readdirSync,
   unlinkSync,
   writeFileSync,
+  readFileSync,
 } from 'node:fs';
+import * as crypto from 'node:crypto';
+import type { Buffer } from 'node:buffer';
 import { normalize, join } from 'node:path';
 import { PostHog } from 'posthog-node';
 import { v4 as uuid } from 'uuid';
-import { BrowserType, chromium, firefox, webkit } from 'playwright';
+import { chromium, firefox, webkit } from 'playwright-core';
+import type { BrowserType } from 'playwright-core';
 import yargs from 'yargs';
 import { hideBin } from 'yargs/helpers';
 import { config } from './config';
 import { log } from './log';
-import {
-  Comparison,
-  ComparisonType,
-  ShotItem,
-  UploadFile,
-  WebhookEvent,
-} from './types';
+import type { ShotItem } from './types';
 
 type ParsedYargs = {
   _: ['update'];
   m: 'update';
 };
+
+type FilenameWithPath = {
+  name: string;
+  path: string;
+};
+
+type FilenameWithAllPaths = {
+  name: string;
+  path: string;
+  pathCurrent?: string;
+};
+
+type Files = {
+  baseline: FilenameWithPath[];
+  current: FilenameWithPath[];
+  difference: FilenameWithPath[];
+};
+
+export type Changes = {
+  difference: FilenameWithAllPaths[];
+  deletion: FilenameWithAllPaths[];
+  addition: FilenameWithAllPaths[];
+};
+
+const POST_HOG_API_KEY = 'phc_RDNnzvANh1mNm9JKogF9UunG3Ky02YCxWP9gXScKShk';
 
 export const isUpdateMode = (): boolean => {
   // @ts-expect-error TBD
@@ -37,27 +60,24 @@ export const isUpdateMode = (): boolean => {
   );
 };
 
-export type Files = {
-  baseline: string[];
-  current: string[];
-  difference: string[];
-};
-
-export type Changes = {
-  difference: string[];
-  deletion: string[];
-  addition: string[];
-};
-
 export const getChanges = (files: Files): Changes => {
   return {
-    difference: files.difference.sort(),
+    difference: files.difference
+      .map((file) => ({
+        ...file,
+        pathCurrent: files.current.find(({ name }) => name === file.name)?.path, // Keep track of custom shots path
+      }))
+      .sort((a, b) => a.name.localeCompare(b.name)),
     deletion: files.baseline
-      .filter((file) => !files.current.includes(file))
-      .sort(),
+      .filter(
+        (file1) => !files.current.some((file2) => file1.name === file2.name),
+      )
+      .sort((a, b) => a.name.localeCompare(b.name)),
     addition: files.current
-      .filter((file) => !files.baseline.includes(file))
-      .sort(),
+      .filter(
+        (file1) => !files.baseline.some((file2) => file1.name === file2.name),
+      )
+      .sort((a, b) => a.name.localeCompare(b.name)),
   };
 };
 
@@ -81,177 +101,6 @@ export const extendFileName = ({ fileName, extension }: ExtendFileName) => {
   parts[extensionIndex] = `${extension}.${parts[extensionIndex]}`;
 
   return parts.join('.');
-};
-
-type CreateUploadItem = {
-  uploadFileName: string;
-  path: string;
-  fileName: string;
-  type: ComparisonType;
-};
-
-const createUploadItem = ({
-  uploadFileName,
-  path,
-  fileName,
-  type,
-}: CreateUploadItem): UploadFile => {
-  if (config.generateOnly) {
-    throw new Error("Can't create upload item when generateOnly is true");
-  }
-
-  const filePath = normalize(join(path, fileName));
-
-  return {
-    uploadPath: join(
-      config.lostPixelProjectId,
-      config.ciBuildId,
-      uploadFileName,
-    ),
-    filePath,
-    metaData: {
-      'content-type': 'image/png',
-      'x-amz-acl': 'public-read',
-      type,
-      original: filePath,
-    },
-  };
-};
-
-type PrepareComparisonList = {
-  changes: Changes;
-  baseUrl: string;
-};
-
-export const prepareComparisonList = ({
-  changes,
-  baseUrl,
-}: PrepareComparisonList): [Comparison[], UploadFile[]] => {
-  const comparisonList: Comparison[] = [];
-  const uploadList: UploadFile[] = [];
-
-  for (const fileName of changes.addition) {
-    const afterFile = extendFileName({
-      fileName,
-      extension: 'after',
-    });
-    const type = 'ADDITION';
-
-    comparisonList.push({
-      type,
-      afterImageUrl: [baseUrl, afterFile].join('/'),
-      path: join(config.imagePathBaseline, fileName),
-      name: fileName,
-    });
-
-    uploadList.push(
-      createUploadItem({
-        uploadFileName: afterFile,
-        path: config.imagePathCurrent,
-        fileName,
-        type,
-      }),
-    );
-  }
-
-  for (const fileName of changes.deletion) {
-    const beforeFile = extendFileName({
-      fileName,
-      extension: 'before',
-    });
-    const type = 'DELETION';
-
-    comparisonList.push({
-      type,
-      beforeImageUrl: [baseUrl, beforeFile].join('/'),
-      path: join(config.imagePathBaseline, fileName),
-      name: fileName,
-    });
-
-    uploadList.push(
-      createUploadItem({
-        uploadFileName: beforeFile,
-        path: config.imagePathBaseline,
-        fileName,
-        type,
-      }),
-    );
-  }
-
-  for (const fileName of changes.difference) {
-    const beforeFile = extendFileName({
-      fileName,
-      extension: 'before',
-    });
-    const afterFile = extendFileName({
-      fileName,
-      extension: 'after',
-    });
-    const differenceFile = extendFileName({
-      fileName,
-      extension: 'difference',
-    });
-    const type = 'DIFFERENCE';
-
-    comparisonList.push({
-      type,
-      beforeImageUrl: [baseUrl, beforeFile].join('/'),
-      afterImageUrl: [baseUrl, afterFile].join('/'),
-      differenceImageUrl: [baseUrl, differenceFile].join('/'),
-      path: join(config.imagePathBaseline, fileName),
-      name: fileName,
-    });
-
-    uploadList.push(
-      createUploadItem({
-        uploadFileName: beforeFile,
-        path: config.imagePathBaseline,
-        fileName,
-        type,
-      }),
-      createUploadItem({
-        uploadFileName: afterFile,
-        path: config.imagePathCurrent,
-        fileName,
-        type,
-      }),
-      createUploadItem({
-        uploadFileName: differenceFile,
-        path: config.imagePathDifference,
-        fileName,
-        type,
-      }),
-    );
-  }
-
-  return [comparisonList, uploadList];
-};
-
-export const getImageList = (path: string): string[] | undefined => {
-  try {
-    const files = readdirSync(path);
-
-    return files.filter((name) => name.endsWith('.png'));
-  } catch (error: unknown) {
-    log(error);
-
-    return undefined;
-  }
-};
-
-export const getEventData = (path?: string): WebhookEvent | undefined => {
-  if (!path) {
-    return undefined;
-  }
-
-  try {
-    // eslint-disable-next-line @typescript-eslint/no-require-imports, @typescript-eslint/no-unsafe-return
-    return require(path);
-  } catch (error: unknown) {
-    log(error);
-
-    return undefined;
-  }
 };
 
 export const createShotsFolders = () => {
@@ -284,7 +133,7 @@ export const sleep = async (ms: number) =>
 export const removeFilesInFolder = (path: string) => {
   const files = readdirSync(path);
 
-  log(`Removing ${files.length} files from ${path}`);
+  log.process('info', 'general', `Removing ${files.length} files from ${path}`);
 
   for (const file of files) {
     const filePath = join(path, file);
@@ -295,14 +144,21 @@ export const removeFilesInFolder = (path: string) => {
 
 export const getBrowser = (): BrowserType => {
   switch (config.browser) {
-    case 'chromium':
+    case 'chromium': {
       return chromium;
-    case 'firefox':
+    }
+
+    case 'firefox': {
       return firefox;
-    case 'webkit':
+    }
+
+    case 'webkit': {
       return webkit;
-    default:
+    }
+
+    default: {
       return chromium;
+    }
   }
 };
 
@@ -315,7 +171,7 @@ export const getVersion = (): string | void => {
   } catch {}
 };
 
-export const fileNameWithoutExtension = (fileName: string): string => {
+const fileNameWithoutExtension = (fileName: string): string => {
   return fileName.split('.').slice(0, -1).join('.');
 };
 
@@ -335,26 +191,22 @@ export const readDirIntoShotItems = (path: string): ShotItem[] => {
         filePathCurrent: join(path, fileNameWithExt),
         filePathDifference: join(config.imagePathDifference, fileNameWithExt),
         url: fileName,
+        // TODO: custom shots take thresholds only from config - not possible to source configs from individual story
         threshold: config.threshold,
       };
     });
 };
 
-export const sendTelemetryData = (properties: {
+const sendTelemetryData = async (properties: {
   runDuration?: number;
   shotsNumber?: number;
   error?: unknown;
 }) => {
-  const client = new PostHog(
-    'phc_RDNnzvANh1mNm9JKogF9UunG3Ky02YCxWP9gXScKShk',
-    {
-      host: 'https://app.posthog.com',
-    },
-  );
+  const client = new PostHog(POST_HOG_API_KEY);
   const id: string = uuid();
 
   try {
-    log('Sending anonymized telemetry data.');
+    log.process('info', 'general', 'Sending anonymized telemetry data.');
 
     const version = getVersion() as string;
     const modes = [];
@@ -379,10 +231,11 @@ export const sendTelemetryData = (properties: {
         event: 'lost-pixel-run',
         properties: { ...properties, version, modes },
       });
-      client.shutdown();
     }
+
+    await client.shutdownAsync();
   } catch (error: unknown) {
-    log('Error when sending telemetry data', error);
+    log.process('error', 'general', 'Error when sending telemetry data', error);
   }
 };
 
@@ -392,15 +245,31 @@ export const parseHrtimeToSeconds = (hrtime: [number, number]) => {
   return seconds;
 };
 
-export const exitProcess = (properties: {
+export const exitProcess = async (properties: {
   runDuration?: number;
   shotsNumber?: number;
   error?: unknown;
   exitCode?: 0 | 1;
 }) => {
-  if (process.env.LOST_PIXEL_DISABLE_TELEMETRY !== '1') {
-    sendTelemetryData(properties);
+  if (process.env.LOST_PIXEL_DISABLE_TELEMETRY === '1') {
+    process.exit(properties.exitCode ?? 1);
+  } else {
+    await sendTelemetryData(properties).finally(() => {
+      process.exit(properties.exitCode ?? 1);
+    });
   }
+};
 
-  process.exit(properties.exitCode ?? 1);
+const hashBuffer = (buffer: Buffer): string => {
+  const hashSum = crypto.createHash('sha256');
+
+  hashSum.update(buffer);
+
+  return hashSum.digest('hex');
+};
+
+export const hashFile = (filePath: string): string => {
+  const file = readFileSync(filePath);
+
+  return hashBuffer(file);
 };
