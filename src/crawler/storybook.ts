@@ -294,7 +294,7 @@ export const generateStorybookShotItems = (
         : true,
     )
     .flatMap((story): ShotItem[] => {
-      const fileNameWithExt = `${story.shotName}.png`;
+      let fileNameWithExt = `${story.shotName}.png`;
 
       const baseShotItem: ShotItem = {
         shotMode: 'storybook',
@@ -317,6 +317,7 @@ export const generateStorybookShotItems = (
       };
 
       const storyLevelBreakpoints = story.parameters?.lostpixel?.breakpoints;
+
       const breakpoints = selectBreakpoints(
         config.breakpoints,
         modeBreakpoints,
@@ -330,10 +331,27 @@ export const generateStorybookShotItems = (
       return breakpoints.map((breakpoint) => {
         const sizeLabel = generateSizeLabel(breakpoint);
 
+        fileNameWithExt = `${story.shotName}[${sizeLabel}].png`;
+
         return {
           ...baseShotItem,
           id: `${story.id}[${sizeLabel}]`,
-          shotName: story.shotName,
+          shotName: `${story.shotName}[${sizeLabel}]`,
+          breakpoint,
+          breakpointGroup: story.id,
+          filePathBaseline: path.join(
+            config.imagePathBaseline,
+            fileNameWithExt,
+          ),
+          filePathCurrent: path.join(config.imagePathCurrent, fileNameWithExt),
+          filePathDifference: path.join(
+            config.imagePathDifference,
+            fileNameWithExt,
+          ),
+          viewport: {
+            width: breakpoint,
+            height: undefined,
+          },
           url: `${iframeUrl}?id=${story.id}&viewMode=story&width=${breakpoint}`,
           browserConfig: generateBrowserConfig({
             ...story,

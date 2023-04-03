@@ -150,7 +150,7 @@ export const selectBreakpoints = (
 export const generateSizeLabel = (breakpoint: number): string => {
   const widthLabel = breakpoint > 0 ? `w${breakpoint}px` : '';
 
-  const sizeLabel = `${widthLabel}${widthLabel}`;
+  const sizeLabel = `${widthLabel}`;
 
   return sizeLabel;
 };

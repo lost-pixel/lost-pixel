@@ -99,6 +99,7 @@ export const createShots = async () => {
         storybookWebUrl,
         collection.stories,
         mask,
+        storybookShots.breakpoints,
       );
 
       log.process(

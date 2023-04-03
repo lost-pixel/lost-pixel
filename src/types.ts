@@ -19,7 +19,7 @@ export type ShotItem = {
   }>;
   viewport?: {
     width: number;
-    height: number;
+    height?: number;
   };
   breakpoint?: number;
 };

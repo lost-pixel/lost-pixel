@@ -97,8 +97,19 @@ const takeScreenShot = async ({
   await sleep(shotItem?.waitBeforeScreenshot ?? config.waitBeforeScreenshot);
 
   try {
-    await resizeViewportToFullscreen({ page });
-    fullScreenMode = false;
+    if (shotItem.viewport) {
+      const currentViewport = page.viewportSize();
+
+      await page.setViewportSize({
+        width: shotItem.viewport.width,
+        height: currentViewport?.height ?? 500,
+      });
+
+      fullScreenMode = true;
+    } else {
+      await resizeViewportToFullscreen({ page });
+      fullScreenMode = false;
+    }
   } catch {
     logger.process(
       'error',
