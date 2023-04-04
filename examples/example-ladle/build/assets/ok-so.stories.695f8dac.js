@@ -1,1 +1,0 @@
-import{j as e,a as t}from"./index.86789f05.js";const n={title:"Test"},d=()=>e("div",{children:t("h1",{children:["This story does not need React import ","hey"]})});typeof window<"u"&&window.document&&window.document.createElement&&document.documentElement.setAttribute("data-storyloaded","");export{d as Yeah,n as default};

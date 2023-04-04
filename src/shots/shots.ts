@@ -203,7 +203,10 @@ export const takeScreenShots = async (shotItems: ShotItem[]) => {
       logger.process(
         'info',
         'general',
-        `Taking screenshot of '${shotItem.shotName}'`,
+
+        `Taking screenshot of '${shotItem.shotName} ${
+          shotItem.breakpoint ? `[${shotItem.breakpoint}]` : ''
+        }'`,
       );
 
       const startTime = Date.now();
