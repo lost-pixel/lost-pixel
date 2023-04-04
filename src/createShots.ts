@@ -47,7 +47,12 @@ export const createShots = async () => {
 
     log.process('info', 'general', `Found ${collection.length} ladle stories`);
 
-    ladleShotItems = generateLadleShotItems(ladleUrl, collection, mask);
+    ladleShotItems = generateLadleShotItems(
+      ladleUrl,
+      collection,
+      mask,
+      ladleShots.breakpoints,
+    );
 
     log.process(
       'info',

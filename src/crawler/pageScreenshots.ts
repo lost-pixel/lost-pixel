@@ -82,6 +82,7 @@ export const generatePageShotItems = (
         id: `${page.name}[${sizeLabel}]`,
         shotName: page.name,
         breakpoint,
+        breakpointGroup: page.name,
         url: path.join(baseUrl, page.path),
         filePathBaseline: `${path.join(
           config.imagePathBaseline,
