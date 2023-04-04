@@ -40,14 +40,9 @@ export const generatePageShotItems = (
     throw new Error('Error: Page names must be unique');
   }
 
-  return pages.flatMap((page) => {
+  return pages.flatMap((page): ShotItem[] => {
     const configLevelBreakpoints = config.breakpoints ?? [];
     const shotBreakpoints = page.breakpoints ?? [];
-
-    // pick the correct breakpoints based on their specificity. The order is:
-    // 1. page level breakpoints
-    // 2. mode level breakpoints
-    // 3. config level breakpoints
 
     const breakpoints = selectBreakpoints(
       configLevelBreakpoints,
@@ -55,9 +50,7 @@ export const generatePageShotItems = (
       shotBreakpoints,
     );
 
-    // if no breakpoints are defined, we can return the shot item directly
-
-    const shotItem: ShotItem = {
+    const baseShotItem: ShotItem = {
       shotMode: 'page',
       id: page.name,
       shotName: config.shotNameGenerator
@@ -78,20 +71,31 @@ export const generatePageShotItems = (
     };
 
     if (!breakpoints || breakpoints.length === 0) {
-      return shotItem;
+      return [baseShotItem];
     }
-
-    // if breakpoints are defined, we need to create a shot item for each breakpoint
-    // and append the breakpoint dimensions to the shot name
 
     return breakpoints.map((breakpoint) => {
       const sizeLabel = generateSizeLabel(breakpoint);
 
       return {
-        ...shotItem,
+        ...baseShotItem,
         id: `${page.name}[${sizeLabel}]`,
         shotName: page.name,
         breakpoint,
+        url: path.join(baseUrl, page.path),
+        filePathBaseline: `${path.join(
+          config.imagePathBaseline,
+          page.name,
+        )}[${sizeLabel}].png`,
+        filePathCurrent: `${path.join(
+          config.imagePathCurrent,
+          page.name,
+        )}[${sizeLabel}].png`,
+        filePathDifference: `${path.join(
+          config.imagePathDifference,
+          page.name,
+        )}[${sizeLabel}].png`,
+        viewport: { width: breakpoint },
         browserConfig: generateBrowserConfig({
           ...page,
           viewport: { width: breakpoint },

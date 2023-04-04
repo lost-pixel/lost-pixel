@@ -22,6 +22,7 @@ export type ShotItem = {
     height?: number;
   };
   breakpoint?: number;
+  breakpointGroup?: string;
 };
 
 export type ExtendedShotItem = ShotItem & {
