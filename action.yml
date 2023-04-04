@@ -10,4 +10,5 @@ inputs:
     required: false
 runs:
   using: 'docker'
-  image: 'docker://lostpixel/lost-pixel:v3.2.0'
+  image: 'Dockerfile'
+  # image: 'docker://lostpixel/lost-pixel:v3.2.0'
