@@ -10,11 +10,13 @@ export const config: CustomProjectConfig = {
         path: '/app',
         name: 'app-masked',
         mask: [{ selector: 'code' }, { selector: 'h2' }],
+        breakpoints: [ 360, 500 ]
       },
       { path: '/next-app', name: 'next-app' },
     ],
     baseUrl: 'http://localhost:3000',
-    pagesJsonUrl:'http://localhost:3000/lost-pixel.json'
+    pagesJsonUrl:'http://localhost:3000/lost-pixel.json',
+    breakpoints:[ 768, 1024 ]
   },
   generateOnly: true,
   failOnDifference: true,
