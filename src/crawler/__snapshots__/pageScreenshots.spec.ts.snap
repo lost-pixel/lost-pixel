@@ -1,0 +1,109 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`generatePageShotItems should generate shot items for pages with breakpoints: PagesWithBreakpoints 1`] = `
+[
+  {
+    "breakpoint": 480,
+    "breakpointGroup": "home",
+    "browserConfig": undefined,
+    "filePathBaseline": ".lostpixel/baseline/home[w480px].png",
+    "filePathCurrent": ".lostpixel/current/home[w480px].png",
+    "filePathDifference": ".lostpixel/difference/home[w480px].png",
+    "id": "home[w480px]",
+    "mask": [],
+    "shotMode": "page",
+    "shotName": "home",
+    "threshold": 0,
+    "url": "https:/example.com/",
+    "viewport": {
+      "width": 480,
+    },
+    "waitBeforeScreenshot": 1000,
+  },
+  {
+    "breakpoint": 768,
+    "breakpointGroup": "home",
+    "browserConfig": undefined,
+    "filePathBaseline": ".lostpixel/baseline/home[w768px].png",
+    "filePathCurrent": ".lostpixel/current/home[w768px].png",
+    "filePathDifference": ".lostpixel/difference/home[w768px].png",
+    "id": "home[w768px]",
+    "mask": [],
+    "shotMode": "page",
+    "shotName": "home",
+    "threshold": 0,
+    "url": "https:/example.com/",
+    "viewport": {
+      "width": 768,
+    },
+    "waitBeforeScreenshot": 1000,
+  },
+  {
+    "breakpoint": 480,
+    "breakpointGroup": "about",
+    "browserConfig": undefined,
+    "filePathBaseline": ".lostpixel/baseline/about[w480px].png",
+    "filePathCurrent": ".lostpixel/current/about[w480px].png",
+    "filePathDifference": ".lostpixel/difference/about[w480px].png",
+    "id": "about[w480px]",
+    "mask": [],
+    "shotMode": "page",
+    "shotName": "about",
+    "threshold": 0,
+    "url": "https:/example.com/about",
+    "viewport": {
+      "width": 480,
+    },
+    "waitBeforeScreenshot": 1000,
+  },
+  {
+    "breakpoint": 768,
+    "breakpointGroup": "about",
+    "browserConfig": undefined,
+    "filePathBaseline": ".lostpixel/baseline/about[w768px].png",
+    "filePathCurrent": ".lostpixel/current/about[w768px].png",
+    "filePathDifference": ".lostpixel/difference/about[w768px].png",
+    "id": "about[w768px]",
+    "mask": [],
+    "shotMode": "page",
+    "shotName": "about",
+    "threshold": 0,
+    "url": "https:/example.com/about",
+    "viewport": {
+      "width": 768,
+    },
+    "waitBeforeScreenshot": 1000,
+  },
+]
+`;
+
+exports[`generatePageShotItems should generate shot items for pages without breakpoints: PagesWithoutBreakpoints 1`] = `
+[
+  {
+    "browserConfig": undefined,
+    "filePathBaseline": ".lostpixel/baseline/home.png",
+    "filePathCurrent": ".lostpixel/current/home.png",
+    "filePathDifference": ".lostpixel/difference/home.png",
+    "id": "home",
+    "mask": [],
+    "shotMode": "page",
+    "shotName": "home",
+    "threshold": 0,
+    "url": "https:/example.com/",
+    "waitBeforeScreenshot": 1000,
+  },
+  {
+    "browserConfig": undefined,
+    "filePathBaseline": ".lostpixel/baseline/about.png",
+    "filePathCurrent": ".lostpixel/current/about.png",
+    "filePathDifference": ".lostpixel/difference/about.png",
+    "id": "about",
+    "mask": [],
+    "shotMode": "page",
+    "shotName": "about",
+    "threshold": 0,
+    "url": "https:/example.com/about",
+    "waitBeforeScreenshot": 1000,
+  },
+]
+`;
