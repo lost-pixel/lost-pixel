@@ -331,12 +331,12 @@ export const generateStorybookShotItems = (
       return breakpoints.map((breakpoint) => {
         const sizeLabel = generateSizeLabel(breakpoint);
 
-        fileNameWithExt = `${story.shotName}[${sizeLabel}].png`;
+        fileNameWithExt = `${story.shotName}${sizeLabel}.png`;
 
         return {
           ...baseShotItem,
-          id: `${story.id}[${sizeLabel}]`,
-          shotName: `${story.shotName}[${sizeLabel}]`,
+          id: `${story.id}${sizeLabel}`,
+          shotName: story.shotName,
           breakpoint,
           breakpointGroup: story.id,
           filePathBaseline: path.join(

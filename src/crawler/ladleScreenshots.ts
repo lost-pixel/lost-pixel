@@ -53,7 +53,7 @@ export const generateLadleShotItems = (
 
       return {
         ...shotItem,
-        id: `${ladleStory.story}[${sizeLabel}]`,
+        id: `${ladleStory.story}${sizeLabel}`,
         shotName: ladleStory.story,
         breakpoint,
         breakpointGroup: ladleStory.story,
@@ -61,15 +61,15 @@ export const generateLadleShotItems = (
         filePathBaseline: `${path.join(
           config.imagePathBaseline,
           ladleStory.story,
-        )}[${sizeLabel}].png`,
+        )}${sizeLabel}.png`,
         filePathCurrent: `${path.join(
           config.imagePathCurrent,
           ladleStory.story,
-        )}[${sizeLabel}].png`,
+        )}${sizeLabel}.png`,
         filePathDifference: `${path.join(
           config.imagePathDifference,
           ladleStory.story,
-        )}[${sizeLabel}].png`,
+        )}${sizeLabel}.png`,
         viewport: { width: breakpoint },
       };
     });

@@ -87,15 +87,15 @@ export const generatePageShotItems = (
         filePathBaseline: `${path.join(
           config.imagePathBaseline,
           page.name,
-        )}[${sizeLabel}].png`,
+        )}${sizeLabel}.png`,
         filePathCurrent: `${path.join(
           config.imagePathCurrent,
           page.name,
-        )}[${sizeLabel}].png`,
+        )}${sizeLabel}.png`,
         filePathDifference: `${path.join(
           config.imagePathDifference,
           page.name,
-        )}[${sizeLabel}].png`,
+        )}${sizeLabel}.png`,
         viewport: { width: breakpoint },
         browserConfig: generateBrowserConfig({
           ...page,
