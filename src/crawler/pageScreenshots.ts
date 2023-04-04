@@ -121,6 +121,7 @@ export const getPagesFromExternalLoader = async () => {
     const { data: pages } = await axios.get<PageScreenshotParameter[]>(
       config.pageShots.pagesJsonUrl,
     );
+
     const pagesArraySchema = z.array(
       z.object({
         path: z.string(),
@@ -149,17 +150,17 @@ export const getPagesFromExternalLoader = async () => {
       return pages;
     }
 
-    log.browser(
+    log.process(
       'error',
       'general',
       'Error validating the loaded pages structure',
     );
-    log.browser('error', 'general', validatePages.error);
+    log.process('error', 'general', validatePages.error);
 
     return [];
   } catch (error: unknown) {
-    if (isAxiosError(error)) {
-      log.browser(
+    if (isAxiosError(error) || error instanceof Error) {
+      log.process(
         'error',
         'network',
         `Error when fetching data: ${error.message}`,
