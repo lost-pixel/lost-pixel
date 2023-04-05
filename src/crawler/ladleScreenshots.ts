@@ -54,7 +54,7 @@ export const generateLadleShotItems = (
       return {
         ...shotItem,
         id: `${ladleStory.story}${sizeLabel}`,
-        shotName: ladleStory.story,
+        shotName: `${ladleStory.story}${sizeLabel}`,
         breakpoint,
         breakpointGroup: ladleStory.story,
         url: `${ladleUrl}/?story=${ladleStory.story}&mode=preview&width=${breakpoint}`,
