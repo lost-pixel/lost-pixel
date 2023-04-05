@@ -336,7 +336,7 @@ export const generateStorybookShotItems = (
         return {
           ...baseShotItem,
           id: `${story.id}${sizeLabel}`,
-          shotName: story.shotName,
+          shotName: `${story.shotName}${sizeLabel}`,
           breakpoint,
           breakpointGroup: story.id,
           filePathBaseline: path.join(
