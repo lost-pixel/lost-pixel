@@ -79,7 +79,7 @@ export const generatePageShotItems = (
 
       return {
         ...baseShotItem,
-        id: `${page.name}[${sizeLabel}]`,
+        id: `${page.name}${sizeLabel}`,
         shotName: `${page.name}${sizeLabel}`,
         breakpoint,
         breakpointGroup: page.name,
