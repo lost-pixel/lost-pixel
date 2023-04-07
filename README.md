@@ -106,7 +106,7 @@ jobs:
         run: npm run build-storybook
 
       - name: Lost Pixel
-        uses: lost-pixel/lost-pixel@v3.2.0
+        uses: lost-pixel/lost-pixel@v3.3.0
 ```
 
 </details>
@@ -171,7 +171,7 @@ jobs:
         run: npm run serve &
 
       - name: Lost Pixel
-        uses: lost-pixel/lost-pixel@v3.2.0
+        uses: lost-pixel/lost-pixel@v3.3.0
 ```
 
 </details>
@@ -228,7 +228,7 @@ jobs:
         run: npm run start &
 
       - name: Lost Pixel
-        uses: lost-pixel/lost-pixel@v3.2.0
+        uses: lost-pixel/lost-pixel@v3.3.0
 ```
 
 </details>
