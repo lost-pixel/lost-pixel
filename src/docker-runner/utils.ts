@@ -49,11 +49,12 @@ export const executeDockerRun = async ({ version }: { version: string }) => {
     'run',
     '--rm',
     '-it',
-    `-v ${process.cwd()}:/workspace`,
-    '-e WORKSPACE=/workspace',
+    `-v ${process.cwd()}:${process.cwd()}`,
+    `-e WORKSPACE=${process.cwd()}`,
     '-e DOCKER=1',
     argv.configDir ? `-e LOST_PIXEL_CONFIG_DIR=${argv.configDir}` : '',
-    `lostpixel/lost-pixel:v${version}`,
+    // `lostpixel/lost-pixel:v${version}`,
+    '065adfb1933c1cb953244203dbfcf83a3dbc15f6cbc6036953761ab0b63a52fa',
   ];
 
   return execa('docker', args, { shell: true, stdio: 'inherit' });
