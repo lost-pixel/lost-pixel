@@ -49,6 +49,7 @@ export const executeDockerRun = async ({ version }: { version: string }) => {
     'run',
     '--rm',
     '-it',
+    `-v ${process.cwd()}:/workspace`,
     '-e WORKSPACE=/workspace',
     '-e DOCKER=1',
     `-e LOST_PIXEL_CONFIG_DIR=${argv.configDir}`,
