@@ -57,10 +57,5 @@ export const executeDockerRun = async ({ version }: { version: string }) => {
     `lostpixel/lost-pixel:v${version}`,
   ];
 
-  return execa('docker', args, { shell: true });
-
-  // Const logs = execa('docker', args, { shell: true });
-  // const errorLogs = [];
-
-  // logs.stderr?.on('data', (chunk) => errorLogs.push(chunk));
+  return execa('docker', args, { shell: true, stdio: 'inherit' });
 };
