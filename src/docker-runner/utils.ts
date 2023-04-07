@@ -1,10 +1,10 @@
 import execa from 'execa';
 import shell from 'shelljs';
+import yargs from 'yargs';
 
 import { hideBin } from 'yargs/helpers';
-// Import { log } from '../log';
 
-export const isDockerInstalled = () => {
+const isDockerInstalled = () => {
   if (!shell.which('docker')) {
     throw new Error('Docker is not installed');
   }
@@ -25,11 +25,7 @@ const isLostPixelImageDownloaded = async ({ version }: { version: string }) => {
   return stdout.trim().length > 0;
 };
 
-export const downloadImageIfNotExistent = async ({
-  version,
-}: {
-  version: string;
-}) => {
+const downloadImageIfNotExistent = async ({ version }: { version: string }) => {
   const doesImageExist = await isLostPixelImageDownloaded({
     version,
   });
