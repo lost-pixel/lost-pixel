@@ -2,7 +2,7 @@ import { existsSync } from 'node:fs';
 import path from 'node:path';
 import get from 'lodash.get';
 import type { BrowserContextOptions, Page } from 'playwright-core';
-import { loadProjectConfigFile } from './configHelper';
+import { loadProjectConfigFile, loadTSProjectConfigFile } from './configHelper';
 import { log } from './log';
 import type { ShotMode } from './types';
 
@@ -183,9 +183,21 @@ type BaseConfig = {
    * Whether to set the GitHub status check on process start or not
    *
    * Setting this option to `true` makes only sense if the repository settings have pending status checks disabled
-   * @default 'false'
+   * @default false
    */
   setPendingStatusCheck: boolean;
+
+  /**
+   * How often to retry a shot for a stable result
+   * @default 3
+   */
+  flakynessRetries: number;
+
+  /**
+   * Time to wait between flakyness retries
+   * @default 2_000
+   */
+  waitBetweenFlakynessRetries: number;
 };
 
 export type Mask = {
@@ -375,6 +387,8 @@ const defaultConfig: BaseConfig = {
   waitForLastRequest: 1000,
   threshold: 0,
   setPendingStatusCheck: false,
+  flakynessRetries: 3,
+  waitBetweenFlakynessRetries: 2000,
 };
 
 const githubConfigDefaults: Partial<ProjectConfig> = {
@@ -484,10 +498,58 @@ const loadProjectConfig = async (): Promise<CustomProjectConfig> => {
     )) as CustomProjectConfig;
 
     return imported;
-  } catch (error: unknown) {
-    log.process('error', 'config', error);
-    log.process('error', 'config', `Failed to load config file: ${configFile}`);
-    process.exit(1);
+  } catch {
+    log.process(
+      'error',
+      'config',
+      'Loading config using ESBuild failed, using fallback option',
+    );
+
+    try {
+      if (existsSync(`${configFileNameBase}.js`)) {
+        const projectConfig =
+          // eslint-disable-next-line @typescript-eslint/no-require-imports, @typescript-eslint/no-var-requires
+          require(`${configFileNameBase}.js`) as CustomProjectConfig;
+
+        log.process(
+          'info',
+          'config',
+          '✅ Successfully loaded configuration from:',
+          `${configFileNameBase}.js`,
+        );
+
+        return projectConfig;
+      }
+
+      if (existsSync(`${configFileNameBase}.ts`)) {
+        const imported = (await loadTSProjectConfigFile(
+          configFile,
+        )) as CustomProjectConfig;
+
+        log.process(
+          'info',
+          'config',
+          '✅ Successfully loaded configuration from:',
+          `${configFileNameBase}.ts`,
+        );
+
+        return imported;
+      }
+
+      log.process(
+        'error',
+        'config',
+        "Couldn't find project config file 'lostpixel.config.js'",
+      );
+      process.exit(1);
+    } catch {
+      log.process(
+        'error',
+        'config',
+        `Failed to load config file: ${configFile}`,
+      );
+      process.exit(1);
+    }
   }
 };
 

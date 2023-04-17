@@ -44,7 +44,11 @@ const renderLog = (entry: LogEntry) => {
     logPrefix.push(`❌`);
   }
 
-  log(...logPrefix, ...entry.content);
+  if (entry.item?.uniqueItemId) {
+    log(...logPrefix, ...entry.content, `(${entry.item?.uniqueItemId})`);
+  } else {
+    log(...logPrefix, ...entry.content);
+  }
 };
 
 export const log = {

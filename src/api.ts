@@ -1,6 +1,7 @@
 import { createReadStream } from 'node:fs';
 import FormData from 'form-data';
-import axios from 'axios';
+import axios, { type AxiosError, isAxiosError } from 'axios';
+import { retry } from 'async';
 import { log, logMemory } from './log';
 import type { LogMemory } from './log';
 import type { PlatformModeConfig } from './config';
@@ -19,7 +20,6 @@ const version = getVersion();
 
 const apiClient = axios.create({
   headers: {
-    'Content-type': 'application/json',
     'x-api-version': '3',
     'x-client-version': version ?? 'unknown',
   },
@@ -115,31 +115,61 @@ const sendToAPI = async <T extends Record<string, unknown>>(
   logger('info', 'api', `⚡️ Sending to API [${parameters.action}]`);
 
   try {
-    let payload: ApiPayloads['payload'] | FormData = parameters.payload;
+    const apiCall = async () => {
+      let payload: ApiPayloads['payload'] | FormData = parameters.payload;
 
-    if (fileKey) {
-      const form = new FormData();
+      if (fileKey) {
+        const form = new FormData();
 
-      for (const [key, element] of Object.entries(parameters.payload)) {
-        if (key === fileKey) {
-          form.append(key, createReadStream(element as string));
-        } else {
-          form.append(key, element);
+        for (const [key, element] of Object.entries(parameters.payload)) {
+          if (key === fileKey) {
+            form.append(key, createReadStream(element as string));
+          } else {
+            form.append(key, element);
+          }
         }
+
+        payload = form;
       }
 
-      payload = form;
-    }
+      return apiClient.post(
+        `${config.lostPixelPlatform}${apiRoutes[parameters.action]}`,
+        payload,
+        {
+          headers: {
+            Authorization: `Bearer ${parameters.apiToken ?? ''}`,
+            'x-api-key': config.apiKey ?? 'undefined',
+            'Content-type': fileKey
+              ? 'multipart/form-data'
+              : 'application/json',
+          },
+        },
+      );
+    };
 
-    const response = await apiClient.post(
-      `${config.lostPixelPlatform}${apiRoutes[parameters.action]}`,
-      payload,
+    const response = await retry(
       {
-        headers: {
-          Authorization: `Bearer ${parameters.apiToken ?? ''}`,
-          'x-api-key': config.apiKey ?? 'undefined',
+        times: 3,
+        interval(retryCount) {
+          const delay = Math.round(2 ** retryCount * 3000 * Math.random());
+
+          logger(
+            'info',
+            'api',
+            `🔄 Retry attempt ${retryCount} in ${delay}ms [${parameters.action}]`,
+          );
+
+          return delay;
+        },
+        errorFilter(error: AxiosError) {
+          return (
+            !error.response ||
+            (error.response.status >= 500 && error.response.status <= 599) ||
+            error.response.status === 0
+          );
         },
       },
+      apiCall,
     );
 
     if (response.status !== 200 && response.status !== 201) {
@@ -152,7 +182,9 @@ const sendToAPI = async <T extends Record<string, unknown>>(
       process.exit(1);
     }
 
-    const outdatedApiRequest = response?.headers?.['x-api-version-warning'];
+    const outdatedApiRequest = response?.headers?.[
+      'x-api-version-warning'
+    ] as string;
 
     if (
       outdatedApiRequest &&
@@ -174,7 +206,7 @@ const sendToAPI = async <T extends Record<string, unknown>>(
 
     return response.data as T;
   } catch (error: unknown) {
-    if (axios.isAxiosError(error)) {
+    if (isAxiosError(error)) {
       logger(
         'error',
         'api',
@@ -243,25 +275,27 @@ export const prepareUpload = async (
     hash: string;
   }>,
 ) => {
-  return sendToAPI<{ requiredFileHashes: string[]; uploadToken: string }>(
-    config,
-    {
-      action: 'prepareUpload',
-      apiToken,
-      payload: {
-        branchName: config.commitRefName,
-        commit: config.commitHash,
-        buildNumber: config.ciBuildNumber,
-        currentShots: shotNamesWithHashes,
-      },
+  return sendToAPI<{
+    requiredFileHashes: string[];
+    uploadToken: string;
+    uploadUrl: string;
+  }>(config, {
+    action: 'prepareUpload',
+    apiToken,
+    payload: {
+      branchName: config.commitRefName,
+      commit: config.commitHash,
+      buildNumber: config.ciBuildNumber,
+      currentShots: shotNamesWithHashes,
     },
-  );
+  });
 };
 
 export const uploadShot = async ({
   config,
   apiToken,
   uploadToken,
+  uploadUrl,
   name,
   file,
   logger,
@@ -269,6 +303,7 @@ export const uploadShot = async ({
   config: PlatformModeConfig;
   apiToken: string;
   uploadToken: string;
+  uploadUrl: string;
   name: string;
   file: string;
   logger?: ReturnType<typeof log.item>;
@@ -283,7 +318,10 @@ export const uploadShot = async ({
       name: string;
     };
   }>(
-    config,
+    {
+      ...config,
+      lostPixelPlatform: uploadUrl,
+    },
     {
       action: 'uploadShot',
       apiToken,
@@ -322,14 +360,31 @@ export const sendRecordLogsToAPI = async (
   config: PlatformModeConfig,
   apiToken: string,
 ) => {
-  return sendToAPI(config, {
-    action: 'recordLogs',
-    apiToken,
-    payload: {
-      branchName: config.commitRefName,
-      buildNumber: config.ciBuildNumber,
-      commit: config.commitHash,
-      log: logMemory,
-    },
-  });
+  try {
+    await sendToAPI(config, {
+      action: 'recordLogs',
+      apiToken,
+      payload: {
+        branchName: config.commitRefName,
+        buildNumber: config.ciBuildNumber,
+        commit: config.commitHash,
+        log: logMemory,
+      },
+    });
+  } catch (error: unknown) {
+    if (isAxiosError(error)) {
+      log.process(
+        'error',
+        'api',
+        'API response: ',
+        error.response?.data || error.message,
+      );
+    } else if (error instanceof Error) {
+      log.process('error', 'api', error.message);
+    } else {
+      log.process('error', 'api', error);
+    }
+
+    log.process('error', 'api', 'Error: Failed to send logs to API');
+  }
 };

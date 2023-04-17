@@ -6,40 +6,41 @@ coverY: 0
 
 ### Prerequisites
 
-* storybook that holds stories to be tested
-* lost-pixel configuration file
+- storybook that holds stories to be tested
+- lost-pixel configuration file
 
 1. Follow this [next.js quickstart doc](https://nextjs.org/docs) to have a basic example up and running
 2. Add lost-pixel [configuration file](../../setup/project-configuration/modes.md#page-shots)
-3.  Add action file in the root of your project. In `.github/workflows/ci.yml`
+3. Add action file in the root of your project. In `.github/workflows/ci.yml`
 
-    <pre><code>on: [push]
-    <strong>jobs:
-    </strong>  build:
-        runs-on: ubuntu-latest
+   <pre><code>on: [push]
+   <strong>jobs:
+   </strong>  build:
+       runs-on: ubuntu-latest
+   
+       steps:
+         - name: Checkout
+           uses: actions/checkout@v3
+   
+         - name: Setup Node
+           uses: actions/setup-node@v3
+           with:
+             node-version: 18.x
+             cache: "npm"
+   
+         - name: Install dependencies
+           run: npm install
+   
+         - name: Build ladle
+           run: npm run build
+   
+         - name: Serve ladle
+           run: npm run serve &#x26;
+   
+         - name: Lost Pixel
+           uses: lost-pixel/lost-pixel@v3.0.3
+   </code></pre>
 
-        steps:
-          - name: Checkout
-            uses: actions/checkout@v3
-
-          - name: Setup Node
-            uses: actions/setup-node@v3
-            with:
-              node-version: 18.x
-              cache: "npm"
-
-          - name: Install dependencies
-            run: npm install
-
-          - name: Build ladle
-            run: npm run build
-
-          - name: Serve ladle
-            run: npm run serve &#x26;
-
-          - name: Lost Pixel
-            uses: lost-pixel/lost-pixel@v3.0.3
-    </code></pre>
 4. _(Optional)_ Add [automatic PR for easy baseline update](../../recipes/lost-pixel-oss/automatic-baseline-update-pr.md)
 
 {% content-ref url="../../recipes/lost-pixel-oss/automatic-baseline-update-pr.md" %}

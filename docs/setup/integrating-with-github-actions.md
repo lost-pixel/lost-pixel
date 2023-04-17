@@ -4,7 +4,7 @@ Lost Pixel has first-class support for GitHub Actions offering a dedicated actio
 
 ```
 - name: Lost Pixel
-  uses: lost-pixel/lost-pixel@v3.0.3
+  uses: lost-pixel/lost-pixel@v3.3.0
 ```
 
 As outlined in [modes](project-configuration/modes.md), Lost Pixel can run in different modes or all of them simultaneously. You would need to build the respective provider and serve it in the action to make it available for the Lost Pixel, e.g. build & serve storybook, build & serve ladle, build & serve next app
@@ -36,7 +36,7 @@ jobs:
         run: npm run build-storybook
 
       - name: Lost Pixel
-        uses: lost-pixel/lost-pixel@v3.0.3
+        uses: lost-pixel/lost-pixel@v3.3.0
 ```
 {% endcode %}
 

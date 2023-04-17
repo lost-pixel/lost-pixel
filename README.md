@@ -4,7 +4,7 @@
   <h1>Lost Pixel</h1>
   <h2>Holistic visual regression testing solution </h2>  
   <a href="https://www.npmjs.com/package/lost-pixel"><img src="https://img.shields.io/npm/v/lost-pixel?style=plastic" /></a> 
-  <a href=https://www.npmjs.com/package/lost-pixel)><img src="https://img.shields.io/npm/dt/lost-pixel" /></a> 
+  <a href="https://www.npmjs.com/package/lost-pixel"><img src="https://img.shields.io/npm/dt/lost-pixel" /></a> 
   <a href="https://github.com/lost-pixel/lost-pixel/blob/main/docs/contributing.md"><img src="https://img.shields.io/badge/PRs-welcome-brightgreen.svg" /></a>
   <a href="https://github.com/lost-pixel/lost-pixel/blob/main/LICENSE"><img src="https://img.shields.io/github/license/lost-pixel/lost-pixel" /></a>
   <a href="https://discord.gg/WqVjk49g9m"><img src="https://img.shields.io/badge/chat-discord-blue?style=flat&logo=discord" alt="discord chat"></a>
@@ -18,6 +18,7 @@
   <a href="https://github.com/lost-pixel/lost-pixel-examples">Examples</a>
   <br />
   <br />
+
 </div>
 <div align='center'>  <a href="https://www.youtube.com/watch?v=8Ws28rQymkE"><img width='400px' src='https://user-images.githubusercontent.com/29632358/187195828-92e2a8fd-0bd5-4b66-bb82-596f5688dc4d.png'> </div>
 <h4 align='center'> <a href="https://www.youtube.com/watch?v=8Ws28rQymkE">Quick start video</a></div>
@@ -43,12 +44,17 @@
 | ---------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------- |
 | ![ezgif-5-e71eb0773d](https://user-images.githubusercontent.com/29632358/185067771-03467437-badd-466b-ad6c-60d7183d99ae.gif) | ![ezgif-5-43091ece5d](https://user-images.githubusercontent.com/29632358/185067989-3f2d818b-c01f-4304-97f6-77295b1970d9.gif) |
 
-- **lost-pixel-platform** (_closed BETA_) - the UI and CI helpers that allow you to use lost-pixel's managed version. This includes specified regression UI, collaboration with team members and easy approval/rejection process for the snapshots. Configure it just once and enjoy hassle free visual regression tests integrated into your GitHub actions pipeline.
+- **lost-pixel-platform** (_open BETA_) - the UI and CI helpers that allow you to use lost-pixel's managed version. This includes specified regression UI, collaboration with team members and easy approval/rejection process for the snapshots. Configure it just once and enjoy hassle free visual regression tests integrated into your GitHub actions pipeline.
+  
+https://user-images.githubusercontent.com/29632358/222420960-57924da4-d0bf-4478-9322-fc68686485b6.mp4
+
 
 <hr/>
 <div align="center">
- <h3> <a href="https://tally.so/r/3xXRoo">🚀 Get the platform beta invite 🚀</a></h3>
+ <h3><a href="https://app.lost-pixel.com">🚀 Start using platform for free 🚀</a></h3>
+ <h3> <a href="https://docs.lost-pixel.com/user-docs/setup/lost-pixel-platform">📚 Platform documentation 📚</a></h3>
 </div>
+
 <hr/>
 
 ## Quick start ⚡
@@ -100,7 +106,7 @@ jobs:
         run: npm run build-storybook
 
       - name: Lost Pixel
-        uses: lost-pixel/lost-pixel@v3.0.3
+        uses: lost-pixel/lost-pixel@v3.3.0
 ```
 
 </details>
@@ -165,7 +171,7 @@ jobs:
         run: npm run serve &
 
       - name: Lost Pixel
-        uses: lost-pixel/lost-pixel@v3.0.3
+        uses: lost-pixel/lost-pixel@v3.3.0
 ```
 
 </details>
@@ -222,7 +228,7 @@ jobs:
         run: npm run start &
 
       - name: Lost Pixel
-        uses: lost-pixel/lost-pixel@v3.0.3
+        uses: lost-pixel/lost-pixel@v3.3.0
 ```
 
 </details>
@@ -256,6 +262,18 @@ Want to chat about visual regression testing with likeminded people? We've start
 <div align='center'>  <a href="https://discord.gg/WqVjk49g9m"><img width='400px' src='https://user-images.githubusercontent.com/29632358/194254174-aad8e9f1-1f1e-4f21-ab36-7fb63eb51696.png'> </div>
    
 <h4 align='center'> <a href="https://discord.gg/WqVjk49g9m">Join our Discord</a></div>
+
+---
+  
+### Using Lost Pixel Platfrom in non-commerical Open Source projects 
+
+We are excited to offer you free usage of Lost Pixel Platform(SaaS) for you Open Source repositories, feel free to reach out to oss@lost-pixel.com to get started!
+
+If you are already using Lost Pixel it would mean a lot to us if you give us a shoutout by including our badge in your OSS project readme!
+
+<a href="https://lost-pixel.com">
+<img src="https://img.shields.io/static/v1?style=flat-square&color=brightgreen&url=https://www.lost-pixel.com&message=Visual%20Regression%20Tests&label=Lost%20Pixel&logo=data:image/png;base64,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"/>  
+  </a>
 
 ---
 

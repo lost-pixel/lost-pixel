@@ -122,7 +122,7 @@ export const createShots = async () => {
 
     const pagesFromLoader = await getPagesFromExternalLoader();
 
-    const pages = [...pagesFromConfig, ...pagesFromLoader];
+    const pages = [...(pagesFromConfig || []), ...(pagesFromLoader || [])];
 
     log.process('info', 'general', `\n=== [Page Mode] ${baseUrl} ===\n`);
 
