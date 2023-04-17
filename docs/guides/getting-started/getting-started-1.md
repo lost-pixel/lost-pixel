@@ -36,7 +36,7 @@ coverY: 0
             run: npm run build-storybook
 
           - name: Lost Pixel
-            uses: lost-pixel/lost-pixel@2.21.0
+            uses: lost-pixel/lost-pixel@3.3.0
     ```
 4. _(Optional)_ Add [automatic PR for easy baseline update](../../recipes/lost-pixel-oss/automatic-baseline-update-pr.md)
 
@@ -45,10 +45,10 @@ coverY: 0
 {% endcontent-ref %}
 
 {% hint style="info" %}
-Note that your `lostpixel.config.js|ts|cjs|mjs` should point to the correct **relative path to built storybook** or to **served storybook url**
+Note that your `lostpixel.config.js|ts|cjs|mjs` should point to the correct **relative path to the built storybook** or to **served storybook URL**
 {% endhint %}
 
-After writing your first stories you can adopt the visual regression testing by following [_visual regression testing_ workflow](../testing-workflow-github-actions.md)
+After writing your first stories, you can adopt the visual regression testing by following the [_visual regression testing_ workflow](../testing-workflow-github-actions.md)
 
 {% hint style="info" %}
 You can see some popular integrations in the [lost-pixel-examples](https://github.com/lost-pixel/lost-pixel-examples) directory

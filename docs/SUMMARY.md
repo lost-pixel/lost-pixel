@@ -1,6 +1,7 @@
 # Table of contents
 
 * [🖼 What is Lost Pixel?](README.md)
+* [🤝 Lost Pixel Platform | Lost Pixel OSS](readme-1.md)
 
 ## ⚙ Setup
 

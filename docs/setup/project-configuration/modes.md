@@ -17,8 +17,13 @@ export const config: CustomProjectConfig = {
   storybookShots: {
     storybookUrl: './storybook-static',
   },
+  // OSS mode 
   generateOnly: true,
-  failOnDifference: true,
+  failOnDifference: true
+  
+  // Lost Pixel Platform (to use in Platform mode, comment out the OSS mode and uncomment this part )
+  // lostPixelProjectId: "xxxx",
+  // process.env.LOST_PIXEL_API_KEY,
 };
 ```
 {% endcode %}
@@ -34,8 +39,13 @@ export const config: CustomProjectConfig = {
   // IP should be localhost when running locally & 172.17.0.1 when running in GitHub action
     baseUrl: 'http://172.17.0.1:61000',
   },
+  // OSS mode 
   generateOnly: true,
-  failOnDifference: true,
+  failOnDifference: true
+  
+  // Lost Pixel Platform (to use in Platform mode, comment out the OSS mode and uncomment this part )
+  // lostPixelProjectId: "xxxx",
+  // process.env.LOST_PIXEL_API_KEY,
 };
 ```
 {% endcode %}
@@ -61,15 +71,20 @@ export const config: CustomProjectConfig = {
 
     baseUrl: 'http://localhost:3000',
   },
+  // OSS mode 
   generateOnly: true,
-  failOnDifference: true,
+  failOnDifference: true
+  
+  // Lost Pixel Platform (to use in Platform mode, comment out the OSS mode and uncomment this part )
+  // lostPixelProjectId: "xxxx",
+  // process.env.LOST_PIXEL_API_KEY,
 };
 ```
 {% endcode %}
 
 ### Custom shots
 
-Custom screenshots presume that you take the screenshots on your side & Lost Pixel Platform runs them for Visual Regression tests. In this example, you can use **Cypress** or **Playwright** to make the screenshots during the tests and just forward them to **lost-pixel** folder.
+Custom screenshots presume that you take the screenshots on your side & Lost Pixel Platform runs them for Visual Regression tests. In this example, you can use **Cypress** or **Playwright** to make the screenshots during the tests and forward them to the **lost-pixel** folder.
 
 {% code title="lost-pixel.config.ts" %}
 ```typescript
@@ -79,9 +94,13 @@ export const config: CustomProjectConfig = {
  customShots: {
     currentShotsPath: "./lost-pixel",
   },
-  lostPixelProjectId: "xxxxxxx",
-  apiKey: process.env.LOST_PIXEL_API_KEY,
-  lostPixelPlatform: "https://api.staging.lost-pixel.com",
+  // OSS mode 
+  generateOnly: true,
+  failOnDifference: true
+  
+  // Lost Pixel Platform (to use in Platform mode, comment out the OSS mode and uncomment this part )
+  // lostPixelProjectId: "xxxx",
+  // process.env.LOST_PIXEL_API_KEY,
 };
 ```
 {% endcode %}
@@ -108,8 +127,13 @@ export const config: CustomProjectConfig = {
     // IP should be localhost when running locally & 172.17.0.1 when running in GitHub action
     ladleUrl: 'http://172.17.0.1:61000',
   },
+  // OSS mode 
   generateOnly: true,
-  failOnDifference: true,
+  failOnDifference: true
+  
+  // Lost Pixel Platform (to use in Platform mode, comment out the OSS mode and uncomment this part )
+  // lostPixelProjectId: "xxxx",
+  // process.env.LOST_PIXEL_API_KEY,
 };
 ```
 {% endcode %}
