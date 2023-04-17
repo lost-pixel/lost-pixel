@@ -8,7 +8,7 @@ In the `open-source edition` of Lost Pixel, the updates of baselines is somethin
 
 * You need to update the baselines on intended changes manually
 * <mark style="color:red;background-color:red;">NOT RECOMMENDED</mark> You can run the baseline update locally with `npx lost-pixel update` but it could lead to flaky results because of the subtle difference of how operating system render fonts&#x20;
-* <mark style="color:green;background-color:green;">RECOMMENDED</mark> Lost Pixel provides a [useful recipe to create automatic PR with updated baselines](../recipes/automatic-baseline-update-pr.md) in case of visual regression
+* <mark style="color:green;background-color:green;">RECOMMENDED</mark> Lost Pixel provides a [useful recipe to create automatic PR with updated baselines](../recipes/lost-pixel-oss/automatic-baseline-update-pr.md) in case of visual regression
 * GitHub split view is your most straightforward way of comparing the before/after images.
 
 {% hint style="info" %}

@@ -1,6 +1,10 @@
 # Baseline images
 
-Lost Pixel works trough the concept of baseline images. Baseline image is something that is accepted to be the agreed desired state of the resulting component/page snapshot. Lost Pixel keeps the baseline images in a dedicated folder in `.png` format. `current` & `difference`\
+{% hint style="danger" %}
+This part of the documentation is only relevant for Lost Pixel(OSS) mode
+{% endhint %}
+
+Lost Pixel works through the concept of baseline images. A baseline image is something that is accepted to be the agreed desired state of the resulting component/page snapshot. Lost Pixel keeps the baseline images in a dedicated folder in `.png` format. `current` & `difference`\
 paths are utility and used during the run of the action.
 
 \

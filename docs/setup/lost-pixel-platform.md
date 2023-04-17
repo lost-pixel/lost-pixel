@@ -4,11 +4,11 @@ description: Setting up Lost Pixel Platform - managed version of Lost Pixel
 
 # ⏯ Lost Pixel Platform
 
-Lost Pixel Platform offers a managed service with a user-friendly interface for a more efficient visual regression testing workflow.
+[Lost Pixel Platform](https://lost-pixel.com) offers a managed service with a user-friendly interface for a more efficient visual regression testing workflow.
 
-The platform version provides additional features, such as collaboration tools, automated test runs, and detailed reporting. By upgrading to the Lost Pixel Platform, you can streamline your visual regression testing process, improve collaboration with your team, and gain access to valuable insights and analytics.
+The platform version provides additional features like collaboration tools, automated test runs, and detailed reporting. Upgrading to the Lost Pixel Platform allows you to streamline your visual regression testing process, improve collaboration with your team, and gain access to valuable insights and analytics.
 
-Lost Pixel Platform has first class integration with **GitHub** & **GitHub Actions** but can be set up with any CI provider **`given it runs on GitHub`**
+Lost Pixel Platform has first-class integration with **GitHub** & **GitHub Actions** but can be set up with any CI provider, **`given it runs on GitHub`**
 
 ### Create Lost Pixel related files
 
@@ -35,7 +35,7 @@ export const config: CustomProjectConfig = {
 ```
 {% endcode %}
 
-Next up GitHub action declaration file that lives in \`.github/workflows\`. We are building & serving our Next.js application & run lost pixel on it's pages(defined in above file):
+Next up is the GitHub action declaration file that lives in `.github/workflows`. We are building & serving our Next.js application & run Lost Pixel on it's pages(defined in the above file):
 
 {% code title="visual-regression.yml" %}
 ```yaml
@@ -76,32 +76,32 @@ jobs:
 ```
 {% endcode %}
 
-### Set up Lost Pixel platform
+### Set up the Lost Pixel platform
 
-Visit [Lost Pixel installation page](https://github.com/apps/lost-pixel/installations/new) and install Lost Pixel App on organisations & repositories you want to have visual tests on
+Visit the [Lost Pixel installation page](https://github.com/apps/lost-pixel/installations/new) and install Lost Pixel App on organisations & repositories you want to have visual tests on
 
-<figure><img src="../.gitbook/assets/SCR-20230114-p4f (2).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/SCR-20230114-p4f (3).png" alt=""><figcaption></figcaption></figure>
 
-Sign in using **GitHub** into [app.lost-pixel.com](https://app.lost-pixel.com), switch to correct organisation & select which repositories selected in previous step should be visible on Lost Pixel Platform:
+Sign in using **GitHub** into [app.lost-pixel.com](https://app.lost-pixel.com), switch to the correct organisation & select which repositories selected in the previous step should be visible on the Lost Pixel Platform:
 
 <figure><img src="../.gitbook/assets/SCR-20230114-pbf.png" alt=""><figcaption><p>app.lost-pixel.com/app/repos/manage</p></figcaption></figure>
 
-From onboarding screen copy your **`project id`** and replace it in the `lost-pixel.config.ts` created in the first step
+From the onboarding-screen copy your **`project id`** and replace it in the `lost-pixel.config.ts` created in the first step
 
 ```
 lostPixelProjectId: 'clcuk66iz005wp41h3cauveb2',
 ```
 
-Copy the **Lost Pixel api key**, we will need to do the final step to provide it as a GitHub Action secret&#x20;
+Copy the **Lost Pixel API key**, we will need to do the final step to provide it as a GitHub Action secret.&#x20;
 
 <figure><img src="../.gitbook/assets/SCR-20230114-phf.png" alt=""><figcaption><p>app.lost-pixel.com/app/repos/lost-pixel-landing </p></figcaption></figure>
 
-### Set Lost Pixel api key on GitHub
+### Set Lost Pixel API key on GitHub
 
 <figure><img src="../.gitbook/assets/SCR-20230114-oyx.png" alt=""><figcaption><p>Setting LOST_PIXEL_API_KEY as Action Secret</p></figcaption></figure>
 
 ### Your visual regression testing workflow is done 🎊
 
-Now all of new pushes to your repository are triggering visual tests that you can conveniently manage yourself or collaboratively with your team!
+All new pushes to your repository are triggering visual tests that you can conveniently manage yourself or collaboratively with your team!
 
-<figure><img src="../.gitbook/assets/image (2).png" alt=""><figcaption><p>lost-pixel.com visual test managed on Lost Pixel Platform</p></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (2) (1).png" alt=""><figcaption><p>lost-pixel.com visual test managed on Lost Pixel Platform</p></figcaption></figure>

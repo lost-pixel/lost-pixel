@@ -42,15 +42,15 @@ coverY: 0
           run: npm run serve &
 
         - name: Lost Pixel
-          uses: lost-pixel/lost-pixel@v3.3.0
+          uses: lost-pixel/lost-pixel@v3.0.3
    ```
 
    {% endcode %}
 
-4. _(Optional)_ Add [automatic PR for easy baseline update](../../recipes/automatic-baseline-update-pr.md)
+4. _(Optional)_ Add [automatic PR for easy baseline update](../../recipes/lost-pixel-oss/automatic-baseline-update-pr.md)
 
-{% content-ref url="../../recipes/automatic-baseline-update-pr.md" %}
-[automatic-baseline-update-pr.md](../../recipes/automatic-baseline-update-pr.md)
+{% content-ref url="../../recipes/lost-pixel-oss/automatic-baseline-update-pr.md" %}
+[automatic-baseline-update-pr.md](../../recipes/lost-pixel-oss/automatic-baseline-update-pr.md)
 {% endcontent-ref %}
 
 After writing your first stories you can adopt the visual regression testing by following [_visual regression testing_ workflow](../testing-workflow-github-actions.md)
