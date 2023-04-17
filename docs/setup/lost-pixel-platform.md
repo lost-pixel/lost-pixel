@@ -80,7 +80,7 @@ jobs:
 
 Visit [Lost Pixel installation page](https://github.com/apps/lost-pixel/installations/new) and install Lost Pixel App on organisations & repositories you want to have visual tests on
 
-<figure><img src="../.gitbook/assets/SCR-20230114-p4f (2).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/SCR-20230114-p4f (3).png" alt=""><figcaption></figcaption></figure>
 
 Sign in using **GitHub** into [app.lost-pixel.com](https://app.lost-pixel.com), switch to correct organisation & select which repositories selected in previous step should be visible on Lost Pixel Platform:
 
@@ -104,4 +104,4 @@ Copy the **Lost Pixel api key**, we will need to do the final step to provide it
 
 Now all of new pushes to your repository are triggering visual tests that you can conveniently manage yourself or collaboratively with your team!
 
-<figure><img src="../.gitbook/assets/image (2).png" alt=""><figcaption><p>lost-pixel.com visual test managed on Lost Pixel Platform</p></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (2) (1).png" alt=""><figcaption><p>lost-pixel.com visual test managed on Lost Pixel Platform</p></figcaption></figure>
