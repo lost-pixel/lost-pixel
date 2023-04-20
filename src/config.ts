@@ -189,7 +189,7 @@ type BaseConfig = {
 
   /**
    * How often to retry a shot for a stable result
-   * @default 3
+   * @default 0
    */
   flakynessRetries: number;
 
@@ -387,7 +387,7 @@ const defaultConfig: BaseConfig = {
   waitForLastRequest: 1000,
   threshold: 0,
   setPendingStatusCheck: false,
-  flakynessRetries: 3,
+  flakynessRetries: 0,
   waitBetweenFlakynessRetries: 2000,
 };
 
