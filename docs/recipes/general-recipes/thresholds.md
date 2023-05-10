@@ -30,7 +30,7 @@ That would render such regression tests ineffective.
 
 The best practice is to start with zero tolerance (`0`).
 When the first flaky regressions show up, try to find an absolute value of pixels that would cover a good threshold.
-Sometimes, there's no value in testing flaky areas of the page. It could make sense to [mask](../../api-reference/api-reference/mask) such areas.
+Sometimes, there's no value in testing flaky areas of the page. It could make sense to [mask](../../api-reference/mask.md) such areas.
 Setting percentage values will make sense for stories or pages where content is being added over time.
 
 Finding the right balance for the threshold setting will depend on your strategy on visual regression testing. You can go with a rather strict approach or choose to adopt a more flexible process.
