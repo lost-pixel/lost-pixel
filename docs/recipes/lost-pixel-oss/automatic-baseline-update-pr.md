@@ -2,7 +2,7 @@
 
 Lost Pixel offers and easy GitHub action integration that will help you to automate the baseline update process by creating the PR with updated images. You will just need to accept it and merge into the original branch.
 
-Assuming you are using [Ladle example](../guides/getting-started/getting-started.md), in the root of your repo let's add a new action file that runs on demand:\
+Assuming you are using [Ladle example](../../guides/getting-started/getting-started.md), in the root of your repo let's add a new action file that runs on demand:\
 `.github/workflows/update-baselines.yml`
 
 {% hint style="info" %}
@@ -36,7 +36,7 @@ jobs:
 
       - name: Lost Pixel
         id: lp
-        uses: lost-pixel/lost-pixel@v3.3.0
+        uses: lost-pixel/lost-pixel@v3.4.0
         env:
           LOST_PIXEL_MODE: update
       - name: Create Pull Request
@@ -51,8 +51,8 @@ jobs:
           body: Automated baseline update PR created by Lost Pixel
 ```
 
-![Run the action this way](<../.gitbook/assets/image (1).png>)
+![Run the action this way](<../../.gitbook/assets/image (1) (1).png>)
 
-The action run will generate a new PR against the original branch that will contain updated baselines, merge it and expect your tests to be **green again**:green_circle:
+The action run will generate a new PR against the original branch that will contain updated baselines, merge it and expect your tests to be **green again**:green\_circle:
 
-![Automatically generated PR](../.gitbook/assets/image.png)
+![Automatically generated PR](<../../.gitbook/assets/image (4).png>)
