@@ -237,7 +237,7 @@ export const platformRunner = async (
     });
 
     const shotsConfig: ShotConfig[] = shotItems.map((shotItem) => ({
-      name: shotItem.shotName,
+      name: `${shotItem.shotMode}/${shotItem.shotName}`,
       threshold: shotItem.threshold,
     }));
 
