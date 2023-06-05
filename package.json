@@ -62,7 +62,7 @@
     "get-port-please": "2.6.1",
     "lodash.get": "4.4.2",
     "lodash.kebabcase": "4.1.1",
-    "odiff-bin": "2.5.0",
+    "odiff-bin": "2.6.1",
     "pixelmatch": "5.3.0",
     "playwright-core": "1.32.2",
     "pngjs": "6.0.0",
