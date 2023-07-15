@@ -62,11 +62,12 @@ const takeScreenShot = async ({
     await page.waitForLoadState('load', {
       timeout: config.timeouts.loadState,
     });
-  } catch {
+  } catch (error: unknown) {
     logger.process(
       'error',
       'timeout',
       `Timeout while waiting for page load state: ${shotItem.url}`,
+      error,
     );
   }
 
@@ -76,11 +77,12 @@ const takeScreenShot = async ({
       logger,
       ignoreUrls: ['/__webpack_hmr'],
     });
-  } catch {
+  } catch (error: unknown) {
     logger.process(
       'error',
       'timeout',
       `Timeout while waiting for all network requests: ${shotItem.url}`,
+      error,
     );
   }
 
@@ -99,11 +101,12 @@ const takeScreenShot = async ({
   try {
     await resizeViewportToFullscreen({ page });
     fullScreenMode = false;
-  } catch {
+  } catch (error: unknown) {
     logger.process(
       'error',
       'general',
       `Could not resize viewport to fullscreen: ${shotItem.shotName}`,
+      error,
     );
   }
 
