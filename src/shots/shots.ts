@@ -25,7 +25,7 @@ const takeScreenShot = async ({
   });
 
   page.on('console', async (message) => {
-    const values = [];
+    const values: unknown[] = [];
 
     try {
       for (const arg of message.args()) {

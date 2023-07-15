@@ -1,5 +1,4 @@
 import { bundleRequire } from 'bundle-require';
-
 import type { Service } from 'ts-node';
 import { log } from './log';
 
@@ -39,6 +38,7 @@ const setupTsNode = async (): Promise<Service> => {
     return tsNodeService;
   } catch (error: unknown) {
     // @ts-expect-error Error type definition is missing 'code'
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
     if (['ERR_MODULE_NOT_FOUND', 'MODULE_NOT_FOUND'].includes(error.code)) {
       log.process(
         'error',
