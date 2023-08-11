@@ -125,7 +125,7 @@ export const collectStoriesViaWindowApi = async (
             typeof parameters === 'string' ||
             typeof parameters === 'number' ||
             typeof parameters === 'boolean' ||
-            typeof parameters === 'undefined' ||
+            parameters === undefined ||
             typeof parameters === 'function' ||
             parameters instanceof RegExp ||
             parameters instanceof Date ||

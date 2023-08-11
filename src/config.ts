@@ -337,7 +337,6 @@ export type GenerateOnlyModeProjectConfig = Omit<
   ProjectConfig,
   | 'lostPixelProjectId'
   | 'ciBuildId'
-  | 'ciBuildId'
   | 'ciBuildNumber'
   | 'repository'
   | 'commitRefName'
