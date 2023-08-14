@@ -12,7 +12,7 @@ export const loadProjectConfigFile = async (
     }>({
       filepath: configFilepath,
       esbuildOptions: {
-        logLevel: 'info',
+        logLevel: 'silent',
       },
     });
 
