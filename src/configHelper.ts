@@ -42,8 +42,12 @@ const setupTsNode = async (): Promise<Service> => {
 
     return tsNodeService;
   } catch (error: unknown) {
-    // @ts-expect-error Error type definition is missing 'code'
-    if (['ERR_MODULE_NOT_FOUND', 'MODULE_NOT_FOUND'].includes(error.code)) {
+    if (
+      ['ERR_MODULE_NOT_FOUND', 'MODULE_NOT_FOUND'].includes(
+        // @ts-expect-error Error type definition is missing 'code'
+        error.code as string,
+      )
+    ) {
       log.process(
         'error',
         'config',
