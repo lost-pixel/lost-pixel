@@ -114,7 +114,7 @@ jobs:
         run: npm run build-storybook
 
       - name: Lost Pixel
-        uses: lost-pixel/lost-pixel@v3.4.1
+        uses: lost-pixel/lost-pixel@v3.4.3
 ```
 
 </details>
@@ -184,7 +184,7 @@ jobs:
         run: npm run serve &
 
       - name: Lost Pixel
-        uses: lost-pixel/lost-pixel@v3.4.1
+        uses: lost-pixel/lost-pixel@v3.4.3
 ```
 
 </details>
@@ -246,7 +246,7 @@ jobs:
         run: npm run start &
 
       - name: Lost Pixel
-        uses: lost-pixel/lost-pixel@v3.4.1
+        uses: lost-pixel/lost-pixel@v3.4.3
 ```
 
 </details>
@@ -326,7 +326,7 @@ jobs:
         run: npx playwright install --with-deps && npm run test:e2e
 
       - name: Lost Pixel
-        uses: lost-pixel/lost-pixel@v3.4.1
+        uses: lost-pixel/lost-pixel@v3.4.3
         env:
           LOST_PIXEL_API_KEY: ${{ secrets.LOST_PIXEL_API_KEY }}
 ```
@@ -365,9 +365,9 @@ Want to chat about visual regression testing with likeminded people? We've start
 
 ---
   
-### Using Lost Pixel Platfrom in non-commerical Open Source projects 
+### Using Lost Pixel Platform in non-commercial Open Source projects 
 
-We are excited to offer you free usage of Lost Pixel Platform(SaaS) for you Open Source repositories, feel free to reach out to oss@lost-pixel.com to get started!
+We are excited to offer you free usage of Lost Pixel Platform(SaaS) for your Open Source repositories, feel free to reach out to oss@lost-pixel.com to get started!
 
 If you are already using Lost Pixel it would mean a lot to us if you give us a shoutout by including our badge in your OSS project readme!
 
