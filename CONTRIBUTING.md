@@ -4,9 +4,7 @@ Before jumping into a PR be sure to search [existing PRs](https://github.com/los
 
 ## Developing
 
-The development branch is `canary`. This is the branch that all pull
-requests should be made against. The changes on the `canary`
-branch are published to the `@canary` tag on npm regularly.
+The development branch is `main`. This is the branch that all pull requests should be made against.
 
 To develop locally:
 
@@ -51,4 +49,4 @@ To check the formatting of your code:
    ```
 
 ## Getting your work merged 
-When you are satisfied with your work open a PR against the `canary` branch and somebody from project maintainers will help you review & merge it!
+When you are satisfied with your work open a PR against the `main` branch and somebody from project maintainers will help you review & merge it!
