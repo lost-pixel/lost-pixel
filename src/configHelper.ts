@@ -5,17 +5,22 @@ import { log } from './log';
 export const loadProjectConfigFile = async (
   configFilepath: string,
 ): Promise<unknown> => {
-  const { mod } = await bundleRequire<{
-    default?: unknown;
-    config?: unknown;
-  }>({
-    filepath: configFilepath,
-    esbuildOptions: {
-      logLevel: 'silent',
-    },
-  });
+  try {
+    const { mod } = await bundleRequire<{
+      default?: unknown;
+      config?: unknown;
+    }>({
+      filepath: configFilepath,
+      esbuildOptions: {
+        logLevel: 'info',
+      },
+    });
 
-  return mod?.default ?? mod?.config ?? mod;
+    return mod?.default ?? mod?.config ?? mod;
+  } catch (error: unknown) {
+    log.process('error', 'config', error);
+    throw new Error("Couldn't load config file");
+  }
 };
 
 let tsNodeService: Service;
@@ -38,7 +43,6 @@ const setupTsNode = async (): Promise<Service> => {
     return tsNodeService;
   } catch (error: unknown) {
     // @ts-expect-error Error type definition is missing 'code'
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
     if (['ERR_MODULE_NOT_FOUND', 'MODULE_NOT_FOUND'].includes(error.code)) {
       log.process(
         'error',
