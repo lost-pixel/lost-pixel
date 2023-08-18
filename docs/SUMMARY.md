@@ -11,7 +11,7 @@
 * [Integrating With GitHub Actions](setup/integrating-with-github-actions.md)
 * [⏯ Lost Pixel Platform](setup/lost-pixel-platform.md)
 
-## 👨🏫 Guides
+## 👨🏫 👨🏫 Guides
 
 * [Getting started](guides/getting-started/README.md)
   * [Getting started with Storybook](guides/getting-started/getting-started-1.md)
