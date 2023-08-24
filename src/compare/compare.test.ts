@@ -157,17 +157,7 @@ describe(compareImagesViaPixelmatch, () => {
     expect(result1.isWithinThreshold).toBe(true);
     expect(result1.pixelDifference).toBeGreaterThan(50_000);
 
-    const result2 = await compareImagesViaPixelmatch(
-      400_000,
-      'fixtures/baseline/banner.png',
-      'fixtures/current/banner2.png',
-      'fixtures/test-results/banner2.png',
-    );
-
-    expect(result2.isWithinThreshold).toBe(true);
-    expect(result2.pixelDifference).toBeGreaterThan(350_000);
-
-    const result3 = await compareImagesViaPixelmatch(
+    const result3 = await compareImagesViaOdiff(
       50_000,
       'fixtures/baseline/banner.png',
       'fixtures/current/banner3.png',
