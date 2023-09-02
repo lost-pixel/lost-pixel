@@ -20,6 +20,21 @@ export type LogMemory = LogEntry[];
 
 export const logMemory: LogMemory = [];
 
+const serializeError = (error: Error) => ({
+  message: error.message,
+  name: error.name,
+  stack: error.stack,
+});
+
+const serializeErrors = (content: unknown[]) =>
+  content.map((item) => {
+    if (item instanceof Error) {
+      return serializeError(item);
+    }
+
+    return item;
+  });
+
 const renderLog = (entry: LogEntry) => {
   if (entry.source === 'browser' && entry.context === 'console') {
     return;
@@ -67,8 +82,11 @@ export const log = {
         content,
       };
 
-      logMemory.push(entry);
       renderLog(entry);
+      logMemory.push({
+        ...entry,
+        content: serializeErrors(content),
+      });
     },
     browser(
       level: LogEntry['level'],
@@ -84,8 +102,11 @@ export const log = {
         content,
       };
 
-      logMemory.push(entry);
       renderLog(entry);
+      logMemory.push({
+        ...entry,
+        content: serializeErrors(content),
+      });
     },
   }),
   process(
@@ -101,8 +122,11 @@ export const log = {
       content,
     };
 
-    logMemory.push(entry);
     renderLog(entry);
+    logMemory.push({
+      ...entry,
+      content: serializeErrors(content),
+    });
   },
   browser(
     level: LogEntry['level'],
@@ -117,7 +141,10 @@ export const log = {
       content,
     };
 
-    logMemory.push(entry);
     renderLog(entry);
+    logMemory.push({
+      ...entry,
+      content: serializeErrors(content),
+    });
   },
 };

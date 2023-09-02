@@ -78,8 +78,13 @@ export const config: CustomProjectConfig = {
   storybookShots: {
     storybookUrl: './storybook-static',
   },
+   // OSS mode 
   generateOnly: true,
-  failOnDifference: true,
+  failOnDifference: true
+  
+  // Lost Pixel Platform (to use in Platform mode, comment out the OSS mode and uncomment this part )
+  // lostPixelProjectId: "xxxx",
+  // process.env.LOST_PIXEL_API_KEY,
 };
 ```
 
@@ -109,7 +114,7 @@ jobs:
         run: npm run build-storybook
 
       - name: Lost Pixel
-        uses: lost-pixel/lost-pixel@v3.4.0
+        uses: lost-pixel/lost-pixel@v3.4.5
 ```
 
 </details>
@@ -131,8 +136,13 @@ export const config: CustomProjectConfig = {
     //ip should be localhost when running locally & 172.17.0.1 when running in GitHub action
     ladleUrl: 'http://172.17.0.1:61000',
   },
+   // OSS mode 
   generateOnly: true,
-  failOnDifference: true,
+  failOnDifference: true
+  
+  // Lost Pixel Platform (to use in Platform mode, comment out the OSS mode and uncomment this part )
+  // lostPixelProjectId: "xxxx",
+  // process.env.LOST_PIXEL_API_KEY,
 };
 ```
 
@@ -174,7 +184,7 @@ jobs:
         run: npm run serve &
 
       - name: Lost Pixel
-        uses: lost-pixel/lost-pixel@v3.4.0
+        uses: lost-pixel/lost-pixel@v3.4.5
 ```
 
 </details>
@@ -197,8 +207,13 @@ export const config: CustomProjectConfig = {
     // IP should be localhost when running locally & 172.17.0.1 when running in GitHub action
     baseUrl: 'http://172.17.0.1:3000',
   },
+  // OSS mode 
   generateOnly: true,
-  failOnDifference: true,
+  failOnDifference: true
+  
+  // Lost Pixel Platform (to use in Platform mode, comment out the OSS mode and uncomment this part )
+  // lostPixelProjectId: "xxxx",
+  // process.env.LOST_PIXEL_API_KEY,
 };
 ```
 
@@ -231,7 +246,89 @@ jobs:
         run: npm run start &
 
       - name: Lost Pixel
-        uses: lost-pixel/lost-pixel@v3.4.0
+        uses: lost-pixel/lost-pixel@v3.4.5
+```
+
+</details>
+
+<details>
+<summary>Custom shots (Playwright example)🎭 </summary>
+
+Assuming you are running some playwright tests, where you want to add visual tests at any step. This setup will run visual regression tests against all the tests, where you've generated lost-pixel screenshots, on every push.
+
+You can find more examples in the [examples repository](https://github.com/lost-pixel/lost-pixel-examples). You can learn more about Lost Pixel workflow and get more useful recipes in [documentation](https://docs.lost-pixel.com/user-docs).
+
+Add `lostpixel.config.ts` at the root of the project:
+
+```typescript
+import { CustomProjectConfig } from 'lost-pixel';
+
+export const config: CustomProjectConfig = {
+ customShots: {
+    currentShotsPath: "./lost-pixel",
+  },
+  // OSS mode 
+  generateOnly: true,
+  failOnDifference: true
+  
+  // Lost Pixel Platform (to use in Platform mode, comment out the OSS mode and uncomment this part )
+  // lostPixelProjectId: "xxxx",
+  // process.env.LOST_PIXEL_API_KEY,
+};
+```
+
+Update your Playwright tests with following line(note, that there is no external dependency needed here):
+
+```javascript
+import { test } from '@playwright/test';
+
+test('lost-pixel e2e', async ({ page }) => {
+  // Start from the index page (the baseURL is set via the webServer in the playwright.config.ts)
+  await page.goto('http://172.17.0.1:3000/context');
+  await page.click('data-test-id=context-click-counter');
+  await page.click('data-test-id=context-click-counter');
+  await page.click('data-test-id=context-click-counter');
+  await page.click('data-test-id=context-click-counter');
+  // Run lost-pixel visual regression test after doing some functional testing on the page
+  await page.screenshot({ path: 'lost-pixel/a.png', fullPage: true });
+});
+```
+
+Add GitHub action `.github/workflows/lost-pixel-run.yml`
+
+```yml
+on: [push]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    name: Lost Pixel
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16.x
+
+      - name: Install dependencies
+        run: npm install --legacy-peer-deps
+
+      - name: Build Next app
+        run: npm run build
+
+      - name: Run Next app
+        run: npm run start &
+
+      - name: Playwright tests
+        run: npx playwright install --with-deps && npm run test:e2e
+
+      - name: Lost Pixel
+        uses: lost-pixel/lost-pixel@v3.4.5
+        env:
+          LOST_PIXEL_API_KEY: ${{ secrets.LOST_PIXEL_API_KEY }}
 ```
 
 </details>
@@ -268,9 +365,9 @@ Want to chat about visual regression testing with likeminded people? We've start
 
 ---
   
-### Using Lost Pixel Platfrom in non-commerical Open Source projects 
+### Using Lost Pixel Platform in non-commercial Open Source projects 
 
-We are excited to offer you free usage of Lost Pixel Platform(SaaS) for you Open Source repositories, feel free to reach out to oss@lost-pixel.com to get started!
+We are excited to offer you free usage of Lost Pixel Platform(SaaS) for your Open Source repositories, feel free to reach out to oss@lost-pixel.com to get started!
 
 If you are already using Lost Pixel it would mean a lot to us if you give us a shoutout by including our badge in your OSS project readme!
 

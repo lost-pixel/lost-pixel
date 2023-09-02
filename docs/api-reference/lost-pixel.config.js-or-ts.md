@@ -4,7 +4,7 @@ description: >-
   config file
 ---
 
-# lost-pixel.config.js|ts|cjs|mjs
+# lost-pixel.config.js|ts
 
 #### Options
 
@@ -90,10 +90,13 @@ description: >-
   * Defaults to `1000`
   * Time to wait for the last network request to start
   * The time to wait for the last network request to start is used to ensure that any final network requests have been made before the image is captured.
-* **threshold**: `number`
-  * **Required**
-  * Threshold for the difference between the baseline and current image
-  * **Values between 0 and 1 are interpreted as percentage of the image size.**
-  * **Values greater or equal to 1 are interpreted as absolute pixel count.**
-  * This threshold is used to determine whether an image is considered different or not. It means that if the difference between the images is greater than the threshold, the test will fail.
+*   **threshold**: `number`
 
+    * **Required**
+    * Threshold for the difference between the baseline and current image
+    * **Values between 0 and 1 are interpreted as percentage of the image size.**
+    * **Values greater or equal to 1 are interpreted as absolute pixel count.**
+    * This threshold is used to determine whether an image is considered different or not. It means that if the difference between the images is greater than the threshold, the test will fail.\
+
+
+    Use [thresholds.md](../recipes/general-recipes/thresholds.md "mention") recipe to get started quickly!

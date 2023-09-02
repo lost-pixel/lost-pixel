@@ -1,5 +1,4 @@
 import fse from 'fs-extra';
-
 import { checkDifferences } from './checkDifferences';
 import { createShots } from './createShots';
 import {
