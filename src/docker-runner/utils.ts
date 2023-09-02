@@ -9,37 +9,12 @@ const isDockerInstalled = () => {
   }
 };
 
-const isLostPixelImageDownloaded = async ({ version }: { version: string }) => {
-  isDockerInstalled();
-  const { exitCode, stdout, stderr } = await execa('docker', [
-    'images',
-    '-q',
-    `lostpixel/lost-pixel:v${version}`,
-  ]);
-
-  if (exitCode !== 0) {
-    throw new Error(`Not successful docker operation, ${stderr}`);
-  }
-
-  return stdout.trim().length > 0;
-};
-
-const downloadImageIfNotExistent = async ({ version }: { version: string }) => {
-  const doesImageExist = await isLostPixelImageDownloaded({
-    version,
-  });
-
-  if (!doesImageExist) {
-    await execa('docker', ['pull', `lostpixel/lost-pixel:v${version}`]);
-  }
-};
-
 type ParsedYargs = {
   configDir: 'string';
 };
 
 export const executeDockerRun = async ({ version }: { version: string }) => {
-  await downloadImageIfNotExistent({ version });
+  isDockerInstalled();
 
   // @ts-expect-error TBD
   const argv = yargs(hideBin(process.argv)).parse() as ParsedYargs;
