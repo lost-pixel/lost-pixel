@@ -14,7 +14,7 @@ const isLostPixelImageDownloaded = async ({ version }: { version: string }) => {
   const { exitCode, stdout, stderr } = await execa('docker', [
     'images',
     '-q',
-    `lostpixel/lost-pixel:${version}`,
+    `lostpixel/lost-pixel:v${version}`,
   ]);
 
   if (exitCode !== 0) {
