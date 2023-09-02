@@ -10,8 +10,8 @@ import {
   removeFilesInFolder,
 } from './utils';
 import type { FullConfig, PlatformModeConfig } from './config';
-import type { ShotConfig } from './api';
 import {
+  type ShotConfig,
   getApiToken,
   prepareUpload,
   processShots,

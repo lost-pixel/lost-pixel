@@ -2,8 +2,7 @@ import { createReadStream } from 'node:fs';
 import FormData from 'form-data';
 import axios, { type AxiosError, isAxiosError } from 'axios';
 import { retry } from 'async';
-import { log, logMemory } from './log';
-import type { LogMemory } from './log';
+import { type LogMemory, log, logMemory } from './log';
 import type { PlatformModeConfig } from './config';
 import { getVersion } from './utils';
 
