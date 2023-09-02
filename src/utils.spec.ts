@@ -1,5 +1,9 @@
-import type { Changes } from './utils';
-import { getChanges, extendFileName, readDirIntoShotItems } from './utils';
+import {
+  getChanges,
+  extendFileName,
+  readDirIntoShotItems,
+  type Changes,
+} from './utils';
 import { configure } from './config';
 import { defaultTestConfig } from './testUtils';
 

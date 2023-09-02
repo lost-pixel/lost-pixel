@@ -3,8 +3,7 @@ import kebabCase from 'lodash.kebabcase';
 import type { BrowserContext } from 'playwright-core';
 import { readFileSync } from 'fs-extra';
 import type { ShotItem } from '../types';
-import { config } from '../config';
-import type { Mask } from '../config';
+import { type Mask, config } from '../config';
 import { getBrowser } from '../utils';
 import { log } from '../log';
 

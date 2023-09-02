@@ -2,8 +2,7 @@ import path from 'node:path';
 import axios, { isAxiosError } from 'axios';
 import { z } from 'zod';
 import { log } from '../log';
-import { config } from '../config';
-import type { PageScreenshotParameter, Mask } from '../config';
+import { type Mask, type PageScreenshotParameter, config } from '../config';
 import type { ShotItem } from '../types';
 
 const generateBrowserConfig = (page: PageScreenshotParameter) => {

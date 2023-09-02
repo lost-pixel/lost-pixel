@@ -1,7 +1,6 @@
 import path from 'node:path';
 import axios from 'axios';
-import { config } from '../config';
-import type { Mask } from '../config';
+import { config, type Mask } from '../config';
 import type { ShotItem } from '../types';
 import type { Story } from './storybook';
 
