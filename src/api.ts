@@ -87,6 +87,7 @@ type ApiPayloadProcessShots = {
     shots?: ShotConfig[];
   };
   log: LogMemory;
+  cacheKey?: string;
 };
 
 type ApiPayloadRecordLogs = {
@@ -366,6 +367,7 @@ export const processShots = async (
   apiToken: string,
   uploadToken: string,
   shotsConfig?: ApiPayloadProcessShots['config']['shots'],
+  cacheKey?: string,
 ) => {
   return sendToAPI<{ success: true }>(config, {
     action: 'processShots',
@@ -377,6 +379,7 @@ export const processShots = async (
         threshold: config.threshold,
       },
       log: logMemory,
+      cacheKey,
     },
   });
 };

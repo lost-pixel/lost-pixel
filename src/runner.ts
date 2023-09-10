@@ -190,7 +190,13 @@ const checkForCachedBuild = async (
         process.env.LOST_PIXEL_CACHE_KEY,
       );
 
-      await processShots(config, apiToken, uploadToken, []);
+      await processShots(
+        config,
+        apiToken,
+        uploadToken,
+        [],
+        process.env.LOST_PIXEL_CACHE_KEY,
+      );
 
       return true;
     }
@@ -295,7 +301,13 @@ export const platformRunner = async (
         threshold: shotItem.threshold,
       }));
 
-      await processShots(config, apiToken, uploadToken, shotsConfig);
+      await processShots(
+        config,
+        apiToken,
+        uploadToken,
+        shotsConfig,
+        process.env.LOST_PIXEL_CACHE_KEY,
+      );
     }
 
     const executionStop = process.hrtime(executionStart);
