@@ -10,6 +10,7 @@ type ApiAction =
   | 'getApiToken'
   | 'init'
   | 'finalize'
+  | 'checkCache'
   | 'prepareUpload'
   | 'uploadShot'
   | 'processShots'
@@ -28,6 +29,7 @@ const apiRoutes: Record<ApiAction, string> = {
   getApiToken: '/auth/get-api-token',
   init: '/app/init',
   finalize: '/app/finalize',
+  checkCache: '/app/check-cache',
   prepareUpload: '/file/prepare-upload',
   uploadShot: '/file/upload-shot',
   processShots: '/app/process-shots',
@@ -51,6 +53,11 @@ type ApiPayloadFinalize = {
   buildNumber: string;
 };
 
+type ApiPayloadCheckCache = {
+  projectId: string;
+  cacheKey: string;
+};
+
 type ApiPayloadPrepareUpload = {
   branchName: string;
   commit: string;
@@ -59,6 +66,7 @@ type ApiPayloadPrepareUpload = {
     name: string;
     hash: string;
   }>;
+  cacheKey?: string;
 };
 
 type ApiPayloadUploadShot = {
@@ -98,6 +106,7 @@ type ApiPayloads =
   | ApiPayload<'getApiToken', ApiPayloadGetApiToken>
   | ApiPayload<'init', ApiPayloadInit>
   | ApiPayload<'finalize', ApiPayloadFinalize>
+  | ApiPayload<'checkCache', ApiPayloadCheckCache>
   | ApiPayload<'prepareUpload', ApiPayloadPrepareUpload>
   | ApiPayload<'uploadShot', ApiPayloadUploadShot>
   | ApiPayload<'processShots', ApiPayloadProcessShots>
@@ -266,6 +275,21 @@ export const sendFinalizeToAPI = async (
   });
 };
 
+export const sendCheckCacheToAPI = async (
+  config: PlatformModeConfig,
+  apiToken: string,
+  cacheKey: string,
+) => {
+  return sendToAPI<{ cacheExists: boolean }>(config, {
+    action: 'checkCache',
+    apiToken,
+    payload: {
+      projectId: config.lostPixelProjectId,
+      cacheKey,
+    },
+  });
+};
+
 export const prepareUpload = async (
   config: PlatformModeConfig,
   apiToken: string,
@@ -273,6 +297,7 @@ export const prepareUpload = async (
     name: string;
     hash: string;
   }>,
+  cacheKey?: string,
 ) => {
   return sendToAPI<{
     requiredFileHashes: string[];
@@ -286,6 +311,7 @@ export const prepareUpload = async (
       commit: config.commitHash,
       buildNumber: config.ciBuildNumber,
       currentShots: shotNamesWithHashes,
+      cacheKey,
     },
   });
 };
