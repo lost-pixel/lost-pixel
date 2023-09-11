@@ -17,6 +17,7 @@ import {
   processShots,
   sendInitToAPI,
   sendRecordLogsToAPI,
+  sendCheckCacheToAPI,
 } from './api';
 import { log } from './log';
 import type { ExtendedShotItem } from './types';
@@ -158,6 +159,58 @@ export const getPlatformApiToken = async (config: PlatformModeConfig) => {
   }
 };
 
+const checkForCachedBuild = async (
+  config: PlatformModeConfig,
+  apiToken: string,
+) => {
+  if (process.env.LOST_PIXEL_CACHE_KEY) {
+    log.process(
+      'info',
+      'general',
+      `♻️  Using cache key ${process.env.LOST_PIXEL_CACHE_KEY}`,
+    );
+
+    const { cacheExists } = await sendCheckCacheToAPI(
+      config,
+      apiToken,
+      process.env.LOST_PIXEL_CACHE_KEY,
+    );
+
+    if (cacheExists) {
+      log.process(
+        'info',
+        'general',
+        `♻️  Cache hit for key ${process.env.LOST_PIXEL_CACHE_KEY} - Skipping shot creation`,
+      );
+
+      const { uploadToken } = await prepareUpload(
+        config,
+        apiToken,
+        [],
+        process.env.LOST_PIXEL_CACHE_KEY,
+      );
+
+      await processShots(
+        config,
+        apiToken,
+        uploadToken,
+        [],
+        process.env.LOST_PIXEL_CACHE_KEY,
+      );
+
+      return true;
+    }
+
+    log.process(
+      'info',
+      'general',
+      `♻️  Cache miss for key ${process.env.LOST_PIXEL_CACHE_KEY}`,
+    );
+  }
+
+  return false;
+};
+
 export const platformRunner = async (
   config: PlatformModeConfig,
   apiToken: string,
@@ -182,65 +235,80 @@ export const platformRunner = async (
       await sendInitToAPI(config, apiToken);
     }
 
-    log.process('info', 'general', '📂 Creating shot folders');
-    const createShotsStart = process.hrtime();
+    const foundCache = await checkForCachedBuild(config, apiToken);
 
-    createShotsFolders();
+    if (!foundCache) {
+      log.process('info', 'general', '📂 Creating shot folders');
+      const createShotsStart = process.hrtime();
 
-    log.process('info', 'general', '📸 Creating shots');
-    const shotItems = await createShots();
+      createShotsFolders();
 
-    const createShotsStop = process.hrtime(createShotsStart);
+      log.process('info', 'general', '📸 Creating shots');
+      const shotItems = await createShots();
 
-    log.process(
-      'info',
-      'general',
-      `⏱  Creating shots took ${parseHrtimeToSeconds(createShotsStop)} seconds`,
-    );
+      const createShotsStop = process.hrtime(createShotsStart);
 
-    const extendedShotItems: ExtendedShotItem[] = shotItems.map((shotItem) => ({
-      ...shotItem,
-      uniqueName: `${shotItem.shotMode}/${shotItem.shotName}`,
-      hash: hashFile(shotItem.filePathCurrent),
-    }));
+      log.process(
+        'info',
+        'general',
+        `⏱  Creating shots took ${parseHrtimeToSeconds(
+          createShotsStop,
+        )} seconds`,
+      );
 
-    const { requiredFileHashes, uploadToken, uploadUrl } = await prepareUpload(
-      config,
-      apiToken,
-      extendedShotItems.map((shotItem) => ({
-        name: shotItem.uniqueName,
-        hash: shotItem.hash,
-      })),
-    );
+      const extendedShotItems: ExtendedShotItem[] = shotItems.map(
+        (shotItem) => ({
+          ...shotItem,
+          uniqueName: `${shotItem.shotMode}/${shotItem.shotName}`,
+          hash: hashFile(shotItem.filePathCurrent),
+        }),
+      );
 
-    log.process(
-      'info',
-      'general',
-      [
-        `🏙 `,
-        `${shotItems.length} shot(s) in total.`,
-        `${
-          shotItems.length - requiredFileHashes.length
-        } shot(s) already exist on platform.`,
-        `${requiredFileHashes.length} shot(s) will be uploaded at ${uploadUrl}.`,
-      ].join(' '),
-    );
+      const { requiredFileHashes, uploadToken, uploadUrl } =
+        await prepareUpload(
+          config,
+          apiToken,
+          extendedShotItems.map((shotItem) => ({
+            name: shotItem.uniqueName,
+            hash: shotItem.hash,
+          })),
+        );
 
-    await uploadRequiredShots({
-      config,
-      apiToken,
-      uploadToken,
-      uploadUrl,
-      requiredFileHashes,
-      extendedShotItems,
-    });
+      log.process(
+        'info',
+        'general',
+        [
+          `🏙 `,
+          `${shotItems.length} shot(s) in total.`,
+          `${
+            shotItems.length - requiredFileHashes.length
+          } shot(s) already exist on platform.`,
+          `${requiredFileHashes.length} shot(s) will be uploaded at ${uploadUrl}.`,
+        ].join(' '),
+      );
 
-    const shotsConfig: ShotConfig[] = shotItems.map((shotItem) => ({
-      name: `${shotItem.shotMode}/${shotItem.shotName}`,
-      threshold: shotItem.threshold,
-    }));
+      await uploadRequiredShots({
+        config,
+        apiToken,
+        uploadToken,
+        uploadUrl,
+        requiredFileHashes,
+        extendedShotItems,
+      });
 
-    await processShots(config, apiToken, uploadToken, shotsConfig);
+      const shotsConfig: ShotConfig[] = shotItems.map((shotItem) => ({
+        name: `${shotItem.shotMode}/${shotItem.shotName}`,
+        threshold: shotItem.threshold,
+      }));
+
+      await processShots(
+        config,
+        apiToken,
+        uploadToken,
+        shotsConfig,
+        process.env.LOST_PIXEL_CACHE_KEY,
+      );
+    }
 
     const executionStop = process.hrtime(executionStart);
 
