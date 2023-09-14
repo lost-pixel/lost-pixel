@@ -2,6 +2,7 @@ import execa from 'execa';
 import shell from 'shelljs';
 import yargs from 'yargs';
 import { hideBin } from 'yargs/helpers';
+import { isUpdateMode } from '../utils';
 
 const isDockerInstalled = () => {
   if (!shell.which('docker')) {
@@ -15,6 +16,7 @@ type ParsedYargs = {
 
 export const executeDockerRun = async ({ version }: { version: string }) => {
   isDockerInstalled();
+  const isUpdateModeEnabled = isUpdateMode();
 
   // @ts-expect-error TBD
   const argv = yargs(hideBin(process.argv)).parse() as ParsedYargs;
@@ -27,6 +29,7 @@ export const executeDockerRun = async ({ version }: { version: string }) => {
     `-e WORKSPACE=${process.cwd()}`,
     '-e DOCKER=1',
     argv.configDir ? `-e LOST_PIXEL_CONFIG_DIR=${argv.configDir}` : '',
+    isUpdateModeEnabled ? '-e LOST_PIXEL_MODE=update' : '',
     `lostpixel/lost-pixel:v${version}`,
   ];
 
