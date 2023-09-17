@@ -71,7 +71,7 @@
     "serve-handler": "6.1.5",
     "shelljs": "^0.8.5",
     "ts-node": "10.9.1",
-    "uuid": "9.0.0",
+    "uuid": "9.0.1",
     "yargs": "17.7.2",
     "zod": "3.21.4"
   },
@@ -86,7 +86,7 @@
     "@types/pngjs": "6.0.1",
     "@types/serve-handler": "6.1.1",
     "@types/shelljs": "^0.8.11",
-    "@types/uuid": "9.0.2",
+    "@types/uuid": "9.0.4",
     "@typescript-eslint/eslint-plugin": "6.7.0",
     "@typescript-eslint/parser": "6.7.0",
     "eslint": "8.49.0",
