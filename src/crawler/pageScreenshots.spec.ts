@@ -1,7 +1,6 @@
 import { createShotsFolders } from '../utils';
 import { type PageScreenshotParameter, configure } from '../config';
 import { defaultTestConfig } from '../testUtils';
-
 import { generatePageShotItems } from './pageScreenshots';
 
 beforeAll(async () => {

@@ -1,6 +1,5 @@
 import { mapLimit } from 'async';
-import { MEDIA_UPLOAD_CONCURRENCY } from './config';
-import type { PlatformModeConfig } from './config';
+import { MEDIA_UPLOAD_CONCURRENCY, type PlatformModeConfig } from './config';
 import type { ExtendedShotItem } from './types';
 import { uploadShot } from './api';
 import { log } from './log';

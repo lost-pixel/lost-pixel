@@ -9,8 +9,9 @@ import { getPlatformApiToken, platformRunner, runner } from './runner';
 import { getVersion } from './utils';
 import { sendFinalizeToAPI } from './api';
 import { config, configure } from './config';
+import { runInDocker } from './docker-runner';
 
-type CommandArgs = ['init-js', 'init-ts', 'finalize'];
+type CommandArgs = ['docker', 'init-js', 'init-ts', 'finalize'];
 
 const args = yargs(hideBin(process.argv)).parse();
 // @ts-expect-error TBD
@@ -24,7 +25,9 @@ if (version) {
 
 // eslint-disable-next-line unicorn/prefer-top-level-await
 (async () => {
-  if (commandArgs.includes('init-js')) {
+  if (commandArgs.includes('docker')) {
+    await runInDocker();
+  } else if (commandArgs.includes('init-js')) {
     log.process('info', 'general', 'Initializing javascript lost-pixel config');
 
     await fs.copy(

@@ -3,8 +3,7 @@ import kebabCase from 'lodash.kebabcase';
 import type { BrowserContext } from 'playwright-core';
 import { readFileSync } from 'fs-extra';
 import type { ShotItem } from '../types';
-import { config } from '../config';
-import type { Mask } from '../config';
+import { type Mask, config } from '../config';
 import { getBrowser } from '../utils';
 import { log } from '../log';
 import { selectBreakpoints, generateSizeLabel } from '../shots/utils';
@@ -127,7 +126,7 @@ export const collectStoriesViaWindowApi = async (
             typeof parameters === 'string' ||
             typeof parameters === 'number' ||
             typeof parameters === 'boolean' ||
-            typeof parameters === 'undefined' ||
+            parameters === undefined ||
             typeof parameters === 'function' ||
             parameters instanceof RegExp ||
             parameters instanceof Date ||

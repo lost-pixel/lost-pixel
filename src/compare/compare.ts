@@ -98,7 +98,7 @@ export const compareImagesViaPixelmatch = async (
   };
 };
 
-const compareImagesViaOdiff = async (
+export const compareImagesViaOdiff = async (
   threshold: number,
   baselineShotPath: string,
   currentShotPath: string,
@@ -129,8 +129,10 @@ const compareImagesViaOdiff = async (
     let isWithinThreshold = true;
 
     // Treat theshold as percentage
+    const pixelDifferencePercentage = Number(result.diffPercentage / 100);
+
     if (threshold < 1) {
-      isWithinThreshold = result.diffPercentage <= threshold;
+      isWithinThreshold = pixelDifferencePercentage <= threshold;
     } else {
       // Treat threshold as absolute value
       isWithinThreshold = result.diffCount <= threshold;
@@ -138,7 +140,7 @@ const compareImagesViaOdiff = async (
 
     return {
       pixelDifference: Number(result.diffCount),
-      pixelDifferencePercentage: Number(result.diffPercentage / 100),
+      pixelDifferencePercentage,
       isWithinThreshold,
     };
   }

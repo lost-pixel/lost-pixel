@@ -3,6 +3,9 @@
 <div align="center">
   <h1>Lost Pixel</h1>
   <h2>Holistic visual regression testing solution </h2>  
+  <a href="https://lost-pixel.com">
+<img src="https://img.shields.io/static/v1?style=flat-square&color=brightgreen&url=https://www.lost-pixel.com&message=Visual%20Regression%20Tests&label=Lost%20Pixel&logo=data:image/png;base64,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"/>  
+  </a>
   <a href="https://www.npmjs.com/package/lost-pixel"><img src="https://img.shields.io/npm/v/lost-pixel?style=plastic" /></a> 
   <a href="https://www.npmjs.com/package/lost-pixel"><img src="https://img.shields.io/npm/dt/lost-pixel" /></a> 
   <a href="https://github.com/lost-pixel/lost-pixel/blob/main/docs/contributing.md"><img src="https://img.shields.io/badge/PRs-welcome-brightgreen.svg" /></a>
@@ -75,8 +78,13 @@ export const config: CustomProjectConfig = {
   storybookShots: {
     storybookUrl: './storybook-static',
   },
+   // OSS mode 
   generateOnly: true,
-  failOnDifference: true,
+  failOnDifference: true
+  
+  // Lost Pixel Platform (to use in Platform mode, comment out the OSS mode and uncomment this part )
+  // lostPixelProjectId: "xxxx",
+  // process.env.LOST_PIXEL_API_KEY,
 };
 ```
 
@@ -106,7 +114,7 @@ jobs:
         run: npm run build-storybook
 
       - name: Lost Pixel
-        uses: lost-pixel/lost-pixel@v3.2.0
+        uses: lost-pixel/lost-pixel@v3.5.2
 ```
 
 </details>
@@ -128,8 +136,13 @@ export const config: CustomProjectConfig = {
     //ip should be localhost when running locally & 172.17.0.1 when running in GitHub action
     ladleUrl: 'http://172.17.0.1:61000',
   },
+   // OSS mode 
   generateOnly: true,
-  failOnDifference: true,
+  failOnDifference: true
+  
+  // Lost Pixel Platform (to use in Platform mode, comment out the OSS mode and uncomment this part )
+  // lostPixelProjectId: "xxxx",
+  // process.env.LOST_PIXEL_API_KEY,
 };
 ```
 
@@ -171,7 +184,7 @@ jobs:
         run: npm run serve &
 
       - name: Lost Pixel
-        uses: lost-pixel/lost-pixel@v3.2.0
+        uses: lost-pixel/lost-pixel@v3.5.2
 ```
 
 </details>
@@ -194,8 +207,13 @@ export const config: CustomProjectConfig = {
     // IP should be localhost when running locally & 172.17.0.1 when running in GitHub action
     baseUrl: 'http://172.17.0.1:3000',
   },
+  // OSS mode 
   generateOnly: true,
-  failOnDifference: true,
+  failOnDifference: true
+  
+  // Lost Pixel Platform (to use in Platform mode, comment out the OSS mode and uncomment this part )
+  // lostPixelProjectId: "xxxx",
+  // process.env.LOST_PIXEL_API_KEY,
 };
 ```
 
@@ -228,7 +246,89 @@ jobs:
         run: npm run start &
 
       - name: Lost Pixel
-        uses: lost-pixel/lost-pixel@v3.2.0
+        uses: lost-pixel/lost-pixel@v3.5.2
+```
+
+</details>
+
+<details>
+<summary>Custom shots (Playwright example)🎭 </summary>
+
+Assuming you are running some playwright tests, where you want to add visual tests at any step. This setup will run visual regression tests against all the tests, where you've generated lost-pixel screenshots, on every push.
+
+You can find more examples in the [examples repository](https://github.com/lost-pixel/lost-pixel-examples). You can learn more about Lost Pixel workflow and get more useful recipes in [documentation](https://docs.lost-pixel.com/user-docs).
+
+Add `lostpixel.config.ts` at the root of the project:
+
+```typescript
+import { CustomProjectConfig } from 'lost-pixel';
+
+export const config: CustomProjectConfig = {
+ customShots: {
+    currentShotsPath: "./lost-pixel",
+  },
+  // OSS mode 
+  generateOnly: true,
+  failOnDifference: true
+  
+  // Lost Pixel Platform (to use in Platform mode, comment out the OSS mode and uncomment this part )
+  // lostPixelProjectId: "xxxx",
+  // process.env.LOST_PIXEL_API_KEY,
+};
+```
+
+Update your Playwright tests with following line(note, that there is no external dependency needed here):
+
+```javascript
+import { test } from '@playwright/test';
+
+test('lost-pixel e2e', async ({ page }) => {
+  // Start from the index page (the baseURL is set via the webServer in the playwright.config.ts)
+  await page.goto('http://172.17.0.1:3000/context');
+  await page.click('data-test-id=context-click-counter');
+  await page.click('data-test-id=context-click-counter');
+  await page.click('data-test-id=context-click-counter');
+  await page.click('data-test-id=context-click-counter');
+  // Run lost-pixel visual regression test after doing some functional testing on the page
+  await page.screenshot({ path: 'lost-pixel/a.png', fullPage: true });
+});
+```
+
+Add GitHub action `.github/workflows/lost-pixel-run.yml`
+
+```yml
+on: [push]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    name: Lost Pixel
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16.x
+
+      - name: Install dependencies
+        run: npm install --legacy-peer-deps
+
+      - name: Build Next app
+        run: npm run build
+
+      - name: Run Next app
+        run: npm run start &
+
+      - name: Playwright tests
+        run: npx playwright install --with-deps && npm run test:e2e
+
+      - name: Lost Pixel
+        uses: lost-pixel/lost-pixel@v3.5.2
+        env:
+          LOST_PIXEL_API_KEY: ${{ secrets.LOST_PIXEL_API_KEY }}
 ```
 
 </details>
@@ -265,9 +365,9 @@ Want to chat about visual regression testing with likeminded people? We've start
 
 ---
   
-### Using Lost Pixel Platfrom in non-commerical Open Source projects 
+### Using Lost Pixel Platform in non-commercial Open Source projects 
 
-We are excited to offer you free usage of Lost Pixel Platform(SaaS) for you Open Source repositories, feel free to reach out to oss@lost-pixel.com to get started!
+We are excited to offer you free usage of Lost Pixel Platform(SaaS) for your Open Source repositories, feel free to reach out to oss@lost-pixel.com to get started!
 
 If you are already using Lost Pixel it would mean a lot to us if you give us a shoutout by including our badge in your OSS project readme!
 
