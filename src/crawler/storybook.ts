@@ -6,6 +6,7 @@ import type { ShotItem } from '../types';
 import { type Mask, config } from '../config';
 import { getBrowser } from '../utils';
 import { log } from '../log';
+import { selectBreakpoints, generateSizeLabel } from '../shots/utils';
 
 export type StoryParameters = {
   lostpixel?: {
@@ -13,6 +14,7 @@ export type StoryParameters = {
     threshold?: number;
     waitBeforeScreenshot?: number;
     mask?: Mask[];
+    breakpoints: number[];
   };
   viewport?: {
     width?: number;
@@ -272,6 +274,7 @@ export const generateStorybookShotItems = (
   baseUrl: string,
   stories: Story[],
   mask?: Mask[],
+  modeBreakpoints?: number[],
 ): ShotItem[] => {
   const iframeUrl = getIframeUrl(getStoryBookUrl(baseUrl));
 
@@ -289,10 +292,10 @@ export const generateStorybookShotItems = (
         ? config.filterShot({ ...story, shotMode: 'storybook' })
         : true,
     )
-    .map((story): ShotItem => {
-      const fileNameWithExt = `${story.shotName}.png`;
+    .flatMap((story): ShotItem[] => {
+      let fileNameWithExt = `${story.shotName}.png`;
 
-      return {
+      const baseShotItem: ShotItem = {
         shotMode: 'storybook',
         id: story.id,
         shotName: story.shotName,
@@ -311,6 +314,55 @@ export const generateStorybookShotItems = (
           config.waitBeforeScreenshot,
         mask: [...(mask ?? []), ...(story.parameters?.lostpixel?.mask ?? [])],
       };
+
+      const storyLevelBreakpoints = story.parameters?.lostpixel?.breakpoints;
+
+      const breakpoints = selectBreakpoints(
+        config.breakpoints,
+        modeBreakpoints,
+        storyLevelBreakpoints,
+      );
+
+      if (!breakpoints || breakpoints.length === 0) {
+        return [baseShotItem];
+      }
+
+      return breakpoints.map((breakpoint) => {
+        const sizeLabel = generateSizeLabel(breakpoint);
+
+        fileNameWithExt = `${story.shotName}${sizeLabel}.png`;
+
+        return {
+          ...baseShotItem,
+          id: `${story.id}${sizeLabel}`,
+          shotName: `${story.shotName}${sizeLabel}`,
+          breakpoint,
+          breakpointGroup: story.id,
+          filePathBaseline: path.join(
+            config.imagePathBaseline,
+            fileNameWithExt,
+          ),
+          filePathCurrent: path.join(config.imagePathCurrent, fileNameWithExt),
+          filePathDifference: path.join(
+            config.imagePathDifference,
+            fileNameWithExt,
+          ),
+          viewport: {
+            width: breakpoint,
+            height: undefined,
+          },
+          url: `${iframeUrl}?id=${story.id}&viewMode=story&width=${breakpoint}`,
+          browserConfig: generateBrowserConfig({
+            ...story,
+            parameters: {
+              ...story.parameters,
+              viewport: {
+                width: breakpoint,
+              },
+            },
+          }),
+        };
+      });
     });
 
   return shotItems;

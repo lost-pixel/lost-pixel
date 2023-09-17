@@ -17,6 +17,12 @@ export type ShotItem = {
   mask?: Array<{
     selector: string;
   }>;
+  viewport?: {
+    width: number;
+    height?: number;
+  };
+  breakpoint?: number;
+  breakpointGroup?: string;
 };
 
 export type ExtendedShotItem = ShotItem & {

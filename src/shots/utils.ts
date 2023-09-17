@@ -130,3 +130,27 @@ export const resizeViewportToFullscreen = async ({ page }: { page: Page }) => {
     height: viewport.height,
   });
 };
+
+export const selectBreakpoints = (
+  topLevelBreakpoints?: number[],
+  modeBreakpoints?: number[],
+  shotBreakpoints?: number[],
+): number[] | undefined => {
+  if (shotBreakpoints && shotBreakpoints.length > 0) {
+    return shotBreakpoints;
+  }
+
+  if (modeBreakpoints && modeBreakpoints.length > 0) {
+    return modeBreakpoints;
+  }
+
+  return topLevelBreakpoints;
+};
+
+export const generateSizeLabel = (breakpoint: number): string => {
+  const widthLabel = breakpoint > 0 ? `w${breakpoint}px` : '';
+
+  const sizeLabel = `__[${widthLabel}]`;
+
+  return sizeLabel;
+};

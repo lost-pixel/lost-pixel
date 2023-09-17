@@ -99,8 +99,19 @@ const takeScreenShot = async ({
   await sleep(shotItem?.waitBeforeScreenshot ?? config.waitBeforeScreenshot);
 
   try {
-    await resizeViewportToFullscreen({ page });
-    fullScreenMode = false;
+    if (shotItem.viewport) {
+      const currentViewport = page.viewportSize();
+
+      await page.setViewportSize({
+        width: shotItem.viewport.width,
+        height: currentViewport?.height ?? 500,
+      });
+
+      fullScreenMode = true;
+    } else {
+      await resizeViewportToFullscreen({ page });
+      fullScreenMode = false;
+    }
   } catch (error: unknown) {
     logger.process(
       'error',
@@ -195,7 +206,10 @@ export const takeScreenShots = async (shotItems: ShotItem[]) => {
       logger.process(
         'info',
         'general',
-        `Taking screenshot of '${shotItem.shotName}'`,
+
+        `Taking screenshot of '${shotItem.shotName} ${
+          shotItem.breakpoint ? `[${shotItem.breakpoint}]` : ''
+        }'`,
       );
 
       const startTime = Date.now();

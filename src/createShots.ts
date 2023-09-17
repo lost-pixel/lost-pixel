@@ -47,7 +47,12 @@ export const createShots = async () => {
 
     log.process('info', 'general', `Found ${collection.length} ladle stories`);
 
-    ladleShotItems = generateLadleShotItems(ladleUrl, collection, mask);
+    ladleShotItems = generateLadleShotItems(
+      ladleUrl,
+      collection,
+      mask,
+      ladleShots.breakpoints,
+    );
 
     log.process(
       'info',
@@ -99,6 +104,7 @@ export const createShots = async () => {
         storybookWebUrl,
         collection.stories,
         mask,
+        storybookShots.breakpoints,
       );
 
       log.process(
@@ -118,15 +124,23 @@ export const createShots = async () => {
   }
 
   if (pageShots) {
-    const { pages: pagesFromConfig, baseUrl, mask } = pageShots;
+    const { pages: pagesFromConfig, baseUrl, mask, breakpoints } = pageShots;
 
     const pagesFromLoader = await getPagesFromExternalLoader();
+
+    if (pagesFromLoader) {
+      log.process(
+        'info',
+        'general',
+        `Found ${pagesFromLoader.length} pages from external loader`,
+      );
+    }
 
     const pages = [...(pagesFromConfig || []), ...(pagesFromLoader || [])];
 
     log.process('info', 'general', `\n=== [Page Mode] ${baseUrl} ===\n`);
 
-    pageShotItems = generatePageShotItems(pages, baseUrl, mask);
+    pageShotItems = generatePageShotItems(pages, baseUrl, mask, breakpoints);
     log.process(
       'info',
       'general',
