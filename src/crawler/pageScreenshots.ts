@@ -4,6 +4,7 @@ import { z } from 'zod';
 import { log } from '../log';
 import { type Mask, type PageScreenshotParameter, config } from '../config';
 import type { ShotItem } from '../types';
+import { selectBreakpoints, generateSizeLabel } from '../shots/utils';
 
 const generateBrowserConfig = (page: PageScreenshotParameter) => {
   const browserConfig =
@@ -30,6 +31,7 @@ export const generatePageShotItems = (
   pages: PageScreenshotParameter[],
   baseUrl: string,
   mask?: Mask[],
+  modeBreakpoints?: number[],
 ): ShotItem[] => {
   const names = pages.map((page) => page.name);
   const uniqueNames = new Set(names);
@@ -38,8 +40,17 @@ export const generatePageShotItems = (
     throw new Error('Error: Page names must be unique');
   }
 
-  return pages.map((page) => {
-    return {
+  return pages.flatMap((page): ShotItem[] => {
+    const configLevelBreakpoints = config.breakpoints ?? [];
+    const shotBreakpoints = page.breakpoints ?? [];
+
+    const breakpoints = selectBreakpoints(
+      configLevelBreakpoints,
+      modeBreakpoints,
+      shotBreakpoints,
+    );
+
+    const baseShotItem: ShotItem = {
       shotMode: 'page',
       id: page.name,
       shotName: config.shotNameGenerator
@@ -58,6 +69,40 @@ export const generatePageShotItems = (
         page.waitBeforeScreenshot ?? config.waitBeforeScreenshot,
       mask: [...(mask ?? []), ...(page.mask ?? [])],
     };
+
+    if (!breakpoints || breakpoints.length === 0) {
+      return [baseShotItem];
+    }
+
+    return breakpoints.map((breakpoint) => {
+      const sizeLabel = generateSizeLabel(breakpoint);
+
+      return {
+        ...baseShotItem,
+        id: `${page.name}${sizeLabel}`,
+        shotName: `${page.name}${sizeLabel}`,
+        breakpoint,
+        breakpointGroup: page.name,
+        url: path.join(baseUrl, page.path),
+        filePathBaseline: `${path.join(
+          config.imagePathBaseline,
+          page.name,
+        )}${sizeLabel}.png`,
+        filePathCurrent: `${path.join(
+          config.imagePathCurrent,
+          page.name,
+        )}${sizeLabel}.png`,
+        filePathDifference: `${path.join(
+          config.imagePathDifference,
+          page.name,
+        )}${sizeLabel}.png`,
+        viewport: { width: breakpoint },
+        browserConfig: generateBrowserConfig({
+          ...page,
+          viewport: { width: breakpoint },
+        }),
+      };
+    });
   });
 };
 
@@ -76,6 +121,7 @@ export const getPagesFromExternalLoader = async () => {
     const { data: pages } = await axios.get<PageScreenshotParameter[]>(
       config.pageShots.pagesJsonUrl,
     );
+
     const pagesArraySchema = z.array(
       z.object({
         path: z.string(),
@@ -104,17 +150,17 @@ export const getPagesFromExternalLoader = async () => {
       return pages;
     }
 
-    log.browser(
+    log.process(
       'error',
       'general',
       'Error validating the loaded pages structure',
     );
-    log.browser('error', 'general', validatePages.error);
+    log.process('error', 'general', validatePages.error);
 
     return [];
   } catch (error: unknown) {
-    if (isAxiosError(error)) {
-      log.browser(
+    if (isAxiosError(error) || error instanceof Error) {
+      log.process(
         'error',
         'network',
         `Error when fetching data: ${error.message}`,

@@ -29,6 +29,10 @@ Primary.args = {
   primary: true,
   label: 'Button',
 };
+Primary.parameters = {
+  lostpixel:{
+    breakpoints: [420, 1000]
+  }}
 
 export const Secondary = Template.bind({});
 Secondary.args = {
