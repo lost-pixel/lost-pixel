@@ -19,7 +19,7 @@ import { log } from './log';
 import type { ShotItem } from './types';
 
 type ParsedYargs = {
-  _: ['update'];
+  _: ['update', 'meta'];
   m: 'update';
 };
 
@@ -57,6 +57,13 @@ export const isUpdateMode = (): boolean => {
     args.m === 'update' ||
     process.env.LOST_PIXEL_MODE === 'update'
   );
+};
+
+export const shallGenerateMeta = (): boolean => {
+  // @ts-expect-error TBD
+  const args = yargs(hideBin(process.argv)).parse() as ParsedYargs;
+
+  return args._.includes('meta') || process.env.GENERATE_META === 'true';
 };
 
 export const getChanges = (files: Files): Changes => {

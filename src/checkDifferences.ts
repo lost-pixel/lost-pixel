@@ -1,9 +1,11 @@
-import { existsSync } from 'node:fs';
+import { existsSync, writeFileSync } from 'node:fs';
+import path from 'node:path';
 import { mapLimit } from 'async';
 import { compareImages } from './compare/compare';
 import { log } from './log';
 import { config } from './config';
 import type { ShotItem } from './types';
+import { shallGenerateMeta } from './utils';
 
 export const checkDifferences = async (shotItems: ShotItem[]) => {
   log.process(
@@ -15,6 +17,15 @@ export const checkDifferences = async (shotItems: ShotItem[]) => {
   const total = shotItems.length;
   let differenceCount = 0;
   let noBaselinesCount = 0;
+
+  const comparisonResults: Record<
+    string,
+    {
+      pixelDifference: number;
+      pixelDifferencePercentage: number;
+      isWithinThreshold: boolean;
+    }
+  > = {};
 
   await mapLimit<[number, ShotItem], void>(
     shotItems.entries(),
@@ -59,6 +70,14 @@ export const checkDifferences = async (shotItems: ShotItem[]) => {
           shotItem.filePathDifference,
         );
 
+      if (shallGenerateMeta()) {
+        comparisonResults[shotItem.id] = {
+          pixelDifference,
+          pixelDifferencePercentage,
+          isWithinThreshold,
+        };
+      }
+
       if (pixelDifference > 0) {
         const percentage = (pixelDifferencePercentage * 100).toFixed(2);
 
@@ -77,6 +96,20 @@ export const checkDifferences = async (shotItems: ShotItem[]) => {
       }
     },
   );
+
+  if (shallGenerateMeta()) {
+    log.process(
+      'info',
+      'general',
+      `Writing meta file with ${
+        Object.entries(comparisonResults).length
+      } items.`,
+    );
+    writeFileSync(
+      `${path.join(config.imagePathCurrent, 'meta')}.json`,
+      JSON.stringify(comparisonResults, null, 2),
+    );
+  }
 
   log.process('info', 'general', 'Comparison done!');
 
