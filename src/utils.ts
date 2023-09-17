@@ -63,7 +63,9 @@ export const shallGenerateMeta = (): boolean => {
   // @ts-expect-error TBD
   const args = yargs(hideBin(process.argv)).parse() as ParsedYargs;
 
-  return args._.includes('meta') || process.env.GENERATE_META === 'true';
+  return (
+    args._.includes('meta') || process.env.LOST_PIXEL_GENERATE_META === 'true'
+  );
 };
 
 export const getChanges = (files: Files): Changes => {

@@ -31,7 +31,7 @@ export const executeDockerRun = async ({ version }: { version: string }) => {
     '-e DOCKER=1',
     argv.configDir ? `-e LOST_PIXEL_CONFIG_DIR=${argv.configDir}` : '',
     isUpdateModeEnabled ? '-e LOST_PIXEL_MODE=update' : '',
-    isGenerateMetaEnabled ? '-e GENERATE_META=true' : '',
+    isGenerateMetaEnabled ? '-e LOST_PIXEL_GENERATE_META=true' : '',
     `lostpixel/lost-pixel:v${version}`,
   ];
 
