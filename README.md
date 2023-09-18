@@ -30,24 +30,24 @@
 
 ## What is Lost Pixel ❓
 
-**Lost Pixel** is an open source visual regression testing tool. Run visual regression tests on your **Storybook** and **Ladle** stories and on your application pages.
+**Lost Pixel** is an open-source visual regression testing tool. Run visual regression tests on your **Storybook** and **Ladle** stories and your application pages.
 
 | Provider         | Status | Description                                                                                                                                                            |
 | ---------------- | :----: | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | **Storybook**    |   ✅   | `First class integration`. Provide your storybook build - Lost Pixel does the rest.                                                                                    |
 | **Ladle**        |   ✅   | `First class integration`. Provide your ladle build - Lost Pixel does the rest.                                                                                        |
 | **Pages**        |   ✅   | Visual tests for modern frontend apps like **Next**, **Gatsby**, **Remix**. Run your app - provide Lost Pixel with paths to test.                                      |
-| **Custom shots** |   ✅   | Take care of taking screenshots on your side - provide Lost Pixel with path to directory with images. Best suitable for custom **Cypress**/**Playwright** integrations |
+| **Custom shots** |   ✅   | Take care of taking screenshots on your side - provide Lost Pixel with a path to the directory with images. Best suitable for custom **Cypress**/**Playwright** integrations |
 
 **Lost Pixel** consists of two products:
 
-- **lost-pixel** (_open BETA_) - the core engine driving the visual regression test runs. It could be used standalone and the main use-cases are outlined in the documentation
+- **lost-pixel** - the core engine driving the visual regression test runs. It could be used standalone, and the main use cases are outlined in the documentation
 
 | What machine sees 🤖                                                                                                         | What human sees 👀                                                                                                           |
 | ---------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------- |
 | ![ezgif-5-e71eb0773d](https://user-images.githubusercontent.com/29632358/185067771-03467437-badd-466b-ad6c-60d7183d99ae.gif) | ![ezgif-5-43091ece5d](https://user-images.githubusercontent.com/29632358/185067989-3f2d818b-c01f-4304-97f6-77295b1970d9.gif) |
 
-- **lost-pixel-platform** (_open BETA_) - the UI and CI helpers that allow you to use lost-pixel's managed version. This includes specified regression UI, collaboration with team members and easy approval/rejection process for the snapshots. Configure it just once and enjoy hassle free visual regression tests integrated into your GitHub actions pipeline.
+- **Lost Pixel Platform** - the **UI and CI helpers** that allow you to use lost-pixel's managed version. This includes specified regression UI, collaboration with team members, and an easy approval/rejection process for the snapshots. You can configure it once and enjoy hassle-free visual regression tests integrated into your GitHub actions pipeline.
   
 https://user-images.githubusercontent.com/29632358/222420960-57924da4-d0bf-4478-9322-fc68686485b6.mp4
 
@@ -59,6 +59,16 @@ https://user-images.githubusercontent.com/29632358/222420960-57924da4-d0bf-4478-
 </div>
 
 <hr/>
+
+## Features
+- 🌐 Visual regression testing in a browser of your choice (chrome, firefox, safari)
+- 📱 Responsive tests running with different breakpoints and viewports
+- 🔀 Parallel execution (limited in OSS version)
+- 🎚️ Flexible sensitivity thresholds
+- 🔄 Flaky test retries
+- 🚫 Masking of parts of the UI that should be excluded from tests
+- ✅ Seamless approval flow (**Lost Pixel Platform only**)
+- 📦 Monorepo execution (**Lost Pixel Platform only**)
 
 ## Quick start ⚡
 
