@@ -68,6 +68,7 @@ https://user-images.githubusercontent.com/29632358/222420960-57924da4-d0bf-4478-
 - 🔄 Flaky test retries
 - 🚫 Masking of parts of the UI that should be excluded from tests
 - ✅ Seamless approval flow (**Lost Pixel Platform only**)
+- 🖼️ Review UI that makes comparing images an effortless task (**Lost Pixel Platform only**)
 - 📦 Monorepo execution (**Lost Pixel Platform only**)
 
 ## Quick start ⚡
