@@ -13,6 +13,6 @@ inputs:
     required: false
 runs:
   using: 'docker'
-  image: 'docker://lostpixel/lost-pixel:v3.6.0'
+  # image: 'docker://lostpixel/lost-pixel:v3.6.0'
   # for branch testing
-  # image: 'Dockerfile'
+  image: 'Dockerfile'
