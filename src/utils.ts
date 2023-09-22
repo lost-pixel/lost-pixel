@@ -141,14 +141,18 @@ export const sleep = async (ms: number) =>
 export const removeFilesInFolder = (path: string, excludePaths?: string[]) => {
   const files = readdirSync(path);
 
-  log.process('info', 'general', `Removing ${files.length} files from ${path}`);
+  const filesPathsIgnoringExclude = files
+    .map((file) => join(path, file))
+    .filter((filePath) => !excludePaths?.includes(filePath));
 
-  for (const file of files) {
-    const filePath = join(path, file);
+  log.process(
+    'info',
+    'general',
+    `Removing ${filesPathsIgnoringExclude.length} files from ${path}`,
+  );
 
-    if (!excludePaths?.includes(filePath)) {
-      unlinkSync(filePath);
-    }
+  for (const filePath of filesPathsIgnoringExclude) {
+    unlinkSync(filePath);
   }
 };
 
