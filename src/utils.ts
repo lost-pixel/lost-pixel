@@ -138,7 +138,7 @@ export const sleep = async (ms: number) =>
     setTimeout(resolve, ms);
   });
 
-export const removeFilesInFolder = (path: string) => {
+export const removeFilesInFolder = (path: string, excludePaths?: string[]) => {
   const files = readdirSync(path);
 
   log.process('info', 'general', `Removing ${files.length} files from ${path}`);
@@ -146,7 +146,9 @@ export const removeFilesInFolder = (path: string) => {
   for (const file of files) {
     const filePath = join(path, file);
 
-    unlinkSync(filePath);
+    if (!excludePaths?.includes(filePath)) {
+      unlinkSync(filePath);
+    }
   }
 };
 
