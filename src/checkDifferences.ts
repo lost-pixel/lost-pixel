@@ -15,8 +15,8 @@ export const checkDifferences = async (shotItems: ShotItem[]) => {
   );
 
   const total = shotItems.length;
-  let differenceCount = 0;
-  let noBaselinesCount = 0;
+  const noBaselinesItems: ShotItem[] = [];
+  const diffInShotItems: ShotItem[] = [];
 
   const comparisonResults: Record<
     string,
@@ -49,7 +49,7 @@ export const checkDifferences = async (shotItems: ShotItem[]) => {
 
       if (!baselineImageExists) {
         logger('Baseline image missing. Will be treated as addition.');
-        noBaselinesCount++;
+        noBaselinesItems.push(shotItem);
 
         return;
       }
@@ -86,7 +86,7 @@ export const checkDifferences = async (shotItems: ShotItem[]) => {
             `Difference of ${pixelDifference} pixels (${percentage}%) found but within threshold.`,
           );
         } else {
-          differenceCount++;
+          diffInShotItems.push(shotItem);
           logger(
             `Difference of ${pixelDifference} pixels (${percentage}%) found. Difference image saved to: ${shotItem.filePathDifference}`,
           );
@@ -113,5 +113,5 @@ export const checkDifferences = async (shotItems: ShotItem[]) => {
 
   log.process('info', 'general', 'Comparison done!');
 
-  return { differenceCount, noBaselinesCount };
+  return { diffInShotItems, noBaselinesItems };
 };
