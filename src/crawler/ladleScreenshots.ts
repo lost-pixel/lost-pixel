@@ -6,11 +6,14 @@ import { selectBreakpoints, generateSizeLabel } from '../shots/utils';
 import type { Story } from './storybook';
 
 export const generateLadleShotItems = (
-  ladleUrl: string,
+  baseUrl: string,
+  isLocalServer: boolean,
   ladleStories: Story[],
   mask?: Mask[],
   modeBreakpoints?: number[],
 ): ShotItem[] => {
+  const ladleUrl = isLocalServer ? `${baseUrl}/index.html` : baseUrl;
+
   return ladleStories.flatMap((ladleStory): ShotItem[] => {
     const configLevelBreakpoints = config.breakpoints ?? [];
 
@@ -26,7 +29,7 @@ export const generateLadleShotItems = (
       shotName: config.shotNameGenerator
         ? config.shotNameGenerator({ ...ladleStory, shotMode: 'ladle' })
         : ladleStory.id,
-      url: `${ladleUrl}/?story=${ladleStory.story}&mode=preview`,
+      url: `${ladleUrl}?story=${ladleStory.story}&mode=preview`,
       filePathBaseline: `${path.join(
         config.imagePathBaseline,
         ladleStory.story,
@@ -56,7 +59,7 @@ export const generateLadleShotItems = (
         shotName: `${ladleStory.story}${sizeLabel}`,
         breakpoint,
         breakpointGroup: ladleStory.story,
-        url: `${ladleUrl}/?story=${ladleStory.story}&mode=preview&width=${breakpoint}`,
+        url: `${ladleUrl}?story=${ladleStory.story}&mode=preview&width=${breakpoint}`,
         filePathBaseline: `${path.join(
           config.imagePathBaseline,
           ladleStory.story,
