@@ -14,7 +14,7 @@ export type StoryParameters = {
     threshold?: number;
     waitBeforeScreenshot?: number;
     mask?: Mask[];
-    breakpoints: number[];
+    breakpoints?: number[];
   };
   viewport?: {
     width?: number;
