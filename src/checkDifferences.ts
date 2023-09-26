@@ -16,7 +16,7 @@ export const checkDifferences = async (shotItems: ShotItem[]) => {
 
   const total = shotItems.length;
   const noBaselinesItems: ShotItem[] = [];
-  const diffInShotItems: ShotItem[] = [];
+  const aboveThresholdDifferenceItems: ShotItem[] = [];
 
   const comparisonResults: Record<
     string,
@@ -86,7 +86,7 @@ export const checkDifferences = async (shotItems: ShotItem[]) => {
             `Difference of ${pixelDifference} pixels (${percentage}%) found but within threshold.`,
           );
         } else {
-          diffInShotItems.push(shotItem);
+          aboveThresholdDifferenceItems.push(shotItem);
           logger(
             `Difference of ${pixelDifference} pixels (${percentage}%) found. Difference image saved to: ${shotItem.filePathDifference}`,
           );
@@ -113,5 +113,5 @@ export const checkDifferences = async (shotItems: ShotItem[]) => {
 
   log.process('info', 'general', 'Comparison done!');
 
-  return { diffInShotItems, noBaselinesItems };
+  return { aboveThresholdDifferenceItems, noBaselinesItems };
 };
