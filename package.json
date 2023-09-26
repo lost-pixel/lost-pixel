@@ -1,6 +1,6 @@
 {
   "name": "lost-pixel",
-  "version": "3.6.0",
+  "version": "3.7.0",
   "description": "GitHub Action for Lost Pixel integration",
   "main": "dist/",
   "bin": "dist/bin.js",
@@ -18,7 +18,6 @@
     "build-example-ladle": "cd examples/example-ladle && npm ci && npm run build",
     "build-example-vite": "cd examples/example-vite-app && npm ci && npm run build",
     "run-example-next-js-pages": "cd examples/example-next-js-pages && npm run start",
-    "run-example-ladle": "cd examples/example-ladle && npm run serve",
     "run-example-vite": "cd examples/example-vite-app && npm run preview",
     "test-on-examples": "./test-on-examples.sh",
     "unused-exports": "ts-prune --error --ignore 'src/index.ts'",

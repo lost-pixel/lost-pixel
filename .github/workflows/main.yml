@@ -48,9 +48,6 @@ jobs:
       - name: Run Example Next.js Pages
         run: npm run run-example-next-js-pages &
 
-      - name: Run Example Ladle
-        run: npm run run-example-ladle &
-
       - name: Run Example Vite
         run: npm run run-example-vite &
 
