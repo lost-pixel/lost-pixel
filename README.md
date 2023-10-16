@@ -125,7 +125,7 @@ jobs:
         run: npm run build-storybook
 
       - name: Lost Pixel
-        uses: lost-pixel/lost-pixel@v3.7.1
+        uses: lost-pixel/lost-pixel@v3.7.2
 ```
 
 </details>
@@ -195,7 +195,7 @@ jobs:
         run: npm run serve &
 
       - name: Lost Pixel
-        uses: lost-pixel/lost-pixel@v3.7.1
+        uses: lost-pixel/lost-pixel@v3.7.2
 ```
 
 </details>
@@ -257,7 +257,7 @@ jobs:
         run: npm run start &
 
       - name: Lost Pixel
-        uses: lost-pixel/lost-pixel@v3.7.1
+        uses: lost-pixel/lost-pixel@v3.7.2
 ```
 
 </details>
@@ -337,7 +337,7 @@ jobs:
         run: npx playwright install --with-deps && npm run test:e2e
 
       - name: Lost Pixel
-        uses: lost-pixel/lost-pixel@v3.7.1
+        uses: lost-pixel/lost-pixel@v3.7.2
         env:
           LOST_PIXEL_API_KEY: ${{ secrets.LOST_PIXEL_API_KEY }}
 ```
