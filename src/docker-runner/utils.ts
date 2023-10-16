@@ -25,7 +25,8 @@ export const executeDockerRun = async ({ version }: { version: string }) => {
   const args = [
     'run',
     '--rm',
-    '-it',
+    // TODO: remove interactive mode for now, while it clashes with Tauri execution
+    // '-it',
     `-v ${process.cwd()}:${process.cwd()}`,
     `-e WORKSPACE=${process.cwd()}`,
     '-e DOCKER=1',
