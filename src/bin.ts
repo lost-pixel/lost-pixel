@@ -6,7 +6,7 @@ import { hideBin } from 'yargs/helpers';
 import fs from 'fs-extra';
 import { log } from './log';
 import { getPlatformApiToken, platformRunner, runner } from './runner';
-import { getVersion } from './utils';
+import { getVersion, isDockerMode } from './utils';
 import { sendFinalizeToAPI } from './api';
 import { config, configure } from './config';
 import { runInDocker } from './docker-runner';
@@ -25,7 +25,7 @@ if (version) {
 
 // eslint-disable-next-line unicorn/prefer-top-level-await
 (async () => {
-  if (commandArgs.includes('docker')) {
+  if (isDockerMode()) {
     await runInDocker();
   } else if (commandArgs.includes('init-js')) {
     log.process('info', 'general', 'Initializing javascript lost-pixel config');
