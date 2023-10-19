@@ -1,21 +1,13 @@
 import execa from 'execa';
-import shell from 'shelljs';
 import yargs from 'yargs';
 import { hideBin } from 'yargs/helpers';
 import { isUpdateMode, shallGenerateMeta } from '../utils';
-
-const isDockerInstalled = () => {
-  if (!shell.which('docker')) {
-    throw new Error('Docker is not installed');
-  }
-};
 
 type ParsedYargs = {
   configDir: 'string';
 };
 
 export const executeDockerRun = async ({ version }: { version: string }) => {
-  isDockerInstalled();
   const isUpdateModeEnabled = isUpdateMode();
   const isGenerateMetaEnabled = shallGenerateMeta();
 
