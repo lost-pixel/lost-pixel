@@ -36,6 +36,9 @@ jobs:
       - name: Build Example Ladle
         run: npm run build-example-ladle
 
+      - name: Build Example Histoire
+        run: npm run build-example-histoire
+
       - name: Build Example Vite
         run: npm run build-example-vite
 
