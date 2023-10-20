@@ -1,6 +1,6 @@
 import type { BrowserContextOptions } from 'playwright-core';
 
-export type ShotMode = 'storybook' | 'ladle' | 'page' | 'custom';
+export type ShotMode = 'storybook' | 'ladle' | 'histoire' | 'page' | 'custom';
 
 export type ShotItem = {
   shotMode: ShotMode;

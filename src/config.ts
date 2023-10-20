@@ -80,6 +80,31 @@ type BaseConfig = {
     breakpoints?: number[];
   };
 
+  histoireShots?: {
+    /**
+     * URL of the Ladle served instance
+     * @default 'http://localhost:61000'
+     */
+    staticBuildPath: string;
+
+    /**
+     * Define areas for all stories where differences will be ignored
+     */
+    mask?: Mask[];
+
+    /**
+     * Define custom breakpoints for ladle tests
+     * @default []
+     * @example
+     * [
+     *  { width: 320, height: 480 },
+     * { width: 768, height: 1024 },
+     * { width: 1280, height: 720 },
+     * ]
+     */
+    breakpoints?: number[];
+  };
+
   /**
    * Enable Page mode
    */
@@ -613,12 +638,13 @@ const loadProjectConfig = async (): Promise<CustomProjectConfig> => {
         "Couldn't find project config file 'lostpixel.config.js'",
       );
       process.exit(1);
-    } catch {
+    } catch (error) {
       log.process(
         'error',
         'config',
         `Failed to load config file: ${configFile}`,
       );
+      log.process('error', 'config', error);
       process.exit(1);
     }
   }
@@ -647,6 +673,7 @@ export const configure = async (customProjectConfig?: CustomProjectConfig) => {
     !config.storybookShots &&
     !config.pageShots &&
     !config.ladleShots &&
+    !config.histoireShots &&
     !config.customShots
   ) {
     config.storybookShots = {

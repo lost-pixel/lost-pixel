@@ -1,0 +1,8 @@
+
+
+
+/api/rss.xml /rss.xml # this is mostly here to support old (pre Aug 2022) swyxkits where the RSS was at the /api/rss.xml was at
+/feed /rss.xml
+/rss /rss.xml
+
+# read docs for more https://docs.netlify.com/routing/redirects/

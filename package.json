@@ -17,6 +17,7 @@
     "build-example-next-js-pages": "cd examples/example-next-js-pages && npm ci --legacy-peer-deps && npm run build",
     "build-example-ladle": "cd examples/example-ladle && npm ci && npm run build",
     "build-example-vite": "cd examples/example-vite-app && npm ci && npm run build",
+    "build-example-histoire": "cd examples/swyxkit && npm ci && npm run story:build",
     "run-example-next-js-pages": "cd examples/example-next-js-pages && npm run start",
     "run-example-vite": "cd examples/example-vite-app && npm run preview",
     "test-on-examples": "./test-on-examples.sh",
@@ -105,6 +106,10 @@
     "prettier": true,
     "rules": {
       "@typescript-eslint/object-curly-spacing": "off",
+      "complexity": [
+        "error",
+        30
+      ],
       "import/extensions": "off",
       "unicorn/filename-case": "off",
       "unicorn/no-process-exit": "off",
