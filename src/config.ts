@@ -85,7 +85,7 @@ type BaseConfig = {
      * URL of the Ladle served instance
      * @default 'http://localhost:61000'
      */
-    staticBuildPath: string;
+    histoireUrl: string;
 
     /**
      * Define areas for all stories where differences will be ignored

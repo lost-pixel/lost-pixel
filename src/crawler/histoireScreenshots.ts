@@ -12,15 +12,7 @@ type HistoireStory = {
     type: string;
     width: string;
   };
-  icon: string | undefined;
-  iconColor: string | undefined;
-  docsOnly: boolean;
   variants?: HistoireStory[];
-  relativePath: string;
-  supportPluginId: string;
-  treePath: string[];
-  virtual: boolean;
-  markdownFile: string | undefined;
 };
 
 type HistoireResponse = {

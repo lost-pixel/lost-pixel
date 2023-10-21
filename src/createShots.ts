@@ -93,16 +93,16 @@ export const createShots = async () => {
   }
 
   if (histoireShots) {
-    const { staticBuildPath } = histoireShots;
+    const { histoireUrl } = histoireShots;
 
     let localServer;
     let histoireWebUrl;
 
     if (
-      !staticBuildPath.startsWith('http://') &&
-      !staticBuildPath.startsWith('https://')
+      !histoireUrl.startsWith('http://') &&
+      !histoireUrl.startsWith('https://')
     ) {
-      const staticWebServer = await launchStaticWebServer(staticBuildPath);
+      const staticWebServer = await launchStaticWebServer(histoireUrl);
 
       histoireWebUrl = staticWebServer.url;
       localServer = staticWebServer.server;
@@ -115,7 +115,7 @@ export const createShots = async () => {
     log.process(
       'info',
       'general',
-      `\n=== [Histoire Mode] ${staticBuildPath} ===\n`,
+      `\n=== [Histoire Mode] ${histoireUrl} ===\n`,
     );
 
     try {
