@@ -17,6 +17,10 @@ cd examples \
 && cd example-ladle \
 && node ../../dist/bin.js \
 && cd .. \
+&& echo "======== Testing: example-histoire" \
+&& cd example-swyxkit \
+&& node ../../dist/bin.js \
+&& cd .. \
 && echo "======== Testing: example-vite-app" \
 && cd example-vite-app \
 && node ../../dist/bin.js \

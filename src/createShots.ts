@@ -16,10 +16,15 @@ import { takeScreenShots } from './shots/shots';
 import { readDirIntoShotItems, removeFilesInFolder } from './utils';
 import { launchStaticWebServer } from './crawler/utils';
 import type { ShotItem } from './types';
+import {
+  collectHistoireStories,
+  generateHistoireShotItems,
+} from './crawler/histoireScreenshots';
 
 export const createShots = async () => {
   const {
     ladleShots,
+    histoireShots,
     storybookShots,
     pageShots,
     customShots,
@@ -27,8 +32,9 @@ export const createShots = async () => {
     imagePathDifference,
   } = config;
   let storybookShotItems: ShotItem[] = [];
-  let pageShotItems: ShotItem[] = [];
   let ladleShotItems: ShotItem[] = [];
+  let histoireShotItems: ShotItem[] = [];
+  let pageShotItems: ShotItem[] = [];
   let customShotItems: ShotItem[] = [];
 
   removeFilesInFolder(imagePathCurrent);
@@ -80,6 +86,66 @@ export const createShots = async () => {
       localServer?.close();
     } catch (error: unknown) {
       localServer?.close();
+      throw error;
+    }
+
+    log.process('info', 'general', 'Screenshots done!');
+  }
+
+  if (histoireShots) {
+    const { histoireUrl } = histoireShots;
+
+    let localServer;
+    let histoireWebUrl;
+
+    if (
+      !histoireUrl.startsWith('http://') &&
+      !histoireUrl.startsWith('https://')
+    ) {
+      const staticWebServer = await launchStaticWebServer(histoireUrl);
+
+      histoireWebUrl = staticWebServer.url;
+      localServer = staticWebServer.server;
+    }
+
+    if (!histoireWebUrl) {
+      throw new Error('Error: Histoire web url not found');
+    }
+
+    log.process(
+      'info',
+      'general',
+      `\n=== [Histoire Mode] ${histoireUrl} ===\n`,
+    );
+
+    try {
+      const collection = await collectHistoireStories(histoireWebUrl);
+
+      if (!collection || collection.length === 0) {
+        throw new Error('Error: Stories not found');
+      }
+
+      log.process(
+        'info',
+        'general',
+        `Found ${collection.length} Histoire stories`,
+      );
+
+      histoireShotItems = generateHistoireShotItems(histoireWebUrl, collection);
+
+      log.process('info', 'general', { histoireShotItems });
+
+      log.process(
+        'info',
+        'general',
+        `Prepared ${histoireShotItems.length} Histoire stories for screenshots`,
+      );
+
+      await takeScreenShots(histoireShotItems);
+      localServer?.close();
+    } catch (error: unknown) {
+      localServer?.close();
+
       throw error;
     }
 
@@ -193,6 +259,7 @@ export const createShots = async () => {
     ...storybookShotItems,
     ...pageShotItems,
     ...ladleShotItems,
+    ...histoireShotItems,
     ...customShotItems,
   ];
 };

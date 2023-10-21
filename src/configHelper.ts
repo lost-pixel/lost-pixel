@@ -5,17 +5,22 @@ import { log } from './log';
 export const loadProjectConfigFile = async (
   configFilepath: string,
 ): Promise<unknown> => {
-  const { mod } = await bundleRequire<{
-    default?: unknown;
-    config?: unknown;
-  }>({
-    filepath: configFilepath,
-    esbuildOptions: {
-      logLevel: 'silent',
-    },
-  });
+  try {
+    const { mod } = await bundleRequire<{
+      default?: unknown;
+      config?: unknown;
+    }>({
+      filepath: configFilepath,
+      esbuildOptions: {
+        // logLevel: 'silent',
+      },
+    });
 
-  return mod?.default ?? mod?.config ?? mod;
+    return mod?.default ?? mod?.config ?? mod;
+  } catch (error: unknown) {
+    log.process('error', 'config', error);
+    throw error;
+  }
 };
 
 let tsNodeService: Service;
