@@ -76,7 +76,6 @@ export const collectHistoireStories = async (histoireUrl: string) => {
   log.process('info', 'general', `\n=== [Histoire Mode] ${jsonUrl} ===\n`);
   const response = await axios.get<HistoireResponse>(jsonUrl);
 
-  log.process('info', 'general', { stories: response.data.stories });
-
-  return response.data.stories;
+  // Ignore the full-config story from Histoire as it is just JSON
+  return response.data.stories.filter((story) => story.id !== 'full-config');
 };
