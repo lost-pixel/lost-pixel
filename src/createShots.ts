@@ -93,7 +93,6 @@ export const createShots = async () => {
   }
 
   if (histoireShots) {
-    log.process('info', 'general', '🍿 LANDED HERE 🍿');
     const { staticBuildPath } = histoireShots;
 
     let localServer;
@@ -112,8 +111,6 @@ export const createShots = async () => {
     if (!histoireWebUrl) {
       throw new Error('Error: Histoire web url not found');
     }
-
-    log.process('info', 'general', { histoireWebUrl, localServer });
 
     log.process(
       'info',
@@ -145,7 +142,10 @@ export const createShots = async () => {
       );
 
       await takeScreenShots(histoireShotItems);
+      localServer?.close();
     } catch (error: unknown) {
+      localServer?.close();
+
       throw error;
     }
 

@@ -60,7 +60,7 @@ const generateShotItemsForStory = (
     });
   }
 
-  return shotItems;
+  return shotItems.filter((story) => story.id !== 'full-config');
 };
 
 export const generateHistoireShotItems = (
@@ -77,5 +77,5 @@ export const collectHistoireStories = async (histoireUrl: string) => {
   const response = await axios.get<HistoireResponse>(jsonUrl);
 
   // Ignore the full-config story from Histoire as it is just JSON
-  return response.data.stories.filter((story) => story.id !== 'full-config');
+  return response.data.stories;
 };
