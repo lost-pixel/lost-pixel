@@ -202,7 +202,7 @@ jobs:
 </details>
 
 <details>
-<summary>Histoire example 🥄</summary>
+<summary>Histoire example 📖</summary>
 
 Assuming you are using [basic example of Histoire](https://github.com/histoire-dev/histoire/tree/main/examples/vue3). This setup will run visual regression tests against all the histoire stories on every push.
 
