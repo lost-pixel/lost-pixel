@@ -36,6 +36,7 @@
 | ---------------- | :----: | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | **Storybook**    |   ✅   | `First class integration`. Provide your storybook build - Lost Pixel does the rest.                                                                                    |
 | **Ladle**        |   ✅   | `First class integration`. Provide your ladle build - Lost Pixel does the rest.                                                                                        |
+| **Histoire**     |   ✅   | `First class integration`. Provide your histoire build - Lost Pixel does the rest.                                                                                     |
 | **Pages**        |   ✅   | Visual tests for modern frontend apps like **Next**, **Gatsby**, **Remix**. Run your app - provide Lost Pixel with paths to test.                                      |
 | **Custom shots** |   ✅   | Take care of taking screenshots on your side - provide Lost Pixel with a path to the directory with images. Best suitable for custom **Cypress**/**Playwright** integrations |
 
@@ -193,6 +194,64 @@ jobs:
 
       - name: Serve ladle
         run: npm run serve &
+
+      - name: Lost Pixel
+        uses: lost-pixel/lost-pixel@v3.8.0
+```
+
+</details>
+
+<details>
+<summary>Histoire example 🥄</summary>
+
+Assuming you are using [basic example of Histoire](https://github.com/histoire-dev/histoire/tree/main/examples/vue3). This setup will run visual regression tests against all the histoire stories on every push.
+
+You can find more examples in the [examples repository](https://github.com/lost-pixel/lost-pixel-examples). You can learn more about Lost Pixel workflow and get more useful recipes in [documentation](https://docs.lost-pixel.com/user-docs).
+
+Add `lostpixel.config.ts` at the root of the project:
+
+```typescript
+import { CustomProjectConfig } from 'lost-pixel';
+
+export const config: CustomProjectConfig = {
+  histoireShots: {
+    //ip should be localhost when running locally & 172.17.0.1 when running in GitHub action
+    histoireUrl: './.histoire/dist',
+  },
+   // OSS mode 
+  generateOnly: true,
+  failOnDifference: true
+  
+  // Lost Pixel Platform (to use in Platform mode, comment out the OSS mode and uncomment this part )
+  // lostPixelProjectId: "xxxx",
+  // process.env.LOST_PIXEL_API_KEY,
+};
+```
+
+Add GitHub action `.github/workflows/lost-pixel-run.yml`
+
+```yml
+on: [push]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18.x
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build histoire
+        run: npm run story:build
 
       - name: Lost Pixel
         uses: lost-pixel/lost-pixel@v3.8.0
