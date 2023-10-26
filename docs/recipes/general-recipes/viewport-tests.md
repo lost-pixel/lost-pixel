@@ -25,7 +25,7 @@ export const config: CustomProjectConfig = {
         breakpoints: [640, 1024],
     },
     waitBeforeScreenshot: 3500,
-    lostPixelProjectId: 'clb1xlaeo1299101qqkt94cn43',
+    lostPixelProjectId: 'YOUR_PROJECT_ID',
     apiKey: process.env.LOST_PIXEL_API_KEY,
 };
 ```

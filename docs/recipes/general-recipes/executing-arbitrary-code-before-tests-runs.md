@@ -9,7 +9,7 @@ module.exports = {
     baseUrl: 'http://172.17.0.1:9000',
     mask: [{ selector: 'span.gatsby-resp-image-background-image' }],
   },
-  lostPixelProjectId: 'clb5ek3mm1772001qqg7yban38',
+  lostPixelProjectId: 'YOUR_PROJECT_ID',
   apiKey: process.env.LOST_PIXEL_API_KEY,
   beforeScreenshot: async (page) => {
     await page.addStyleTag({

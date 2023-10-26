@@ -10,7 +10,7 @@ module.exports = {
     baseUrl: 'http://172.17.0.1:9000',
 
   },
-  lostPixelProjectId: 'clb5ek3mm1772001qqg7yban38',
+  lostPixelProjectId: 'YOUR_PROJECT_ID',
   apiKey: process.env.LOST_PIXEL_API_KEY,
   },
 }
