@@ -682,9 +682,13 @@ export const configure = async (customProjectConfig?: CustomProjectConfig) => {
     config.generateOnly = true;
     config.lostPixelProjectId = undefined;
 
+    const urlChunks = ['http://', 'https://', '127.0.0.1'];
+
     if (
-      config.pageShots?.baseUrl.includes('http://') &&
-      !config.pageShots?.baseUrl.includes('localhost')
+      config.pageShots?.baseUrl &&
+      urlChunks.some((urlChunk) =>
+        config?.pageShots?.baseUrl.includes(urlChunk),
+      )
     ) {
       const url = new URL(config.pageShots.baseUrl);
 
