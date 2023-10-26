@@ -1,6 +1,6 @@
 # Integrating With GitHub Actions
 
-Lost Pixel has first-class support for GitHub Actions offering a dedicated action in the GitHub Action Marketplace:
+Lost Pixel has first-class support for GitHub Actions, offering a dedicated action in the GitHub Action Marketplace:
 
 ```
 - name: Lost Pixel
@@ -9,7 +9,7 @@ Lost Pixel has first-class support for GitHub Actions offering a dedicated actio
 
 As outlined in [modes](project-configuration/modes.md), Lost Pixel can run in different modes or all of them simultaneously. You would need to build the respective provider and serve it in the action to make it available for the Lost Pixel, e.g. build & serve storybook, build & serve ladle, build & serve next app
 
-Here's an example of a full workflow file that builds the Storybook before continuing with Lost Pixel. To make it run, you need to place `vis-reg-test.yml` into `.github/workflows` at the root of your project. This will execute the Lost Pixel visual regression tests on every commit:
+Here's an example of a complete workflow file that builds the Storybook before continuing with Lost Pixel. To make it run, you need to place `vis-reg-test.yml` it into `.github/workflows` at the root of your project. This will execute the Lost Pixel visual regression tests on every commit:
 
 {% code title="vis-reg-test.yml" %}
 ```yaml
