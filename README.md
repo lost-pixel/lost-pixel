@@ -71,7 +71,7 @@ https://user-images.githubusercontent.com/29632358/222420960-57924da4-d0bf-4478-
 - ✅ Seamless approval flow (**Lost Pixel Platform only**)
 - 🤖 [Executing arbitrary code](https://docs.lost-pixel.com/user-docs/recipes/general-recipes/executing-arbitrary-code-before-tests-runs) before tests to reduce flakiness
 - 🖼️ Review UI that makes comparing images an effortless task (**Lost Pixel Platform only**)
-- 📦 Monorepo execution (**Lost Pixel Platform only**)
+- 📦 [Monorepo execution ](https://docs.lost-pixel.com/user-docs/recipes/lost-pixel-platform/monorepo)(**Lost Pixel Platform only**)
 
 ## Quick start ⚡
 
