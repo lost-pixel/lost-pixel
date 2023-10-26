@@ -18,8 +18,8 @@ import { config } from './config';
 import { log } from './log';
 import type { ShotItem } from './types';
 
-type ParsedYargs = {
-  _: ['update', 'meta', 'docker'];
+export type ParsedYargs = {
+  _: ['update', 'meta', 'docker', 'local'];
   m: 'update';
 };
 

@@ -1,10 +1,13 @@
 import { existsSync } from 'node:fs';
 import path from 'node:path';
+import yargs from 'yargs';
+import { hideBin } from 'yargs/helpers';
 import get from 'lodash.get';
 import type { BrowserContextOptions, Page } from 'playwright-core';
 import { loadProjectConfigFile, loadTSProjectConfigFile } from './configHelper';
 import { log } from './log';
 import type { ShotMode } from './types';
+import type { ParsedYargs } from './utils';
 
 type BaseConfig = {
   /**
@@ -464,6 +467,13 @@ export type CustomProjectConfig =
   | (Partial<BaseConfig> & GenerateOnlyModeProjectConfig)
   | (Partial<BaseConfig> & ProjectConfig);
 
+export const isLocalDebugMode = (): boolean => {
+  // @ts-expect-error TBD
+  const args = yargs(hideBin(process.argv)).parse() as ParsedYargs;
+
+  return args._.includes('local') || process.env.LOST_PIXEL_LOCAL === 'true';
+};
+
 const defaultConfig: BaseConfig = {
   browser: 'chromium',
   lostPixelPlatform: 'https://api.lost-pixel.com',
@@ -667,6 +677,11 @@ export const configure = async (customProjectConfig?: CustomProjectConfig) => {
     ...defaultConfig,
     ...projectConfig,
   };
+
+  if (isLocalDebugMode()) {
+    config.generateOnly = true;
+    config.lostPixelProjectId = undefined;
+  }
 
   // Default to Storybook mode if no mode is defined
   if (
