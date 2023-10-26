@@ -681,6 +681,16 @@ export const configure = async (customProjectConfig?: CustomProjectConfig) => {
   if (isLocalDebugMode()) {
     config.generateOnly = true;
     config.lostPixelProjectId = undefined;
+
+    if (
+      config.pageShots?.baseUrl.includes('http://') &&
+      !config.pageShots?.baseUrl.includes('localhost')
+    ) {
+      const url = new URL(config.pageShots.baseUrl);
+
+      url.hostname = 'localhost';
+      config.pageShots.baseUrl = url.toString();
+    }
   }
 
   // Default to Storybook mode if no mode is defined
