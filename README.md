@@ -65,7 +65,7 @@ https://user-images.githubusercontent.com/29632358/222420960-57924da4-d0bf-4478-
 - 🌐 Visual regression testing in a browser of your choice (chrome, firefox, safari)
 - 📱 Responsive tests running with [different breakpoints and viewports](https://docs.lost-pixel.com/user-docs/recipes/general-recipes/viewport-tests)
 - 🔀 Parallel execution (limited in OSS version)
-- 🎚️ Flexible sensitivity thresholds
+- 🎚️ Flexible sensitivity [thresholds](https://docs.lost-pixel.com/user-docs/recipes/general-recipes/thresholds)
 - 🔄 Flaky test retries. [Utilities to reduce flakiness](https://docs.lost-pixel.com/user-docs/recipes/general-recipes/flakiness).
 - 🚫 [Masking of parts of the UI](https://docs.lost-pixel.com/user-docs/recipes/general-recipes/masking-page-elements) that should be excluded from tests
 - ✅ Seamless approval flow (**Lost Pixel Platform only**)
