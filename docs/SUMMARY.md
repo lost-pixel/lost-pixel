@@ -11,7 +11,7 @@
 * [Integrating With GitHub Actions](setup/integrating-with-github-actions.md)
 * [⏯ Lost Pixel Platform](setup/lost-pixel-platform.md)
 
-## 👨🏫 Guides
+## 👨🏫 👨🏫 Guides
 
 * [Getting started](guides/getting-started/README.md)
   * [Getting started with Storybook](guides/getting-started/getting-started-1.md)
@@ -34,6 +34,10 @@
 * [🍝 General recipes](recipes/general-recipes/README.md)
   * [Thresholds](recipes/general-recipes/thresholds.md)
   * [Flakiness](recipes/general-recipes/flakiness.md)
+  * [Viewport tests](recipes/general-recipes/viewport-tests.md)
+  * [Masking page elements](recipes/general-recipes/masking-page-elements.md)
+  * [Executing arbitrary code before tests runs](recipes/general-recipes/executing-arbitrary-code-before-tests-runs.md)
+  * [Programmatically generated pages](recipes/general-recipes/programmatically-generated-pages.md)
 
 ## 💡 Examples
 

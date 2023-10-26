@@ -1,9 +1,10 @@
 # Modes
 
-Lost Pixel is able to run in different modes to base your visual regression tests on one of the currently available options:
+Lost Pixel can run in different modes to base your visual regression tests on one of the currently available options:
 
-* Storybook
-* Ladle
+* Storybook(needs built Storybook)
+* Ladle(needs built Ladle or running Ladle)
+* Histoire(needs built Histoire)
 * Page shots
 * Custom shots
 
@@ -38,6 +39,27 @@ export const config: CustomProjectConfig = {
   ladleShots: {
   // IP should be localhost when running locally & 172.17.0.1 when running in GitHub action
     baseUrl: 'http://172.17.0.1:61000',
+  },
+  // OSS mode 
+  generateOnly: true,
+  failOnDifference: true
+  
+  // Lost Pixel Platform (to use in Platform mode, comment out the OSS mode and uncomment this part )
+  // lostPixelProjectId: "xxxx",
+  // process.env.LOST_PIXEL_API_KEY,
+};
+```
+{% endcode %}
+
+### Histoire
+
+{% code title="lost-pixel.config.ts" %}
+```typescript
+import { CustomProjectConfig } from 'lost-pixel';
+
+export const config: CustomProjectConfig = {
+  histoireShots: {
+    histoireUrl: './.histoire/dist',
   },
   // OSS mode 
   generateOnly: true,

@@ -4,11 +4,11 @@ description: Lost Pixel Platform & Lost Pixel(OSS)
 
 # 🖼 What is Lost Pixel?
 
-Lost Pixel is an open-source tool to run visual regression tests on your software project. Currently supported modes include [Storybook](https://storybook.js.org/), [Ladle](https://ladle.dev/), Page Screenshots(Web app pages) & Custom Screenshots(your own way of making screenshots, e.g. Cypress or Playwright).
+Lost Pixel is an open-source tool to run visual regression tests on your software project. Currently supported modes include [Storybook](https://storybook.js.org/), [Ladle](https://ladle.dev/), [Histoire](https://histoire.dev/) Page Screenshots(Web app pages) & Custom Screenshots(your own way of making screenshots, e.g. Cypress or Playwright).
 
 Like other tests in software development (e.g., unit and integration tests), visual regression tests exist to detect regressions after changes to the code base have been made. In this case, the focus is on the visual aspect of unintended changes.
 
-Lost Pixel consists of the Lost Pixel engine(OSS) & Lost Pixel Platform(SaaS), learn which one fits your needs the best:
+Lost Pixel consists of the [Lost Pixel engine(OSS)](https://github.com/lost-pixel/lost-pixel) & [Lost Pixel Platform(SaaS)](https://lost-pixel.com); learn which one fits your needs the best:
 
 {% content-ref url="readme-1.md" %}
 [readme-1.md](readme-1.md)
@@ -22,7 +22,7 @@ Visual regression tests do not replace unit and integration tests. They compleme
 Learn what is Visual Regression Testing and how you can benefit from it&#x20;
 {% endembed %}
 
-Especially the fact that the user interface is what your customers will see makes it even more important to have these quality checks in place.
+The fact that the user interface is what your customers will see makes it even more important to have these quality checks in place.
 
 Developers must be confident that an introduced code change will not break the app. Manually visiting your app's page (and state) to check if everything is rendered correctly is neither pleasant nor effective. This is a process of the past.
 
@@ -55,7 +55,11 @@ Learn 5 main reasons to add Visual Regression Testing to your test suite
 ### Case studies:
 
 {% embed url="https://lost-pixel.com/blog/post/case-study-prisma" %}
-Top notch teams like prisma.io are using Lost Pixel to overcome their challenges. Learn from their experience.
+Top-notch teams like prisma.io are using Lost Pixel to overcome their challenges. Learn from their experience.
+{% endembed %}
+
+{% embed url="https://lost-pixel.com/blog/post/lost-pixel-adverity-case-study" %}
+Teams like Adverity run millions of shots per month and make sure their clients are always looking at impeccable UI
 {% endembed %}
 
 ### Guides: Jump right in
