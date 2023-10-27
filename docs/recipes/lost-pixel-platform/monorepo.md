@@ -4,11 +4,10 @@ description: Set up Lost Pixel Platform with Monorepo (GitHub Actions)
 
 # Monorepo
 
-Follow a comprehensive  tutorial covering the Lost Pixel + Turborepo setup(WIP)
+Follow a comprehensive tutorial covering the Lost Pixel + Turborepo setup(WIP)
 
 \
-The GitHub action below focuses on running Lost Pixel in monorepo mode on the Lost Pixel Platform. You need to enable this on the Platform UI first in the repository settings:\
-
+The GitHub action below focuses on running Lost Pixel in monorepo mode on the Lost Pixel Platform. You need to enable this on the Platform UI first in the repository settings:\\
 
 <figure><img src="../../.gitbook/assets/image (8).png" alt=""><figcaption><p>Lost Pixel Platform - monorepo mode in settings</p></figcaption></figure>
 
@@ -93,7 +92,7 @@ jobs:
 ```
 {% endcode %}
 
-To run Lost Pixel in monorepo, you must ensure that you have two[ lostpixel.config.ts|js](../../api-reference/lost-pixel.config.js-or-ts.md) files in respective monorepo packages.&#x20;
+To run Lost Pixel in monorepo, you must ensure that you have two[ lostpixel.config.ts|js](../../api-reference/lost-pixel.config.js-or-ts.md) files in respective monorepo packages.
 
 #### FInalise action
 
