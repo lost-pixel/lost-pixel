@@ -11,7 +11,7 @@
 * [Integrating With GitHub Actions](setup/integrating-with-github-actions.md)
 * [⏯ Lost Pixel Platform](setup/lost-pixel-platform.md)
 
-## 👨🏫 👨🏫 Guides
+## 👨🏫 Guides
 
 * [Getting started](guides/getting-started/README.md)
   * [Getting started with Storybook](guides/getting-started/getting-started-1.md)
@@ -24,6 +24,7 @@
 
 * [⏯ Lost Pixel Platform](recipes/lost-pixel-platform/README.md)
   * [Working with baseline images](recipes/lost-pixel-platform/working-with-baseline-images.md)
+  * [Local debugging](recipes/lost-pixel-platform/local-debugging.md)
   * [Integrations](recipes/lost-pixel-platform/integrations.md)
   * [Monorepo](recipes/lost-pixel-platform/monorepo.md)
   * [Automatic baseline updates on selected branches](recipes/lost-pixel-platform/automatic-baseline-updates-on-selected-branches.md)

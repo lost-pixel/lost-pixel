@@ -1,3 +1,7 @@
+---
+description: Making the team aware of Lost Pixel runs
+---
+
 # Integrations
 
 Lost Pixel Platform supports various integrations that help your team collaborate on visual issues.
