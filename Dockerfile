@@ -22,6 +22,10 @@ FROM mcr.microsoft.com/playwright:v1.37.0-focal AS runner
 
 ENV NODE_ENV=production
 
+RUN apt-get update \
+  && apt-get install -y jq \
+  && rm -rf /var/lib/apt/lists/*
+
 WORKDIR /lost-pixel
 
 COPY --from=builder /app/dist dist
