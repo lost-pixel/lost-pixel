@@ -1,10 +1,11 @@
 import path from 'node:path';
 import axios, { isAxiosError } from 'axios';
 import { z } from 'zod';
+import type { BrowserType } from 'playwright-core';
 import { log } from '../log';
 import { type Mask, type PageScreenshotParameter, config } from '../config';
 import type { ShotItem } from '../types';
-import { selectBreakpoints, generateSizeLabel } from '../shots/utils';
+import { selectBreakpoints, generateLabel } from '../shots/utils';
 
 const generateBrowserConfig = (page: PageScreenshotParameter) => {
   const browserConfig = config.configureBrowser?.({
@@ -31,6 +32,7 @@ export const generatePageShotItems = (
   baseUrl: string,
   mask?: Mask[],
   modeBreakpoints?: number[],
+  browser?: BrowserType,
 ): ShotItem[] => {
   const names = pages.map((page) => page.name);
   const uniqueNames = new Set(names);
@@ -40,28 +42,22 @@ export const generatePageShotItems = (
   }
 
   return pages.flatMap((page): ShotItem[] => {
-    const configLevelBreakpoints = config.breakpoints ?? [];
-    const shotBreakpoints = page.breakpoints ?? [];
-
-    const breakpoints = selectBreakpoints(
-      configLevelBreakpoints,
-      modeBreakpoints,
-      shotBreakpoints,
-    );
+    const shotName =
+      config.shotNameGenerator?.({ ...page, shotMode: 'page' }) ?? page.name;
+    let label = generateLabel({ browser });
+    let fileNameWithExt = `${shotName}${label}.png`;
 
     const baseShotItem: ShotItem = {
       shotMode: 'page',
-      id: page.name,
-      shotName: config.shotNameGenerator
-        ? config.shotNameGenerator({ ...page, shotMode: 'page' })
-        : page.name,
+      id: `${shotName}${label}`,
+      shotName: `${shotName}${label}`,
       url: path.join(baseUrl, page.path),
-      filePathBaseline: `${path.join(config.imagePathBaseline, page.name)}.png`,
-      filePathCurrent: `${path.join(config.imagePathCurrent, page.name)}.png`,
-      filePathDifference: `${path.join(
+      filePathBaseline: path.join(config.imagePathBaseline, fileNameWithExt),
+      filePathCurrent: path.join(config.imagePathCurrent, fileNameWithExt),
+      filePathDifference: path.join(
         config.imagePathDifference,
-        page.name,
-      )}.png`,
+        fileNameWithExt,
+      ),
       browserConfig: generateBrowserConfig(page),
       threshold: page.threshold ?? config.threshold,
       waitBeforeScreenshot:
@@ -69,32 +65,33 @@ export const generatePageShotItems = (
       mask: [...(mask ?? []), ...(page.mask ?? [])],
     };
 
+    const breakpoints = selectBreakpoints(
+      config.breakpoints,
+      modeBreakpoints,
+      page.breakpoints,
+    );
+
     if (!breakpoints || breakpoints.length === 0) {
       return [baseShotItem];
     }
 
     return breakpoints.map((breakpoint) => {
-      const sizeLabel = generateSizeLabel(breakpoint);
+      label = generateLabel({ breakpoint, browser });
+      fileNameWithExt = `${shotName}${label}.png`;
 
       return {
         ...baseShotItem,
-        id: `${page.name}${sizeLabel}`,
-        shotName: `${page.name}${sizeLabel}`,
+        id: `${shotName}${label}`,
+        shotName: `${shotName}${label}`,
         breakpoint,
         breakpointGroup: page.name,
         url: path.join(baseUrl, page.path),
-        filePathBaseline: `${path.join(
-          config.imagePathBaseline,
-          page.name,
-        )}${sizeLabel}.png`,
-        filePathCurrent: `${path.join(
-          config.imagePathCurrent,
-          page.name,
-        )}${sizeLabel}.png`,
-        filePathDifference: `${path.join(
+        filePathBaseline: path.join(config.imagePathBaseline, fileNameWithExt),
+        filePathCurrent: path.join(config.imagePathCurrent, fileNameWithExt),
+        filePathDifference: path.join(
           config.imagePathDifference,
-          page.name,
-        )}${sizeLabel}.png`,
+          fileNameWithExt,
+        ),
         viewport: { width: breakpoint },
         browserConfig: generateBrowserConfig({
           ...page,

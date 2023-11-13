@@ -14,7 +14,7 @@ type BaseConfig = {
    * Browser to use: chromium, firefox, or webkit
    * @default 'chromium'
    */
-  browser: 'chromium' | 'firefox' | 'webkit';
+  browser: Browser | Browser[];
 
   /**
    * URL of the Lost Pixel API endpoint
@@ -287,6 +287,8 @@ type BaseConfig = {
    */
   waitBetweenFlakynessRetries: number;
 };
+
+export type Browser = 'chromium' | 'firefox' | 'webkit';
 
 export type Mask = {
   /**
