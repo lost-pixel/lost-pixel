@@ -4,10 +4,439 @@ import yargs from 'yargs';
 import { hideBin } from 'yargs/helpers';
 import get from 'lodash.get';
 import type { BrowserContextOptions, Page } from 'playwright-core';
+import z from 'zod';
 import { loadProjectConfigFile, loadTSProjectConfigFile } from './configHelper';
 import { log } from './log';
 import type { ShotMode } from './types';
 import type { ParsedYargs } from './utils';
+
+export const MaskSchema = z.object({
+  /**
+   * CSS selector for the element to mask
+   * Examples:
+   * - `#my-id`: Selects the element with the id `my-id`
+   * - `.my-class`: Selects all elements with the class `my-class`
+   * - `div`: Selects all `div` elements
+   * - `div.my-class`: Selects all `div` elements with the class `my-class`
+   * - `li:nth-child(2n)`: Selects all even `li` elements
+   * - `[data-testid="hero-banner"]`: Selects all elements with the attribute `data-testid` set to `hero-banner`
+   * - `div > p`: Selects all `p` elements that are direct children of a `div` element
+   */
+  selector: z.string(),
+});
+
+export const PageScreenshotParameterSchema = z.object({
+  /**
+   * Path to the page to take a screenshot of (e.g. /login)
+   */
+  path: z.string(),
+
+  /**
+   * Unique name for the page
+   */
+  name: z.string(),
+
+  /**
+   * Time to wait before taking a screenshot
+   * @default 1_000
+   */
+  waitBeforeScreenshot: z.number().optional(),
+
+  /**
+   * Threshold for the difference between the baseline and current image
+   *
+   * Values between 0 and 1 are interpreted as percentage of the image size
+   *
+   * Values greater or equal to 1 are interpreted as pixel count.
+   * @default 0
+   */
+  threshold: z.number().optional(),
+
+  /**
+   * Define custom breakpoints for the page as width in pixels
+   * @default []
+   * @example
+   * [ 320, 768, 1280 ]
+   */
+  breakpoints: z.array(z.number()).optional(),
+
+  /**
+   * Define a custom viewport for the page
+   * @default { width: 1280, height: 720 }
+   */
+  viewport: z
+    .object({
+      width: z.number().optional(),
+      height: z.number().optional(),
+    })
+    .optional(),
+
+  /**
+   * Define areas for the page where differences will be ignored
+   */
+  mask: z.array(MaskSchema).optional(),
+});
+
+export const StorybookShotsSchema = z.object({
+  /**
+   * URL of the Storybook instance or local folder
+   * @default 'storybook-static'
+   */
+  storybookUrl: z.string(),
+
+  /**
+   * Define areas for all stories where differences will be ignored
+   */
+  mask: z.array(MaskSchema).optional(),
+
+  /**
+   * Define custom breakpoints for all Storybook shots as width in pixels
+   * @default []
+   * @example
+   * [ 320, 768, 1280 ]
+   */
+  breakpoints: z.array(z.number()).optional(),
+});
+
+export const LadleShotsSchema = z.object({
+  /**
+   * URL of the Ladle served instance
+   * @default 'http://localhost:61000'
+   */
+  ladleUrl: z.string(),
+
+  /**
+   * Define areas for all stories where differences will be ignored
+   */
+  mask: z.array(MaskSchema).optional(),
+
+  /**
+   * Define custom breakpoints for all Ladle shots as width in pixels
+   * @default []
+   * @example
+   * [ 320, 768, 1280 ]
+   */
+  breakpoints: z.array(z.number()).optional(),
+});
+
+export const HistoireShotsSchema = z.object({
+  /**
+   * URL of the Histoire served instance
+   * @default 'http://localhost:61000'
+   */
+  histoireUrl: z.string(),
+
+  /**
+   * Define areas for all stories where differences will be ignored
+   */
+  mask: z.array(MaskSchema).optional(),
+
+  /**
+   * Define custom breakpoints for all Histoire shots as width in pixels
+   * @default []
+   * @example
+   * [ 320, 768, 1280 ]
+   */
+  breakpoints: z.array(z.number()).optional(),
+});
+
+export const PageShotsSchema = z.object({
+  /**
+   * Paths to take screenshots of
+   */
+  pages: z.array(PageScreenshotParameterSchema),
+
+  /**
+   * Url that must return a JSON compatible with `PageScreenshotParameter[]`. It is useful when you want to autogenerate the pages that you want to run lost-pixel on. Can be used together with `pages` as both are composed into a single run.
+   */
+  pagesJsonUrl: z.string().optional(),
+
+  /**
+   * Base URL of the running application (e.g. http://localhost:3000)
+   */
+  baseUrl: z.string(),
+
+  /**
+   * Define areas for all pages where differences will be ignored
+   */
+  mask: z.array(MaskSchema).optional(),
+
+  /**
+   * Define custom breakpoints for all page shots as width in pixels
+   * @default []
+   * @example
+   * [ 320, 768, 1280 ]
+   */
+  breakpoints: z.array(z.number()).optional(),
+});
+
+export const CustomShotsSchema = z.object({
+  /**
+   * Path to current shots folder
+   *
+   * This path cannot be the same as the `imagePathCurrent` path
+   */
+  currentShotsPath: z.string(),
+});
+
+export const BaseConfigSchema = z.object({
+  /**
+   * Browser to use: chromium, firefox, or webkit
+   * @default 'chromium'
+   */
+  browser: z.enum(['chromium', 'firefox', 'webkit']),
+
+  /**
+   * URL of the Lost Pixel API endpoint
+   * @default 'https://api.lost-pixel.com'
+   */
+  lostPixelPlatform: z.string(),
+
+  /**
+   * API key for the Lost Pixel platform
+   */
+  apiKey: z.string().optional(),
+
+  /**
+   * Enable Storybook mode
+   */
+  storybookShots: StorybookShotsSchema.optional(),
+
+  /**
+   * Enable Ladle mode
+   */
+  ladleShots: LadleShotsSchema.optional(),
+
+  /**
+   * Enable Histoire mode
+   */
+  histoireShots: HistoireShotsSchema.optional(),
+
+  /**
+   * Enable Page mode
+   */
+  pageShots: PageShotsSchema.optional(),
+
+  /**
+   * Enable Custom mode
+   */
+  customShots: CustomShotsSchema.optional(),
+
+  /**
+   * Path to the baseline image folder
+   * @default '.lostpixel/baseline/'
+   */
+  imagePathBaseline: z.string(),
+
+  /**
+   * Path to the current image folder
+   * @default '.lostpixel/current/'
+   */
+  imagePathCurrent: z.string(),
+
+  /**
+   * Path to the difference image folder
+   * @default '.lostpixel/difference/'
+   */
+  imagePathDifference: z.string(),
+
+  /**
+   * Define custom breakpoints for all tests as width in pixels
+   * @default []
+   * @example
+   * [ 320, 768, 1280 ]
+   */
+  breakpoints: z.array(z.number()).optional(),
+
+  /**
+   * Number of concurrent shots to take
+   * @default 5
+   */
+  shotConcurrency: z.number(),
+
+  /**
+   * Number of concurrent screenshots to compare
+   * @default 10
+   */
+  compareConcurrency: z.number(),
+
+  /**
+   * Which comparison engine to use for diffing images
+   * @default 'pixelmatch'
+   */
+  compareEngine: z.enum(['pixelmatch', 'odiff']),
+
+  /**
+   * Timeouts for various stages of the test
+   */
+  timeouts: z.object({
+    /**
+     * Timeout for fetching stories
+     * @default 30_000
+     */
+    fetchStories: z.number().optional(),
+
+    /**
+     * Timeout for loading the state of the page
+     * @default 30_000
+     */
+    loadState: z.number().optional(),
+
+    /**
+     * Timeout for waiting for network requests to finish
+     * @default 30_000
+     */
+    networkRequests: z.number().optional(),
+  }),
+
+  /**
+   * Time to wait before taking a screenshot
+   * @default 1_000
+   */
+  waitBeforeScreenshot: z.number(),
+
+  /**
+   * Time to wait for the first network request to start
+   * @default 1_000
+   */
+  waitForFirstRequest: z.number(),
+
+  /**
+   * Time to wait for the last network request to start
+   * @default 1_000
+   */
+  waitForLastRequest: z.number(),
+
+  /**
+   * Threshold for the difference between the baseline and current image
+   *
+   * Values between 0 and 1 are interpreted as percentage of the image size
+   *
+   * Values greater or equal to 1 are interpreted as pixel count.
+   * @default 0
+   */
+  threshold: z.number(),
+
+  /**
+   * Whether to set the GitHub status check on process start or not
+   *
+   * Setting this option to `true` makes only sense if the repository settings have pending status checks disabled
+   * @default false
+   */
+  setPendingStatusCheck: z.boolean(),
+
+  /**
+   * How often to retry a shot for a stable result
+   * @default 0
+   */
+  flakynessRetries: z.number(),
+
+  /**
+   * Time to wait between flakyness retries
+   * @default 2_000
+   */
+  waitBetweenFlakynessRetries: z.number(),
+});
+
+const ShotModeSchema = z.enum([
+  'storybook',
+  'ladle',
+  'histoire',
+  'page',
+  'custom',
+]);
+
+const StoryLikeSchema = z.object({
+  shotMode: ShotModeSchema,
+  id: z.string().optional(),
+  kind: z.string().optional(),
+  story: z.string().optional(),
+  shotName: z.string().optional(),
+  parameters: z.record(z.unknown()).optional(),
+});
+
+const ProjectConfigSchema = z.object({
+  /**
+   * Project ID
+   */
+  lostPixelProjectId: z.string(),
+
+  /**
+   * CI build ID
+   */
+  ciBuildId: z.string(),
+
+  /**
+   * CI build number
+   */
+  ciBuildNumber: z.string(),
+
+  /**
+   * Git repository name (e.g. 'lost-pixel/lost-pixel-storybook')
+   */
+  repository: z.string(),
+
+  /**
+   * Git branch name (e.g. 'main')
+   */
+  commitRefName: z.string(),
+
+  /**
+   * Git commit SHA (e.g. 'b9b8b9b9b9b9b9b9b9b9b9b9b9b9b9b9b9b9b9b9')
+   */
+  commitHash: z.string(),
+
+  /**
+   * Flag that decides if images should be uploaded to S3 bucket or just generated (non-SaaS self-hosted mode)
+   */
+  generateOnly: z.boolean().optional(),
+
+  /**
+   * Flag that decides if process should exit if a difference is found
+   */
+  failOnDifference: z.boolean().optional(),
+
+  /**
+   * File path to event.json file
+   */
+  eventFilePath: z.string().optional(),
+
+  /**
+   * Global shot filter
+   */
+  filterShot: z
+    .function()
+    .args(StoryLikeSchema)
+    .returns(z.boolean())
+    .optional(),
+
+  /**
+   * Shot and file name generator for images
+   */
+  shotNameGenerator: z
+    .function()
+    .args(StoryLikeSchema)
+    .returns(z.string())
+    .optional(),
+
+  /**
+   * Configure browser context options
+   */
+  configureBrowser: z
+    .function()
+    .args(StoryLikeSchema)
+    .returns(z.any())
+    .optional(),
+
+  /**
+   * Configure page before screenshot
+   */
+  beforeScreenshot: z
+    .function()
+    .args(z.any(), StoryLikeSchema)
+    .returns(z.promise(z.void()))
+    .optional(),
+});
 
 type BaseConfig = {
   /**
