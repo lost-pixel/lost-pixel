@@ -179,6 +179,23 @@ export const CustomShotsSchema = z.object({
   currentShotsPath: z.string(),
 });
 
+const ShotModeSchema = z.enum([
+  'storybook',
+  'ladle',
+  'histoire',
+  'page',
+  'custom',
+]);
+
+const StoryLikeSchema = z.object({
+  shotMode: ShotModeSchema,
+  id: z.string().optional(),
+  kind: z.string().optional(),
+  story: z.string().optional(),
+  shotName: z.string().optional(),
+  parameters: z.record(z.unknown()).optional(),
+});
+
 export const BaseConfigSchema = z.object({
   /**
    * Browser to use: chromium, firefox, or webkit
@@ -336,70 +353,6 @@ export const BaseConfigSchema = z.object({
    * @default 2_000
    */
   waitBetweenFlakynessRetries: z.number(),
-});
-
-const ShotModeSchema = z.enum([
-  'storybook',
-  'ladle',
-  'histoire',
-  'page',
-  'custom',
-]);
-
-const StoryLikeSchema = z.object({
-  shotMode: ShotModeSchema,
-  id: z.string().optional(),
-  kind: z.string().optional(),
-  story: z.string().optional(),
-  shotName: z.string().optional(),
-  parameters: z.record(z.unknown()).optional(),
-});
-
-const ProjectConfigSchema = z.object({
-  /**
-   * Project ID
-   */
-  lostPixelProjectId: z.string(),
-
-  /**
-   * CI build ID
-   */
-  ciBuildId: z.string(),
-
-  /**
-   * CI build number
-   */
-  ciBuildNumber: z.string(),
-
-  /**
-   * Git repository name (e.g. 'lost-pixel/lost-pixel-storybook')
-   */
-  repository: z.string(),
-
-  /**
-   * Git branch name (e.g. 'main')
-   */
-  commitRefName: z.string(),
-
-  /**
-   * Git commit SHA (e.g. 'b9b8b9b9b9b9b9b9b9b9b9b9b9b9b9b9b9b9b9b9')
-   */
-  commitHash: z.string(),
-
-  /**
-   * Flag that decides if images should be uploaded to S3 bucket or just generated (non-SaaS self-hosted mode)
-   */
-  generateOnly: z.boolean().optional(),
-
-  /**
-   * Flag that decides if process should exit if a difference is found
-   */
-  failOnDifference: z.boolean().optional(),
-
-  /**
-   * File path to event.json file
-   */
-  eventFilePath: z.string().optional(),
 
   /**
    * Global shot filter
@@ -436,6 +389,55 @@ const ProjectConfigSchema = z.object({
     .args(z.any(), StoryLikeSchema)
     .returns(z.promise(z.void()))
     .optional(),
+});
+
+const ProjectConfigSchema = z.object({
+  /**
+   * Project ID
+   */
+  lostPixelProjectId: z.string(),
+
+  /**
+   * CI build ID
+   */
+  ciBuildId: z.string(),
+
+  /**
+   * CI build number
+   */
+  ciBuildNumber: z.string(),
+
+  /**
+   * Git repository name (e.g. 'lost-pixel/lost-pixel-storybook')
+   */
+  repository: z.string(),
+
+  /**
+   * Git branch name (e.g. 'main')
+   */
+  commitRefName: z.string(),
+
+  /**
+   * Git commit SHA (e.g. 'b9b8b9b9b9b9b9b9b9b9b9b9b9b9b9b9b9b9b9b9')
+   */
+  commitHash: z.string(),
+
+  /**
+   * File path to event.json file
+   */
+  eventFilePath: z.string().optional(),
+});
+
+const GenerateOnlyModeProjectConfigSchema = BaseConfigSchema.extend({
+  /**
+   * Flag that decides if images should be uploaded to S3 bucket or just generated (non-SaaS self-hosted mode)
+   */
+  generateOnly: z.boolean().optional(),
+
+  /**
+   * Flag that decides if process should exit if a difference is found
+   */
+  failOnDifference: z.boolean().optional(),
 });
 
 type BaseConfig = {
