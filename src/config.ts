@@ -391,7 +391,7 @@ export const BaseConfigSchema = z.object({
     .optional(),
 });
 
-const ProjectConfigSchema = z.object({
+const PlatformModeConfigSchema = BaseConfigSchema.extend({
   /**
    * Project ID
    */
@@ -428,7 +428,7 @@ const ProjectConfigSchema = z.object({
   eventFilePath: z.string().optional(),
 });
 
-const GenerateOnlyModeProjectConfigSchema = BaseConfigSchema.extend({
+const GenerateOnlyModeConfigSchema = BaseConfigSchema.extend({
   /**
    * Flag that decides if images should be uploaded to S3 bucket or just generated (non-SaaS self-hosted mode)
    */
