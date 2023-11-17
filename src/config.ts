@@ -201,7 +201,7 @@ export const BaseConfigSchema = z.object({
    * Browser to use: chromium, firefox, or webkit
    * @default 'chromium'
    */
-  browser: z.enum(['chromium', 'firefox', 'webkit']),
+  browser: z.enum(['chromium', 'firefox', 'webkit']).default('chromium'),
 
   /**
    * Enable Storybook mode
@@ -232,7 +232,7 @@ export const BaseConfigSchema = z.object({
    * Path to the current image folder
    * @default '.lostpixel/current/'
    */
-  imagePathCurrent: z.string(),
+  imagePathCurrent: z.string().default('.lostpixel/current/'),
 
   /**
    * Define custom breakpoints for all tests as width in pixels
@@ -240,7 +240,7 @@ export const BaseConfigSchema = z.object({
    * @example
    * [ 320, 768, 1280 ]
    */
-  breakpoints: z.array(z.number()).optional(),
+  breakpoints: z.array(z.number()).default([]),
 
   /**
    * Number of concurrent shots to take
@@ -256,38 +256,38 @@ export const BaseConfigSchema = z.object({
      * Timeout for fetching stories
      * @default 30_000
      */
-    fetchStories: z.number().optional(),
+    fetchStories: z.number().default(30_000),
 
     /**
      * Timeout for loading the state of the page
      * @default 30_000
      */
-    loadState: z.number().optional(),
+    loadState: z.number().default(30_000),
 
     /**
      * Timeout for waiting for network requests to finish
      * @default 30_000
      */
-    networkRequests: z.number().optional(),
+    networkRequests: z.number().default(30_000),
   }),
 
   /**
    * Time to wait before taking a screenshot
    * @default 1_000
    */
-  waitBeforeScreenshot: z.number(),
+  waitBeforeScreenshot: z.number().default(1000),
 
   /**
    * Time to wait for the first network request to start
    * @default 1_000
    */
-  waitForFirstRequest: z.number(),
+  waitForFirstRequest: z.number().default(1000),
 
   /**
    * Time to wait for the last network request to start
    * @default 1_000
    */
-  waitForLastRequest: z.number(),
+  waitForLastRequest: z.number().default(1000),
 
   /**
    * Threshold for the difference between the baseline and current image
@@ -297,19 +297,19 @@ export const BaseConfigSchema = z.object({
    * Values greater or equal to 1 are interpreted as pixel count.
    * @default 0
    */
-  threshold: z.number(),
+  threshold: z.number().default(0),
 
   /**
    * How often to retry a shot for a stable result
    * @default 0
    */
-  flakynessRetries: z.number(),
+  flakynessRetries: z.number().default(0),
 
   /**
    * Time to wait between flakyness retries
    * @default 2_000
    */
-  waitBetweenFlakynessRetries: z.number(),
+  waitBetweenFlakynessRetries: z.number().default(2000),
 
   /**
    * Global shot filter
@@ -353,12 +353,12 @@ const PlatformModeConfigSchema = BaseConfigSchema.extend({
    * URL of the Lost Pixel API endpoint
    * @default 'https://api.lost-pixel.com'
    */
-  lostPixelPlatform: z.string(),
+  lostPixelPlatform: z.string().default('https://api.lost-pixel.com'),
 
   /**
    * API key for the Lost Pixel platform
    */
-  apiKey: z.string().optional(),
+  apiKey: z.string(),
 
   /**
    * Project ID
@@ -401,12 +401,13 @@ const PlatformModeConfigSchema = BaseConfigSchema.extend({
    * Setting this option to `true` makes only sense if the repository settings have pending status checks disabled
    * @default false
    */
-  setPendingStatusCheck: z.boolean(),
+  setPendingStatusCheck: z.boolean().default(false),
 });
 
 const GenerateOnlyModeConfigSchema = BaseConfigSchema.extend({
   /**
-   * Flag that decides if images should be uploaded to S3 bucket or just generated (non-SaaS self-hosted mode)
+   * Run in local mode
+   * @deprecated Defaults to running in generateOnly mode
    */
   generateOnly: z.boolean().optional(),
 
@@ -419,25 +420,25 @@ const GenerateOnlyModeConfigSchema = BaseConfigSchema.extend({
    * Path to the baseline image folder
    * @default '.lostpixel/baseline/'
    */
-  imagePathBaseline: z.string(),
+  imagePathBaseline: z.string().default('.lostpixel/baseline/'),
 
   /**
    * Path to the difference image folder
    * @default '.lostpixel/difference/'
    */
-  imagePathDifference: z.string(),
+  imagePathDifference: z.string().default('.lostpixel/difference/'),
 
   /**
    * Number of concurrent screenshots to compare
    * @default 10
    */
-  compareConcurrency: z.number(),
+  compareConcurrency: z.number().default(10),
 
   /**
    * Which comparison engine to use for diffing images
    * @default 'pixelmatch'
    */
-  compareEngine: z.enum(['pixelmatch', 'odiff']),
+  compareEngine: z.enum(['pixelmatch', 'odiff']).default('pixelmatch'),
 });
 
 type BaseConfig = {
