@@ -204,17 +204,6 @@ export const BaseConfigSchema = z.object({
   browser: z.enum(['chromium', 'firefox', 'webkit']),
 
   /**
-   * URL of the Lost Pixel API endpoint
-   * @default 'https://api.lost-pixel.com'
-   */
-  lostPixelPlatform: z.string(),
-
-  /**
-   * API key for the Lost Pixel platform
-   */
-  apiKey: z.string().optional(),
-
-  /**
    * Enable Storybook mode
    */
   storybookShots: StorybookShotsSchema.optional(),
@@ -240,22 +229,10 @@ export const BaseConfigSchema = z.object({
   customShots: CustomShotsSchema.optional(),
 
   /**
-   * Path to the baseline image folder
-   * @default '.lostpixel/baseline/'
-   */
-  imagePathBaseline: z.string(),
-
-  /**
    * Path to the current image folder
    * @default '.lostpixel/current/'
    */
   imagePathCurrent: z.string(),
-
-  /**
-   * Path to the difference image folder
-   * @default '.lostpixel/difference/'
-   */
-  imagePathDifference: z.string(),
 
   /**
    * Define custom breakpoints for all tests as width in pixels
@@ -270,18 +247,6 @@ export const BaseConfigSchema = z.object({
    * @default 5
    */
   shotConcurrency: z.number(),
-
-  /**
-   * Number of concurrent screenshots to compare
-   * @default 10
-   */
-  compareConcurrency: z.number(),
-
-  /**
-   * Which comparison engine to use for diffing images
-   * @default 'pixelmatch'
-   */
-  compareEngine: z.enum(['pixelmatch', 'odiff']),
 
   /**
    * Timeouts for various stages of the test
@@ -335,14 +300,6 @@ export const BaseConfigSchema = z.object({
   threshold: z.number(),
 
   /**
-   * Whether to set the GitHub status check on process start or not
-   *
-   * Setting this option to `true` makes only sense if the repository settings have pending status checks disabled
-   * @default false
-   */
-  setPendingStatusCheck: z.boolean(),
-
-  /**
    * How often to retry a shot for a stable result
    * @default 0
    */
@@ -393,6 +350,17 @@ export const BaseConfigSchema = z.object({
 
 const PlatformModeConfigSchema = BaseConfigSchema.extend({
   /**
+   * URL of the Lost Pixel API endpoint
+   * @default 'https://api.lost-pixel.com'
+   */
+  lostPixelPlatform: z.string(),
+
+  /**
+   * API key for the Lost Pixel platform
+   */
+  apiKey: z.string().optional(),
+
+  /**
    * Project ID
    */
   lostPixelProjectId: z.string(),
@@ -426,6 +394,14 @@ const PlatformModeConfigSchema = BaseConfigSchema.extend({
    * File path to event.json file
    */
   eventFilePath: z.string().optional(),
+
+  /**
+   * Whether to set the GitHub status check on process start or not
+   *
+   * Setting this option to `true` makes only sense if the repository settings have pending status checks disabled
+   * @default false
+   */
+  setPendingStatusCheck: z.boolean(),
 });
 
 const GenerateOnlyModeConfigSchema = BaseConfigSchema.extend({
@@ -438,6 +414,30 @@ const GenerateOnlyModeConfigSchema = BaseConfigSchema.extend({
    * Flag that decides if process should exit if a difference is found
    */
   failOnDifference: z.boolean().optional(),
+
+  /**
+   * Path to the baseline image folder
+   * @default '.lostpixel/baseline/'
+   */
+  imagePathBaseline: z.string(),
+
+  /**
+   * Path to the difference image folder
+   * @default '.lostpixel/difference/'
+   */
+  imagePathDifference: z.string(),
+
+  /**
+   * Number of concurrent screenshots to compare
+   * @default 10
+   */
+  compareConcurrency: z.number(),
+
+  /**
+   * Which comparison engine to use for diffing images
+   * @default 'pixelmatch'
+   */
+  compareEngine: z.enum(['pixelmatch', 'odiff']),
 });
 
 type BaseConfig = {
