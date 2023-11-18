@@ -19,7 +19,7 @@ import { log } from './log';
 import type { ShotItem } from './types';
 import { POST_HOG_API_KEY, notSupported } from './constants';
 
-export type ParsedYargs = {
+type ParsedYargs = {
   _: ['update', 'meta', 'docker', 'local'];
   m: 'update';
 };
