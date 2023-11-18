@@ -467,37 +467,6 @@ export type CustomProjectConfig = Config;
 
 export const MEDIA_UPLOAD_CONCURRENCY = 10;
 
-const defaultConfig: BaseConfig = {
-  browser: 'chromium',
-  lostPixelPlatform: 'https://api.lost-pixel.com',
-  imagePathBaseline: '.lostpixel/baseline/',
-  imagePathCurrent: '.lostpixel/current/',
-  imagePathDifference: '.lostpixel/difference/',
-  shotConcurrency: 5,
-  compareConcurrency: 10,
-  compareEngine: 'pixelmatch',
-  timeouts: {
-    fetchStories: 30_000,
-    loadState: 30_000,
-    networkRequests: 30_000,
-  },
-  waitBeforeScreenshot: 1000,
-  waitForFirstRequest: 1000,
-  waitForLastRequest: 1000,
-  threshold: 0,
-  setPendingStatusCheck: false,
-  flakynessRetries: 0,
-  waitBetweenFlakynessRetries: 2000,
-};
-
-const githubConfigDefaults: Partial<ProjectConfig> = {
-  ciBuildId: process.env.CI_BUILD_ID,
-  ciBuildNumber: process.env.CI_BUILD_NUMBER,
-  repository: process.env.REPOSITORY,
-  commitRefName: process.env.COMMIT_REF_NAME,
-  commitHash: process.env.COMMIT_HASH,
-};
-
 export let config: FullConfig;
 
 const checkConfig = () => {
