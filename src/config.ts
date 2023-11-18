@@ -390,10 +390,28 @@ export const PlatformModeConfigSchema = BaseConfigSchema.extend({
   commitRefName: z.string().default(process.env.COMMIT_REF_NAME),
 
   /**
-   * Git commit SHA (e.g. 'b9b8b9b9b9b9b9b9b9b9b9b9b9b9b9b9b9b9b9b9')
+   * Git commit hash (e.g. 'b9b8b9b9b9b9b9b9b9b9b9b9b9b9b9b9b9b9b9b9')
    */
   // @ts-expect-error If not set, it will be caught during config validation
   commitHash: z.string().default(process.env.COMMIT_HASH),
+
+  /**
+   * Git commit sha (e.g. 'b9b8b9b9b9b9b9b9b9b9b9b9b9b9b9b9b9b9b9b9')
+   */
+  // @ts-expect-error If not set, it will be caught during config validation
+  commitSha: z.string().optional().default(process.env.COMMIT_SHA),
+
+  /**
+   * PR commit sha (e.g. 'b9b8b9b9b9b9b9b9b9b9b9b9b9b9b9b9b9b9b9b9')
+   */
+  // @ts-expect-error If not set, it will be caught during config validation
+  prCommitSha: z.string().optional().default(process.env.PR_COMMIT_SHA),
+
+  /**
+   * PR head sha (e.g. 'b9b8b9b9b9b9b9b9b9b9b9b9b9b9b9b9b9b9b9b9')
+   */
+  // @ts-expect-error If not set, it will be caught during config validation
+  prHeadSha: z.string().optional().default(process.env.PR_HEAD_SHA),
 
   /**
    * File path to event.json file
