@@ -491,12 +491,12 @@ const printConfigErrors = (error: z.ZodError) => {
   }
 };
 
-export const checkConfig = (userConfig: Config) => {
+export const parseConfig = (userConfig: Config) => {
   if (detectConfigMode(userConfig) === 'platform') {
     const platformCheck = PlatformModeConfigSchema.safeParse(userConfig);
 
     if (platformCheck.success) {
-      return;
+      return platformCheck.data;
     }
 
     printConfigErrors(platformCheck.error);
@@ -505,7 +505,7 @@ export const checkConfig = (userConfig: Config) => {
       GenerateOnlyModeConfigSchema.safeParse(userConfig);
 
     if (generateOnlyCheck.success) {
-      return;
+      return generateOnlyCheck.data;
     }
 
     printConfigErrors(generateOnlyCheck.error);
