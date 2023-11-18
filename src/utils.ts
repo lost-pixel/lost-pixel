@@ -14,7 +14,7 @@ import { v4 as uuid } from 'uuid';
 import { type BrowserType, chromium, firefox, webkit } from 'playwright-core';
 import yargs from 'yargs';
 import { hideBin } from 'yargs/helpers';
-import { config } from './config';
+import { config, isPlatformModeConfig } from './config';
 import { log } from './log';
 import type { ShotItem } from './types';
 
@@ -126,11 +126,13 @@ export const extendFileName = ({ fileName, extension }: ExtendFileName) => {
 };
 
 export const createShotsFolders = () => {
-  const paths = [
-    config.imagePathBaseline,
-    config.imagePathCurrent,
-    config.imagePathDifference,
-  ];
+  const paths = isPlatformModeConfig(config)
+    ? [config.imagePathCurrent]
+    : [
+        config.imagePathBaseline,
+        config.imagePathCurrent,
+        config.imagePathDifference,
+      ];
 
   for (const path of paths) {
     if (!existsSync(path)) {
@@ -139,7 +141,7 @@ export const createShotsFolders = () => {
   }
 
   const ignoreFile = normalize(
-    join(config.imagePathBaseline, '..', '.gitignore'),
+    join(config.imagePathCurrent, '..', '.gitignore'),
   );
 
   if (!existsSync(ignoreFile)) {
