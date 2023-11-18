@@ -2,7 +2,12 @@ import path from 'node:path';
 import axios, { isAxiosError } from 'axios';
 import { z } from 'zod';
 import { log } from '../log';
-import { type Mask, type PageScreenshotParameter, config } from '../config';
+import {
+  type Mask,
+  type PageScreenshotParameter,
+  config,
+  isPlatformModeConfig,
+} from '../config';
 import type { ShotItem } from '../types';
 import { selectBreakpoints, generateSizeLabel } from '../shots/utils';
 
@@ -56,12 +61,13 @@ export const generatePageShotItems = (
         ? config.shotNameGenerator({ ...page, shotMode: 'page' })
         : page.name,
       url: path.join(baseUrl, page.path),
-      filePathBaseline: `${path.join(config.imagePathBaseline, page.name)}.png`,
+      filePathBaseline: isPlatformModeConfig(config)
+        ? 'not supported'
+        : `${path.join(config.imagePathBaseline, page.name)}.png`,
       filePathCurrent: `${path.join(config.imagePathCurrent, page.name)}.png`,
-      filePathDifference: `${path.join(
-        config.imagePathDifference,
-        page.name,
-      )}.png`,
+      filePathDifference: isPlatformModeConfig(config)
+        ? 'not supported'
+        : `${path.join(config.imagePathDifference, page.name)}.png`,
       browserConfig: generateBrowserConfig(page),
       threshold: page.threshold ?? config.threshold,
       waitBeforeScreenshot:
@@ -83,18 +89,19 @@ export const generatePageShotItems = (
         breakpoint,
         breakpointGroup: page.name,
         url: path.join(baseUrl, page.path),
-        filePathBaseline: `${path.join(
-          config.imagePathBaseline,
-          page.name,
-        )}${sizeLabel}.png`,
+        filePathBaseline: isPlatformModeConfig(config)
+          ? 'not supported'
+          : `${path.join(config.imagePathBaseline, page.name)}${sizeLabel}.png`,
         filePathCurrent: `${path.join(
           config.imagePathCurrent,
           page.name,
         )}${sizeLabel}.png`,
-        filePathDifference: `${path.join(
-          config.imagePathDifference,
-          page.name,
-        )}${sizeLabel}.png`,
+        filePathDifference: isPlatformModeConfig(config)
+          ? 'not supported'
+          : `${path.join(
+              config.imagePathDifference,
+              page.name,
+            )}${sizeLabel}.png`,
         viewport: { width: breakpoint },
         browserConfig: generateBrowserConfig({
           ...page,

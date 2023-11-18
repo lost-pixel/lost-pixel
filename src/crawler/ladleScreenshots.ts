@@ -1,6 +1,6 @@
 import path from 'node:path';
 import axios from 'axios';
-import { config, type Mask } from '../config';
+import { config, isPlatformModeConfig, type Mask } from '../config';
 import type { ShotItem } from '../types';
 import { selectBreakpoints, generateSizeLabel } from '../shots/utils';
 import type { Story } from './storybook';
@@ -30,18 +30,16 @@ export const generateLadleShotItems = (
         ? config.shotNameGenerator({ ...ladleStory, shotMode: 'ladle' })
         : ladleStory.id,
       url: `${ladleUrl}?story=${ladleStory.story}&mode=preview`,
-      filePathBaseline: `${path.join(
-        config.imagePathBaseline,
-        ladleStory.story,
-      )}.png`,
+      filePathBaseline: isPlatformModeConfig(config)
+        ? 'not supported'
+        : `${path.join(config.imagePathBaseline, ladleStory.story)}.png`,
       filePathCurrent: `${path.join(
         config.imagePathCurrent,
         ladleStory.story,
       )}.png`,
-      filePathDifference: `${path.join(
-        config.imagePathDifference,
-        ladleStory.story,
-      )}.png`,
+      filePathDifference: isPlatformModeConfig(config)
+        ? 'not supported'
+        : `${path.join(config.imagePathDifference, ladleStory.story)}.png`,
       threshold: config.threshold,
       mask: mask ?? [],
     };
@@ -60,18 +58,22 @@ export const generateLadleShotItems = (
         breakpoint,
         breakpointGroup: ladleStory.story,
         url: `${ladleUrl}?story=${ladleStory.story}&mode=preview&width=${breakpoint}`,
-        filePathBaseline: `${path.join(
-          config.imagePathBaseline,
-          ladleStory.story,
-        )}${sizeLabel}.png`,
+        filePathBaseline: isPlatformModeConfig(config)
+          ? 'not supported'
+          : `${path.join(
+              config.imagePathBaseline,
+              ladleStory.story,
+            )}${sizeLabel}.png`,
         filePathCurrent: `${path.join(
           config.imagePathCurrent,
           ladleStory.story,
         )}${sizeLabel}.png`,
-        filePathDifference: `${path.join(
-          config.imagePathDifference,
-          ladleStory.story,
-        )}${sizeLabel}.png`,
+        filePathDifference: isPlatformModeConfig(config)
+          ? 'not supported'
+          : `${path.join(
+              config.imagePathDifference,
+              ladleStory.story,
+            )}${sizeLabel}.png`,
         viewport: { width: breakpoint },
       };
     });

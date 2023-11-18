@@ -3,7 +3,7 @@ import kebabCase from 'lodash.kebabcase';
 import type { BrowserContext } from 'playwright-core';
 import { readFileSync } from 'fs-extra';
 import type { ShotItem } from '../types';
-import { type Mask, config } from '../config';
+import { type Mask, config, isPlatformModeConfig } from '../config';
 import { getBrowser } from '../utils';
 import { log } from '../log';
 import { selectBreakpoints, generateSizeLabel } from '../shots/utils';
@@ -301,12 +301,13 @@ export const generateStorybookShotItems = (
         shotName: story.shotName,
         importPath: story.importPath,
         url: `${iframeUrl}?id=${story.id}&viewMode=story`,
-        filePathBaseline: path.join(config.imagePathBaseline, fileNameWithExt),
+        filePathBaseline: isPlatformModeConfig(config)
+          ? 'not supported'
+          : path.join(config.imagePathBaseline, fileNameWithExt),
         filePathCurrent: path.join(config.imagePathCurrent, fileNameWithExt),
-        filePathDifference: path.join(
-          config.imagePathDifference,
-          fileNameWithExt,
-        ),
+        filePathDifference: isPlatformModeConfig(config)
+          ? 'not supported'
+          : path.join(config.imagePathDifference, fileNameWithExt),
         browserConfig: generateBrowserConfig(story),
         threshold: story.parameters?.lostpixel?.threshold ?? config.threshold,
         waitBeforeScreenshot:
@@ -338,15 +339,13 @@ export const generateStorybookShotItems = (
           shotName: `${story.shotName}${sizeLabel}`,
           breakpoint,
           breakpointGroup: story.id,
-          filePathBaseline: path.join(
-            config.imagePathBaseline,
-            fileNameWithExt,
-          ),
+          filePathBaseline: isPlatformModeConfig(config)
+            ? 'not supported'
+            : path.join(config.imagePathBaseline, fileNameWithExt),
           filePathCurrent: path.join(config.imagePathCurrent, fileNameWithExt),
-          filePathDifference: path.join(
-            config.imagePathDifference,
-            fileNameWithExt,
-          ),
+          filePathDifference: isPlatformModeConfig(config)
+            ? 'not supported'
+            : path.join(config.imagePathDifference, fileNameWithExt),
           viewport: {
             width: breakpoint,
             height: undefined,
