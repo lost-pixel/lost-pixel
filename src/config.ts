@@ -480,7 +480,9 @@ export let config: Config;
 export const isPlatformModeConfig = (
   userConfig: PlatformModeConfig | GenerateOnlyModeConfig,
 ): userConfig is PlatformModeConfig =>
-  'apiKey' in userConfig || 'lostPixelProjectId' in userConfig;
+  ('apiKey' in userConfig && typeof userConfig.apiKey === 'string') ||
+  ('lostPixelProjectId' in userConfig &&
+    typeof userConfig.lostPixelProjectId === 'string');
 
 const printConfigErrors = (error: z.ZodError) => {
   for (const issue of error.issues) {
