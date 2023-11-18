@@ -25,10 +25,16 @@ describe(generatePageShotItems, () => {
       {
         name: 'home',
         path: '/',
+        breakpoints: [],
+        threshold: 0,
+        waitBeforeScreenshot: 1000,
       },
       {
         name: 'about',
         path: '/about',
+        breakpoints: [],
+        threshold: 0,
+        waitBeforeScreenshot: 1000,
       },
     ];
 
@@ -45,11 +51,15 @@ describe(generatePageShotItems, () => {
         name: 'home',
         path: '/',
         breakpoints: [480, 768],
+        threshold: 0,
+        waitBeforeScreenshot: 1000,
       },
       {
         name: 'about',
         path: '/about',
         breakpoints: [480, 768],
+        threshold: 0,
+        waitBeforeScreenshot: 1000,
       },
     ];
 
