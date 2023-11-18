@@ -21,6 +21,8 @@ const MaskSchema = z.object({
   selector: z.string(),
 });
 
+export type Mask = z.infer<typeof MaskSchema>;
+
 const PageScreenshotParameterSchema = z.object({
   /**
    * Path to the page to take a screenshot of (e.g. /login)
@@ -72,6 +74,10 @@ const PageScreenshotParameterSchema = z.object({
    */
   mask: z.array(MaskSchema).optional(),
 });
+
+export type PageScreenshotParameter = z.infer<
+  typeof PageScreenshotParameterSchema
+>;
 
 const StorybookShotsSchema = z.object({
   /**
