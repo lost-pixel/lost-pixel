@@ -637,11 +637,11 @@ const loadProjectConfig = async (): Promise<Config> => {
 };
 
 export const configure = async (
-  customProjectConfig?: Config,
+  customProjectConfig?: CustomProjectConfig,
   localDebugMode?: boolean,
 ) => {
   if (customProjectConfig) {
-    config = parseConfig(customProjectConfig);
+    config = parseConfig(customProjectConfig as Config);
 
     return;
   }
