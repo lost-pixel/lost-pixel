@@ -9,7 +9,7 @@ import {
   parseHrtimeToSeconds,
   removeFilesInFolder,
 } from './utils';
-import type { FullConfig, PlatformModeConfig } from './config';
+import type { GenerateOnlyModeConfig, PlatformModeConfig } from './config';
 import {
   type ShotConfig,
   getApiToken,
@@ -23,7 +23,7 @@ import { log } from './log';
 import type { ExtendedShotItem } from './types';
 import { uploadRequiredShots } from './upload';
 
-export const runner = async (config: FullConfig) => {
+export const runner = async (config: GenerateOnlyModeConfig) => {
   const executionStart = process.hrtime();
 
   try {

@@ -3,8 +3,8 @@ import axios from 'axios';
 import { config, isPlatformModeConfig, type Mask } from '../config';
 import type { ShotItem } from '../types';
 import { selectBreakpoints, generateSizeLabel } from '../shots/utils';
-import type { Story } from './storybook';
 import { notSupported } from '../constants';
+import type { Story } from './storybook';
 
 export const generateLadleShotItems = (
   baseUrl: string,

@@ -461,8 +461,10 @@ export const FlexibleConfigSchema = z.union([
   }).partial(),
 ]);
 
-type PlatformModeConfig = z.infer<typeof PlatformModeConfigSchema>;
-type GenerateOnlyModeConfig = z.infer<typeof GenerateOnlyModeConfigSchema>;
+export type PlatformModeConfig = z.infer<typeof PlatformModeConfigSchema>;
+export type GenerateOnlyModeConfig = z.infer<
+  typeof GenerateOnlyModeConfigSchema
+>;
 
 export type Config = z.infer<typeof ConfigSchema>;
 export type CustomProjectConfig = z.infer<typeof FlexibleConfigSchema>;

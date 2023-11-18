@@ -17,6 +17,7 @@ import { hideBin } from 'yargs/helpers';
 import { config, isPlatformModeConfig } from './config';
 import { log } from './log';
 import type { ShotItem } from './types';
+import { notSupported } from './constants';
 
 export type ParsedYargs = {
   _: ['update', 'meta', 'docker', 'local'];
@@ -217,9 +218,13 @@ export const readDirIntoShotItems = (path: string): ShotItem[] => {
         id: fileName,
         shotName: fileName,
         shotMode: 'custom',
-        filePathBaseline: join(config.imagePathBaseline, fileNameWithExt),
+        filePathBaseline: isPlatformModeConfig(config)
+          ? notSupported
+          : join(config.imagePathBaseline, fileNameWithExt),
         filePathCurrent: join(path, fileNameWithExt),
-        filePathDifference: join(config.imagePathDifference, fileNameWithExt),
+        filePathDifference: isPlatformModeConfig(config)
+          ? notSupported
+          : join(config.imagePathDifference, fileNameWithExt),
         url: fileName,
         // TODO: custom shots take thresholds only from config - not possible to source configs from individual story
         threshold: config.threshold,
