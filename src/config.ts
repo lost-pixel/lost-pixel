@@ -920,12 +920,6 @@ export type CustomProjectConfig =
   | (Partial<BaseConfig> & GenerateOnlyModeProjectConfig)
   | (Partial<BaseConfig> & ProjectConfig);
 
-export const isLocalDebugMode = (): boolean => {
-  // @ts-expect-error TBD
-  const args = yargs(hideBin(process.argv)).parse() as ParsedYargs;
-
-  return args._.includes('local') || process.env.LOST_PIXEL_LOCAL === 'true';
-};
 
 const defaultConfig: BaseConfig = {
   browser: 'chromium',

@@ -66,6 +66,13 @@ export const isDockerMode = (): boolean => {
   return args._.includes('docker') || process.env.LOST_PIXEL_DOCKER === 'true';
 };
 
+export const isLocalDebugMode = (): boolean => {
+  // @ts-expect-error TBD
+  const args = yargs(hideBin(process.argv)).parse() as ParsedYargs;
+
+  return args._.includes('local') || process.env.LOST_PIXEL_LOCAL === 'true';
+};
+
 export const shallGenerateMeta = (): boolean => {
   // @ts-expect-error TBD
   const args = yargs(hideBin(process.argv)).parse() as ParsedYargs;
