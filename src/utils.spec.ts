@@ -9,9 +9,11 @@ import { defaultTestConfig } from './testUtils';
 
 beforeAll(async () => {
   await configure({
-    ...defaultTestConfig,
-    lostPixelProjectId: 'lorem-ipsum',
-    ciBuildId: '456',
+    customProjectConfig: {
+      ...defaultTestConfig,
+      lostPixelProjectId: 'lorem-ipsum',
+      ciBuildId: '456',
+    },
   });
 });
 

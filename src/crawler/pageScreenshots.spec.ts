@@ -5,9 +5,11 @@ import { generatePageShotItems } from './pageScreenshots';
 
 beforeAll(async () => {
   await configure({
-    ...defaultTestConfig,
-    timeouts: {
-      fetchStories: 2000,
+    customProjectConfig: {
+      ...defaultTestConfig,
+      timeouts: {
+        fetchStories: 2000,
+      },
     },
   });
 

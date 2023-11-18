@@ -628,10 +628,13 @@ const loadProjectConfig = async (): Promise<Config> => {
   }
 };
 
-export const configure = async (
-  customProjectConfig?: CustomProjectConfig,
-  localDebugMode?: boolean,
-) => {
+export const configure = async ({
+  customProjectConfig,
+  localDebugMode,
+}: {
+  customProjectConfig?: CustomProjectConfig;
+  localDebugMode?: boolean;
+}) => {
   if (customProjectConfig) {
     config = parseConfig(customProjectConfig as Config);
 
