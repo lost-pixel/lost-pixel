@@ -1,12 +1,10 @@
 import { createShotsFolders } from '../utils';
 import { type PageScreenshotParameter, configure } from '../config';
-import { defaultTestConfig } from '../testUtils';
 import { generatePageShotItems } from './pageScreenshots';
 
 beforeAll(async () => {
   await configure({
     customProjectConfig: {
-      ...defaultTestConfig,
       timeouts: {
         fetchStories: 2000,
       },
