@@ -467,40 +467,51 @@ export type CustomProjectConfig = Config;
 
 export const MEDIA_UPLOAD_CONCURRENCY = 10;
 
-export let config: FullConfig;
+export let config: Config;
 
-const checkConfig = () => {
-  const missingProps: string[] = [];
+export const detectConfigMode = (userConfig: Config) => {
+  if ('apiKey' in userConfig || 'lostPixelProjectId' in userConfig) {
+    return 'platform';
+  }
 
-  for (const prop of requiredConfigProps) {
-    if (!get(config, prop)) {
-      missingProps.push(prop);
+  return 'generateOnly';
+};
+
+const printConfigErrors = (error: z.ZodError) => {
+  for (const issue of error.issues) {
+    log.process(
+      'error',
+      'config',
+      [
+        'Configuration error:',
+        `  - Path: ${issue.path.join('.')}`,
+        `  - Message: ${issue.message}`,
+      ].join('\n'),
+    );
+  }
+};
+
+export const checkConfig = (userConfig: Config) => {
+  if (detectConfigMode(userConfig) === 'platform') {
+    const platformCheck = PlatformModeConfigSchema.safeParse(userConfig);
+
+    if (platformCheck.success) {
+      return;
     }
+
+    printConfigErrors(platformCheck.error);
+  } else {
+    const generateOnlyCheck =
+      GenerateOnlyModeConfigSchema.safeParse(userConfig);
+
+    if (generateOnlyCheck.success) {
+      return;
+    }
+
+    printConfigErrors(generateOnlyCheck.error);
   }
 
-  if (missingProps.length > 0) {
-    log.process(
-      'error',
-      'config',
-      `Error: Missing required config properties: ${missingProps.join(', ')}`,
-    );
-    process.exit(1);
-  }
-
-  if (
-    config.customShots?.currentShotsPath &&
-    path.relative(
-      path.resolve(config.imagePathCurrent),
-      path.resolve(config.customShots.currentShotsPath),
-    ) === ''
-  ) {
-    log.process(
-      'error',
-      'config',
-      `Error: 'customShots.currentShotsPath' cannot be equal to 'imagePathCurrent'`,
-    );
-    process.exit(1);
-  }
+  process.exit(1);
 };
 
 const configDirBase = process.env.LOST_PIXEL_CONFIG_DIR ?? process.cwd();
