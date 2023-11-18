@@ -518,7 +518,7 @@ export const parseConfig = (userConfig: Config) => {
     printConfigErrors(generateOnlyCheck.error);
   }
 
-  process.exit(1);
+  throw new Error('Configuration error');
 };
 
 const configDirBase = process.env.LOST_PIXEL_CONFIG_DIR ?? process.cwd();
