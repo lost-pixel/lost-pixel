@@ -1,8 +1,7 @@
 import execa from 'execa';
 import yargs from 'yargs';
 import { hideBin } from 'yargs/helpers';
-import { isUpdateMode, shallGenerateMeta } from '../utils';
-import { isLocalDebugMode } from '../config';
+import { isLocalDebugMode, isUpdateMode, shallGenerateMeta } from '../utils';
 
 type ParsedYargs = {
   configDir: 'string';

@@ -6,7 +6,7 @@ import { hideBin } from 'yargs/helpers';
 import fs from 'fs-extra';
 import { log } from './log';
 import { getPlatformApiToken, platformRunner, runner } from './runner';
-import { getVersion, isDockerMode } from './utils';
+import { getVersion, isDockerMode, isLocalDebugMode } from './utils';
 import { sendFinalizeToAPI } from './api';
 import { config, configure, isPlatformModeConfig } from './config';
 import { runInDocker } from './docker-runner';
@@ -60,7 +60,9 @@ if (version) {
     );
     log.process('info', 'general', '✅ Config successfully initialized');
   } else {
-    await configure();
+    await configure({
+      localDebugMode: isLocalDebugMode(),
+    });
 
     if (isPlatformModeConfig(config)) {
       log.process(
