@@ -522,7 +522,7 @@ const configFileNameBase = path.join(
   'lostpixel.config',
 );
 
-const loadProjectConfig = async (): Promise<CustomProjectConfig> => {
+const loadProjectConfig = async (): Promise<Config> => {
   log.process('info', 'config', 'Loading project config ...');
   log.process('info', 'config', 'Current working directory:', process.cwd());
 
@@ -572,9 +572,7 @@ const loadProjectConfig = async (): Promise<CustomProjectConfig> => {
   const configFile = configFiles[0];
 
   try {
-    const imported = (await loadProjectConfigFile(
-      configFile,
-    )) as CustomProjectConfig;
+    const imported = (await loadProjectConfigFile(configFile)) as Config;
 
     return imported;
   } catch {
@@ -588,7 +586,7 @@ const loadProjectConfig = async (): Promise<CustomProjectConfig> => {
       if (existsSync(`${configFileNameBase}.js`)) {
         const projectConfig =
           // eslint-disable-next-line @typescript-eslint/no-require-imports, @typescript-eslint/no-var-requires
-          require(`${configFileNameBase}.js`) as CustomProjectConfig;
+          require(`${configFileNameBase}.js`) as Config;
 
         log.process(
           'info',
@@ -601,9 +599,7 @@ const loadProjectConfig = async (): Promise<CustomProjectConfig> => {
       }
 
       if (existsSync(`${configFileNameBase}.ts`)) {
-        const imported = (await loadTSProjectConfigFile(
-          configFile,
-        )) as CustomProjectConfig;
+        const imported = (await loadTSProjectConfigFile(configFile)) as Config;
 
         log.process(
           'info',
