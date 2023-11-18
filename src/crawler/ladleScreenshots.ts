@@ -4,6 +4,7 @@ import { config, isPlatformModeConfig, type Mask } from '../config';
 import type { ShotItem } from '../types';
 import { selectBreakpoints, generateSizeLabel } from '../shots/utils';
 import type { Story } from './storybook';
+import { notSupported } from '../constants';
 
 export const generateLadleShotItems = (
   baseUrl: string,
@@ -31,14 +32,14 @@ export const generateLadleShotItems = (
         : ladleStory.id,
       url: `${ladleUrl}?story=${ladleStory.story}&mode=preview`,
       filePathBaseline: isPlatformModeConfig(config)
-        ? 'not supported'
+        ? notSupported
         : `${path.join(config.imagePathBaseline, ladleStory.story)}.png`,
       filePathCurrent: `${path.join(
         config.imagePathCurrent,
         ladleStory.story,
       )}.png`,
       filePathDifference: isPlatformModeConfig(config)
-        ? 'not supported'
+        ? notSupported
         : `${path.join(config.imagePathDifference, ladleStory.story)}.png`,
       threshold: config.threshold,
       mask: mask ?? [],
@@ -59,7 +60,7 @@ export const generateLadleShotItems = (
         breakpointGroup: ladleStory.story,
         url: `${ladleUrl}?story=${ladleStory.story}&mode=preview&width=${breakpoint}`,
         filePathBaseline: isPlatformModeConfig(config)
-          ? 'not supported'
+          ? notSupported
           : `${path.join(
               config.imagePathBaseline,
               ladleStory.story,
@@ -69,7 +70,7 @@ export const generateLadleShotItems = (
           ladleStory.story,
         )}${sizeLabel}.png`,
         filePathDifference: isPlatformModeConfig(config)
-          ? 'not supported'
+          ? notSupported
           : `${path.join(
               config.imagePathDifference,
               ladleStory.story,

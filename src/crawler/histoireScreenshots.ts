@@ -3,6 +3,7 @@ import axios from 'axios';
 import { log } from '../log';
 import { config, isPlatformModeConfig } from '../config';
 import { type ShotItem } from '../types';
+import { notSupported } from '../constants';
 
 type HistoireStory = {
   id: string;
@@ -37,14 +38,14 @@ const generateShotItemsForStory = (
       shotName: variantShotName,
       url: `${baseUrl}/__sandbox.html?storyId=${story.id}&variantId=${variant.id}`,
       filePathBaseline: isPlatformModeConfig(config)
-        ? 'not supported'
+        ? notSupported
         : path.join(config.imagePathBaseline, `${variantShotName}.png`),
       filePathCurrent: path.join(
         config.imagePathCurrent,
         `${variantShotName}.png`,
       ),
       filePathDifference: isPlatformModeConfig(config)
-        ? 'not supported'
+        ? notSupported
         : path.join(config.imagePathDifference, `${variantShotName}.png`),
       threshold: config.threshold,
     });

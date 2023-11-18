@@ -7,6 +7,7 @@ import { type Mask, config, isPlatformModeConfig } from '../config';
 import { getBrowser } from '../utils';
 import { log } from '../log';
 import { selectBreakpoints, generateSizeLabel } from '../shots/utils';
+import { notSupported } from '../constants';
 
 export type StoryParameters = {
   lostpixel?: {
@@ -302,11 +303,11 @@ export const generateStorybookShotItems = (
         importPath: story.importPath,
         url: `${iframeUrl}?id=${story.id}&viewMode=story`,
         filePathBaseline: isPlatformModeConfig(config)
-          ? 'not supported'
+          ? notSupported
           : path.join(config.imagePathBaseline, fileNameWithExt),
         filePathCurrent: path.join(config.imagePathCurrent, fileNameWithExt),
         filePathDifference: isPlatformModeConfig(config)
-          ? 'not supported'
+          ? notSupported
           : path.join(config.imagePathDifference, fileNameWithExt),
         browserConfig: generateBrowserConfig(story),
         threshold: story.parameters?.lostpixel?.threshold ?? config.threshold,
@@ -340,11 +341,11 @@ export const generateStorybookShotItems = (
           breakpoint,
           breakpointGroup: story.id,
           filePathBaseline: isPlatformModeConfig(config)
-            ? 'not supported'
+            ? notSupported
             : path.join(config.imagePathBaseline, fileNameWithExt),
           filePathCurrent: path.join(config.imagePathCurrent, fileNameWithExt),
           filePathDifference: isPlatformModeConfig(config)
-            ? 'not supported'
+            ? notSupported
             : path.join(config.imagePathDifference, fileNameWithExt),
           viewport: {
             width: breakpoint,

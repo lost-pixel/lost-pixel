@@ -10,6 +10,7 @@ import {
 } from '../config';
 import type { ShotItem } from '../types';
 import { selectBreakpoints, generateSizeLabel } from '../shots/utils';
+import { notSupported } from '../constants';
 
 const generateBrowserConfig = (page: PageScreenshotParameter) => {
   const browserConfig = config.configureBrowser?.({
@@ -62,11 +63,11 @@ export const generatePageShotItems = (
         : page.name,
       url: path.join(baseUrl, page.path),
       filePathBaseline: isPlatformModeConfig(config)
-        ? 'not supported'
+        ? notSupported
         : `${path.join(config.imagePathBaseline, page.name)}.png`,
       filePathCurrent: `${path.join(config.imagePathCurrent, page.name)}.png`,
       filePathDifference: isPlatformModeConfig(config)
-        ? 'not supported'
+        ? notSupported
         : `${path.join(config.imagePathDifference, page.name)}.png`,
       browserConfig: generateBrowserConfig(page),
       threshold: page.threshold ?? config.threshold,
@@ -90,14 +91,14 @@ export const generatePageShotItems = (
         breakpointGroup: page.name,
         url: path.join(baseUrl, page.path),
         filePathBaseline: isPlatformModeConfig(config)
-          ? 'not supported'
+          ? notSupported
           : `${path.join(config.imagePathBaseline, page.name)}${sizeLabel}.png`,
         filePathCurrent: `${path.join(
           config.imagePathCurrent,
           page.name,
         )}${sizeLabel}.png`,
         filePathDifference: isPlatformModeConfig(config)
-          ? 'not supported'
+          ? notSupported
           : `${path.join(
               config.imagePathDifference,
               page.name,
