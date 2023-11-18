@@ -8,7 +8,7 @@ import { log } from './log';
 import { getPlatformApiToken, platformRunner, runner } from './runner';
 import { getVersion, isDockerMode } from './utils';
 import { sendFinalizeToAPI } from './api';
-import { config, configure } from './config';
+import { config, configure, isPlatformModeConfig } from './config';
 import { runInDocker } from './docker-runner';
 
 type CommandArgs = ['docker', 'init-js', 'init-ts', 'finalize'];
@@ -62,15 +62,7 @@ if (version) {
   } else {
     await configure();
 
-    if (config.generateOnly) {
-      log.process(
-        'info',
-        'general',
-        `🚀 Starting Lost Pixel in 'generateOnly' mode`,
-      );
-
-      await runner(config);
-    } else {
+    if (isPlatformModeConfig(config)) {
       log.process(
         'info',
         'general',
@@ -84,6 +76,14 @@ if (version) {
       } else {
         await platformRunner(config, apiToken);
       }
+    } else {
+      log.process(
+        'info',
+        'general',
+        `🚀 Starting Lost Pixel in 'generateOnly' mode`,
+      );
+
+      await runner(config);
     }
   }
 })();
