@@ -4,7 +4,7 @@ import type { BrowserContextOptions, Page } from 'playwright-core';
 import z from 'zod';
 import { loadProjectConfigFile, loadTSProjectConfigFile } from './configHelper';
 import { log } from './log';
-// import type { ShotMode } from './types';
+import { ShotModeSchema } from './types';
 
 const MaskSchema = z.object({
   /**
@@ -180,14 +180,6 @@ const CustomShotsSchema = z.object({
    */
   currentShotsPath: z.string(),
 });
-
-const ShotModeSchema = z.enum([
-  'storybook',
-  'ladle',
-  'histoire',
-  'page',
-  'custom',
-]);
 
 const StoryLikeSchema = z.object({
   shotMode: ShotModeSchema,
