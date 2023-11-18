@@ -61,6 +61,9 @@ type ApiPayloadCheckCache = {
 type ApiPayloadPrepareUpload = {
   branchName: string;
   commit: string;
+  commitSha?: string;
+  prCommitSha?: string;
+  prHeadSha?: string;
   buildNumber: string;
   currentShots: Array<{
     name: string;
@@ -310,6 +313,9 @@ export const prepareUpload = async (
     payload: {
       branchName: config.commitRefName,
       commit: config.commitHash,
+      commitSha: config.commitSha,
+      prCommitSha: config.prCommitSha,
+      prHeadSha: config.prHeadSha,
       buildNumber: config.ciBuildNumber,
       currentShots: shotNamesWithHashes,
       cacheKey,
