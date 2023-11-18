@@ -40,7 +40,7 @@ export const PageScreenshotParameterSchema = z.object({
    * Time to wait before taking a screenshot
    * @default 1_000
    */
-  waitBeforeScreenshot: z.number().optional(),
+  waitBeforeScreenshot: z.number().default(1000),
 
   /**
    * Threshold for the difference between the baseline and current image
@@ -50,7 +50,7 @@ export const PageScreenshotParameterSchema = z.object({
    * Values greater or equal to 1 are interpreted as pixel count.
    * @default 0
    */
-  threshold: z.number().optional(),
+  threshold: z.number().default(0),
 
   /**
    * Define custom breakpoints for the page as width in pixels
@@ -58,7 +58,7 @@ export const PageScreenshotParameterSchema = z.object({
    * @example
    * [ 320, 768, 1280 ]
    */
-  breakpoints: z.array(z.number()).optional(),
+  breakpoints: z.array(z.number()),
 
   /**
    * Define a custom viewport for the page
@@ -116,7 +116,7 @@ export const LadleShotsSchema = z.object({
    * @example
    * [ 320, 768, 1280 ]
    */
-  breakpoints: z.array(z.number()).optional(),
+  breakpoints: z.array(z.number()).default([]).optional(),
 });
 
 export const HistoireShotsSchema = z.object({
@@ -196,6 +196,26 @@ const StoryLikeSchema = z.object({
   parameters: z.record(z.unknown()).optional(),
 });
 
+export const TimeoutsSchema = z.object({
+  /**
+   * Timeout for fetching stories
+   * @default 30_000
+   */
+  fetchStories: z.number().default(30_000),
+
+  /**
+   * Timeout for loading the state of the page
+   * @default 30_000
+   */
+  loadState: z.number().default(30_000),
+
+  /**
+   * Timeout for waiting for network requests to finish
+   * @default 30_000
+   */
+  networkRequests: z.number().default(30_000),
+});
+
 export const BaseConfigSchema = z.object({
   /**
    * Browser to use: chromium, firefox, or webkit
@@ -246,29 +266,15 @@ export const BaseConfigSchema = z.object({
    * Number of concurrent shots to take
    * @default 5
    */
-  shotConcurrency: z.number(),
+  shotConcurrency: z.number().default(5),
 
   /**
    * Timeouts for various stages of the test
    */
-  timeouts: z.object({
-    /**
-     * Timeout for fetching stories
-     * @default 30_000
-     */
-    fetchStories: z.number().default(30_000),
-
-    /**
-     * Timeout for loading the state of the page
-     * @default 30_000
-     */
-    loadState: z.number().default(30_000),
-
-    /**
-     * Timeout for waiting for network requests to finish
-     * @default 30_000
-     */
-    networkRequests: z.number().default(30_000),
+  timeouts: TimeoutsSchema.default({
+    fetchStories: 30_000,
+    loadState: 30_000,
+    networkRequests: 30_000,
   }),
 
   /**
@@ -348,7 +354,7 @@ export const BaseConfigSchema = z.object({
     .optional(),
 });
 
-const PlatformModeConfigSchema = BaseConfigSchema.extend({
+export const PlatformModeConfigSchema = BaseConfigSchema.extend({
   /**
    * URL of the Lost Pixel API endpoint
    * @default 'https://api.lost-pixel.com'
@@ -404,7 +410,7 @@ const PlatformModeConfigSchema = BaseConfigSchema.extend({
   setPendingStatusCheck: z.boolean().default(false),
 });
 
-const GenerateOnlyModeConfigSchema = BaseConfigSchema.extend({
+export const GenerateOnlyModeConfigSchema = BaseConfigSchema.extend({
   /**
    * Run in local mode
    * @deprecated Defaults to running in generateOnly mode
@@ -440,6 +446,15 @@ const GenerateOnlyModeConfigSchema = BaseConfigSchema.extend({
    */
   compareEngine: z.enum(['pixelmatch', 'odiff']).default('pixelmatch'),
 });
+
+export const ConfigSchema = z.union([
+  PlatformModeConfigSchema.extend({
+    timeouts: TimeoutsSchema.partial(),
+  }).partial(),
+  GenerateOnlyModeConfigSchema.extend({
+    timeouts: TimeoutsSchema.partial(),
+  }).partial(),
+]);
 
 type BaseConfig = {
   /**
