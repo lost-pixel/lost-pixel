@@ -455,9 +455,15 @@ export const ConfigSchema = z.union([
 export const FlexibleConfigSchema = z.union([
   PlatformModeConfigSchema.extend({
     timeouts: TimeoutsSchema.partial(),
+    pageShots: PageShotsSchema.extend({
+      pages: z.array(PageScreenshotParameterSchema.partial()),
+    }),
   }).partial(),
   GenerateOnlyModeConfigSchema.extend({
     timeouts: TimeoutsSchema.partial(),
+    pageShots: PageShotsSchema.extend({
+      pages: z.array(PageScreenshotParameterSchema.partial()),
+    }),
   }).partial(),
 ]);
 
