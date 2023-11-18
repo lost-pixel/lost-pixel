@@ -489,7 +489,7 @@ const printConfigErrors = (error: z.ZodError) => {
 };
 
 export const parseConfig = (userConfig: Config) => {
-  if (detectConfigMode(userConfig) === 'platform') {
+  if (isPlatformModeConfig(userConfig)) {
     const platformCheck = PlatformModeConfigSchema.safeParse(userConfig);
 
     if (platformCheck.success) {
