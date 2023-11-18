@@ -17,7 +17,7 @@ import { hideBin } from 'yargs/helpers';
 import { config, isPlatformModeConfig } from './config';
 import { log } from './log';
 import type { ShotItem } from './types';
-import { notSupported } from './constants';
+import { POST_HOG_API_KEY, notSupported } from './constants';
 
 export type ParsedYargs = {
   _: ['update', 'meta', 'docker', 'local'];
@@ -46,8 +46,6 @@ export type Changes = {
   deletion: FilenameWithAllPaths[];
   addition: FilenameWithAllPaths[];
 };
-
-const POST_HOG_API_KEY = 'phc_RDNnzvANh1mNm9JKogF9UunG3Ky02YCxWP9gXScKShk';
 
 export const isUpdateMode = (): boolean => {
   // @ts-expect-error TBD

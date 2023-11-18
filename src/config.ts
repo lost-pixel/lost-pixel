@@ -469,8 +469,6 @@ export type GenerateOnlyModeConfig = z.infer<
 export type Config = z.infer<typeof ConfigSchema>;
 export type CustomProjectConfig = z.infer<typeof FlexibleConfigSchema>;
 
-export const MEDIA_UPLOAD_CONCURRENCY = 10;
-
 export let config: Config;
 
 export const isPlatformModeConfig = (
