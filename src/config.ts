@@ -1,14 +1,10 @@
 import { existsSync } from 'node:fs';
 import path from 'node:path';
-import yargs from 'yargs';
-import { hideBin } from 'yargs/helpers';
-import get from 'lodash.get';
-import type { BrowserContextOptions, Page } from 'playwright-core';
+// import type { BrowserContextOptions, Page } from 'playwright-core';
 import z from 'zod';
 import { loadProjectConfigFile, loadTSProjectConfigFile } from './configHelper';
 import { log } from './log';
-import type { ShotMode } from './types';
-import type { ParsedYargs } from './utils';
+// import type { ShotMode } from './types';
 
 const MaskSchema = z.object({
   /**
@@ -634,57 +630,61 @@ const loadProjectConfig = async (): Promise<Config> => {
   }
 };
 
-export const configure = async (customProjectConfig?: CustomProjectConfig) => {
+export const configure = async (
+  customProjectConfig?: Config,
+  localDebugMode?: boolean,
+) => {
   if (customProjectConfig) {
-    config = {
-      ...defaultConfig,
-      ...customProjectConfig,
-    };
+    config = parseConfig(customProjectConfig);
 
     return;
   }
 
-  const projectConfig = await loadProjectConfig();
+  let loadedProjectConfig = await loadProjectConfig();
 
-  config = {
-    ...(!projectConfig.generateOnly && { ...githubConfigDefaults }),
-    ...defaultConfig,
-    ...projectConfig,
-  };
+  if (localDebugMode) {
+    let localDebugConfig = loadedProjectConfig;
 
-  if (isLocalDebugMode()) {
-    config.generateOnly = true;
-    config.lostPixelProjectId = undefined;
+    if (isPlatformModeConfig(loadedProjectConfig)) {
+      localDebugConfig = {
+        ...loadedProjectConfig,
+        generateOnly: true,
+        // @ts-expect-error Force it into generateOnly mode by dropping the platform specific properties
+        lostPixelProjectId: undefined,
+        // @ts-expect-error Force it into generateOnly mode by dropping the platform specific properties
+        apiKey: undefined,
+      };
+    }
 
     const urlChunks = ['http://', 'https://', '127.0.0.1'];
 
     if (
-      config.pageShots?.baseUrl &&
+      localDebugConfig.pageShots?.baseUrl &&
       urlChunks.some((urlChunk) =>
-        config?.pageShots?.baseUrl.includes(urlChunk),
+        localDebugConfig?.pageShots?.baseUrl.includes(urlChunk),
       )
     ) {
-      const url = new URL(config.pageShots.baseUrl);
+      const url = new URL(localDebugConfig.pageShots.baseUrl);
 
       url.hostname = 'localhost';
-      config.pageShots.baseUrl = url.toString();
+      localDebugConfig.pageShots.baseUrl = url.toString();
     }
+
+    loadedProjectConfig = localDebugConfig;
   }
 
   // Default to Storybook mode if no mode is defined
   if (
-    !config.storybookShots &&
-    !config.pageShots &&
-    !config.ladleShots &&
-    !config.histoireShots &&
-    !config.customShots
+    !loadedProjectConfig.storybookShots &&
+    !loadedProjectConfig.pageShots &&
+    !loadedProjectConfig.ladleShots &&
+    !loadedProjectConfig.histoireShots &&
+    !loadedProjectConfig.customShots
   ) {
-    config.storybookShots = {
+    loadedProjectConfig.storybookShots = {
       storybookUrl: 'storybook-static',
     };
   }
 
-  if (!config.generateOnly) {
-    checkConfig();
-  }
+  config = parseConfig(loadedProjectConfig);
 };
