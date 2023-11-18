@@ -452,8 +452,13 @@ export const GenerateOnlyModeConfigSchema = BaseConfigSchema.extend({
   compareEngine: z.enum(['pixelmatch', 'odiff']).default('pixelmatch'),
 });
 
-// use partial() specifically for the inferred type
 export const ConfigSchema = z.union([
+  PlatformModeConfigSchema,
+  GenerateOnlyModeConfigSchema,
+]);
+
+// use partial() specifically for the inferred type
+export const FlexibleConfigSchema = z.union([
   PlatformModeConfigSchema.extend({
     timeouts: TimeoutsSchema.partial(),
   }).partial(),
@@ -462,8 +467,11 @@ export const ConfigSchema = z.union([
   }).partial(),
 ]);
 
+type PlatformModeConfig = z.infer<typeof PlatformModeConfigSchema>;
+type GenerateOnlyModeConfig = z.infer<typeof GenerateOnlyModeConfigSchema>;
+
 export type Config = z.infer<typeof ConfigSchema>;
-export type CustomProjectConfig = Config;
+export type CustomProjectConfig = z.infer<typeof FlexibleConfigSchema>;
 
 export const MEDIA_UPLOAD_CONCURRENCY = 10;
 
