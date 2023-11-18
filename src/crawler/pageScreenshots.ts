@@ -76,7 +76,7 @@ export const generatePageShotItems = (
       mask: [...(mask ?? []), ...(page.mask ?? [])],
     };
 
-    if (!breakpoints || breakpoints.length === 0) {
+    if (breakpoints.length === 0) {
       return [baseShotItem];
     }
 

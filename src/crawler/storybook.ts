@@ -317,7 +317,8 @@ export const generateStorybookShotItems = (
         mask: [...(mask ?? []), ...(story.parameters?.lostpixel?.mask ?? [])],
       };
 
-      const storyLevelBreakpoints = story.parameters?.lostpixel?.breakpoints;
+      const storyLevelBreakpoints =
+        story.parameters?.lostpixel?.breakpoints ?? [];
 
       const breakpoints = selectBreakpoints(
         config.breakpoints,
@@ -325,7 +326,7 @@ export const generateStorybookShotItems = (
         storyLevelBreakpoints,
       );
 
-      if (!breakpoints || breakpoints.length === 0) {
+      if (breakpoints.length === 0) {
         return [baseShotItem];
       }
 

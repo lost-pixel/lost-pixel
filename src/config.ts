@@ -56,7 +56,7 @@ const PageScreenshotParameterSchema = z.object({
    * @example
    * [ 320, 768, 1280 ]
    */
-  breakpoints: z.array(z.number()),
+  breakpoints: z.array(z.number()).optional(),
 
   /**
    * Define a custom viewport for the page
@@ -118,7 +118,7 @@ const LadleShotsSchema = z.object({
    * @example
    * [ 320, 768, 1280 ]
    */
-  breakpoints: z.array(z.number()).default([]).optional(),
+  breakpoints: z.array(z.number()).optional(),
 });
 
 const HistoireShotsSchema = z.object({
@@ -254,7 +254,7 @@ const BaseConfigSchema = z.object({
    * @example
    * [ 320, 768, 1280 ]
    */
-  breakpoints: z.array(z.number()).default([]),
+  breakpoints: z.array(z.number()).optional(),
 
   /**
    * Number of concurrent shots to take

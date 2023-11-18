@@ -45,7 +45,7 @@ export const generateLadleShotItems = (
       mask: mask ?? [],
     };
 
-    if (!breakpoints || breakpoints.length === 0) {
+    if (breakpoints.length === 0) {
       return [shotItem];
     }
 
