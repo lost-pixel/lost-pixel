@@ -10,7 +10,7 @@ import { log } from './log';
 import type { ShotMode } from './types';
 import type { ParsedYargs } from './utils';
 
-export const MaskSchema = z.object({
+const MaskSchema = z.object({
   /**
    * CSS selector for the element to mask
    * Examples:
@@ -25,7 +25,7 @@ export const MaskSchema = z.object({
   selector: z.string(),
 });
 
-export const PageScreenshotParameterSchema = z.object({
+const PageScreenshotParameterSchema = z.object({
   /**
    * Path to the page to take a screenshot of (e.g. /login)
    */
@@ -77,7 +77,7 @@ export const PageScreenshotParameterSchema = z.object({
   mask: z.array(MaskSchema).optional(),
 });
 
-export const StorybookShotsSchema = z.object({
+const StorybookShotsSchema = z.object({
   /**
    * URL of the Storybook instance or local folder
    * @default 'storybook-static'
@@ -98,7 +98,7 @@ export const StorybookShotsSchema = z.object({
   breakpoints: z.array(z.number()).optional(),
 });
 
-export const LadleShotsSchema = z.object({
+const LadleShotsSchema = z.object({
   /**
    * URL of the Ladle served instance
    * @default 'http://localhost:61000'
@@ -119,7 +119,7 @@ export const LadleShotsSchema = z.object({
   breakpoints: z.array(z.number()).default([]).optional(),
 });
 
-export const HistoireShotsSchema = z.object({
+const HistoireShotsSchema = z.object({
   /**
    * URL of the Histoire served instance
    * @default 'http://localhost:61000'
@@ -140,7 +140,7 @@ export const HistoireShotsSchema = z.object({
   breakpoints: z.array(z.number()).optional(),
 });
 
-export const PageShotsSchema = z.object({
+const PageShotsSchema = z.object({
   /**
    * Paths to take screenshots of
    */
@@ -170,7 +170,7 @@ export const PageShotsSchema = z.object({
   breakpoints: z.array(z.number()).optional(),
 });
 
-export const CustomShotsSchema = z.object({
+const CustomShotsSchema = z.object({
   /**
    * Path to current shots folder
    *
@@ -196,7 +196,7 @@ const StoryLikeSchema = z.object({
   parameters: z.record(z.unknown()).optional(),
 });
 
-export const TimeoutsSchema = z.object({
+const TimeoutsSchema = z.object({
   /**
    * Timeout for fetching stories
    * @default 30_000
@@ -216,7 +216,7 @@ export const TimeoutsSchema = z.object({
   networkRequests: z.number().default(30_000),
 });
 
-export const BaseConfigSchema = z.object({
+const BaseConfigSchema = z.object({
   /**
    * Browser to use: chromium, firefox, or webkit
    * @default 'chromium'
@@ -447,6 +447,7 @@ export const GenerateOnlyModeConfigSchema = BaseConfigSchema.extend({
   compareEngine: z.enum(['pixelmatch', 'odiff']).default('pixelmatch'),
 });
 
+// use partial() specifically for the inferred type
 export const ConfigSchema = z.union([
   PlatformModeConfigSchema.extend({
     timeouts: TimeoutsSchema.partial(),
