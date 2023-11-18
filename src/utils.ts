@@ -306,3 +306,13 @@ export const hashFile = (filePath: string): string => {
 
   return hashBuffer(file);
 };
+
+export const featureNotSupported = (feature: string) => {
+  log.process(
+    'error',
+    'general',
+    `${feature} is not supported in this configuration mode`,
+  );
+
+  process.exit(1);
+};
