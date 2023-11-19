@@ -246,6 +246,9 @@ export const platformRunner = async (
         `repository = ${config.repository}`,
         `commitRefName = ${config.commitRefName}`,
         `commitHash = ${config.commitHash}`,
+        `commitSha = ${config.commitSha}`,
+        `prCommitSha = ${config.prCommitSha}`,
+        `prHeadSha = ${config.prHeadSha}`,
       ].join('\n   - '),
     );
 
