@@ -251,12 +251,13 @@ const generateFilename = (story: Story) =>
   [story.kind, story.story].map((value) => kebabCase(value)).join('--');
 
 const generateBrowserConfig = (story: Story) => {
-  const browserConfig = config.configureBrowser?.({
-    ...story,
-    shotMode: 'storybook',
-  });
+  const browserConfig =
+    config.configureBrowser?.({
+      ...story,
+      shotMode: 'storybook',
+    }) ?? {};
 
-  if (story.parameters?.viewport && browserConfig) {
+  if (story.parameters?.viewport) {
     browserConfig.viewport = browserConfig.viewport ?? {
       width: 1280,
       height: 720,
