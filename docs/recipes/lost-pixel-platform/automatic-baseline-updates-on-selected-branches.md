@@ -1,3 +1,7 @@
+---
+description: Automatically update baselines when they hit a specific branch
+---
+
 # Automatic baseline updates on selected branches
 
 Sometimes your team uses Visual Regression Testing flow in a non-enforcement way, meaning that Lost Pixel checks don't need to pass for a PR to be qualified for a merge.&#x20;

@@ -1,0 +1,31 @@
+# example netlify.toml
+[build]
+  command = "npm run build"
+  publish = "build"
+
+[functions]
+  directory = "functions"
+  node_bundler = "esbuild" 
+  # (nov 2022) normally want to use esbuild, but there is a bug with netlify and esbuild right now https://github.com/sveltejs/kit/issues/7839#issuecomment-1328605300
+  # (dec 2022) we tried disabling esbuild to move to sveltekit adapter auto 89, but then there was an issue with prismjs rendering https://github.com/pngwn/MDsveX/issues/484
+  # so moved back to adapter auto 72 just to have a working build that can render code highlights
+  external_node_modules = ["mdsvex"]
+
+[build.environment]
+  NODE_VERSION = "16" 
+  NPM_FLAGS = "-f" # force install for histoire https://github.com/histoire-dev/histoire/pull/569
+  ## as of v0.334 sveltekit requires node 16 https://github.com/sveltejs/kit/pull/4922
+  ## https://github.com/sveltejs/kit/issues/2687
+
+[[headers]]
+  ## https://answers.netlify.com/t/content-type-header-not-working-in-netlify-toml/7718
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "DENY"
+    X-XSS-Protection = "1; mode=block"
+    Cache-Control = "public, max-age=31536000" 
+    # cache just over 1 hour for webpagetest to be happy
+    X-Content-Type-Options = "nosniff"
+    ## Content-Security-Policy = "default-src 'self'; script-src 'nonce-swyx'; img-src *"
+    # in loving memory
+    X-Clacks-Overhead = "GNU Terry Pratchett"

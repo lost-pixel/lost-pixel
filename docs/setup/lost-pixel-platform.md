@@ -10,6 +10,18 @@ The platform version provides additional features like collaboration tools, auto
 
 Lost Pixel Platform has first-class integration with **GitHub** & **GitHub Actions** but can be set up with any CI provider, **`given it runs on GitHub`**
 
+{% embed url="https://lost-pixel.com/blog/post/storybook-visual-regression-testing-with-lost-pixel-platform" %}
+Storybook + Lost Pixel Platform
+{% endembed %}
+
+{% embed url="https://lost-pixel.com/blog/post/visual-regression-testing-with-ladle" %}
+Ladle + Lost Pixel Platform
+{% endembed %}
+
+{% embed url="https://lost-pixel.com/blog/post/playwright-visual-regression-testing" %}
+Playwright + Lost Pixel Platform
+{% endembed %}
+
 ### Create Lost Pixel related files
 
 We need to create `lost-pixel.config.js|ts` file that will run the whole setup. We will use the example of [lost-pixel.com](https://www.lost-pixel.com) as it is set up on our own platform 😊

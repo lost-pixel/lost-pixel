@@ -62,23 +62,41 @@ export const runner = async (config: FullConfig) => {
 
     log.process('info', 'general', '🔍 Checking differences');
     const checkDifferenceStart = process.hrtime();
-    const { differenceCount, noBaselinesCount } = await checkDifferences(
-      shotItems,
-    );
+    const { aboveThresholdDifferenceItems, noBaselinesItems } =
+      await checkDifferences(shotItems);
 
     if (isUpdateMode()) {
-      removeFilesInFolder(config.imagePathBaseline);
-      fse.copySync(config.imagePathCurrent, config.imagePathBaseline);
+      // Remove only the files which are no longer present in our shot items
+      removeFilesInFolder(
+        config.imagePathBaseline,
+        shotItems.map((shotItem) => shotItem.filePathBaseline),
+      );
+
+      // Synchronize differences from both lack of baseline and over threshold difference
+      for (const noBaselineItem of noBaselinesItems) {
+        fse.copySync(
+          noBaselineItem.filePathCurrent,
+          noBaselineItem.filePathBaseline,
+        );
+      }
+
+      for (const aboveThresholdDifferenceItem of aboveThresholdDifferenceItems) {
+        fse.copySync(
+          aboveThresholdDifferenceItem.filePathCurrent,
+          aboveThresholdDifferenceItem.filePathBaseline,
+        );
+      }
     }
 
     if (
-      (differenceCount > 0 || noBaselinesCount > 0) &&
+      (aboveThresholdDifferenceItems.length > 0 ||
+        noBaselinesItems.length > 0) &&
       config.failOnDifference
     ) {
       log.process(
         'info',
         'general',
-        `👋 Exiting process with ${differenceCount} found differences & ${noBaselinesCount} baselines to update`,
+        `👋 Exiting process with ${aboveThresholdDifferenceItems.length} found differences & ${noBaselinesItems.length} baselines to update`,
       );
 
       if (config.generateOnly) {

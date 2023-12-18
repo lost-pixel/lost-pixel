@@ -18,8 +18,8 @@ import { config } from './config';
 import { log } from './log';
 import type { ShotItem } from './types';
 
-type ParsedYargs = {
-  _: ['update', 'meta'];
+export type ParsedYargs = {
+  _: ['update', 'meta', 'docker', 'local'];
   m: 'update';
 };
 
@@ -57,6 +57,13 @@ export const isUpdateMode = (): boolean => {
     args.m === 'update' ||
     process.env.LOST_PIXEL_MODE === 'update'
   );
+};
+
+export const isDockerMode = (): boolean => {
+  // @ts-expect-error TBD
+  const args = yargs(hideBin(process.argv)).parse() as ParsedYargs;
+
+  return args._.includes('docker') || process.env.LOST_PIXEL_DOCKER === 'true';
 };
 
 export const shallGenerateMeta = (): boolean => {
@@ -138,14 +145,20 @@ export const sleep = async (ms: number) =>
     setTimeout(resolve, ms);
   });
 
-export const removeFilesInFolder = (path: string) => {
+export const removeFilesInFolder = (path: string, excludePaths?: string[]) => {
   const files = readdirSync(path);
 
-  log.process('info', 'general', `Removing ${files.length} files from ${path}`);
+  const filesPathsIgnoringExclude = files
+    .map((file) => join(path, file))
+    .filter((filePath) => !excludePaths?.includes(filePath));
 
-  for (const file of files) {
-    const filePath = join(path, file);
+  log.process(
+    'info',
+    'general',
+    `Removing ${filesPathsIgnoringExclude.length} files from ${path}`,
+  );
 
+  for (const filePath of filesPathsIgnoringExclude) {
     unlinkSync(filePath);
   }
 };

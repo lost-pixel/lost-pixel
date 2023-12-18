@@ -1,10 +1,13 @@
 import { existsSync } from 'node:fs';
 import path from 'node:path';
+import yargs from 'yargs';
+import { hideBin } from 'yargs/helpers';
 import get from 'lodash.get';
 import type { BrowserContextOptions, Page } from 'playwright-core';
 import { loadProjectConfigFile, loadTSProjectConfigFile } from './configHelper';
 import { log } from './log';
 import type { ShotMode } from './types';
+import type { ParsedYargs } from './utils';
 
 type BaseConfig = {
   /**
@@ -61,6 +64,31 @@ type BaseConfig = {
      * @default 'http://localhost:61000'
      */
     ladleUrl: string;
+
+    /**
+     * Define areas for all stories where differences will be ignored
+     */
+    mask?: Mask[];
+
+    /**
+     * Define custom breakpoints for ladle tests
+     * @default []
+     * @example
+     * [
+     *  { width: 320, height: 480 },
+     * { width: 768, height: 1024 },
+     * { width: 1280, height: 720 },
+     * ]
+     */
+    breakpoints?: number[];
+  };
+
+  histoireShots?: {
+    /**
+     * URL of the Ladle served instance
+     * @default 'http://localhost:61000'
+     */
+    histoireUrl: string;
 
     /**
      * Define areas for all stories where differences will be ignored
@@ -439,6 +467,13 @@ export type CustomProjectConfig =
   | (Partial<BaseConfig> & GenerateOnlyModeProjectConfig)
   | (Partial<BaseConfig> & ProjectConfig);
 
+export const isLocalDebugMode = (): boolean => {
+  // @ts-expect-error TBD
+  const args = yargs(hideBin(process.argv)).parse() as ParsedYargs;
+
+  return args._.includes('local') || process.env.LOST_PIXEL_LOCAL === 'true';
+};
+
 const defaultConfig: BaseConfig = {
   browser: 'chromium',
   lostPixelPlatform: 'https://api.lost-pixel.com',
@@ -613,12 +648,13 @@ const loadProjectConfig = async (): Promise<CustomProjectConfig> => {
         "Couldn't find project config file 'lostpixel.config.js'",
       );
       process.exit(1);
-    } catch {
+    } catch (error) {
       log.process(
         'error',
         'config',
         `Failed to load config file: ${configFile}`,
       );
+      log.process('error', 'config', error);
       process.exit(1);
     }
   }
@@ -642,11 +678,31 @@ export const configure = async (customProjectConfig?: CustomProjectConfig) => {
     ...projectConfig,
   };
 
+  if (isLocalDebugMode()) {
+    config.generateOnly = true;
+    config.lostPixelProjectId = undefined;
+
+    const urlChunks = ['http://', 'https://', '127.0.0.1'];
+
+    if (
+      config.pageShots?.baseUrl &&
+      urlChunks.some((urlChunk) =>
+        config?.pageShots?.baseUrl.includes(urlChunk),
+      )
+    ) {
+      const url = new URL(config.pageShots.baseUrl);
+
+      url.hostname = 'localhost';
+      config.pageShots.baseUrl = url.toString();
+    }
+  }
+
   // Default to Storybook mode if no mode is defined
   if (
     !config.storybookShots &&
     !config.pageShots &&
     !config.ladleShots &&
+    !config.histoireShots &&
     !config.customShots
   ) {
     config.storybookShots = {

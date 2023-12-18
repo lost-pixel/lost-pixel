@@ -24,6 +24,7 @@
 
 * [⏯ Lost Pixel Platform](recipes/lost-pixel-platform/README.md)
   * [Working with baseline images](recipes/lost-pixel-platform/working-with-baseline-images.md)
+  * [Local debugging](recipes/lost-pixel-platform/local-debugging.md)
   * [Integrations](recipes/lost-pixel-platform/integrations.md)
   * [Monorepo](recipes/lost-pixel-platform/monorepo.md)
   * [Automatic baseline updates on selected branches](recipes/lost-pixel-platform/automatic-baseline-updates-on-selected-branches.md)
@@ -34,6 +35,10 @@
 * [🍝 General recipes](recipes/general-recipes/README.md)
   * [Thresholds](recipes/general-recipes/thresholds.md)
   * [Flakiness](recipes/general-recipes/flakiness.md)
+  * [Viewport tests](recipes/general-recipes/viewport-tests.md)
+  * [Masking page elements](recipes/general-recipes/masking-page-elements.md)
+  * [Executing arbitrary code before tests runs](recipes/general-recipes/executing-arbitrary-code-before-tests-runs.md)
+  * [Programmatically generated pages](recipes/general-recipes/programmatically-generated-pages.md)
 
 ## 💡 Examples
 

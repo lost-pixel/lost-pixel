@@ -14,7 +14,7 @@ Here are the main differences between our two core offerings:
 
 #### Lost Pixel(OSS)
 
-* very small team
+* tiny team
 * little collaboration needs
 * no need for speed
 * surface review process
@@ -27,5 +27,5 @@ Here are the main differences between our two core offerings:
 * high collaboration needs
 * speed of execution
 * review & maintenance workflow trusted by top teams
-* monorepo support
+* **monorepo support**
 * collaborative integrations(comments, notifications)
