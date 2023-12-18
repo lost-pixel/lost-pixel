@@ -48,7 +48,7 @@
 | ---------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------- |
 | ![ezgif-5-e71eb0773d](https://user-images.githubusercontent.com/29632358/185067771-03467437-badd-466b-ad6c-60d7183d99ae.gif) | ![ezgif-5-43091ece5d](https://user-images.githubusercontent.com/29632358/185067989-3f2d818b-c01f-4304-97f6-77295b1970d9.gif) |
 
-- **Lost Pixel Platform** - the **UI and CI helpers** that allow you to use lost-pixel's managed version. This includes specified regression UI, collaboration with team members, and an easy approval/rejection process for the snapshots. You can configure it once and enjoy hassle-free visual regression tests integrated into your GitHub actions pipeline.
+- **Lost Pixel Platform** - the **UI and CI helpers** that allow you to use lost-pixel's managed version. This includes specified regression UI, collaboration with team members, and an easy approval/rejection process for the snapshots. You can configure it once and enjoy hassle-free visual regression tests integrated into your GitHub actions pipeline. `lost-pixel` repository is **core** to the SaaS offering and is being actively improved & maintained.
   
 https://user-images.githubusercontent.com/29632358/222420960-57924da4-d0bf-4478-9322-fc68686485b6.mp4
 
