@@ -64,6 +64,7 @@ https://user-images.githubusercontent.com/29632358/222420960-57924da4-d0bf-4478-
 ## Features
 - 🌐 Visual regression testing in a browser of your choice (chrome, firefox, safari)
 - 📱 Responsive tests running with [different breakpoints and viewports](https://docs.lost-pixel.com/user-docs/recipes/general-recipes/viewport-tests)
+- 🖥️ Multiple browser execution (Chrome, Mozilla, Safari)
 - 🔀 Parallel execution (limited in OSS version)
 - 🎚️ Flexible sensitivity [thresholds](https://docs.lost-pixel.com/user-docs/recipes/general-recipes/thresholds)
 - 🔄 Flaky test retries. [Utilities to reduce flakiness](https://docs.lost-pixel.com/user-docs/recipes/general-recipes/flakiness).
