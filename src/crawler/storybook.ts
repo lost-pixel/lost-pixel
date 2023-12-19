@@ -1,12 +1,12 @@
 import path from 'node:path';
 import kebabCase from 'lodash.kebabcase';
-import type { BrowserContext } from 'playwright-core';
+import type { BrowserContext, BrowserType } from 'playwright-core';
 import { readFileSync } from 'fs-extra';
 import type { ShotItem } from '../types';
 import { type Mask, config } from '../config';
 import { getBrowser } from '../utils';
 import { log } from '../log';
-import { selectBreakpoints, generateSizeLabel } from '../shots/utils';
+import { selectBreakpoints, generateLabel } from '../shots/utils';
 
 export type StoryParameters = {
   lostpixel?: {
@@ -275,16 +275,11 @@ export const generateStorybookShotItems = (
   stories: Story[],
   mask?: Mask[],
   modeBreakpoints?: number[],
+  browser?: BrowserType,
 ): ShotItem[] => {
   const iframeUrl = getIframeUrl(getStoryBookUrl(baseUrl));
 
-  const shotItems = stories
-    .map((story) => ({
-      ...story,
-      shotName: config.shotNameGenerator
-        ? config.shotNameGenerator({ ...story, shotMode: 'storybook' })
-        : generateFilename(story),
-    }))
+  return stories
     .filter((story) => story.parameters?.lostpixel?.disable !== true)
     .filter((story) => story.parameters?.storyshots?.disable !== true)
     .filter((story) =>
@@ -293,12 +288,16 @@ export const generateStorybookShotItems = (
         : true,
     )
     .flatMap((story): ShotItem[] => {
-      let fileNameWithExt = `${story.shotName}.png`;
+      const shotName =
+        config.shotNameGenerator?.({ ...story, shotMode: 'storybook' }) ??
+        generateFilename(story);
+      let label = generateLabel({ browser });
+      let fileNameWithExt = `${shotName}${label}.png`;
 
       const baseShotItem: ShotItem = {
         shotMode: 'storybook',
-        id: story.id,
-        shotName: story.shotName,
+        id: `${story.id}${label}`,
+        shotName: `${shotName}${label}`,
         importPath: story.importPath,
         url: `${iframeUrl}?id=${story.id}&viewMode=story`,
         filePathBaseline: path.join(config.imagePathBaseline, fileNameWithExt),
@@ -328,14 +327,13 @@ export const generateStorybookShotItems = (
       }
 
       return breakpoints.map((breakpoint) => {
-        const sizeLabel = generateSizeLabel(breakpoint);
-
-        fileNameWithExt = `${story.shotName}${sizeLabel}.png`;
+        label = generateLabel({ breakpoint, browser });
+        fileNameWithExt = `${shotName}${label}.png`;
 
         return {
           ...baseShotItem,
-          id: `${story.id}${sizeLabel}`,
-          shotName: `${story.shotName}${sizeLabel}`,
+          id: `${story.id}${label}`,
+          shotName: `${shotName}${label}`,
           breakpoint,
           breakpointGroup: story.id,
           filePathBaseline: path.join(
@@ -364,6 +362,4 @@ export const generateStorybookShotItems = (
         };
       });
     });
-
-  return shotItems;
 };

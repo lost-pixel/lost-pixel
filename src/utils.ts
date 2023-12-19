@@ -163,8 +163,8 @@ export const removeFilesInFolder = (path: string, excludePaths?: string[]) => {
   }
 };
 
-export const getBrowser = (): BrowserType => {
-  switch (config.browser) {
+const convertBrowser = (browserKey?: string) => {
+  switch (browserKey) {
     case 'chromium': {
       return chromium;
     }
@@ -181,6 +181,21 @@ export const getBrowser = (): BrowserType => {
       return chromium;
     }
   }
+};
+
+export const getBrowser = (): BrowserType => {
+  if (Array.isArray(config.browser)) return convertBrowser(config.browser[0]);
+
+  return convertBrowser(config.browser);
+};
+
+export const getBrowsers = (): BrowserType[] => {
+  if (!Array.isArray(config.browser) || config.browser.length === 0)
+    return [getBrowser()];
+
+  const browsers = config.browser.map((key) => convertBrowser(key));
+
+  return [...new Set(browsers)];
 };
 
 export const getVersion = (): string | void => {

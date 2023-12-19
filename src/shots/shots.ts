@@ -1,6 +1,6 @@
 import path from 'node:path';
 import { mapLimit } from 'async';
-import type { Browser } from 'playwright-core';
+import type { Browser, BrowserType } from 'playwright-core';
 import { log } from '../log';
 import { getBrowser, hashFile, sleep } from '../utils';
 import { config } from '../config';
@@ -187,8 +187,11 @@ const takeScreenShot = async ({
   return success;
 };
 
-export const takeScreenShots = async (shotItems: ShotItem[]) => {
-  const browser = await getBrowser().launch();
+export const takeScreenShots = async (
+  shotItems: ShotItem[],
+  _browser?: BrowserType,
+) => {
+  const browser = await (_browser ?? getBrowser()).launch();
   const total = shotItems.length;
 
   await mapLimit<[number, ShotItem], void>(

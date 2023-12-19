@@ -8,10 +8,11 @@ description: >-
 
 #### Options
 
-* **browser**: `'chromium' | 'firefox' | 'webkit'`
+* **browser**: `'chromium' | 'firefox' | 'webkit' | Array<'chromium' | 'firefox' | 'webkit'>`
   * **Required**
   * Defaults to `'chromium'`
-  * Browser to use when doing the screenshots: **chromium**, **firefox**, or **webkit**
+  * This option specifies which browser(s) will be used for capturing screenshots.
+  * Accepted values are **chromium**, **firefox**, and **webkit**, which can be used individually or as an array for multiple browsers.
 * **lostPixelPlatform**: `string`
   * **Required**
   * Defaults to `'https://api.lost-pixel.com'` if not provided
