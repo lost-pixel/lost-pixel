@@ -105,6 +105,9 @@
     "typescript": "5.2.2",
     "xo": "0.54.2"
   },
+  "peerDependencies": {
+    "playwright-core": ">=1.37.0"
+  },
   "xo": {
     "prettier": true,
     "rules": {
