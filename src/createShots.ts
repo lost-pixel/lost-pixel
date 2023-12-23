@@ -87,7 +87,7 @@ export const createShots = async () => {
           browsers.length > 1 ? browser : undefined,
         );
 
-        ladleShotItems = ladleShotItems.concat(shotItems);
+        ladleShotItems = shotItems;
 
         log.process(
           'info',
@@ -155,7 +155,7 @@ export const createShots = async () => {
           browsers.length > 1 ? browser : undefined,
         );
 
-        histoireShotItems = histoireShotItems.concat(shotItems);
+        histoireShotItems = shotItems;
 
         log.process(
           'info',
@@ -222,7 +222,7 @@ export const createShots = async () => {
           browsers.length > 1 ? browser : undefined,
         );
 
-        storybookShotItems = storybookShotItems.concat(shotItems);
+        storybookShotItems = shotItems;
 
         log.process(
           'info',
@@ -270,7 +270,7 @@ export const createShots = async () => {
         browsers.length > 1 ? browser : undefined,
       );
 
-      pageShotItems = pageShotItems.concat(shotItems);
+      pageShotItems = shotItems;
 
       log.process(
         'info',
