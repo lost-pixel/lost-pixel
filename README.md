@@ -452,3 +452,7 @@ If you are already using Lost Pixel it would mean a lot to us if you give us a s
 ## Contributing 🏗️
 
 **Lost Pixel** is open source in it's heart and welcomes any external contribution. You can refer to [CONTRIBUTING.md](https://github.com/lost-pixel/lost-pixel/blob/main/CONTRIBUTING.md) to get going with the project locally in couple of minutes.
+
+## Lost Pixel Usage Insights
+
+[![lost-pixel npminsights](https://npminsights.vercel.app/api/package/readme-image/lost-pixel)](https://npminsights.vercel.app/package/lost-pixel)
