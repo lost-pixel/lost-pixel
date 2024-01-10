@@ -59,7 +59,9 @@ async function generatePagesFileFromSitemap(
     const pages: PageScreenshotParameter[] = urls.map((url) => {
       const page: PageScreenshotParameter = {
         path: new URL(url).pathname, // Extract the path from the URL
-        name: url.replace(/^https?:\/\/(www\.)?|^www\./g, '').replace(/\//g, '_'), // Create a unique name
+        name: url
+          .replace(/^https?:\/\/(www\.)?|^www\./g, '')
+          .replace(/\//g, '_'), // Create a unique name
       };
 
       return page;
