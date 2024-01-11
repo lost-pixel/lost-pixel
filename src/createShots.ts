@@ -5,7 +5,7 @@ import {
   collectLadleStories,
   generateLadleShotItems,
 } from './crawler/ladleScreenshots';
-import { config } from './config';
+import { type PageScreenshotParameter, config } from './config';
 import {
   collectStories,
   generateStorybookShotItems,
@@ -249,15 +249,27 @@ export const createShots = async () => {
 
     const pagesFromLoader = await getPagesFromExternalLoader();
 
-    if (pagesFromLoader) {
+    let jsonPages: PageScreenshotParameter[] = [];
+
+    if (config.pageShots?.pagesJsonRefiner) {
       log.process(
         'info',
         'general',
-        `Found ${pagesFromLoader.length} pages from external loader`,
+        `🧬 Refining pages received in json with function provided in pagesJsonRefiner`,
+      );
+
+      jsonPages = config.pageShots.pagesJsonRefiner(pagesFromLoader || []);
+    }
+
+    if (jsonPages.length > 0) {
+      log.process(
+        'info',
+        'general',
+        `Found ${jsonPages.length} pages from external loader`,
       );
     }
 
-    const pages = [...(pagesFromConfig || []), ...(pagesFromLoader || [])];
+    const pages = [...(pagesFromConfig || []), ...(jsonPages || [])];
 
     log.process('info', 'general', `\n=== [Page Mode] ${baseUrl} ===\n`);
 

@@ -19,9 +19,11 @@ import { log } from './log';
 import type { ShotItem } from './types';
 
 export type ParsedYargs = {
-  _: ['update', 'meta', 'docker', 'local'];
+  _: ['update', 'meta', 'docker', 'local', 'page-sitemap-gen'];
   m: 'update';
 };
+
+type CliMode = 'update' | 'page-sitemap-gen';
 
 type FilenameWithPath = {
   name: string;
@@ -55,7 +57,17 @@ export const isUpdateMode = (): boolean => {
   return (
     args._.includes('update') ||
     args.m === 'update' ||
-    process.env.LOST_PIXEL_MODE === 'update'
+    (process.env.LOST_PIXEL_MODE as CliMode) === 'update'
+  );
+};
+
+export const isSitemapPageGenMode = (): boolean => {
+  // @ts-expect-error TBD
+  const args = yargs(hideBin(process.argv)).parse() as ParsedYargs;
+
+  return (
+    args._.includes('page-sitemap-gen') ||
+    (process.env.LOST_PIXEL_MODE as CliMode) === 'page-sitemap-gen'
   );
 };
 
