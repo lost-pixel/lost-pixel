@@ -249,7 +249,7 @@ export const createShots = async () => {
 
     const pagesFromLoader = await getPagesFromExternalLoader();
 
-    let jsonPages: PageScreenshotParameter[] = [];
+    let jsonPages: PageScreenshotParameter[] = pagesFromLoader || [];
 
     if (config.pageShots?.pagesJsonRefiner) {
       log.process(

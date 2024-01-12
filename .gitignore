@@ -110,3 +110,4 @@ dist
 /.vscode/settings.json
 /lostpixel.config.js
 /lostpixel.config.ts
+/pagesJson.json
