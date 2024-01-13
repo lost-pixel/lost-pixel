@@ -437,6 +437,8 @@ export const generateStorybookShotItems = (
                 ...baseShotItem,
                 id: `${story.id}${label}-${snapshot.name ?? 'snapshot'}`,
                 shotName: `${snapshotShotName}${label}`,
+                breakpoint,
+                breakpointGroup: story.id,
                 filePathBaseline: path.join(
                   config.imagePathBaseline,
                   fileNameWithExt,
@@ -455,6 +457,12 @@ export const generateStorybookShotItems = (
                   combinedArgs,
                   breakpoint,
                 ),
+                viewport: breakpoint
+                  ? {
+                      width: breakpoint,
+                      height: undefined,
+                    }
+                  : undefined,
                 browserConfig: generateBrowserConfig({
                   ...story,
                   parameters: {
