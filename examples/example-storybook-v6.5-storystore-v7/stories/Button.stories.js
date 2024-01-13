@@ -31,7 +31,12 @@ Primary.args = {
 };
 Primary.parameters = {
   lostpixel:{
-    breakpoints: [420, 1000]
+    breakpoints: [420, 1000],
+    extraShots:[
+      {suffix:'with XXX label',args:{label:'XXX'}},
+      {suffix:'with MMM label & red',args:{label:'MMM',backgroundColor:'red',primary:false}},
+
+    ]
   }}
 
 export const Secondary = Template.bind({});
