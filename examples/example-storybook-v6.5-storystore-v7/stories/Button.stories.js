@@ -35,7 +35,6 @@ Primary.parameters = {
     extraShots:[
       {suffix:'with XXX label',args:{label:'XXX'}},
       {suffix:'with MMM label & red',args:{label:'MMM',backgroundColor:'red',primary:false}},
-
     ]
   }}
 
