@@ -128,7 +128,7 @@ jobs:
         run: npm run build-storybook
 
       - name: Lost Pixel
-        uses: lost-pixel/lost-pixel@v3.8.2
+        uses: lost-pixel/lost-pixel@v3.10.0
 ```
 
 </details>
@@ -198,7 +198,7 @@ jobs:
         run: npm run serve &
 
       - name: Lost Pixel
-        uses: lost-pixel/lost-pixel@v3.8.2
+        uses: lost-pixel/lost-pixel@v3.10.0
 ```
 
 </details>
@@ -256,7 +256,7 @@ jobs:
         run: npm run story:build
 
       - name: Lost Pixel
-        uses: lost-pixel/lost-pixel@v3.8.2
+        uses: lost-pixel/lost-pixel@v3.10.0
 ```
 
 </details>
@@ -318,7 +318,7 @@ jobs:
         run: npm run start &
 
       - name: Lost Pixel
-        uses: lost-pixel/lost-pixel@v3.8.2
+        uses: lost-pixel/lost-pixel@v3.10.0
 ```
 
 </details>
@@ -398,7 +398,7 @@ jobs:
         run: npx playwright install --with-deps && npm run test:e2e
 
       - name: Lost Pixel
-        uses: lost-pixel/lost-pixel@v3.8.2
+        uses: lost-pixel/lost-pixel@v3.10.0
         env:
           LOST_PIXEL_API_KEY: ${{ secrets.LOST_PIXEL_API_KEY }}
 ```
@@ -452,3 +452,7 @@ If you are already using Lost Pixel it would mean a lot to us if you give us a s
 ## Contributing 🏗️
 
 **Lost Pixel** is open source in it's heart and welcomes any external contribution. You can refer to [CONTRIBUTING.md](https://github.com/lost-pixel/lost-pixel/blob/main/CONTRIBUTING.md) to get going with the project locally in couple of minutes.
+
+## Lost Pixel Usage Insights 📈
+
+[![lost-pixel npminsights](https://npminsights.vercel.app/api/package/readme-image/lost-pixel)](https://npminsights.vercel.app/package/lost-pixel)
