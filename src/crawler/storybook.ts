@@ -304,7 +304,7 @@ const generateFilename = (
   prefix?: string,
   suffix?: string,
 ) => {
-  return [prefix, kebabCase(kind), kebabCase(story), suffix]
+  return [prefix, kebabCase(kind), kebabCase(story), kebabCase(suffix)]
     .filter(Boolean)
     .join('--');
 };
