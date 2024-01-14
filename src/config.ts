@@ -23,7 +23,7 @@ const MaskSchema = z.object({
 
 export type Mask = z.infer<typeof MaskSchema>;
 
-const PageScreenshotParameterSchema = z.object({
+export const PageScreenshotParameterSchema = z.object({
   /**
    * Path to the page to take a screenshot of (e.g. /login)
    */

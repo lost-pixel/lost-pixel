@@ -4,7 +4,10 @@ import { parseStringPromise } from 'xml2js';
 import yargs from 'yargs';
 import { hideBin } from 'yargs/helpers';
 import { log } from './log';
-import { type PageScreenshotParameter } from './config';
+import {
+  PageScreenshotParameterSchema,
+  type PageScreenshotParameter,
+} from './config';
 
 type SitemapParserOptions = {
   outputPath: string;
@@ -57,12 +60,14 @@ async function generatePagesFileFromSitemap(
     const urls = await parseSitemap(sitemapContent);
 
     const pages: PageScreenshotParameter[] = urls.map((url) => {
-      const page: PageScreenshotParameter = {
-        path: new URL(url).pathname, // Extract the path from the URL
-        name: url
-          .replace(/^https?:\/\/(www\.)?|^www\./g, '')
-          .replace(/\//g, '_'), // Create a unique name
-      };
+      const page: PageScreenshotParameter = PageScreenshotParameterSchema.parse(
+        {
+          path: new URL(url).pathname, // Extract the path from the URL
+          name: url
+            .replace(/^https?:\/\/(www\.)?|^www\./g, '')
+            .replace(/\//g, '_'), // Create a unique name
+        },
+      );
 
       return page;
     });
