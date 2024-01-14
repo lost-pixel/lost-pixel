@@ -31,6 +31,9 @@
     "dev": "ts-node src/bin",
     "start": "NODE_ENV=production node dist/bin.js"
   },
+  "engines": {
+    "node": ">=18"
+  },
   "lint-staged": {
     "*.{js,ts}": [
       "./node_modules/eslint/bin/eslint.js"

@@ -102,7 +102,7 @@ export const resizeViewportToFullscreen = async ({ page }: { page: Page }) => {
   const viewport = await page.evaluate(
     async () =>
       new Promise<{ height: number; width: number }>((resolve) => {
-        const body = document.body;
+        const { body } = document;
         const html = document.documentElement;
 
         const height = Math.max(

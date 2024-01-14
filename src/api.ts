@@ -125,7 +125,8 @@ const sendToAPI = async <T extends Record<string, unknown>>(
 
   try {
     const apiCall = async () => {
-      let payload: ApiPayloads['payload'] | FormData = parameters.payload;
+      let { payload }: { payload: ApiPayloads['payload'] | FormData } =
+        parameters;
 
       if (fileKey) {
         const form = new FormData();
