@@ -4,7 +4,7 @@ import type { BrowserContextOptions, Page } from 'playwright-core';
 import z from 'zod';
 import { loadProjectConfigFile, loadTSProjectConfigFile } from './configHelper';
 import { log } from './log';
-import { ShotModeSchema } from './types';
+import { BrowserSchema, ShotModeSchema } from './types';
 
 const MaskSchema = z.object({
   /**
@@ -228,7 +228,9 @@ const BaseConfigSchema = z.object({
    * Browser to use: chromium, firefox, or webkit
    * @default 'chromium'
    */
-  browser: z.enum(['chromium', 'firefox', 'webkit']).default('chromium'),
+  browser: z
+    .union([BrowserSchema, z.array(BrowserSchema).default(['chromium'])])
+    .default('chromium'),
 
   /**
    * Enable Storybook mode
