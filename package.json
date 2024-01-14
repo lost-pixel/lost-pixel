@@ -89,7 +89,7 @@
     "@types/lodash.kebabcase": "4.1.7",
     "@types/pixelmatch": "5.2.4",
     "@types/pngjs": "6.0.1",
-    "@types/serve-handler": "6.1.1",
+    "@types/serve-handler": "6.1.4",
     "@types/shelljs": "^0.8.11",
     "@types/uuid": "9.0.2",
     "@typescript-eslint/eslint-plugin": "6.7.3",
