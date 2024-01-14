@@ -1124,12 +1124,6 @@ exports[`collectStories should collect stories from StoryBook: ViaWindowApi Stor
           "measureEnabled": false,
           "outline": false,
         },
-        "lostpixel": {
-          "breakpoints": [
-            542,
-            1042,
-          ],
-        },
         "storySource": {
           "source": "({ label, ...args }) => {
   // You can either use a function to create DOM elements or use a plain html string!
