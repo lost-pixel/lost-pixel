@@ -1,8 +1,15 @@
+import type { Server } from 'node:http';
+import { mapLimit } from 'async';
+import type { BrowserType } from 'playwright-core';
 import {
   collectLadleStories,
   generateLadleShotItems,
 } from './crawler/ladleScreenshots';
-import { config, isPlatformModeConfig } from './config';
+import {
+  type PageScreenshotParameter,
+  config,
+  isPlatformModeConfig,
+} from './config';
 import {
   collectStories,
   generateStorybookShotItems,
@@ -13,7 +20,11 @@ import {
 } from './crawler/pageScreenshots';
 import { log } from './log';
 import { takeScreenShots } from './shots/shots';
-import { readDirIntoShotItems, removeFilesInFolder } from './utils';
+import {
+  getBrowsers,
+  readDirIntoShotItems,
+  removeFilesInFolder,
+} from './utils';
 import { launchStaticWebServer } from './crawler/utils';
 import type { ShotItem } from './types';
 import {
@@ -42,13 +53,15 @@ export const createShots = async () => {
     removeFilesInFolder(config.imagePathDifference);
   }
 
+  const browsers = getBrowsers();
+
   if (ladleShots) {
     const { ladleUrl, mask } = ladleShots;
 
     log.process('info', 'general', `\n=== [Ladle Mode] ${ladleUrl} ===\n`);
 
     let ladleWebUrl = ladleUrl;
-    let localServer;
+    let localServer: undefined | Server;
 
     if (!ladleUrl.startsWith('http://') && !ladleUrl.startsWith('https://')) {
       const staticWebServer = await launchStaticWebServer(ladleUrl);
@@ -70,21 +83,29 @@ export const createShots = async () => {
         `Found ${collection.length} ladle stories`,
       );
 
-      ladleShotItems = generateLadleShotItems(
-        ladleWebUrl,
-        Boolean(localServer),
-        collection,
-        mask,
-        ladleShots.breakpoints,
-      );
+      await mapLimit(browsers, 1, async (browser: BrowserType) => {
+        const shotItems = generateLadleShotItems(
+          ladleWebUrl,
+          Boolean(localServer),
+          collection,
+          mask,
+          ladleShots.breakpoints,
+          browsers.length > 1 ? browser : undefined,
+        );
 
-      log.process(
-        'info',
-        'general',
-        `Prepared ${ladleShotItems.length} ladle stories for screenshots`,
-      );
+        ladleShotItems = shotItems;
 
-      await takeScreenShots(ladleShotItems);
+        log.process(
+          'info',
+          'general',
+          `Prepared ${
+            shotItems.length
+          } ladle stories for screenshots on ${browser.name()}`,
+        );
+
+        await takeScreenShots(shotItems, browser);
+      });
+
       localServer?.close();
     } catch (error: unknown) {
       localServer?.close();
@@ -98,7 +119,7 @@ export const createShots = async () => {
     const { histoireUrl } = histoireShots;
 
     let localServer;
-    let histoireWebUrl;
+    let histoireWebUrl: undefined | string;
 
     if (
       !histoireUrl.startsWith('http://') &&
@@ -133,17 +154,26 @@ export const createShots = async () => {
         `Found ${collection.length} Histoire stories`,
       );
 
-      histoireShotItems = generateHistoireShotItems(histoireWebUrl, collection);
+      await mapLimit(browsers, 1, async (browser: BrowserType) => {
+        const shotItems = generateHistoireShotItems(
+          histoireWebUrl!,
+          collection,
+          browsers.length > 1 ? browser : undefined,
+        );
 
-      log.process('info', 'general', { histoireShotItems });
+        histoireShotItems = shotItems;
 
-      log.process(
-        'info',
-        'general',
-        `Prepared ${histoireShotItems.length} Histoire stories for screenshots`,
-      );
+        log.process(
+          'info',
+          'general',
+          `Prepared ${
+            shotItems.length
+          } Histoire stories for screenshots on ${browser.name()}`,
+        );
 
-      await takeScreenShots(histoireShotItems);
+        await takeScreenShots(shotItems, browser);
+      });
+
       localServer?.close();
     } catch (error: unknown) {
       localServer?.close();
@@ -189,20 +219,28 @@ export const createShots = async () => {
         `Found ${collection.stories.length} stories`,
       );
 
-      storybookShotItems = generateStorybookShotItems(
-        storybookWebUrl,
-        collection.stories,
-        mask,
-        storybookShots.breakpoints,
-      );
+      await mapLimit(browsers, 1, async (browser: BrowserType) => {
+        const shotItems = generateStorybookShotItems(
+          storybookWebUrl,
+          collection.stories!,
+          mask,
+          storybookShots.breakpoints,
+          browsers.length > 1 ? browser : undefined,
+        );
 
-      log.process(
-        'info',
-        'general',
-        `Prepared ${storybookShotItems.length} stories for screenshots`,
-      );
+        storybookShotItems = shotItems;
 
-      await takeScreenShots(storybookShotItems);
+        log.process(
+          'info',
+          'general',
+          `Prepared ${
+            shotItems.length
+          } stories for screenshots on ${browser.name()}`,
+        );
+
+        await takeScreenShots(shotItems, browser);
+      });
+
       localServer?.close();
     } catch (error: unknown) {
       localServer?.close();
@@ -217,26 +255,52 @@ export const createShots = async () => {
 
     const pagesFromLoader = await getPagesFromExternalLoader();
 
-    if (pagesFromLoader) {
+    let jsonPages: PageScreenshotParameter[] = pagesFromLoader || [];
+
+    if (config.pageShots?.pagesJsonRefiner) {
       log.process(
         'info',
         'general',
-        `Found ${pagesFromLoader.length} pages from external loader`,
+        `🧬 Refining pages received in json with function provided in pagesJsonRefiner`,
+      );
+
+      jsonPages = config.pageShots.pagesJsonRefiner(pagesFromLoader || []);
+    }
+
+    if (jsonPages.length > 0) {
+      log.process(
+        'info',
+        'general',
+        `Found ${jsonPages.length} pages from external loader`,
       );
     }
 
-    const pages = [...(pagesFromConfig || []), ...(pagesFromLoader || [])];
+    const pages = [...(pagesFromConfig || []), ...(jsonPages || [])];
 
     log.process('info', 'general', `\n=== [Page Mode] ${baseUrl} ===\n`);
 
-    pageShotItems = generatePageShotItems(pages, baseUrl, mask, breakpoints);
-    log.process(
-      'info',
-      'general',
-      `Prepared ${pageShotItems.length} pages for screenshots`,
-    );
+    await mapLimit(browsers, 1, async (browser: BrowserType) => {
+      const shotItems = generatePageShotItems(
+        pages,
+        baseUrl,
+        mask,
+        breakpoints,
+        browsers.length > 1 ? browser : undefined,
+      );
 
-    await takeScreenShots(pageShotItems);
+      pageShotItems = shotItems;
+
+      log.process(
+        'info',
+        'general',
+        `Prepared ${
+          shotItems.length
+        } pages for screenshots on ${browser.name()}`,
+      );
+
+      await takeScreenShots(shotItems, browser);
+    });
+
     log.process('info', 'general', 'Screenshots done!');
   }
 

@@ -1005,6 +1005,22 @@ exports[`collectStories should collect stories from StoryBook: ViaWindowApi Stor
             420,
             1000,
           ],
+          "extraShots": [
+            {
+              "args": {
+                "label": "XXX",
+              },
+              "suffix": "with XXX label",
+            },
+            {
+              "args": {
+                "backgroundColor": "red",
+                "label": "MMM",
+                "primary": false,
+              },
+              "suffix": "with MMM label & red",
+            },
+          ],
         },
         "storySource": {
           "source": "({ label, ...args }) => {

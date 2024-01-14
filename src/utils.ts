@@ -20,9 +20,11 @@ import type { ShotItem } from './types';
 import { POST_HOG_API_KEY, notSupported } from './constants';
 
 type ParsedYargs = {
-  _: ['update', 'meta', 'docker', 'local'];
+  _: ['update', 'meta', 'docker', 'local', 'page-sitemap-gen'];
   m: 'update';
 };
+
+type CliMode = 'update' | 'page-sitemap-gen';
 
 type FilenameWithPath = {
   name: string;
@@ -54,7 +56,17 @@ export const isUpdateMode = (): boolean => {
   return (
     args._.includes('update') ||
     args.m === 'update' ||
-    process.env.LOST_PIXEL_MODE === 'update'
+    (process.env.LOST_PIXEL_MODE as CliMode) === 'update'
+  );
+};
+
+export const isSitemapPageGenMode = (): boolean => {
+  // @ts-expect-error TBD
+  const args = yargs(hideBin(process.argv)).parse() as ParsedYargs;
+
+  return (
+    args._.includes('page-sitemap-gen') ||
+    (process.env.LOST_PIXEL_MODE as CliMode) === 'page-sitemap-gen'
   );
 };
 
@@ -171,8 +183,8 @@ export const removeFilesInFolder = (path: string, excludePaths?: string[]) => {
   }
 };
 
-export const getBrowser = (): BrowserType => {
-  switch (config.browser) {
+const convertBrowser = (browserKey?: string) => {
+  switch (browserKey) {
     case 'chromium': {
       return chromium;
     }
@@ -189,6 +201,21 @@ export const getBrowser = (): BrowserType => {
       return chromium;
     }
   }
+};
+
+export const getBrowser = (): BrowserType => {
+  if (Array.isArray(config.browser)) return convertBrowser(config.browser[0]);
+
+  return convertBrowser(config.browser);
+};
+
+export const getBrowsers = (): BrowserType[] => {
+  if (!Array.isArray(config.browser) || config.browser.length === 0)
+    return [getBrowser()];
+
+  const browsers = config.browser.map((key) => convertBrowser(key));
+
+  return [...new Set(browsers)];
 };
 
 export const getVersion = (): string | void => {

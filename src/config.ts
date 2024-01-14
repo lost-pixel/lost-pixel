@@ -154,6 +154,19 @@ const PageShotsSchema = z.object({
   pagesJsonUrl: z.string().optional(),
 
   /**
+   * Url that must return a JSON compatible with `PageScreenshotParameter[]`. It is useful when you want to autogenerate the pages that you want to run lost-pixel on. Can be used together with `pages` as both are composed into a single run.
+   */
+  pagesJsonRefiner: z
+    .function()
+    .args(
+      z.object({
+        pages: z.array(PageScreenshotParameterSchema),
+      }),
+    )
+    .returns(z.array(PageScreenshotParameterSchema))
+    .optional(),
+
+  /**
    * Base URL of the running application (e.g. http://localhost:3000)
    */
   baseUrl: z.string(),

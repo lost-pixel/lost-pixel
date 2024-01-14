@@ -6,10 +6,16 @@ import { hideBin } from 'yargs/helpers';
 import fs from 'fs-extra';
 import { log } from './log';
 import { getPlatformApiToken, platformRunner, runner } from './runner';
-import { getVersion, isDockerMode, isLocalDebugMode } from './utils';
+import {
+  getVersion,
+  isDockerMode,
+  isSitemapPageGenMode,
+  isLocalDebugMode,
+} from './utils';
 import { sendFinalizeToAPI } from './api';
 import { config, configure, isPlatformModeConfig } from './config';
 import { runInDocker } from './docker-runner';
+import { generatePagesFromSitemap } from './generatePagesFromSitemap';
 
 type CommandArgs = ['docker', 'init-js', 'init-ts', 'finalize'];
 
@@ -25,6 +31,12 @@ if (version) {
 
 // eslint-disable-next-line unicorn/prefer-top-level-await
 (async () => {
+  if (isSitemapPageGenMode()) {
+    await generatePagesFromSitemap();
+
+    return;
+  }
+
   if (isDockerMode()) {
     await runInDocker();
   } else if (commandArgs.includes('init-js')) {

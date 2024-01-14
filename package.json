@@ -1,6 +1,6 @@
 {
   "name": "lost-pixel",
-  "version": "3.8.2",
+  "version": "3.11.0",
   "description": "GitHub Action for Lost Pixel integration",
   "main": "dist/",
   "bin": "dist/bin.js",
@@ -31,6 +31,9 @@
     "dev": "ts-node src/bin",
     "start": "NODE_ENV=production node dist/bin.js"
   },
+  "engines": {
+    "node": ">=18"
+  },
   "lint-staged": {
     "*.{js,ts}": [
       "./node_modules/eslint/bin/eslint.js"
@@ -53,6 +56,7 @@
   },
   "homepage": "https://github.com/lost-pixel/lost-pixel#readme",
   "dependencies": {
+    "@types/xml2js": "^0.4.14",
     "async": "3.2.4",
     "axios": "1.5.0",
     "bundle-require": "4.0.1",
@@ -72,6 +76,7 @@
     "shelljs": "^0.8.5",
     "ts-node": "10.9.1",
     "uuid": "9.0.0",
+    "xml2js": "^0.6.2",
     "yargs": "17.7.2",
     "zod": "3.22.4"
   },

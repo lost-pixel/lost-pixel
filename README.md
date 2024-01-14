@@ -48,7 +48,7 @@
 | ---------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------- |
 | ![ezgif-5-e71eb0773d](https://user-images.githubusercontent.com/29632358/185067771-03467437-badd-466b-ad6c-60d7183d99ae.gif) | ![ezgif-5-43091ece5d](https://user-images.githubusercontent.com/29632358/185067989-3f2d818b-c01f-4304-97f6-77295b1970d9.gif) |
 
-- **Lost Pixel Platform** - the **UI and CI helpers** that allow you to use lost-pixel's managed version. This includes specified regression UI, collaboration with team members, and an easy approval/rejection process for the snapshots. You can configure it once and enjoy hassle-free visual regression tests integrated into your GitHub actions pipeline.
+- **Lost Pixel Platform** - the **UI and CI helpers** that allow you to use lost-pixel's managed version. This includes specified regression UI, collaboration with team members, and an easy approval/rejection process for the snapshots. You can configure it once and enjoy hassle-free visual regression tests integrated into your GitHub actions pipeline. `lost-pixel` repository is **core** to the SaaS offering and is being actively improved & maintained.
   
 https://user-images.githubusercontent.com/29632358/222420960-57924da4-d0bf-4478-9322-fc68686485b6.mp4
 
@@ -64,6 +64,7 @@ https://user-images.githubusercontent.com/29632358/222420960-57924da4-d0bf-4478-
 ## Features
 - 🌐 Visual regression testing in a browser of your choice (chrome, firefox, safari)
 - 📱 Responsive tests running with [different breakpoints and viewports](https://docs.lost-pixel.com/user-docs/recipes/general-recipes/viewport-tests)
+- 🖥️ Multiple browser execution (Chrome, Mozilla, Safari)
 - 🔀 Parallel execution (limited in OSS version)
 - 🎚️ Flexible sensitivity [thresholds](https://docs.lost-pixel.com/user-docs/recipes/general-recipes/thresholds)
 - 🔄 Flaky test retries. [Utilities to reduce flakiness](https://docs.lost-pixel.com/user-docs/recipes/general-recipes/flakiness).
@@ -127,7 +128,7 @@ jobs:
         run: npm run build-storybook
 
       - name: Lost Pixel
-        uses: lost-pixel/lost-pixel@v3.8.2
+        uses: lost-pixel/lost-pixel@v3.11.0
 ```
 
 </details>
@@ -197,7 +198,7 @@ jobs:
         run: npm run serve &
 
       - name: Lost Pixel
-        uses: lost-pixel/lost-pixel@v3.8.2
+        uses: lost-pixel/lost-pixel@v3.11.0
 ```
 
 </details>
@@ -255,7 +256,7 @@ jobs:
         run: npm run story:build
 
       - name: Lost Pixel
-        uses: lost-pixel/lost-pixel@v3.8.2
+        uses: lost-pixel/lost-pixel@v3.11.0
 ```
 
 </details>
@@ -317,7 +318,7 @@ jobs:
         run: npm run start &
 
       - name: Lost Pixel
-        uses: lost-pixel/lost-pixel@v3.8.2
+        uses: lost-pixel/lost-pixel@v3.11.0
 ```
 
 </details>
@@ -397,7 +398,7 @@ jobs:
         run: npx playwright install --with-deps && npm run test:e2e
 
       - name: Lost Pixel
-        uses: lost-pixel/lost-pixel@v3.8.2
+        uses: lost-pixel/lost-pixel@v3.11.0
         env:
           LOST_PIXEL_API_KEY: ${{ secrets.LOST_PIXEL_API_KEY }}
 ```
@@ -451,3 +452,7 @@ If you are already using Lost Pixel it would mean a lot to us if you give us a s
 ## Contributing 🏗️
 
 **Lost Pixel** is open source in it's heart and welcomes any external contribution. You can refer to [CONTRIBUTING.md](https://github.com/lost-pixel/lost-pixel/blob/main/CONTRIBUTING.md) to get going with the project locally in couple of minutes.
+
+## Lost Pixel Usage Insights 📈
+
+[![lost-pixel npminsights](https://npminsights.vercel.app/api/package/readme-image/lost-pixel)](https://npminsights.vercel.app/package/lost-pixel)

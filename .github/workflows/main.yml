@@ -30,12 +30,6 @@ jobs:
       - name: Build Example Storybook v6.5 with StoryStore v7
         run: npm run build-example-storybook-v6.5-storystore-v7
 
-      - name: Test
-        run: npm run test
-
-      - name: Build
-        run: npm run build
-
       - name: Build Example Pages
         run: npm run build-example-next-js-pages
 
@@ -47,6 +41,12 @@ jobs:
 
       - name: Build Example Vite
         run: npm run build-example-vite
+
+      - name: Test
+        run: npm run test
+
+      - name: Build
+        run: npm run build
 
       - name: Run Example Next.js Pages
         run: npm run run-example-next-js-pages &

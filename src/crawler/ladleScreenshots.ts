@@ -1,8 +1,9 @@
 import path from 'node:path';
 import axios from 'axios';
+import type { BrowserType } from 'playwright-core';
 import { config, isPlatformModeConfig, type Mask } from '../config';
 import type { ShotItem } from '../types';
-import { selectBreakpoints, generateSizeLabel } from '../shots/utils';
+import { selectBreakpoints, generateLabel } from '../shots/utils';
 import { notSupported } from '../constants';
 import type { Story } from './storybook';
 
@@ -12,69 +13,61 @@ export const generateLadleShotItems = (
   ladleStories: Story[],
   mask?: Mask[],
   modeBreakpoints?: number[],
+  browser?: BrowserType,
 ): ShotItem[] => {
   const ladleUrl = isLocalServer ? `${baseUrl}/index.html` : baseUrl;
 
   return ladleStories.flatMap((ladleStory): ShotItem[] => {
-    const configLevelBreakpoints = config.breakpoints ?? [];
-
-    const breakpoints = selectBreakpoints(
-      configLevelBreakpoints,
-      modeBreakpoints,
-      ladleStory.parameters?.lostpixel?.breakpoints,
-    );
+    const shotName =
+      config.shotNameGenerator?.({ ...ladleStory, shotMode: 'ladle' }) ??
+      ladleStory.id;
+    let label = generateLabel({ browser });
+    let fileNameWithExt = `${shotName}${label}.png`;
 
     const shotItem: ShotItem = {
       shotMode: 'ladle',
-      id: ladleStory.story,
-      shotName: config.shotNameGenerator
-        ? config.shotNameGenerator({ ...ladleStory, shotMode: 'ladle' })
-        : ladleStory.id,
+      id: `${ladleStory.story}${label}`,
+      shotName: `${shotName}${label}`,
       url: `${ladleUrl}?story=${ladleStory.story}&mode=preview`,
       filePathBaseline: isPlatformModeConfig(config)
         ? notSupported
-        : `${path.join(config.imagePathBaseline, ladleStory.story)}.png`,
-      filePathCurrent: `${path.join(
-        config.imagePathCurrent,
-        ladleStory.story,
-      )}.png`,
+        : path.join(config.imagePathBaseline, fileNameWithExt),
+      filePathCurrent: path.join(config.imagePathCurrent, fileNameWithExt),
       filePathDifference: isPlatformModeConfig(config)
         ? notSupported
-        : `${path.join(config.imagePathDifference, ladleStory.story)}.png`,
+        : path.join(config.imagePathDifference, fileNameWithExt),
       threshold: config.threshold,
       mask: mask ?? [],
     };
+
+    const breakpoints = selectBreakpoints(
+      config.breakpoints,
+      modeBreakpoints,
+      ladleStory.parameters?.lostpixel?.breakpoints,
+    );
 
     if (breakpoints.length === 0) {
       return [shotItem];
     }
 
     return breakpoints.map((breakpoint) => {
-      const sizeLabel = generateSizeLabel(breakpoint);
+      label = generateLabel({ breakpoint, browser });
+      fileNameWithExt = `${shotName}${label}.png`;
 
       return {
         ...shotItem,
-        id: `${ladleStory.story}${sizeLabel}`,
-        shotName: `${ladleStory.story}${sizeLabel}`,
+        id: `${ladleStory.story}${label}`,
+        shotName: `${ladleStory.story}${label}`,
         breakpoint,
         breakpointGroup: ladleStory.story,
         url: `${ladleUrl}?story=${ladleStory.story}&mode=preview&width=${breakpoint}`,
         filePathBaseline: isPlatformModeConfig(config)
           ? notSupported
-          : `${path.join(
-              config.imagePathBaseline,
-              ladleStory.story,
-            )}${sizeLabel}.png`,
-        filePathCurrent: `${path.join(
-          config.imagePathCurrent,
-          ladleStory.story,
-        )}${sizeLabel}.png`,
+          : path.join(config.imagePathBaseline, fileNameWithExt),
+        filePathCurrent: path.join(config.imagePathCurrent, fileNameWithExt),
         filePathDifference: isPlatformModeConfig(config)
           ? notSupported
-          : `${path.join(
-              config.imagePathDifference,
-              ladleStory.story,
-            )}${sizeLabel}.png`,
+          : path.join(config.imagePathDifference, fileNameWithExt),
         viewport: { width: breakpoint },
       };
     });

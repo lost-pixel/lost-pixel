@@ -1,9 +1,11 @@
 import path from 'node:path';
 import axios from 'axios';
+import type { BrowserType } from 'playwright-core';
 import { log } from '../log';
 import { config, isPlatformModeConfig } from '../config';
 import { type ShotItem } from '../types';
 import { notSupported } from '../constants';
+import { generateLabel } from '../shots/utils';
 
 type HistoireStory = {
   id: string;
@@ -23,6 +25,7 @@ type HistoireResponse = {
 const generateShotItemsForStory = (
   story: HistoireStory,
   baseUrl: string,
+  browser?: BrowserType,
 ): ShotItem[] => {
   const shotItems: ShotItem[] = [];
 
@@ -30,23 +33,24 @@ const generateShotItemsForStory = (
   const variants = story.variants ?? [story];
 
   for (const variant of variants) {
-    const variantShotName = variant.title;
+    const shotName =
+      config.shotNameGenerator?.({ ...variant, shotMode: 'histoire' }) ??
+      variant.title;
+    const label = generateLabel({ browser });
+    const fileNameWithExt = `${shotName}${label}.png`;
 
     shotItems.push({
       shotMode: 'histoire',
-      id: variant.id,
-      shotName: variantShotName,
+      id: `${variant.id}${label}`,
+      shotName: `${shotName}${label}`,
       url: `${baseUrl}/__sandbox.html?storyId=${story.id}&variantId=${variant.id}`,
       filePathBaseline: isPlatformModeConfig(config)
         ? notSupported
-        : path.join(config.imagePathBaseline, `${variantShotName}.png`),
-      filePathCurrent: path.join(
-        config.imagePathCurrent,
-        `${variantShotName}.png`,
-      ),
+        : path.join(config.imagePathBaseline, fileNameWithExt),
+      filePathCurrent: path.join(config.imagePathCurrent, fileNameWithExt),
       filePathDifference: isPlatformModeConfig(config)
         ? notSupported
-        : path.join(config.imagePathDifference, `${variantShotName}.png`),
+        : path.join(config.imagePathDifference, fileNameWithExt),
       threshold: config.threshold,
     });
   }
@@ -57,8 +61,11 @@ const generateShotItemsForStory = (
 export const generateHistoireShotItems = (
   baseUrl: string,
   stories: HistoireStory[],
+  browser?: BrowserType,
 ): ShotItem[] => {
-  return stories.flatMap((story) => generateShotItemsForStory(story, baseUrl));
+  return stories.flatMap((story) =>
+    generateShotItemsForStory(story, baseUrl, browser),
+  );
 };
 
 export const collectHistoireStories = async (histoireUrl: string) => {

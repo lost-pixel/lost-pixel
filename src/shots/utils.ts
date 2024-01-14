@@ -1,4 +1,4 @@
-import type { Page, Request } from 'playwright-core';
+import type { BrowserType, Page, Request } from 'playwright-core';
 import { config } from '../config';
 import type { log } from '../log';
 
@@ -102,7 +102,7 @@ export const resizeViewportToFullscreen = async ({ page }: { page: Page }) => {
   const viewport = await page.evaluate(
     async () =>
       new Promise<{ height: number; width: number }>((resolve) => {
-        const body = document.body;
+        const { body } = document;
         const html = document.documentElement;
 
         const height = Math.max(
@@ -147,10 +147,19 @@ export const selectBreakpoints = (
   return topLevelBreakpoints ?? [];
 };
 
-export const generateSizeLabel = (breakpoint: number): string => {
-  const widthLabel = breakpoint > 0 ? `w${breakpoint}px` : '';
+export const generateLabel = ({
+  breakpoint,
+  browser,
+}: {
+  breakpoint?: number;
+  browser?: BrowserType;
+}): string => {
+  const widthLabel = breakpoint && breakpoint > 0 ? `w${breakpoint}px` : '';
+  const browserLabel = browser?.name() ?? '';
 
-  const sizeLabel = `__[${widthLabel}]`;
+  const labels = [widthLabel, browserLabel].filter(Boolean);
 
-  return sizeLabel;
+  if (labels.length === 0) return '';
+
+  return `__[${labels.join('|')}]`;
 };
