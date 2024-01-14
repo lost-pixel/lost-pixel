@@ -158,11 +158,7 @@ const PageShotsSchema = z.object({
    */
   pagesJsonRefiner: z
     .function()
-    .args(
-      z.object({
-        pages: z.array(PageScreenshotParameterSchema),
-      }),
-    )
+    .args(z.array(PageScreenshotParameterSchema))
     .returns(z.array(PageScreenshotParameterSchema))
     .optional(),
 
