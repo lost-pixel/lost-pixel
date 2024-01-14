@@ -6,10 +6,16 @@ import { hideBin } from 'yargs/helpers';
 import fs from 'fs-extra';
 import { log } from './log';
 import { getPlatformApiToken, platformRunner, runner } from './runner';
-import { getVersion, isDockerMode } from './utils';
+import {
+  getVersion,
+  isDockerMode,
+  isSitemapPageGenMode,
+  isLocalDebugMode,
+} from './utils';
 import { sendFinalizeToAPI } from './api';
-import { config, configure } from './config';
+import { config, configure, isPlatformModeConfig } from './config';
 import { runInDocker } from './docker-runner';
+import { generatePagesFromSitemap } from './generatePagesFromSitemap';
 
 type CommandArgs = ['docker', 'init-js', 'init-ts', 'finalize'];
 
@@ -25,6 +31,12 @@ if (version) {
 
 // eslint-disable-next-line unicorn/prefer-top-level-await
 (async () => {
+  if (isSitemapPageGenMode()) {
+    await generatePagesFromSitemap();
+
+    return;
+  }
+
   if (isDockerMode()) {
     await runInDocker();
   } else if (commandArgs.includes('init-js')) {
@@ -60,17 +72,11 @@ if (version) {
     );
     log.process('info', 'general', '✅ Config successfully initialized');
   } else {
-    await configure();
+    await configure({
+      localDebugMode: isLocalDebugMode(),
+    });
 
-    if (config.generateOnly) {
-      log.process(
-        'info',
-        'general',
-        `🚀 Starting Lost Pixel in 'generateOnly' mode`,
-      );
-
-      await runner(config);
-    } else {
+    if (isPlatformModeConfig(config)) {
       log.process(
         'info',
         'general',
@@ -84,6 +90,14 @@ if (version) {
       } else {
         await platformRunner(config, apiToken);
       }
+    } else {
+      log.process(
+        'info',
+        'general',
+        `🚀 Starting Lost Pixel in 'generateOnly' mode`,
+      );
+
+      await runner(config);
     }
   }
 })();

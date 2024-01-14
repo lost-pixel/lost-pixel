@@ -1,6 +1,5 @@
 import { createShotsFolders, getBrowser } from '../utils';
 import { configure } from '../config';
-import { defaultTestConfig } from '../testUtils';
 import {
   collectStories,
   collectStoriesViaStoriesJson,
@@ -20,9 +19,10 @@ const storyBookV7Url = getStoryBookUrl(
 
 beforeAll(async () => {
   await configure({
-    ...defaultTestConfig,
-    timeouts: {
-      fetchStories: 2000,
+    customProjectConfig: {
+      timeouts: {
+        fetchStories: 2000,
+      },
     },
   });
 

@@ -3,11 +3,15 @@ import path from 'node:path';
 import { mapLimit } from 'async';
 import { compareImages } from './compare/compare';
 import { log } from './log';
-import { config } from './config';
+import { config, isPlatformModeConfig } from './config';
 import type { ShotItem } from './types';
-import { shallGenerateMeta } from './utils';
+import { featureNotSupported, shallGenerateMeta } from './utils';
 
 export const checkDifferences = async (shotItems: ShotItem[]) => {
+  if (isPlatformModeConfig(config)) {
+    return featureNotSupported('checkDifferences()');
+  }
+
   log.process(
     'info',
     'general',

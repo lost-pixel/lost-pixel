@@ -2,7 +2,8 @@ import { readFileSync, writeFileSync } from 'node:fs';
 import pixelmatch from 'pixelmatch';
 import { compare as odiffCompare } from 'odiff-bin';
 import { PNG } from 'pngjs';
-import { config } from '../config';
+import { config, isPlatformModeConfig } from '../config';
+import { featureNotSupported } from '../utils';
 import { resizeImage } from './utils';
 
 export const checkThreshold = (
@@ -158,6 +159,10 @@ export const compareImages = async (
   pixelDifferencePercentage: number;
   isWithinThreshold: boolean;
 }> => {
+  if (isPlatformModeConfig(config)) {
+    return featureNotSupported('compareImages()');
+  }
+
   if (config.compareEngine === 'pixelmatch') {
     return compareImagesViaPixelmatch(
       threshold,

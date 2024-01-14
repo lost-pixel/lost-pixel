@@ -36,7 +36,7 @@ jobs:
 
       - name: Lost Pixel
         id: lp
-        uses: lost-pixel/lost-pixel@v3.8.3-beta.1
+        uses: lost-pixel/lost-pixel@v3.11.0
         env:
           LOST_PIXEL_MODE: update
       - name: Create Pull Request
@@ -53,6 +53,6 @@ jobs:
 
 ![Run the action this way](<../../.gitbook/assets/image (1) (1).png>)
 
-The action run will generate a new PR against the original branch that will contain updated baselines, merge it and expect your tests to be **green again**:green\_circle:
+The action run will generate a new PR against the original branch that will contain updated baselines, merge it and expect your tests to be **green again**:green_circle:
 
 ![Automatically generated PR](<../../.gitbook/assets/image (4).png>)

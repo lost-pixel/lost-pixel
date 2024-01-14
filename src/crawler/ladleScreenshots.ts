@@ -1,9 +1,10 @@
 import path from 'node:path';
 import axios from 'axios';
 import type { BrowserType } from 'playwright-core';
-import { config, type Mask } from '../config';
+import { config, isPlatformModeConfig, type Mask } from '../config';
 import type { ShotItem } from '../types';
 import { selectBreakpoints, generateLabel } from '../shots/utils';
+import { notSupported } from '../constants';
 import type { Story } from './storybook';
 
 export const generateLadleShotItems = (
@@ -28,12 +29,13 @@ export const generateLadleShotItems = (
       id: `${ladleStory.story}${label}`,
       shotName: `${shotName}${label}`,
       url: `${ladleUrl}?story=${ladleStory.story}&mode=preview`,
-      filePathBaseline: path.join(config.imagePathBaseline, fileNameWithExt),
+      filePathBaseline: isPlatformModeConfig(config)
+        ? notSupported
+        : path.join(config.imagePathBaseline, fileNameWithExt),
       filePathCurrent: path.join(config.imagePathCurrent, fileNameWithExt),
-      filePathDifference: path.join(
-        config.imagePathDifference,
-        fileNameWithExt,
-      ),
+      filePathDifference: isPlatformModeConfig(config)
+        ? notSupported
+        : path.join(config.imagePathDifference, fileNameWithExt),
       threshold: config.threshold,
       mask: mask ?? [],
     };
@@ -44,7 +46,7 @@ export const generateLadleShotItems = (
       ladleStory.parameters?.lostpixel?.breakpoints,
     );
 
-    if (!breakpoints || breakpoints.length === 0) {
+    if (breakpoints.length === 0) {
       return [shotItem];
     }
 
@@ -59,12 +61,13 @@ export const generateLadleShotItems = (
         breakpoint,
         breakpointGroup: ladleStory.story,
         url: `${ladleUrl}?story=${ladleStory.story}&mode=preview&width=${breakpoint}`,
-        filePathBaseline: path.join(config.imagePathBaseline, fileNameWithExt),
+        filePathBaseline: isPlatformModeConfig(config)
+          ? notSupported
+          : path.join(config.imagePathBaseline, fileNameWithExt),
         filePathCurrent: path.join(config.imagePathCurrent, fileNameWithExt),
-        filePathDifference: path.join(
-          config.imagePathDifference,
-          fileNameWithExt,
-        ),
+        filePathDifference: isPlatformModeConfig(config)
+          ? notSupported
+          : path.join(config.imagePathDifference, fileNameWithExt),
         viewport: { width: breakpoint },
       };
     });

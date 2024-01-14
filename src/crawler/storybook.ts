@@ -3,11 +3,18 @@ import kebabCase from 'lodash.kebabcase';
 import type { BrowserContext, BrowserType } from 'playwright-core';
 import { readFileSync } from 'fs-extra';
 import type { ShotItem } from '../types';
-import { type Mask, config } from '../config';
+import { type Mask, config, isPlatformModeConfig } from '../config';
 import { getBrowser } from '../utils';
 import { log } from '../log';
 import { selectBreakpoints, generateLabel } from '../shots/utils';
+import { notSupported } from '../constants';
 
+type ExtraShots = {
+  name?: string;
+  args?: Record<string, unknown>; // Additional args for the snapshot
+  prefix?: string; // Prefix for the snapshot name
+  suffix?: string; // Suffix for the snapshot name
+};
 export type StoryParameters = {
   lostpixel?: {
     disable?: boolean;
@@ -15,6 +22,8 @@ export type StoryParameters = {
     waitBeforeScreenshot?: number;
     mask?: Mask[];
     breakpoints?: number[];
+    args?: Record<string, unknown>; // Args for the story
+    extraShots?: ExtraShots[]; // Additional snapshots for the story
   };
   viewport?: {
     width?: number;
@@ -247,9 +256,6 @@ export const collectStories = async (url: string) => {
   }
 };
 
-const generateFilename = (story: Story) =>
-  [story.kind, story.story].map((value) => kebabCase(value)).join('--');
-
 const generateBrowserConfig = (story: Story) => {
   const browserConfig = config.configureBrowser?.({
     ...story,
@@ -268,6 +274,40 @@ const generateBrowserConfig = (story: Story) => {
   }
 
   return browserConfig;
+};
+
+const generateStoryUrl = (
+  iframeUrl: string,
+  storyId: string,
+  args?: Record<string, unknown>,
+  breakpoint?: number,
+): string => {
+  let url = `${iframeUrl}?id=${storyId}&viewMode=story`;
+
+  if (args) {
+    const argsString = Object.entries(args)
+      .map(([key, value]) => `${key}:${value as string}`)
+      .join(';');
+
+    url += `&args=${argsString}`;
+  }
+
+  if (breakpoint !== undefined) {
+    url += `&width=${breakpoint}`;
+  }
+
+  return url;
+};
+
+const generateFilename = (
+  kind: string,
+  story: string,
+  prefix?: string,
+  suffix?: string,
+) => {
+  return [prefix, kebabCase(kind), kebabCase(story), kebabCase(suffix)]
+    .filter(Boolean)
+    .join('--');
 };
 
 export const generateStorybookShotItems = (
@@ -290,7 +330,7 @@ export const generateStorybookShotItems = (
     .flatMap((story): ShotItem[] => {
       const shotName =
         config.shotNameGenerator?.({ ...story, shotMode: 'storybook' }) ??
-        generateFilename(story);
+        generateFilename(story.kind, story.story);
       let label = generateLabel({ browser });
       let fileNameWithExt = `${shotName}${label}.png`;
 
@@ -299,13 +339,18 @@ export const generateStorybookShotItems = (
         id: `${story.id}${label}`,
         shotName: `${shotName}${label}`,
         importPath: story.importPath,
-        url: `${iframeUrl}?id=${story.id}&viewMode=story`,
-        filePathBaseline: path.join(config.imagePathBaseline, fileNameWithExt),
-        filePathCurrent: path.join(config.imagePathCurrent, fileNameWithExt),
-        filePathDifference: path.join(
-          config.imagePathDifference,
-          fileNameWithExt,
+        url: generateStoryUrl(
+          iframeUrl,
+          story.id,
+          story.parameters?.lostpixel?.args,
         ),
+        filePathBaseline: isPlatformModeConfig(config)
+          ? notSupported
+          : path.join(config.imagePathBaseline, fileNameWithExt),
+        filePathCurrent: path.join(config.imagePathCurrent, fileNameWithExt),
+        filePathDifference: isPlatformModeConfig(config)
+          ? notSupported
+          : path.join(config.imagePathDifference, fileNameWithExt),
         browserConfig: generateBrowserConfig(story),
         threshold: story.parameters?.lostpixel?.threshold ?? config.threshold,
         waitBeforeScreenshot:
@@ -314,7 +359,8 @@ export const generateStorybookShotItems = (
         mask: [...(mask ?? []), ...(story.parameters?.lostpixel?.mask ?? [])],
       };
 
-      const storyLevelBreakpoints = story.parameters?.lostpixel?.breakpoints;
+      const storyLevelBreakpoints =
+        story.parameters?.lostpixel?.breakpoints ?? [];
 
       const breakpoints = selectBreakpoints(
         config.breakpoints,
@@ -322,44 +368,114 @@ export const generateStorybookShotItems = (
         storyLevelBreakpoints,
       );
 
+      let shotItems = [];
+
       if (!breakpoints || breakpoints.length === 0) {
-        return [baseShotItem];
+        shotItems = [baseShotItem];
+      } else {
+        shotItems = breakpoints.map((breakpoint) => {
+          label = generateLabel({ breakpoint, browser });
+          fileNameWithExt = `${shotName}${label}.png`;
+
+          return {
+            ...baseShotItem,
+            id: `${story.id}${label}`,
+            shotName: `${shotName}${label}`,
+            breakpoint,
+            breakpointGroup: story.id,
+            filePathBaseline: isPlatformModeConfig(config)
+              ? notSupported
+              : path.join(config.imagePathBaseline, fileNameWithExt),
+            filePathCurrent: path.join(
+              config.imagePathCurrent,
+              fileNameWithExt,
+            ),
+            filePathDifference: isPlatformModeConfig(config)
+              ? notSupported
+              : path.join(config.imagePathDifference, fileNameWithExt),
+            viewport: {
+              width: breakpoint,
+              height: undefined,
+            },
+            url: generateStoryUrl(
+              iframeUrl,
+              story.id,
+              story.parameters?.lostpixel?.args,
+              breakpoint,
+            ),
+            browserConfig: generateBrowserConfig({
+              ...story,
+              parameters: {
+                ...story.parameters,
+                viewport: {
+                  width: breakpoint,
+                },
+              },
+            }),
+          };
+        });
       }
 
-      return breakpoints.map((breakpoint) => {
-        label = generateLabel({ breakpoint, browser });
-        fileNameWithExt = `${shotName}${label}.png`;
+      const extraShots =
+        story.parameters?.lostpixel?.extraShots?.flatMap((snapshot) => {
+          const combinedArgs = {
+            ...story.parameters?.lostpixel?.args,
+            ...snapshot.args,
+          };
+          const snapshotShotName = generateFilename(
+            story.kind,
+            story.story,
+            snapshot.prefix,
+            snapshot.suffix,
+          );
 
-        return {
-          ...baseShotItem,
-          id: `${story.id}${label}`,
-          shotName: `${shotName}${label}`,
-          breakpoint,
-          breakpointGroup: story.id,
-          filePathBaseline: path.join(
-            config.imagePathBaseline,
-            fileNameWithExt,
-          ),
-          filePathCurrent: path.join(config.imagePathCurrent, fileNameWithExt),
-          filePathDifference: path.join(
-            config.imagePathDifference,
-            fileNameWithExt,
-          ),
-          viewport: {
-            width: breakpoint,
-            height: undefined,
-          },
-          url: `${iframeUrl}?id=${story.id}&viewMode=story&width=${breakpoint}`,
-          browserConfig: generateBrowserConfig({
-            ...story,
-            parameters: {
-              ...story.parameters,
-              viewport: {
-                width: breakpoint,
-              },
+          return (breakpoints?.length === 0 ? [undefined] : breakpoints)!.map(
+            (breakpoint) => {
+              label = generateLabel({ breakpoint, browser });
+              fileNameWithExt = `${snapshotShotName}${label}.png`;
+
+              return {
+                ...baseShotItem,
+                id: `${story.id}${label}-${snapshot.name ?? 'snapshot'}`,
+                shotName: `${snapshotShotName}${label}`,
+                breakpoint,
+                breakpointGroup: story.id,
+                filePathBaseline: isPlatformModeConfig(config)
+                  ? notSupported
+                  : path.join(config.imagePathBaseline, fileNameWithExt),
+                filePathCurrent: path.join(
+                  config.imagePathCurrent,
+                  fileNameWithExt,
+                ),
+                filePathDifference: isPlatformModeConfig(config)
+                  ? notSupported
+                  : path.join(config.imagePathDifference, fileNameWithExt),
+                url: generateStoryUrl(
+                  iframeUrl,
+                  story.id,
+                  combinedArgs,
+                  breakpoint,
+                ),
+                viewport: breakpoint
+                  ? {
+                      width: breakpoint,
+                      height: undefined,
+                    }
+                  : undefined,
+                browserConfig: generateBrowserConfig({
+                  ...story,
+                  parameters: {
+                    ...story.parameters,
+                    viewport: {
+                      width: breakpoint,
+                    },
+                  },
+                }),
+              };
             },
-          }),
-        };
-      });
+          );
+        }) ?? [];
+
+      return [...shotItems, ...extraShots];
     });
 };

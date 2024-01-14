@@ -4,7 +4,7 @@ Lost Pixel has first-class support for GitHub Actions, offering a dedicated acti
 
 ```
 - name: Lost Pixel
-  uses: lost-pixel/lost-pixel@v3.8.3-beta.1
+  uses: lost-pixel/lost-pixel@v3.11.0
 ```
 
 As outlined in [modes](project-configuration/modes.md), Lost Pixel can run in different modes or all of them simultaneously. You would need to build the respective provider and serve it in the action to make it available for the Lost Pixel, e.g. build & serve storybook, build & serve ladle, build & serve next app
@@ -12,6 +12,7 @@ As outlined in [modes](project-configuration/modes.md), Lost Pixel can run in di
 Here's an example of a complete workflow file that builds the Storybook before continuing with Lost Pixel. To make it run, you need to place `vis-reg-test.yml` it into `.github/workflows` at the root of your project. This will execute the Lost Pixel visual regression tests on every commit:
 
 {% code title="vis-reg-test.yml" %}
+
 ```yaml
 on: [push]
 
@@ -36,8 +37,9 @@ jobs:
         run: npm run build-storybook
 
       - name: Lost Pixel
-        uses: lost-pixel/lost-pixel@v3.8.3-beta.1
+        uses: lost-pixel/lost-pixel@v3.11.0
 ```
+
 {% endcode %}
 
 {% hint style="info" %}
@@ -47,8 +49,9 @@ Using Lost Pixel in **Platform Mode,** you need to provide the `LOST_PIXEL_API_K
 
 ```
 - name: Lost Pixel
-  uses: lost-pixel/lost-pixel@v3.8.3-beta.1
+  uses: lost-pixel/lost-pixel@v3.11.0
   env:
       LOST_PIXEL_API_KEY: ${{ secrets.LOST_PIXEL_API_KEY }}
 ```
+
 {% endhint %}

@@ -1,9 +1,10 @@
 import { mapLimit } from 'async';
-import { MEDIA_UPLOAD_CONCURRENCY, type PlatformModeConfig } from './config';
+import { type PlatformModeConfig } from './config';
 import type { ExtendedShotItem } from './types';
 import { uploadShot } from './api';
 import { log } from './log';
 import { parseHrtimeToSeconds } from './utils';
+import { MEDIA_UPLOAD_CONCURRENCY } from './constants';
 
 export const uploadRequiredShots = async ({
   config,

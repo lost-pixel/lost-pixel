@@ -2,10 +2,17 @@ import path from 'node:path';
 import axios, { isAxiosError } from 'axios';
 import { z } from 'zod';
 import type { BrowserType } from 'playwright-core';
+import fs from 'fs-extra';
 import { log } from '../log';
-import { type Mask, type PageScreenshotParameter, config } from '../config';
+import {
+  type Mask,
+  type PageScreenshotParameter,
+  config,
+  isPlatformModeConfig,
+} from '../config';
 import type { ShotItem } from '../types';
 import { selectBreakpoints, generateLabel } from '../shots/utils';
+import { notSupported } from '../constants';
 
 const generateBrowserConfig = (page: PageScreenshotParameter) => {
   const browserConfig = config.configureBrowser?.({
@@ -52,12 +59,13 @@ export const generatePageShotItems = (
       id: `${shotName}${label}`,
       shotName: `${shotName}${label}`,
       url: path.join(baseUrl, page.path),
-      filePathBaseline: path.join(config.imagePathBaseline, fileNameWithExt),
+      filePathBaseline: isPlatformModeConfig(config)
+        ? notSupported
+        : path.join(config.imagePathBaseline, fileNameWithExt),
       filePathCurrent: path.join(config.imagePathCurrent, fileNameWithExt),
-      filePathDifference: path.join(
-        config.imagePathDifference,
-        fileNameWithExt,
-      ),
+      filePathDifference: isPlatformModeConfig(config)
+        ? notSupported
+        : path.join(config.imagePathDifference, fileNameWithExt),
       browserConfig: generateBrowserConfig(page),
       threshold: page.threshold ?? config.threshold,
       waitBeforeScreenshot:
@@ -71,7 +79,7 @@ export const generatePageShotItems = (
       page.breakpoints,
     );
 
-    if (!breakpoints || breakpoints.length === 0) {
+    if (breakpoints.length === 0) {
       return [baseShotItem];
     }
 
@@ -86,12 +94,13 @@ export const generatePageShotItems = (
         breakpoint,
         breakpointGroup: page.name,
         url: path.join(baseUrl, page.path),
-        filePathBaseline: path.join(config.imagePathBaseline, fileNameWithExt),
+        filePathBaseline: isPlatformModeConfig(config)
+          ? notSupported
+          : path.join(config.imagePathBaseline, fileNameWithExt),
         filePathCurrent: path.join(config.imagePathCurrent, fileNameWithExt),
-        filePathDifference: path.join(
-          config.imagePathDifference,
-          fileNameWithExt,
-        ),
+        filePathDifference: isPlatformModeConfig(config)
+          ? notSupported
+          : path.join(config.imagePathDifference, fileNameWithExt),
         viewport: { width: breakpoint },
         browserConfig: generateBrowserConfig({
           ...page,
@@ -102,22 +111,53 @@ export const generatePageShotItems = (
   });
 };
 
+// Helper function to check if a string is a valid URL
+const isValidHttpUrl = (string: string) => {
+  let url;
+
+  try {
+    url = new URL(string);
+  } catch {
+    return false;
+  }
+
+  return url.protocol === 'http:' || url.protocol === 'https:';
+};
+
 export const getPagesFromExternalLoader = async () => {
   try {
     if (!config.pageShots?.pagesJsonUrl) {
       return [];
     }
 
-    log.browser(
+    log.process(
       'info',
       'general',
-      'Loading pages via external loader file supplied in pagesJsonUrl',
+      `⏬ Loading pages from ${config.pageShots.pagesJsonUrl}`,
     );
 
-    const { data: pages } = await axios.get<PageScreenshotParameter[]>(
-      config.pageShots.pagesJsonUrl,
-    );
+    let pages;
 
+    // Check if the pagesJsonUrl is a valid URL or a local file path
+    if (isValidHttpUrl(config.pageShots.pagesJsonUrl)) {
+      log.process('info', 'general', `🕸️ Trying to fetch from URL`);
+      const response = await axios.get<PageScreenshotParameter[]>(
+        config.pageShots.pagesJsonUrl,
+      );
+
+      pages = response.data;
+    } else {
+      // Read the file from the local filesystem
+      log.process('info', 'general', `⏬ Trying to fetch from local file`);
+      const fileContents = await fs.readFile(
+        config.pageShots.pagesJsonUrl,
+        'utf8',
+      );
+
+      pages = JSON.parse(fileContents) as PageScreenshotParameter[];
+    }
+
+    // Validation logic remains the same
     const pagesArraySchema = z.array(
       z.object({
         path: z.string(),
@@ -143,13 +183,19 @@ export const getPagesFromExternalLoader = async () => {
     const validatePages = pagesArraySchema.safeParse(pages);
 
     if (validatePages.success) {
+      log.process(
+        'info',
+        'general',
+        `✅ Successfully validated pages structure & loaded ${pages.length} pages from JSON file.`,
+      );
+
       return pages;
     }
 
     log.process(
       'error',
       'general',
-      'Error validating the loaded pages structure',
+      '❌ Error validating the loaded pages structure',
     );
     log.process('error', 'general', validatePages.error);
 
@@ -159,7 +205,7 @@ export const getPagesFromExternalLoader = async () => {
       log.process(
         'error',
         'network',
-        `Error when fetching data: ${error.message}`,
+        `❌ Error when fetching data: ${error.message}`,
       );
     }
 

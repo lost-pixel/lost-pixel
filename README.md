@@ -32,12 +32,12 @@
 
 **Lost Pixel** is an open-source visual regression testing tool. Run visual regression tests on your **Storybook** and **Ladle** stories and your application pages.
 
-| Provider         | Status | Description                                                                                                                                                            |
-| ---------------- | :----: | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **Storybook**    |   ✅   | `First class integration`. Provide your storybook build - Lost Pixel does the rest.                                                                                    |
-| **Ladle**        |   ✅   | `First class integration`. Provide your ladle build - Lost Pixel does the rest.                                                                                        |
-| **Histoire**     |   ✅   | `First class integration`. Provide your histoire build - Lost Pixel does the rest.                                                                                     |
-| **Pages**        |   ✅   | Visual tests for modern frontend apps like **Next**, **Gatsby**, **Remix**. Run your app - provide Lost Pixel with paths to test.                                      |
+| Provider         | Status | Description                                                                                                                                                                  |
+| ---------------- | :----: | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Storybook**    |   ✅   | `First class integration`. Provide your storybook build - Lost Pixel does the rest.                                                                                          |
+| **Ladle**        |   ✅   | `First class integration`. Provide your ladle build - Lost Pixel does the rest.                                                                                              |
+| **Histoire**     |   ✅   | `First class integration`. Provide your histoire build - Lost Pixel does the rest.                                                                                           |
+| **Pages**        |   ✅   | Visual tests for modern frontend apps like **Next**, **Gatsby**, **Remix**. Run your app - provide Lost Pixel with paths to test.                                            |
 | **Custom shots** |   ✅   | Take care of taking screenshots on your side - provide Lost Pixel with a path to the directory with images. Best suitable for custom **Cypress**/**Playwright** integrations |
 
 **Lost Pixel** consists of two products:
@@ -49,9 +49,8 @@
 | ![ezgif-5-e71eb0773d](https://user-images.githubusercontent.com/29632358/185067771-03467437-badd-466b-ad6c-60d7183d99ae.gif) | ![ezgif-5-43091ece5d](https://user-images.githubusercontent.com/29632358/185067989-3f2d818b-c01f-4304-97f6-77295b1970d9.gif) |
 
 - **Lost Pixel Platform** - the **UI and CI helpers** that allow you to use lost-pixel's managed version. This includes specified regression UI, collaboration with team members, and an easy approval/rejection process for the snapshots. You can configure it once and enjoy hassle-free visual regression tests integrated into your GitHub actions pipeline. `lost-pixel` repository is **core** to the SaaS offering and is being actively improved & maintained.
-  
-https://user-images.githubusercontent.com/29632358/222420960-57924da4-d0bf-4478-9322-fc68686485b6.mp4
 
+https://user-images.githubusercontent.com/29632358/222420960-57924da4-d0bf-4478-9322-fc68686485b6.mp4
 
 <hr/>
 <div align="center">
@@ -62,6 +61,7 @@ https://user-images.githubusercontent.com/29632358/222420960-57924da4-d0bf-4478-
 <hr/>
 
 ## Features
+
 - 🌐 Visual regression testing in a browser of your choice (chrome, firefox, safari)
 - 📱 Responsive tests running with [different breakpoints and viewports](https://docs.lost-pixel.com/user-docs/recipes/general-recipes/viewport-tests)
 - 🖥️ Multiple browser execution (Chrome, Mozilla, Safari)
@@ -92,10 +92,10 @@ export const config: CustomProjectConfig = {
   storybookShots: {
     storybookUrl: './storybook-static',
   },
-   // OSS mode 
+  // OSS mode
   generateOnly: true,
-  failOnDifference: true
-  
+  failOnDifference: true,
+
   // Lost Pixel Platform (to use in Platform mode, comment out the OSS mode and uncomment this part )
   // lostPixelProjectId: "xxxx",
   // process.env.LOST_PIXEL_API_KEY,
@@ -128,7 +128,7 @@ jobs:
         run: npm run build-storybook
 
       - name: Lost Pixel
-        uses: lost-pixel/lost-pixel@v3.8.3-beta.1
+        uses: lost-pixel/lost-pixel@v3.11.0
 ```
 
 </details>
@@ -150,10 +150,10 @@ export const config: CustomProjectConfig = {
     //ip should be localhost when running locally & 172.17.0.1 when running in GitHub action
     ladleUrl: 'http://172.17.0.1:61000',
   },
-   // OSS mode 
+  // OSS mode
   generateOnly: true,
-  failOnDifference: true
-  
+  failOnDifference: true,
+
   // Lost Pixel Platform (to use in Platform mode, comment out the OSS mode and uncomment this part )
   // lostPixelProjectId: "xxxx",
   // process.env.LOST_PIXEL_API_KEY,
@@ -198,7 +198,7 @@ jobs:
         run: npm run serve &
 
       - name: Lost Pixel
-        uses: lost-pixel/lost-pixel@v3.8.3-beta.1
+        uses: lost-pixel/lost-pixel@v3.11.0
 ```
 
 </details>
@@ -220,10 +220,10 @@ export const config: CustomProjectConfig = {
     //ip should be localhost when running locally & 172.17.0.1 when running in GitHub action
     histoireUrl: './.histoire/dist',
   },
-   // OSS mode 
+  // OSS mode
   generateOnly: true,
-  failOnDifference: true
-  
+  failOnDifference: true,
+
   // Lost Pixel Platform (to use in Platform mode, comment out the OSS mode and uncomment this part )
   // lostPixelProjectId: "xxxx",
   // process.env.LOST_PIXEL_API_KEY,
@@ -256,7 +256,7 @@ jobs:
         run: npm run story:build
 
       - name: Lost Pixel
-        uses: lost-pixel/lost-pixel@v3.8.3-beta.1
+        uses: lost-pixel/lost-pixel@v3.11.0
 ```
 
 </details>
@@ -279,10 +279,10 @@ export const config: CustomProjectConfig = {
     // IP should be localhost when running locally & 172.17.0.1 when running in GitHub action
     baseUrl: 'http://172.17.0.1:3000',
   },
-  // OSS mode 
+  // OSS mode
   generateOnly: true,
-  failOnDifference: true
-  
+  failOnDifference: true,
+
   // Lost Pixel Platform (to use in Platform mode, comment out the OSS mode and uncomment this part )
   // lostPixelProjectId: "xxxx",
   // process.env.LOST_PIXEL_API_KEY,
@@ -318,7 +318,7 @@ jobs:
         run: npm run start &
 
       - name: Lost Pixel
-        uses: lost-pixel/lost-pixel@v3.8.3-beta.1
+        uses: lost-pixel/lost-pixel@v3.11.0
 ```
 
 </details>
@@ -336,13 +336,13 @@ Add `lostpixel.config.ts` at the root of the project:
 import { CustomProjectConfig } from 'lost-pixel';
 
 export const config: CustomProjectConfig = {
- customShots: {
-    currentShotsPath: "./lost-pixel",
+  customShots: {
+    currentShotsPath: './lost-pixel',
   },
-  // OSS mode 
+  // OSS mode
   generateOnly: true,
-  failOnDifference: true
-  
+  failOnDifference: true,
+
   // Lost Pixel Platform (to use in Platform mode, comment out the OSS mode and uncomment this part )
   // lostPixelProjectId: "xxxx",
   // process.env.LOST_PIXEL_API_KEY,
@@ -398,7 +398,7 @@ jobs:
         run: npx playwright install --with-deps && npm run test:e2e
 
       - name: Lost Pixel
-        uses: lost-pixel/lost-pixel@v3.8.3-beta.1
+        uses: lost-pixel/lost-pixel@v3.11.0
         env:
           LOST_PIXEL_API_KEY: ${{ secrets.LOST_PIXEL_API_KEY }}
 ```
@@ -436,8 +436,8 @@ Want to chat about visual regression testing with likeminded people? We've start
 <h4 align='center'> <a href="https://discord.gg/WqVjk49g9m">Join our Discord</a></div>
 
 ---
-  
-### Using Lost Pixel Platform in non-commercial Open Source projects 
+
+### Using Lost Pixel Platform in non-commercial Open Source projects
 
 We are excited to offer you free usage of Lost Pixel Platform(SaaS) for your Open Source repositories, feel free to reach out to oss@lost-pixel.com to get started!
 
@@ -452,3 +452,7 @@ If you are already using Lost Pixel it would mean a lot to us if you give us a s
 ## Contributing 🏗️
 
 **Lost Pixel** is open source in it's heart and welcomes any external contribution. You can refer to [CONTRIBUTING.md](https://github.com/lost-pixel/lost-pixel/blob/main/CONTRIBUTING.md) to get going with the project locally in couple of minutes.
+
+## Lost Pixel Usage Insights 📈
+
+[![lost-pixel npminsights](https://npminsights.vercel.app/api/package/readme-image/lost-pixel)](https://npminsights.vercel.app/package/lost-pixel)

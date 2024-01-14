@@ -12,6 +12,7 @@ The GitHub action below focuses on running Lost Pixel in monorepo mode on the Lo
 <figure><img src="../../.gitbook/assets/image (8).png" alt=""><figcaption><p>Lost Pixel Platform - monorepo mode in settings</p></figcaption></figure>
 
 {% code title=".github/workflows/vrt.yml" %}
+
 ```yaml
 on:
   push:
@@ -28,14 +29,14 @@ jobs:
       matrix:
         config:
           - {
-              package: "apps/web",
-              name: "Lost Pixel for Web",
-              command: "pnpm run dev",
+              package: 'apps/web',
+              name: 'Lost Pixel for Web',
+              command: 'pnpm run dev',
             }
           - {
-              package: "apps/docs",
-              name: "Lost Pixel for Docs",
-              command: "pnpm run dev",
+              package: 'apps/docs',
+              name: 'Lost Pixel for Docs',
+              command: 'pnpm run dev',
             }
     steps:
       - name: Checkout
@@ -70,7 +71,7 @@ jobs:
           CI: true
 
       - name: ${{ matrix.config.name }}
-        uses: lost-pixel/lost-pixel@v3.8.3-beta.1
+        uses: lost-pixel/lost-pixel@v3.11.0
         env:
           LOST_PIXEL_API_KEY: ${{ secrets.LOST_PIXEL_API_KEY }}
           LOST_PIXEL_CONFIG_DIR: ${{ matrix.config.package }}
@@ -83,13 +84,14 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Lost Pixel Finalize
-        uses: lost-pixel/lost-pixel@v3.8.3-beta.1
+        uses: lost-pixel/lost-pixel@v3.11.0
         env:
           LOST_PIXEL_API_KEY: ${{ secrets.LOST_PIXEL_API_KEY }}
           LOST_PIXEL_CONFIG_DIR: apps/web
         with:
           FINALIZE: true
 ```
+
 {% endcode %}
 
 To run Lost Pixel in monorepo, you must ensure that you have two[ lostpixel.config.ts|js](../../api-reference/lost-pixel.config.js-or-ts.md) files in respective monorepo packages.
