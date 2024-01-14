@@ -379,32 +379,54 @@ export const PlatformModeConfigSchema = BaseConfigSchema.extend({
   /**
    * CI build ID
    */
-  // @ts-expect-error If not set, it will be caught during config validation
-  ciBuildId: z.string().default(process.env.CI_BUILD_ID),
+  ciBuildId: z
+    .string({
+      required_error: 'Required (can be set via `CI_BUILD_ID` env variable)',
+    })
+    // @ts-expect-error If not set, it will be caught during config validation
+    .default(process.env.CI_BUILD_ID),
 
   /**
    * CI build number
    */
-  // @ts-expect-error If not set, it will be caught during config validation
-  ciBuildNumber: z.string().default(process.env.CI_BUILD_NUMBER),
+  ciBuildNumber: z
+    .string({
+      required_error:
+        'Required (can be set via `CI_BUILD_NUMBER` env variable)',
+    })
+    // @ts-expect-error If not set, it will be caught during config validation
+    .default(process.env.CI_BUILD_NUMBER),
 
   /**
    * Git repository name (e.g. 'lost-pixel/lost-pixel-storybook')
    */
-  // @ts-expect-error If not set, it will be caught during config validation
-  repository: z.string().default(process.env.REPOSITORY),
+  repository: z
+    .string({
+      required_error: 'Required (can be set via `REPOSITORY` env variable)',
+    })
+    // @ts-expect-error If not set, it will be caught during config validation
+    .default(process.env.REPOSITORY),
 
   /**
    * Git branch name (e.g. 'main')
    */
-  // @ts-expect-error If not set, it will be caught during config validation
-  commitRefName: z.string().default(process.env.COMMIT_REF_NAME),
+  commitRefName: z
+    .string({
+      required_error:
+        'Required (can be set via `COMMIT_REF_NAME` env variable)',
+    })
+    // @ts-expect-error If not set, it will be caught during config validation
+    .default(process.env.COMMIT_REF_NAME),
 
   /**
    * Git commit SHA (e.g. 'b9b8b9b9b9b9b9b9b9b9b9b9b9b9b9b9b9b9b9b9')
    */
-  // @ts-expect-error If not set, it will be caught during config validation
-  commitHash: z.string().default(process.env.COMMIT_HASH),
+  commitHash: z
+    .string({
+      required_error: 'Required (can be set via `COMMIT_HASH` env variable)',
+    })
+    // @ts-expect-error If not set, it will be caught during config validation
+    .default(process.env.COMMIT_HASH),
 
   /**
    * File path to event.json file
