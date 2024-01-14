@@ -1,13 +1,13 @@
 import { createShotsFolders } from '../utils';
 import { type PageScreenshotParameter, configure } from '../config';
-import { defaultTestConfig } from '../testUtils';
 import { generatePageShotItems } from './pageScreenshots';
 
 beforeAll(async () => {
   await configure({
-    ...defaultTestConfig,
-    timeouts: {
-      fetchStories: 2000,
+    customProjectConfig: {
+      timeouts: {
+        fetchStories: 2000,
+      },
     },
   });
 
@@ -23,10 +23,16 @@ describe(generatePageShotItems, () => {
       {
         name: 'home',
         path: '/',
+        breakpoints: [],
+        threshold: 0,
+        waitBeforeScreenshot: 1000,
       },
       {
         name: 'about',
         path: '/about',
+        breakpoints: [],
+        threshold: 0,
+        waitBeforeScreenshot: 1000,
       },
     ];
 
@@ -43,11 +49,15 @@ describe(generatePageShotItems, () => {
         name: 'home',
         path: '/',
         breakpoints: [480, 768],
+        threshold: 0,
+        waitBeforeScreenshot: 1000,
       },
       {
         name: 'about',
         path: '/about',
         breakpoints: [480, 768],
+        threshold: 0,
+        waitBeforeScreenshot: 1000,
       },
     ];
 

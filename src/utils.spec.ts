@@ -5,13 +5,10 @@ import {
   type Changes,
 } from './utils';
 import { configure } from './config';
-import { defaultTestConfig } from './testUtils';
 
 beforeAll(async () => {
   await configure({
-    ...defaultTestConfig,
-    lostPixelProjectId: 'lorem-ipsum',
-    ciBuildId: '456',
+    customProjectConfig: {},
   });
 });
 

@@ -1,6 +1,17 @@
+import z from 'zod';
 import type { BrowserContextOptions } from 'playwright-core';
 
-export type ShotMode = 'storybook' | 'ladle' | 'histoire' | 'page' | 'custom';
+export const BrowserSchema = z.enum(['chromium', 'firefox', 'webkit']);
+
+export const ShotModeSchema = z.enum([
+  'storybook',
+  'ladle',
+  'histoire',
+  'page',
+  'custom',
+]);
+
+export type ShotMode = z.infer<typeof ShotModeSchema>;
 
 export type ShotItem = {
   shotMode: ShotMode;

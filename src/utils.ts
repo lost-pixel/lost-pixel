@@ -14,11 +14,12 @@ import { v4 as uuid } from 'uuid';
 import { type BrowserType, chromium, firefox, webkit } from 'playwright-core';
 import yargs from 'yargs';
 import { hideBin } from 'yargs/helpers';
-import { config } from './config';
+import { config, isPlatformModeConfig } from './config';
 import { log } from './log';
 import type { ShotItem } from './types';
+import { POST_HOG_API_KEY, notSupported } from './constants';
 
-export type ParsedYargs = {
+type ParsedYargs = {
   _: ['update', 'meta', 'docker', 'local', 'page-sitemap-gen'];
   m: 'update';
 };
@@ -48,8 +49,6 @@ export type Changes = {
   addition: FilenameWithAllPaths[];
 };
 
-const POST_HOG_API_KEY = 'phc_RDNnzvANh1mNm9JKogF9UunG3Ky02YCxWP9gXScKShk';
-
 export const isUpdateMode = (): boolean => {
   // @ts-expect-error TBD
   const args = yargs(hideBin(process.argv)).parse() as ParsedYargs;
@@ -76,6 +75,13 @@ export const isDockerMode = (): boolean => {
   const args = yargs(hideBin(process.argv)).parse() as ParsedYargs;
 
   return args._.includes('docker') || process.env.LOST_PIXEL_DOCKER === 'true';
+};
+
+export const isLocalDebugMode = (): boolean => {
+  // @ts-expect-error TBD
+  const args = yargs(hideBin(process.argv)).parse() as ParsedYargs;
+
+  return args._.includes('local') || process.env.LOST_PIXEL_LOCAL === 'true';
 };
 
 export const shallGenerateMeta = (): boolean => {
@@ -131,11 +137,13 @@ export const extendFileName = ({ fileName, extension }: ExtendFileName) => {
 };
 
 export const createShotsFolders = () => {
-  const paths = [
-    config.imagePathBaseline,
-    config.imagePathCurrent,
-    config.imagePathDifference,
-  ];
+  const paths = isPlatformModeConfig(config)
+    ? [config.imagePathCurrent]
+    : [
+        config.imagePathBaseline,
+        config.imagePathCurrent,
+        config.imagePathDifference,
+      ];
 
   for (const path of paths) {
     if (!existsSync(path)) {
@@ -144,7 +152,7 @@ export const createShotsFolders = () => {
   }
 
   const ignoreFile = normalize(
-    join(config.imagePathBaseline, '..', '.gitignore'),
+    join(config.imagePathCurrent, '..', '.gitignore'),
   );
 
   if (!existsSync(ignoreFile)) {
@@ -235,9 +243,13 @@ export const readDirIntoShotItems = (path: string): ShotItem[] => {
         id: fileName,
         shotName: fileName,
         shotMode: 'custom',
-        filePathBaseline: join(config.imagePathBaseline, fileNameWithExt),
+        filePathBaseline: isPlatformModeConfig(config)
+          ? notSupported
+          : join(config.imagePathBaseline, fileNameWithExt),
         filePathCurrent: join(path, fileNameWithExt),
-        filePathDifference: join(config.imagePathDifference, fileNameWithExt),
+        filePathDifference: isPlatformModeConfig(config)
+          ? notSupported
+          : join(config.imagePathDifference, fileNameWithExt),
         url: fileName,
         // TODO: custom shots take thresholds only from config - not possible to source configs from individual story
         threshold: config.threshold,
@@ -320,4 +332,14 @@ export const hashFile = (filePath: string): string => {
   const file = readFileSync(filePath);
 
   return hashBuffer(file);
+};
+
+export const featureNotSupported = (feature: string) => {
+  log.process(
+    'error',
+    'general',
+    `${feature} is not supported in this configuration mode`,
+  );
+
+  process.exit(1);
 };

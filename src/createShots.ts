@@ -5,7 +5,11 @@ import {
   collectLadleStories,
   generateLadleShotItems,
 } from './crawler/ladleScreenshots';
-import { type PageScreenshotParameter, config } from './config';
+import {
+  type PageScreenshotParameter,
+  config,
+  isPlatformModeConfig,
+} from './config';
 import {
   collectStories,
   generateStorybookShotItems,
@@ -36,7 +40,6 @@ export const createShots = async () => {
     pageShots,
     customShots,
     imagePathCurrent,
-    imagePathDifference,
   } = config;
   let storybookShotItems: ShotItem[] = [];
   let ladleShotItems: ShotItem[] = [];
@@ -45,7 +48,10 @@ export const createShots = async () => {
   let customShotItems: ShotItem[] = [];
 
   removeFilesInFolder(imagePathCurrent);
-  removeFilesInFolder(imagePathDifference);
+
+  if (!isPlatformModeConfig(config)) {
+    removeFilesInFolder(config.imagePathDifference);
+  }
 
   const browsers = getBrowsers();
 

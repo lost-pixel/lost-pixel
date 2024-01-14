@@ -3,10 +3,11 @@ import kebabCase from 'lodash.kebabcase';
 import type { BrowserContext, BrowserType } from 'playwright-core';
 import { readFileSync } from 'fs-extra';
 import type { ShotItem } from '../types';
-import { type Mask, config } from '../config';
+import { type Mask, config, isPlatformModeConfig } from '../config';
 import { getBrowser } from '../utils';
 import { log } from '../log';
 import { selectBreakpoints, generateLabel } from '../shots/utils';
+import { notSupported } from '../constants';
 
 type ExtraShots = {
   name?: string;
@@ -343,12 +344,13 @@ export const generateStorybookShotItems = (
           story.id,
           story.parameters?.lostpixel?.args,
         ),
-        filePathBaseline: path.join(config.imagePathBaseline, fileNameWithExt),
+        filePathBaseline: isPlatformModeConfig(config)
+          ? notSupported
+          : path.join(config.imagePathBaseline, fileNameWithExt),
         filePathCurrent: path.join(config.imagePathCurrent, fileNameWithExt),
-        filePathDifference: path.join(
-          config.imagePathDifference,
-          fileNameWithExt,
-        ),
+        filePathDifference: isPlatformModeConfig(config)
+          ? notSupported
+          : path.join(config.imagePathDifference, fileNameWithExt),
         browserConfig: generateBrowserConfig(story),
         threshold: story.parameters?.lostpixel?.threshold ?? config.threshold,
         waitBeforeScreenshot:
@@ -357,7 +359,8 @@ export const generateStorybookShotItems = (
         mask: [...(mask ?? []), ...(story.parameters?.lostpixel?.mask ?? [])],
       };
 
-      const storyLevelBreakpoints = story.parameters?.lostpixel?.breakpoints;
+      const storyLevelBreakpoints =
+        story.parameters?.lostpixel?.breakpoints ?? [];
 
       const breakpoints = selectBreakpoints(
         config.breakpoints,
@@ -380,18 +383,16 @@ export const generateStorybookShotItems = (
             shotName: `${shotName}${label}`,
             breakpoint,
             breakpointGroup: story.id,
-            filePathBaseline: path.join(
-              config.imagePathBaseline,
-              fileNameWithExt,
-            ),
+            filePathBaseline: isPlatformModeConfig(config)
+              ? notSupported
+              : path.join(config.imagePathBaseline, fileNameWithExt),
             filePathCurrent: path.join(
               config.imagePathCurrent,
               fileNameWithExt,
             ),
-            filePathDifference: path.join(
-              config.imagePathDifference,
-              fileNameWithExt,
-            ),
+            filePathDifference: isPlatformModeConfig(config)
+              ? notSupported
+              : path.join(config.imagePathDifference, fileNameWithExt),
             viewport: {
               width: breakpoint,
               height: undefined,
@@ -439,18 +440,16 @@ export const generateStorybookShotItems = (
                 shotName: `${snapshotShotName}${label}`,
                 breakpoint,
                 breakpointGroup: story.id,
-                filePathBaseline: path.join(
-                  config.imagePathBaseline,
-                  fileNameWithExt,
-                ),
+                filePathBaseline: isPlatformModeConfig(config)
+                  ? notSupported
+                  : path.join(config.imagePathBaseline, fileNameWithExt),
                 filePathCurrent: path.join(
                   config.imagePathCurrent,
                   fileNameWithExt,
                 ),
-                filePathDifference: path.join(
-                  config.imagePathDifference,
-                  fileNameWithExt,
-                ),
+                filePathDifference: isPlatformModeConfig(config)
+                  ? notSupported
+                  : path.join(config.imagePathDifference, fileNameWithExt),
                 url: generateStoryUrl(
                   iframeUrl,
                   story.id,

@@ -2,8 +2,9 @@ import path from 'node:path';
 import axios from 'axios';
 import type { BrowserType } from 'playwright-core';
 import { log } from '../log';
-import { config } from '../config';
+import { config, isPlatformModeConfig } from '../config';
 import { type ShotItem } from '../types';
+import { notSupported } from '../constants';
 import { generateLabel } from '../shots/utils';
 
 type HistoireStory = {
@@ -43,12 +44,13 @@ const generateShotItemsForStory = (
       id: `${variant.id}${label}`,
       shotName: `${shotName}${label}`,
       url: `${baseUrl}/__sandbox.html?storyId=${story.id}&variantId=${variant.id}`,
-      filePathBaseline: path.join(config.imagePathBaseline, fileNameWithExt),
+      filePathBaseline: isPlatformModeConfig(config)
+        ? notSupported
+        : path.join(config.imagePathBaseline, fileNameWithExt),
       filePathCurrent: path.join(config.imagePathCurrent, fileNameWithExt),
-      filePathDifference: path.join(
-        config.imagePathDifference,
-        fileNameWithExt,
-      ),
+      filePathDifference: isPlatformModeConfig(config)
+        ? notSupported
+        : path.join(config.imagePathDifference, fileNameWithExt),
       threshold: config.threshold,
     });
   }

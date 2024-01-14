@@ -135,7 +135,7 @@ export const selectBreakpoints = (
   topLevelBreakpoints?: number[],
   modeBreakpoints?: number[],
   shotBreakpoints?: number[],
-): number[] | undefined => {
+) => {
   if (shotBreakpoints && shotBreakpoints.length > 0) {
     return shotBreakpoints;
   }
@@ -144,7 +144,7 @@ export const selectBreakpoints = (
     return modeBreakpoints;
   }
 
-  return topLevelBreakpoints;
+  return topLevelBreakpoints ?? [];
 };
 
 export const generateLabel = ({

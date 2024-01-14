@@ -4,9 +4,15 @@ import { z } from 'zod';
 import type { BrowserType } from 'playwright-core';
 import fs from 'fs-extra';
 import { log } from '../log';
-import { type Mask, type PageScreenshotParameter, config } from '../config';
+import {
+  type Mask,
+  type PageScreenshotParameter,
+  config,
+  isPlatformModeConfig,
+} from '../config';
 import type { ShotItem } from '../types';
 import { selectBreakpoints, generateLabel } from '../shots/utils';
+import { notSupported } from '../constants';
 
 const generateBrowserConfig = (page: PageScreenshotParameter) => {
   const browserConfig = config.configureBrowser?.({
@@ -53,12 +59,13 @@ export const generatePageShotItems = (
       id: `${shotName}${label}`,
       shotName: `${shotName}${label}`,
       url: path.join(baseUrl, page.path),
-      filePathBaseline: path.join(config.imagePathBaseline, fileNameWithExt),
+      filePathBaseline: isPlatformModeConfig(config)
+        ? notSupported
+        : path.join(config.imagePathBaseline, fileNameWithExt),
       filePathCurrent: path.join(config.imagePathCurrent, fileNameWithExt),
-      filePathDifference: path.join(
-        config.imagePathDifference,
-        fileNameWithExt,
-      ),
+      filePathDifference: isPlatformModeConfig(config)
+        ? notSupported
+        : path.join(config.imagePathDifference, fileNameWithExt),
       browserConfig: generateBrowserConfig(page),
       threshold: page.threshold ?? config.threshold,
       waitBeforeScreenshot:
@@ -72,7 +79,7 @@ export const generatePageShotItems = (
       page.breakpoints,
     );
 
-    if (!breakpoints || breakpoints.length === 0) {
+    if (breakpoints.length === 0) {
       return [baseShotItem];
     }
 
@@ -87,12 +94,13 @@ export const generatePageShotItems = (
         breakpoint,
         breakpointGroup: page.name,
         url: path.join(baseUrl, page.path),
-        filePathBaseline: path.join(config.imagePathBaseline, fileNameWithExt),
+        filePathBaseline: isPlatformModeConfig(config)
+          ? notSupported
+          : path.join(config.imagePathBaseline, fileNameWithExt),
         filePathCurrent: path.join(config.imagePathCurrent, fileNameWithExt),
-        filePathDifference: path.join(
-          config.imagePathDifference,
-          fileNameWithExt,
-        ),
+        filePathDifference: isPlatformModeConfig(config)
+          ? notSupported
+          : path.join(config.imagePathDifference, fileNameWithExt),
         viewport: { width: breakpoint },
         browserConfig: generateBrowserConfig({
           ...page,
