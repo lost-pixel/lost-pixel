@@ -87,7 +87,7 @@
     "@types/jest": "29.5.5",
     "@types/lodash.get": "4.4.7",
     "@types/lodash.kebabcase": "4.1.7",
-    "@types/pixelmatch": "5.2.4",
+    "@types/pixelmatch": "5.2.6",
     "@types/pngjs": "6.0.4",
     "@types/serve-handler": "6.1.4",
     "@types/shelljs": "0.8.15",
