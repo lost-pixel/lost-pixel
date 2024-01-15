@@ -85,7 +85,7 @@
     "@types/async": "3.2.24",
     "@types/fs-extra": "11.0.2",
     "@types/jest": "29.5.5",
-    "@types/lodash.get": "4.4.7",
+    "@types/lodash.get": "4.4.9",
     "@types/lodash.kebabcase": "4.1.7",
     "@types/pixelmatch": "5.2.4",
     "@types/pngjs": "6.0.4",
