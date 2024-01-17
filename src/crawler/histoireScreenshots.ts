@@ -35,13 +35,13 @@ const generateShotItemsForStory = (
   for (const variant of variants) {
     const shotName =
       config.shotNameGenerator?.({ ...variant, shotMode: 'histoire' }) ??
-      ${story.id}_${variant.title};
+      `${story.id}_${variant.title}`;
     const label = generateLabel({ browser });
     const fileNameWithExt = `${shotName}${label}.png`;
 
     shotItems.push({
       shotMode: 'histoire',
-      id: `${variant.id}${label}`,
+      id: `${story.id}_${variant.id}${label}`,
       shotName: `${shotName}${label}`,
       url: `${baseUrl}/__sandbox.html?storyId=${story.id}&variantId=${variant.id}`,
       filePathBaseline: isPlatformModeConfig(config)
