@@ -35,7 +35,7 @@ const generateShotItemsForStory = (
   for (const variant of variants) {
     const shotName =
       config.shotNameGenerator?.({ ...variant, shotMode: 'histoire' }) ??
-      variant.title;
+      ${story.id}_${variant.title};
     const label = generateLabel({ browser });
     const fileNameWithExt = `${shotName}${label}.png`;
 
