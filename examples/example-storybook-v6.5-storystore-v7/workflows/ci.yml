@@ -21,4 +21,4 @@ jobs:
         run: npm run build-storybook
 
       - name: Lost Pixel
-        uses: lost-pixel/lost-pixel@v3.11.0
+        uses: lost-pixel/lost-pixel@v3.12.1
