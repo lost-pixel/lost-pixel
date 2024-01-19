@@ -17,10 +17,20 @@ LoggedIn.args = {
   // More on composing args: https://storybook.js.org/docs/html/writing-stories/args#args-composition
   ...HeaderStories.LoggedIn.args,
 };
+LoggedIn.parameters = {
+  lostpixel: {
+    elementSelector: '#root',
+  },
+};
 
 export const LoggedOut = Template.bind({});
 LoggedOut.args = {
   ...HeaderStories.LoggedOut.args,
+};
+LoggedOut.parameters = {
+  lostpixel: {
+    elementSelector: '#root',
+  },
 };
 
 export const Masked = Template.bind({});

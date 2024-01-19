@@ -3,10 +3,10 @@ import kebabCase from 'lodash.kebabcase';
 import type { BrowserContext, BrowserType } from 'playwright-core';
 import { readFileSync } from 'fs-extra';
 import type { ShotItem } from '../types';
-import { type Mask, config, isPlatformModeConfig } from '../config';
+import { config, isPlatformModeConfig, type Mask } from '../config';
 import { getBrowser } from '../utils';
 import { log } from '../log';
-import { selectBreakpoints, generateLabel } from '../shots/utils';
+import { generateLabel, selectBreakpoints } from '../shots/utils';
 import { notSupported } from '../constants';
 
 type ExtraShots = {
@@ -24,6 +24,7 @@ export type StoryParameters = {
     breakpoints?: number[];
     args?: Record<string, unknown>; // Args for the story
     extraShots?: ExtraShots[]; // Additional snapshots for the story
+    elementLocator?: string;
   };
   viewport?: {
     width?: number;
@@ -357,6 +358,7 @@ export const generateStorybookShotItems = (
           story.parameters?.lostpixel?.waitBeforeScreenshot ??
           config.waitBeforeScreenshot,
         mask: [...(mask ?? []), ...(story.parameters?.lostpixel?.mask ?? [])],
+        elementLocator: story.parameters?.lostpixel?.elementLocator,
       };
 
       const storyLevelBreakpoints =

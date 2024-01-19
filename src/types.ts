@@ -34,6 +34,7 @@ export type ShotItem = {
   };
   breakpoint?: number;
   breakpointGroup?: string;
+  elementLocator?: string;
 };
 
 export type ExtendedShotItem = ShotItem & {

@@ -101,3 +101,9 @@ description: >-
 
 
     Use [thresholds.md](../recipes/general-recipes/thresholds.md "mention") recipe to get started quickly!
+
+* **elementLocator**: `string`
+  * **Optional**
+  * Defaults to `''`
+  * The element locator is used to specify which element on the page to take a screenshot of. If no element locator is provided, the entire page will be captured.
+  * `elementLocator: '#root > *:first-child',`
