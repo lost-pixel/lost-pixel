@@ -64,8 +64,8 @@ async function generatePagesFileFromSitemap(
         {
           path: new URL(url).pathname, // Extract the path from the URL
           name: url
-            .replace(/^https?:\/\/(www\.)?|^www\./g, '')
-            .replace(/\//g, '_'), // Create a unique name
+            .replaceAll(/^https?:\/\/(www\.)?|^www\./g, '')
+            .replaceAll('/', '_'), // Create a unique name
         },
       );
 
