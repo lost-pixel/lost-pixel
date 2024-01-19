@@ -140,7 +140,7 @@ const takeScreenShot = async ({
       if (!elementLocator) {
         screenshotOptions = {...screenshotOptions, fullPage: fullScreenMode};
       }
-
+      // eslint-disable-next-line no-await-in-loop
       await page.locator(elementLocator).screenshot(screenshotOptions)
 
       const currentShotHash = hashFile(shotItem.filePathCurrent);
