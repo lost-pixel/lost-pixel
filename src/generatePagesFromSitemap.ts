@@ -4,10 +4,7 @@ import { parseStringPromise } from 'xml2js';
 import yargs from 'yargs';
 import { hideBin } from 'yargs/helpers';
 import { log } from './log';
-import {
-  PageScreenshotParameterSchema,
-  type PageScreenshotParameter,
-} from './config';
+import { type PageScreenshotParameter, PageScreenshotParameterSchema } from './config';
 
 type SitemapParserOptions = {
   outputPath: string;
@@ -64,8 +61,8 @@ async function generatePagesFileFromSitemap(
         {
           path: new URL(url).pathname, // Extract the path from the URL
           name: url
-            .replaceAll(/^https?:\/\/(www\.)?|^www\./g, '')
-            .replaceAll('/', '_'), // Create a unique name
+            .replace(/^https?:\/\/(www\.)?|^www\./gm, '')
+            .replace(/\//gm, '_'), // Create a unique name
         },
       );
 
