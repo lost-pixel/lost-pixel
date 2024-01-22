@@ -4,7 +4,10 @@ import { parseStringPromise } from 'xml2js';
 import yargs from 'yargs';
 import { hideBin } from 'yargs/helpers';
 import { log } from './log';
-import { type PageScreenshotParameter, PageScreenshotParameterSchema } from './config';
+import {
+  type PageScreenshotParameter,
+  PageScreenshotParameterSchema,
+} from './config';
 
 type SitemapParserOptions = {
   outputPath: string;
