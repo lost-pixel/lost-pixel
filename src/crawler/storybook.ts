@@ -358,7 +358,10 @@ export const generateStorybookShotItems = (
           story.parameters?.lostpixel?.waitBeforeScreenshot ??
           config.waitBeforeScreenshot,
         mask: [...(mask ?? []), ...(story.parameters?.lostpixel?.mask ?? [])],
-        elementLocator: story.parameters?.lostpixel?.elementLocator,
+        elementLocator:
+          story.parameters?.lostpixel?.elementLocator ??
+          config?.storybookShots?.elementLocator ??
+          '',
       };
 
       const storyLevelBreakpoints =

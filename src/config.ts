@@ -98,6 +98,10 @@ const StorybookShotsSchema = z.object({
    * [ 320, 768, 1280 ]
    */
   breakpoints: z.array(z.number()).optional(),
+  /**
+   * Target specific element on page with a selector
+   */
+  elementLocator: z.string().optional(),
 });
 
 const LadleShotsSchema = z.object({
@@ -357,11 +361,6 @@ const BaseConfigSchema = z.object({
     .args(z.custom<Page>(), StoryLikeSchema)
     .returns(z.promise(z.void()))
     .optional(),
-
-  /**
-   * Target specific element on page with a selector
-   */
-  elementLocator: z.string().optional(),
 });
 
 export const PlatformModeConfigSchema = BaseConfigSchema.extend({

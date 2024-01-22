@@ -22,7 +22,7 @@ description: >-
   * **Optional**
   * API key for the Lost Pixel platform
   * The API key is used to authenticate with the Lost Pixel platform. Only used when using Lost Pixel Platform managed version.
-* **storybookShots**: `{ storybookUrl: string, mask?:` [`Mask`](mask.md)`[] }` | `undefined`
+* **storybookShots**: `{ storybookUrl: string, mask?:` [`Mask`](mask.md)`[] , elementLocator?: string}` | `undefined`
   * **Optional**
   * Enable Storybook mode
   * Allows for specifying the URL of the Storybook instance or local folder and any areas for all stories where differences will be ignored with `mask.`See reference for `Mask` below
@@ -101,9 +101,3 @@ description: >-
 
 
     Use [thresholds.md](../recipes/general-recipes/thresholds.md "mention") recipe to get started quickly!
-
-* **elementLocator**: `string`
-  * **Optional**
-  * Defaults to `''`
-  * The element locator is used to specify which element on the page to take a screenshot of. If no element locator is provided, the entire page will be captured.
-  * `elementLocator: '#root > *:first-child',`

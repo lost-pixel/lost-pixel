@@ -130,8 +130,7 @@ const takeScreenShot = async ({
 
   try {
     while (retryCount <= config.flakynessRetries) {
-      const elementLocator =
-        shotItem.elementLocator ?? config?.elementLocator ?? '';
+      const elementLocator = shotItem.elementLocator ?? '';
 
       let screenshotOptions: PageScreenshotOptions = {
         path: shotItem.filePathCurrent,
