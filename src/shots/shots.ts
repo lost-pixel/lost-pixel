@@ -130,7 +130,7 @@ const takeScreenShot = async ({
 
   try {
     while (retryCount <= config.flakynessRetries) {
-      const elementLocator = shotItem.elementLocator ?? '';
+      const elementLocator = shotItem.elementLocator;
 
       let screenshotOptions: PageScreenshotOptions = {
         path: shotItem.filePathCurrent,
@@ -143,10 +143,12 @@ const takeScreenShot = async ({
       // add fullPage option if no elementLocator is set
       if (!elementLocator) {
         screenshotOptions = { ...screenshotOptions, fullPage: fullScreenMode };
+        // eslint-disable-next-line no-await-in-loop
+        await page.screenshot(screenshotOptions);
+      } else {
+        // eslint-disable-next-line no-await-in-loop
+        await page.locator(elementLocator).screenshot(screenshotOptions);
       }
-
-      // eslint-disable-next-line no-await-in-loop
-      await page.locator(elementLocator).screenshot(screenshotOptions);
 
       const currentShotHash = hashFile(shotItem.filePathCurrent);
 
