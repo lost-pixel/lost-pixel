@@ -1,4 +1,4 @@
-# Element locator for components
+# Storybook Element locator for components
 
 In case you build something like a design system, you can use the `elementLocator` property to take a screenshot of the exact component you want to test.
 
