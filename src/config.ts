@@ -98,6 +98,10 @@ const StorybookShotsSchema = z.object({
    * [ 320, 768, 1280 ]
    */
   breakpoints: z.array(z.number()).optional(),
+  /**
+   * Target specific element on page with a selector
+   */
+  elementLocator: z.string().optional(),
 });
 
 const LadleShotsSchema = z.object({

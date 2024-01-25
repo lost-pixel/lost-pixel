@@ -1,6 +1,10 @@
 import path from 'node:path';
 import { mapLimit } from 'async';
-import type { Browser, BrowserType } from 'playwright-core';
+import type {
+  Browser,
+  BrowserType,
+  PageScreenshotOptions,
+} from 'playwright-core';
 import { log } from '../log';
 import { getBrowser, hashFile, sleep } from '../utils';
 import { config } from '../config';
@@ -126,15 +130,25 @@ const takeScreenShot = async ({
 
   try {
     while (retryCount <= config.flakynessRetries) {
-      // eslint-disable-next-line no-await-in-loop
-      await page.screenshot({
+      const { elementLocator } = shotItem;
+
+      let screenshotOptions: PageScreenshotOptions = {
         path: shotItem.filePathCurrent,
-        fullPage: fullScreenMode,
         animations: 'disabled',
         mask: shotItem.mask
           ? shotItem.mask.map((mask) => page.locator(mask.selector))
           : [],
-      });
+      };
+
+      // add fullPage option if no elementLocator is set
+      if (elementLocator) {
+        // eslint-disable-next-line no-await-in-loop
+        await page.locator(elementLocator).screenshot(screenshotOptions);
+      } else {
+        screenshotOptions = { ...screenshotOptions, fullPage: fullScreenMode };
+        // eslint-disable-next-line no-await-in-loop
+        await page.screenshot(screenshotOptions);
+      }
 
       const currentShotHash = hashFile(shotItem.filePathCurrent);
 

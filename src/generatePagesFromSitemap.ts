@@ -5,8 +5,8 @@ import yargs from 'yargs';
 import { hideBin } from 'yargs/helpers';
 import { log } from './log';
 import {
-  PageScreenshotParameterSchema,
   type PageScreenshotParameter,
+  PageScreenshotParameterSchema,
 } from './config';
 
 type SitemapParserOptions = {
