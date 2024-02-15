@@ -4,7 +4,7 @@ description: >-
   config file
 ---
 
-# lost-pixel.config.js|ts
+# lostpixel.config.js|ts
 
 #### Options
 
