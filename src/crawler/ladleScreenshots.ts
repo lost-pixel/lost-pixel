@@ -41,6 +41,7 @@ export const generateLadleShotItems = (
         shotMode: 'ladle',
         id: `${ladleStory.story}${label}`,
         shotName: `${shotName}${label}`,
+        importPath: ladleStory.importPath,
         url: `${ladleUrl}?story=${ladleStory.story}&mode=preview`,
         filePathBaseline: isPlatformModeConfig(config)
           ? notSupported
@@ -103,6 +104,7 @@ export const collectLadleStories = async (ladleUrl: string) => {
       id: key,
       story: key,
       kind: key,
+      importPath: storyConfig.filePath,
       parameters: storyConfig.meta,
     });
   }
