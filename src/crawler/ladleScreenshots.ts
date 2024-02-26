@@ -50,8 +50,19 @@ export const generateLadleShotItems = (
         filePathDifference: isPlatformModeConfig(config)
           ? notSupported
           : path.join(config.imagePathDifference, fileNameWithExt),
-        threshold: config.threshold,
-        mask: mask ?? [],
+        threshold:
+          ladleStory.parameters?.lostpixel?.threshold ?? config.threshold,
+        waitBeforeScreenshot:
+          ladleStory.parameters?.lostpixel?.waitBeforeScreenshot ??
+          config.waitBeforeScreenshot,
+        mask: [
+          ...(mask ?? []),
+          ...(ladleStory.parameters?.lostpixel?.mask ?? []),
+        ],
+        elementLocator:
+          ladleStory.parameters?.lostpixel?.elementLocator ??
+          config?.storybookShots?.elementLocator ??
+          '',
       };
 
       const breakpoints = selectBreakpoints(
