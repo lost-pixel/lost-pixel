@@ -7,6 +7,12 @@ import { selectBreakpoints, generateLabel } from '../shots/utils';
 import { notSupported } from '../constants';
 import type { Story } from './storybook';
 
+type LadleStoryConfig = {
+  name: string;
+  filePath: string;
+  meta: Record<string, unknown>;
+};
+
 export const generateLadleShotItems = (
   baseUrl: string,
   isLocalServer: boolean,
@@ -76,18 +82,23 @@ export const generateLadleShotItems = (
 
 export const collectLadleStories = async (ladleUrl: string) => {
   const {
-    data: ladleMeta,
+    data,
   }: {
     data: {
-      stories: {
-        id: string;
-      };
+      stories: LadleStoryConfig[];
     };
   } = await axios.get(`${ladleUrl}/meta.json`);
 
-  const collection: Story[] | undefined = Object.keys(ladleMeta.stories).map(
-    (storyKey) => ({ id: storyKey, story: storyKey, kind: storyKey }),
-  );
+  const collection: Story[] = [];
+
+  for (const [key, storyConfig] of Object.entries(data.stories)) {
+    collection.push({
+      id: key,
+      story: key,
+      kind: key,
+      parameters: storyConfig.meta,
+    });
+  }
 
   return collection;
 };
