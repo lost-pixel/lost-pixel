@@ -23,6 +23,6 @@ export const DisabledStory = () => {
 DisabledStory.storyName = 'DisabledStory';
 DisabledStory.meta = {
   lostpixel: {
-    disabled: true,
+    disable: true,
   },
 };
