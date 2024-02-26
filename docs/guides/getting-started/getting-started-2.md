@@ -38,7 +38,7 @@ coverY: 0
            run: npm run serve &#x26;
    
          - name: Lost Pixel
-           uses: lost-pixel/lost-pixel@v3.13.0
+           uses: lost-pixel/lost-pixel@v3.14.0
    </code></pre>
 
 4. _(Optional)_ Add [automatic PR for easy baseline update](../../recipes/lost-pixel-oss/automatic-baseline-update-pr.md)
