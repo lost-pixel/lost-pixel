@@ -75,6 +75,19 @@ const takeScreenShot = async ({
     );
   }
 
+  if (shotItem.shotMode === 'ladle') {
+    try {
+      await page.waitForSelector('[data-storyloaded]');
+    } catch (error: unknown) {
+      logger.process(
+        'error',
+        'timeout',
+        `Timeout while waiting for Ladle story to load: ${shotItem.url}`,
+        error,
+      );
+    }
+  }
+
   try {
     await waitForNetworkRequests({
       page,
