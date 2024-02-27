@@ -24,9 +24,9 @@ Playwright + Lost Pixel Platform
 
 ### Create Lost Pixel related files
 
-We need to create `lost-pixel.config.js|ts` file that will run the whole setup. We will use the example of [lost-pixel.com](https://www.lost-pixel.com) as it is set up on our own platform 😊
+We need to create `lostpixel.config.js|ts` file that will run the whole setup. We will use the example of [lost-pixel.com](https://www.lost-pixel.com) as it is set up on our own platform 😊
 
-{% code title="lost-pixel.config.ts" %}
+{% code title="lostpixel.config.ts" %}
 ```typescript
 import { CustomProjectConfig } from 'lost-pixel';
 
@@ -98,7 +98,7 @@ Sign in using **GitHub** into [app.lost-pixel.com](https://app.lost-pixel.com), 
 
 <figure><img src="../.gitbook/assets/SCR-20230114-pbf.png" alt=""><figcaption><p>app.lost-pixel.com/app/repos/manage</p></figcaption></figure>
 
-From the onboarding-screen copy your **`project id`** and replace it in the `lost-pixel.config.ts` created in the first step
+From the onboarding-screen copy your **`project id`** and replace it in the `lostpixel.config.ts` created in the first step
 
 ```
 lostPixelProjectId: 'clcuk66iz005wp41h3cauveb2',

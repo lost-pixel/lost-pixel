@@ -70,7 +70,7 @@ jobs:
           CI: true
 
       - name: ${{ matrix.config.name }}
-        uses: lost-pixel/lost-pixel@v3.13.0
+        uses: lost-pixel/lost-pixel@v3.14.0
         env:
           LOST_PIXEL_API_KEY: ${{ secrets.LOST_PIXEL_API_KEY }}
           LOST_PIXEL_CONFIG_DIR: ${{ matrix.config.package }}
@@ -83,7 +83,7 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Lost Pixel Finalize
-        uses: lost-pixel/lost-pixel@v3.13.0
+        uses: lost-pixel/lost-pixel@v3.14.0
         env:
           LOST_PIXEL_API_KEY: ${{ secrets.LOST_PIXEL_API_KEY }}
           LOST_PIXEL_CONFIG_DIR: apps/web
@@ -92,8 +92,8 @@ jobs:
 ```
 {% endcode %}
 
-To run Lost Pixel in monorepo, you must ensure that you have two[ lostpixel.config.ts|js](../../api-reference/lost-pixel.config.js-or-ts.md) files in respective monorepo packages.
+To run Lost Pixel in monorepo, you must ensure that you have two[ lostpixel.config.ts|js](../../api-reference/lostpixel.config.js-or-ts.md) files in respective monorepo packages.
 
 #### FInalise action
 
-As seen above, a Lost Pixel Finalize step is required to wrap up the Lost Pixel run and create respective GitHub commit checks. The final step needs to point to any of the monorepo [lostpixel.config.js|ts](../../api-reference/lost-pixel.config.js-or-ts.md), in this case, it is `apps/web` but we can easily replace it with `apps/docs` with no effect on the run
+As seen above, a Lost Pixel Finalize step is required to wrap up the Lost Pixel run and create respective GitHub commit checks. The final step needs to point to any of the monorepo [lostpixel.config.js|ts](../../api-reference/lostpixel.config.js-or-ts.md), in this case, it is `apps/web` but we can easily replace it with `apps/docs` with no effect on the run

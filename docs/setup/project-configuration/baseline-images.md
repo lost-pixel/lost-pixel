@@ -10,7 +10,7 @@ paths are utility and used during the run of the action.
 \
 You could adapt the relative paths to the images in the config file:
 
-{% code title="lost-pixel.config.ts" %}
+{% code title="lostpixel.config.ts" %}
 ```typescript
 import { CustomProjectConfig } from 'lost-pixel';
 

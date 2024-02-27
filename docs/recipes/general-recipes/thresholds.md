@@ -1,6 +1,6 @@
 # Thresholds
 
-The thresholds value is set in [lost-pixel.config.js-or-ts.md](../../api-reference/lost-pixel.config.js-or-ts.md "mention")
+The thresholds value is set in [lostpixel.config.js-or-ts.md](../../api-reference/lostpixel.config.js-or-ts.md "mention")
 
 Values `between 0 and 1` are interpreted as percentage of the image size.
 
