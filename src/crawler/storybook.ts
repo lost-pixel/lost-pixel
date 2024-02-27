@@ -104,15 +104,23 @@ export const collectStoriesViaWindowApi = async (
 
   await page.goto(iframeUrl);
 
-  // Storybooks <= 7 still support the deprecated raw API for extracting stories
-  // version 8 and onwards use the preview API to extract stories - see https://github.com/storybookjs/storybook/blob/next/MIGRATION.md#storystore-and-methods-deprecated
-  const supportsRawAPI = await page.evaluate(async () => {
-    const { __STORYBOOK_CLIENT_API__: api } = window as WindowObject;
+  // Storybook >= 8 expose a new preview API that has a `ready` method to be awaited before proceeding
+  const isV8OrAbove = await page.evaluate(async () => {
+    const { __STORYBOOK_PREVIEW__: api } = window as WindowObject;
 
-    return api.raw !== undefined;
+    return api.ready !== undefined;
   });
 
-  if (supportsRawAPI) {
+  if (isV8OrAbove) {
+    // SB v8 and above
+    await page.evaluate(async () => {
+      const { __STORYBOOK_PREVIEW__: api } = window as WindowObject;
+
+      if (api.ready) {
+        await api.ready();
+      }
+    });
+  } else {
     // SB v7 and below
     await page.waitForFunction(
       () => (window as WindowObject).__STORYBOOK_CLIENT_API__,
@@ -127,15 +135,6 @@ export const collectStoriesViaWindowApi = async (
 
       if (api.storyStore) {
         await api.storyStore.cacheAllCSFFiles?.();
-      }
-    });
-  } else {
-    // SB v8 and above
-    await page.evaluate(async () => {
-      const { __STORYBOOK_PREVIEW__: api } = window as WindowObject;
-
-      if (api.ready) {
-        await api.ready();
       }
     });
   }
