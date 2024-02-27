@@ -49,7 +49,7 @@ export type Story = {
 
 type StorybookPreviewApi = {
   ready: () => Promise<void>;
-  extract?: () => Story[];
+  extract?: () => Promise<Record<string, Story>>;
 };
 
 type StorybookClientApi = {
@@ -187,7 +187,7 @@ export const collectStoriesViaWindowApi = async (
     if (previewApi.extract) {
       const items = await previewApi.extract();
 
-      const stories: Story[] = items.map((item) => {
+      const stories: Story[] = Object.values(items).map((item) => {
         const parameters = parseParameters(
           item.parameters as Record<string, unknown>,
         ) as Story['parameters'];
