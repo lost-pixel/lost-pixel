@@ -47,10 +47,10 @@ export type Story = {
   };
 };
 
-type StorybookClientApi = {
-  raw?: () => Story[];
-  storyStore?: {
+type StorybookPreviewApi = {
+  storyStore: {
     cacheAllCSFFiles: () => Promise<void>;
+    extract?: () => Story[];
   };
 };
 
@@ -60,7 +60,7 @@ type StoriesJson = {
 };
 
 type WindowObject = typeof window & {
-  __STORYBOOK_CLIENT_API__: StorybookClientApi;
+  __STORYBOOK_PREVIEW__: StorybookPreviewApi;
 };
 
 type CrawlerResult = {
@@ -99,7 +99,7 @@ export const collectStoriesViaWindowApi = async (
   await page.goto(iframeUrl);
 
   await page.waitForFunction(
-    () => (window as WindowObject).__STORYBOOK_CLIENT_API__,
+    () => (window as WindowObject).__STORYBOOK_PREVIEW__,
     null,
     {
       timeout: config.timeouts.fetchStories,
@@ -107,7 +107,7 @@ export const collectStoriesViaWindowApi = async (
   );
 
   await page.evaluate(async () => {
-    const { __STORYBOOK_CLIENT_API__: api } = window as WindowObject;
+    const { __STORYBOOK_PREVIEW__: api } = window as WindowObject;
 
     if (api.storyStore) {
       await api.storyStore.cacheAllCSFFiles?.();
@@ -160,10 +160,10 @@ export const collectStoriesViaWindowApi = async (
         };
 
         const fetchStories = () => {
-          const { __STORYBOOK_CLIENT_API__: api } = window as WindowObject;
+          const { __STORYBOOK_PREVIEW__: api } = window as WindowObject;
 
-          if (api.raw) {
-            const stories: Story[] = api.raw().map((item) => {
+          if (api.storyStore?.extract) {
+            const stories: Story[] = api.storyStore.extract().map((item) => {
               const parameters = parseParameters(
                 item.parameters as Record<string, unknown>,
               ) as Story['parameters'];
