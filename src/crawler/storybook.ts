@@ -48,9 +48,14 @@ export type Story = {
 };
 
 type StorybookPreviewApi = {
-  storyStore: {
+  ready: () => Promise<void>;
+  extract?: () => Story[];
+};
+
+type StorybookClientApi = {
+  raw?: () => Story[];
+  storyStore?: {
     cacheAllCSFFiles: () => Promise<void>;
-    extract?: () => Story[];
   };
 };
 
@@ -61,6 +66,7 @@ type StoriesJson = {
 
 type WindowObject = typeof window & {
   __STORYBOOK_PREVIEW__: StorybookPreviewApi;
+  __STORYBOOK_CLIENT_API__: StorybookClientApi;
 };
 
 type CrawlerResult = {
@@ -98,96 +104,107 @@ export const collectStoriesViaWindowApi = async (
 
   await page.goto(iframeUrl);
 
-  await page.waitForFunction(
-    () => (window as WindowObject).__STORYBOOK_PREVIEW__,
-    null,
-    {
-      timeout: config.timeouts.fetchStories,
-    },
-  );
+  // Storybooks <= 7 still support the deprecated raw API for extracting stories
+  // version 8 and onwards use the preview API to extract stories - see https://github.com/storybookjs/storybook/blob/next/MIGRATION.md#storystore-and-methods-deprecated
+  const supportsRawAPI = await page.evaluate(async () => {
+    const { __STORYBOOK_CLIENT_API__: api } = window as WindowObject;
 
-  await page.evaluate(async () => {
-    const { __STORYBOOK_PREVIEW__: api } = window as WindowObject;
-
-    if (api.storyStore) {
-      await api.storyStore.cacheAllCSFFiles?.();
-    }
+    return api.raw !== undefined;
   });
 
-  const result = await page.evaluate(
-    async () =>
-      new Promise<CrawlerResult>((resolve) => {
-        const parseParameters = <T>(
-          parameters: T,
-          level = 0,
-        ): T | 'UNSUPPORTED_DEPTH' | 'UNSUPPORTED_TYPE' => {
-          if (level > 10) {
-            return 'UNSUPPORTED_DEPTH';
-          }
+  if (supportsRawAPI) {
+    // SB v7 and below
+    await page.waitForFunction(
+      () => (window as WindowObject).__STORYBOOK_CLIENT_API__,
+      null,
+      {
+        timeout: config.timeouts.fetchStories,
+      },
+    );
 
-          if (Array.isArray(parameters)) {
-            // @ts-expect-error FIXME
-            return parameters.map((value) =>
-              parseParameters<unknown>(value, level + 1),
-            );
-          }
+    await page.evaluate(async () => {
+      const { __STORYBOOK_CLIENT_API__: api } = window as WindowObject;
 
-          if (
-            typeof parameters === 'string' ||
-            typeof parameters === 'number' ||
-            typeof parameters === 'boolean' ||
-            parameters === undefined ||
-            typeof parameters === 'function' ||
-            parameters instanceof RegExp ||
-            parameters instanceof Date ||
-            parameters === null
-          ) {
-            return parameters;
-          }
+      if (api.storyStore) {
+        await api.storyStore.cacheAllCSFFiles?.();
+      }
+    });
+  } else {
+    // SB v8 and above
+    await page.evaluate(async () => {
+      const { __STORYBOOK_PREVIEW__: api } = window as WindowObject;
 
-          if (typeof parameters === 'object' && parameters !== null) {
-            // @ts-expect-error FIXME
-            // eslint-disable-next-line unicorn/no-array-reduce
-            return Object.keys(parameters).reduce<T>((acc, key: keyof T) => {
-              // @ts-expect-error FIXME
-              acc[key] = parseParameters(parameters[key], level + 1);
+      if (api.ready) {
+        await api.ready();
+      }
+    });
+  }
 
-              return acc;
-            }, {});
-          }
+  const result = await page.evaluate(async (): Promise<CrawlerResult> => {
+    const parseParameters = <T>(
+      parameters: T,
+      level = 0,
+    ): T | 'UNSUPPORTED_DEPTH' | 'UNSUPPORTED_TYPE' => {
+      if (level > 10) {
+        return 'UNSUPPORTED_DEPTH';
+      }
 
-          return 'UNSUPPORTED_TYPE';
+      if (Array.isArray(parameters)) {
+        // @ts-expect-error FIXME
+        return parameters.map((value) =>
+          parseParameters<unknown>(value, level + 1),
+        );
+      }
+
+      if (
+        typeof parameters === 'string' ||
+        typeof parameters === 'number' ||
+        typeof parameters === 'boolean' ||
+        parameters === undefined ||
+        typeof parameters === 'function' ||
+        parameters instanceof RegExp ||
+        parameters instanceof Date ||
+        parameters === null
+      ) {
+        return parameters;
+      }
+
+      if (typeof parameters === 'object' && parameters !== null) {
+        // @ts-expect-error FIXME
+        // eslint-disable-next-line unicorn/no-array-reduce
+        return Object.keys(parameters).reduce<T>((acc, key: keyof T) => {
+          // @ts-expect-error FIXME
+          acc[key] = parseParameters(parameters[key], level + 1);
+
+          return acc;
+        }, {});
+      }
+
+      return 'UNSUPPORTED_TYPE';
+    };
+
+    const { __STORYBOOK_PREVIEW__: previewApi } = window as WindowObject;
+
+    if (previewApi.extract) {
+      const stories: Story[] = (await previewApi.extract()).map((item) => {
+        const parameters = parseParameters(
+          item.parameters as Record<string, unknown>,
+        ) as Story['parameters'];
+
+        return {
+          id: item.id,
+          kind: item.kind,
+          story: item.story,
+          importPath: parameters?.fileName,
+          parameters,
         };
+      });
 
-        const fetchStories = () => {
-          const { __STORYBOOK_PREVIEW__: api } = window as WindowObject;
+      return { stories };
+    }
 
-          if (api.storyStore?.extract) {
-            const stories: Story[] = api.storyStore.extract().map((item) => {
-              const parameters = parseParameters(
-                item.parameters as Record<string, unknown>,
-              ) as Story['parameters'];
-
-              return {
-                id: item.id,
-                kind: item.kind,
-                story: item.story,
-                importPath: parameters?.fileName,
-                parameters,
-              };
-            });
-
-            resolve({ stories });
-
-            return;
-          }
-
-          resolve({ stories: [] });
-        };
-
-        fetchStories();
-      }),
-  );
+    return { stories: [] };
+  });
 
   return result;
 };
