@@ -185,7 +185,9 @@ export const collectStoriesViaWindowApi = async (
     const { __STORYBOOK_PREVIEW__: previewApi } = window as WindowObject;
 
     if (previewApi.extract) {
-      const stories: Story[] = (await previewApi.extract()).map((item) => {
+      const items = await previewApi.extract();
+
+      const stories: Story[] = items.map((item) => {
         const parameters = parseParameters(
           item.parameters as Record<string, unknown>,
         ) as Story['parameters'];
