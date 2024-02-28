@@ -99,5 +99,12 @@ description: >-
     * **Values greater or equal to 1 are interpreted as absolute pixel count.**
     * This threshold is used to determine whether an image is considered different or not. It means that if the difference between the images is greater than the threshold, the test will fail.\
 
-
     Use [thresholds.md](../recipes/general-recipes/thresholds.md "mention") recipe to get started quickly!
+* **flakynessRetries**: `number`
+  * **Optional**
+  * Defaults to `0`
+  * How many times to retry a shot for a stable result.
+* **waitBetweenFlakynessRetries**: `number`
+  * **Optional**
+  * Defaults to `2000`
+  * Time to wait between flakyness retries.
