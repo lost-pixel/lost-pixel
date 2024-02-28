@@ -104,6 +104,14 @@ export const collectStoriesViaWindowApi = async (
 
   await page.goto(iframeUrl);
 
+  await page.waitForFunction(
+    () => (window as WindowObject).__STORYBOOK_PREVIEW__,
+    null,
+    {
+      timeout: config.timeouts.fetchStories,
+    },
+  );
+
   // Storybook >= 8 expose a new preview API that has a `ready` method to be awaited before proceeding
   const isV8OrAbove = await page.evaluate(async () => {
     const { __STORYBOOK_PREVIEW__: api } = window as WindowObject;
