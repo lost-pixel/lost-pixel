@@ -268,8 +268,15 @@ export const platformRunner = async (
       const uniqueShotNames = new Set(shotNames);
 
       if (shotNames.length !== uniqueShotNames.size) {
+        const duplicates: string[] = shotNames.filter(
+          (shotName) =>
+            shotNames.filter((item) => item === shotName).length > 1,
+        );
+
         throw new Error(
-          'Error: Shot names must be unique (check for duplicate Story names)',
+          `Error: Shot names must be unique (check for duplicate Story names: [ ${[
+            ...new Set(duplicates),
+          ].join(', ')} ])`,
         );
       }
 
