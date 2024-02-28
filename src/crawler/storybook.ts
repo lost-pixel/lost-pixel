@@ -190,29 +190,38 @@ export const collectStoriesViaWindowApi = async (
       return 'UNSUPPORTED_TYPE';
     };
 
-    const { __STORYBOOK_PREVIEW__: previewApi } = window as WindowObject;
-
-    if (previewApi.extract) {
-      const items = await previewApi.extract();
-
-      const stories: Story[] = Object.values(items).map((item) => {
+    const mapStories = (stories: Story[]): Story[] =>
+      stories.map((story) => {
         const parameters = parseParameters(
-          item.parameters as Record<string, unknown>,
+          story.parameters as Record<string, unknown>,
         ) as Story['parameters'];
 
         return {
-          id: item.id,
-          kind: item.kind,
-          story: item.story,
+          id: story.id,
+          kind: story.kind,
+          story: story.story,
           importPath: parameters?.fileName,
           parameters,
         };
       });
 
-      return { stories };
+    const {
+      __STORYBOOK_PREVIEW__: previewApi,
+      __STORYBOOK_CLIENT_API__: clientApi,
+    } = window as WindowObject;
+
+    let stories: Story[] = [];
+
+    if (previewApi.extract) {
+      const items = await previewApi.extract();
+
+      stories = mapStories(Object.values(items));
+    } else if (clientApi.raw) {
+      // Fallback for 6.4 and below
+      stories = mapStories(clientApi.raw());
     }
 
-    return { stories: [] };
+    return { stories };
   });
 
   return result;
