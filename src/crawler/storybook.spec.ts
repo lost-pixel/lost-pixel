@@ -17,6 +17,10 @@ const storyBookV7Url = getStoryBookUrl(
   'examples/example-storybook-v6.5-storystore-v7/storybook-static',
 );
 
+const storyBookV8Url = getStoryBookUrl(
+  'examples/example-storybook-v8/storybook-static',
+);
+
 beforeAll(async () => {
   await configure({
     customProjectConfig: {
@@ -95,6 +99,24 @@ describe(collectStories, () => {
 
     {
       const { server, url } = await launchStaticWebServer(storyBookV7Url);
+
+      expect(await collectStoriesViaStoriesJson(context, url)).toMatchSnapshot(
+        'ViaStoriesJson',
+      );
+      server.close();
+    }
+
+    {
+      const { server, url } = await launchStaticWebServer(storyBookV8Url);
+
+      expect(await collectStoriesViaWindowApi(context, url)).toMatchSnapshot(
+        'ViaWindowApi StoryStore v7',
+      );
+      server.close();
+    }
+
+    {
+      const { server, url } = await launchStaticWebServer(storyBookV8Url);
 
       expect(await collectStoriesViaStoriesJson(context, url)).toMatchSnapshot(
         'ViaStoriesJson',
