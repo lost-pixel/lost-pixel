@@ -61,6 +61,202 @@ exports[`collectStories should collect stories from StoryBook: ViaStoriesJson 1`
 }
 `;
 
+exports[`collectStories should collect stories from StoryBook: ViaStoriesJson 2`] = `
+{
+  "stories": [
+    {
+      "id": "configure-your-project--docs",
+      "importPath": "./src/stories/Configure.mdx",
+      "kind": "Configure your project",
+      "name": "Docs",
+      "parameters": {
+        "__id": "configure-your-project--docs",
+        "docsOnly": true,
+        "fileName": "./src/stories/Configure.mdx",
+      },
+      "storiesImports": [],
+      "story": "Docs",
+      "tags": [
+        "unattached-mdx",
+        "docs",
+      ],
+      "title": "Configure your project",
+    },
+    {
+      "id": "example-button--docs",
+      "importPath": "./src/stories/Button.stories.ts",
+      "kind": "Example/Button",
+      "name": "Docs",
+      "parameters": {
+        "__id": "example-button--docs",
+        "docsOnly": true,
+        "fileName": "./src/stories/Button.stories.ts",
+      },
+      "storiesImports": [],
+      "story": "Docs",
+      "tags": [
+        "autodocs",
+        "docs",
+      ],
+      "title": "Example/Button",
+    },
+    {
+      "id": "example-button--primary",
+      "importPath": "./src/stories/Button.stories.ts",
+      "kind": "Example/Button",
+      "name": "Primary",
+      "parameters": {
+        "__id": "example-button--primary",
+        "docsOnly": false,
+        "fileName": "./src/stories/Button.stories.ts",
+      },
+      "story": "Primary",
+      "tags": [
+        "autodocs",
+        "story",
+      ],
+      "title": "Example/Button",
+    },
+    {
+      "id": "example-button--secondary",
+      "importPath": "./src/stories/Button.stories.ts",
+      "kind": "Example/Button",
+      "name": "Secondary",
+      "parameters": {
+        "__id": "example-button--secondary",
+        "docsOnly": false,
+        "fileName": "./src/stories/Button.stories.ts",
+      },
+      "story": "Secondary",
+      "tags": [
+        "autodocs",
+        "story",
+      ],
+      "title": "Example/Button",
+    },
+    {
+      "id": "example-button--large",
+      "importPath": "./src/stories/Button.stories.ts",
+      "kind": "Example/Button",
+      "name": "Large",
+      "parameters": {
+        "__id": "example-button--large",
+        "docsOnly": false,
+        "fileName": "./src/stories/Button.stories.ts",
+      },
+      "story": "Large",
+      "tags": [
+        "autodocs",
+        "story",
+      ],
+      "title": "Example/Button",
+    },
+    {
+      "id": "example-button--small",
+      "importPath": "./src/stories/Button.stories.ts",
+      "kind": "Example/Button",
+      "name": "Small",
+      "parameters": {
+        "__id": "example-button--small",
+        "docsOnly": false,
+        "fileName": "./src/stories/Button.stories.ts",
+      },
+      "story": "Small",
+      "tags": [
+        "autodocs",
+        "story",
+      ],
+      "title": "Example/Button",
+    },
+    {
+      "id": "example-header--docs",
+      "importPath": "./src/stories/Header.stories.ts",
+      "kind": "Example/Header",
+      "name": "Docs",
+      "parameters": {
+        "__id": "example-header--docs",
+        "docsOnly": true,
+        "fileName": "./src/stories/Header.stories.ts",
+      },
+      "storiesImports": [],
+      "story": "Docs",
+      "tags": [
+        "autodocs",
+        "docs",
+      ],
+      "title": "Example/Header",
+    },
+    {
+      "id": "example-header--logged-in",
+      "importPath": "./src/stories/Header.stories.ts",
+      "kind": "Example/Header",
+      "name": "Logged In",
+      "parameters": {
+        "__id": "example-header--logged-in",
+        "docsOnly": false,
+        "fileName": "./src/stories/Header.stories.ts",
+      },
+      "story": "Logged In",
+      "tags": [
+        "autodocs",
+        "story",
+      ],
+      "title": "Example/Header",
+    },
+    {
+      "id": "example-header--logged-out",
+      "importPath": "./src/stories/Header.stories.ts",
+      "kind": "Example/Header",
+      "name": "Logged Out",
+      "parameters": {
+        "__id": "example-header--logged-out",
+        "docsOnly": false,
+        "fileName": "./src/stories/Header.stories.ts",
+      },
+      "story": "Logged Out",
+      "tags": [
+        "autodocs",
+        "story",
+      ],
+      "title": "Example/Header",
+    },
+    {
+      "id": "example-page--logged-out",
+      "importPath": "./src/stories/Page.stories.ts",
+      "kind": "Example/Page",
+      "name": "Logged Out",
+      "parameters": {
+        "__id": "example-page--logged-out",
+        "docsOnly": false,
+        "fileName": "./src/stories/Page.stories.ts",
+      },
+      "story": "Logged Out",
+      "tags": [
+        "story",
+      ],
+      "title": "Example/Page",
+    },
+    {
+      "id": "example-page--logged-in",
+      "importPath": "./src/stories/Page.stories.ts",
+      "kind": "Example/Page",
+      "name": "Logged In",
+      "parameters": {
+        "__id": "example-page--logged-in",
+        "docsOnly": false,
+        "fileName": "./src/stories/Page.stories.ts",
+      },
+      "story": "Logged In",
+      "tags": [
+        "play-fn",
+        "story",
+      ],
+      "title": "Example/Page",
+    },
+  ],
+}
+`;
+
 exports[`collectStories should collect stories from StoryBook: ViaWindowApi 1`] = `
 {
   "stories": [
@@ -1667,6 +1863,454 @@ exports[`collectStories should collect stories from StoryBook: ViaWindowApi Stor
         },
       },
       "story": "Logged Out",
+    },
+  ],
+}
+`;
+
+exports[`collectStories should collect stories from StoryBook: ViaWindowApi StoryStore v7 2`] = `
+{
+  "stories": [
+    {
+      "id": "example-button--primary",
+      "importPath": "./src/stories/Button.stories.ts",
+      "kind": "Example/Button",
+      "parameters": {
+        "__isArgsStory": true,
+        "actions": {
+          "argTypesRegex": "^on[A-Z].*",
+        },
+        "backgrounds": {
+          "grid": {
+            "cellAmount": 5,
+            "cellSize": 20,
+            "opacity": 0.5,
+          },
+          "values": [
+            {
+              "name": "light",
+              "value": "#F8F8F8",
+            },
+            {
+              "name": "dark",
+              "value": "#333333",
+            },
+          ],
+        },
+        "controls": {
+          "matchers": {
+            "color": /\\(background\\|color\\)\\$/i,
+            "date": /Date\\$/i,
+          },
+        },
+        "docs": {
+          "extractArgTypes": undefined,
+          "extractComponentDescription": undefined,
+          "renderer": undefined,
+          "source": {
+            "originalSource": "{
+  args: {
+    primary: true,
+    label: 'Button'
+  }
+}",
+          },
+          "story": {
+            "inline": true,
+          },
+        },
+        "fileName": "./src/stories/Button.stories.ts",
+        "layout": "centered",
+        "renderer": "react",
+        "throwPlayFunctionExceptions": false,
+      },
+      "story": "Primary",
+    },
+    {
+      "id": "example-button--secondary",
+      "importPath": "./src/stories/Button.stories.ts",
+      "kind": "Example/Button",
+      "parameters": {
+        "__isArgsStory": true,
+        "actions": {
+          "argTypesRegex": "^on[A-Z].*",
+        },
+        "backgrounds": {
+          "grid": {
+            "cellAmount": 5,
+            "cellSize": 20,
+            "opacity": 0.5,
+          },
+          "values": [
+            {
+              "name": "light",
+              "value": "#F8F8F8",
+            },
+            {
+              "name": "dark",
+              "value": "#333333",
+            },
+          ],
+        },
+        "controls": {
+          "matchers": {
+            "color": /\\(background\\|color\\)\\$/i,
+            "date": /Date\\$/i,
+          },
+        },
+        "docs": {
+          "extractArgTypes": undefined,
+          "extractComponentDescription": undefined,
+          "renderer": undefined,
+          "source": {
+            "originalSource": "{
+  args: {
+    label: 'Button'
+  }
+}",
+          },
+          "story": {
+            "inline": true,
+          },
+        },
+        "fileName": "./src/stories/Button.stories.ts",
+        "layout": "centered",
+        "renderer": "react",
+        "throwPlayFunctionExceptions": false,
+      },
+      "story": "Secondary",
+    },
+    {
+      "id": "example-button--large",
+      "importPath": "./src/stories/Button.stories.ts",
+      "kind": "Example/Button",
+      "parameters": {
+        "__isArgsStory": true,
+        "actions": {
+          "argTypesRegex": "^on[A-Z].*",
+        },
+        "backgrounds": {
+          "grid": {
+            "cellAmount": 5,
+            "cellSize": 20,
+            "opacity": 0.5,
+          },
+          "values": [
+            {
+              "name": "light",
+              "value": "#F8F8F8",
+            },
+            {
+              "name": "dark",
+              "value": "#333333",
+            },
+          ],
+        },
+        "controls": {
+          "matchers": {
+            "color": /\\(background\\|color\\)\\$/i,
+            "date": /Date\\$/i,
+          },
+        },
+        "docs": {
+          "extractArgTypes": undefined,
+          "extractComponentDescription": undefined,
+          "renderer": undefined,
+          "source": {
+            "originalSource": "{
+  args: {
+    size: 'large',
+    label: 'Button'
+  }
+}",
+          },
+          "story": {
+            "inline": true,
+          },
+        },
+        "fileName": "./src/stories/Button.stories.ts",
+        "layout": "centered",
+        "renderer": "react",
+        "throwPlayFunctionExceptions": false,
+      },
+      "story": "Large",
+    },
+    {
+      "id": "example-button--small",
+      "importPath": "./src/stories/Button.stories.ts",
+      "kind": "Example/Button",
+      "parameters": {
+        "__isArgsStory": true,
+        "actions": {
+          "argTypesRegex": "^on[A-Z].*",
+        },
+        "backgrounds": {
+          "grid": {
+            "cellAmount": 5,
+            "cellSize": 20,
+            "opacity": 0.5,
+          },
+          "values": [
+            {
+              "name": "light",
+              "value": "#F8F8F8",
+            },
+            {
+              "name": "dark",
+              "value": "#333333",
+            },
+          ],
+        },
+        "controls": {
+          "matchers": {
+            "color": /\\(background\\|color\\)\\$/i,
+            "date": /Date\\$/i,
+          },
+        },
+        "docs": {
+          "extractArgTypes": undefined,
+          "extractComponentDescription": undefined,
+          "renderer": undefined,
+          "source": {
+            "originalSource": "{
+  args: {
+    size: 'small',
+    label: 'Button'
+  }
+}",
+          },
+          "story": {
+            "inline": true,
+          },
+        },
+        "fileName": "./src/stories/Button.stories.ts",
+        "layout": "centered",
+        "renderer": "react",
+        "throwPlayFunctionExceptions": false,
+      },
+      "story": "Small",
+    },
+    {
+      "id": "example-header--logged-in",
+      "importPath": "./src/stories/Header.stories.ts",
+      "kind": "Example/Header",
+      "parameters": {
+        "__isArgsStory": true,
+        "actions": {
+          "argTypesRegex": "^on[A-Z].*",
+        },
+        "backgrounds": {
+          "grid": {
+            "cellAmount": 5,
+            "cellSize": 20,
+            "opacity": 0.5,
+          },
+          "values": [
+            {
+              "name": "light",
+              "value": "#F8F8F8",
+            },
+            {
+              "name": "dark",
+              "value": "#333333",
+            },
+          ],
+        },
+        "controls": {
+          "matchers": {
+            "color": /\\(background\\|color\\)\\$/i,
+            "date": /Date\\$/i,
+          },
+        },
+        "docs": {
+          "extractArgTypes": undefined,
+          "extractComponentDescription": undefined,
+          "renderer": undefined,
+          "source": {
+            "originalSource": "{
+  args: {
+    user: {
+      name: 'Jane Doe'
+    }
+  }
+}",
+          },
+          "story": {
+            "inline": true,
+          },
+        },
+        "fileName": "./src/stories/Header.stories.ts",
+        "layout": "fullscreen",
+        "renderer": "react",
+        "throwPlayFunctionExceptions": false,
+      },
+      "story": "Logged In",
+    },
+    {
+      "id": "example-header--logged-out",
+      "importPath": "./src/stories/Header.stories.ts",
+      "kind": "Example/Header",
+      "parameters": {
+        "__isArgsStory": true,
+        "actions": {
+          "argTypesRegex": "^on[A-Z].*",
+        },
+        "backgrounds": {
+          "grid": {
+            "cellAmount": 5,
+            "cellSize": 20,
+            "opacity": 0.5,
+          },
+          "values": [
+            {
+              "name": "light",
+              "value": "#F8F8F8",
+            },
+            {
+              "name": "dark",
+              "value": "#333333",
+            },
+          ],
+        },
+        "controls": {
+          "matchers": {
+            "color": /\\(background\\|color\\)\\$/i,
+            "date": /Date\\$/i,
+          },
+        },
+        "docs": {
+          "extractArgTypes": undefined,
+          "extractComponentDescription": undefined,
+          "renderer": undefined,
+          "source": {
+            "originalSource": "{}",
+          },
+          "story": {
+            "inline": true,
+          },
+        },
+        "fileName": "./src/stories/Header.stories.ts",
+        "layout": "fullscreen",
+        "renderer": "react",
+        "throwPlayFunctionExceptions": false,
+      },
+      "story": "Logged Out",
+    },
+    {
+      "id": "example-page--logged-out",
+      "importPath": "./src/stories/Page.stories.ts",
+      "kind": "Example/Page",
+      "parameters": {
+        "__isArgsStory": true,
+        "actions": {
+          "argTypesRegex": "^on[A-Z].*",
+        },
+        "backgrounds": {
+          "grid": {
+            "cellAmount": 5,
+            "cellSize": 20,
+            "opacity": 0.5,
+          },
+          "values": [
+            {
+              "name": "light",
+              "value": "#F8F8F8",
+            },
+            {
+              "name": "dark",
+              "value": "#333333",
+            },
+          ],
+        },
+        "controls": {
+          "matchers": {
+            "color": /\\(background\\|color\\)\\$/i,
+            "date": /Date\\$/i,
+          },
+        },
+        "docs": {
+          "extractArgTypes": undefined,
+          "extractComponentDescription": undefined,
+          "renderer": undefined,
+          "source": {
+            "originalSource": "{}",
+          },
+          "story": {
+            "inline": true,
+          },
+        },
+        "fileName": "./src/stories/Page.stories.ts",
+        "layout": "fullscreen",
+        "renderer": "react",
+        "throwPlayFunctionExceptions": false,
+      },
+      "story": "Logged Out",
+    },
+    {
+      "id": "example-page--logged-in",
+      "importPath": "./src/stories/Page.stories.ts",
+      "kind": "Example/Page",
+      "parameters": {
+        "__isArgsStory": true,
+        "actions": {
+          "argTypesRegex": "^on[A-Z].*",
+        },
+        "backgrounds": {
+          "grid": {
+            "cellAmount": 5,
+            "cellSize": 20,
+            "opacity": 0.5,
+          },
+          "values": [
+            {
+              "name": "light",
+              "value": "#F8F8F8",
+            },
+            {
+              "name": "dark",
+              "value": "#333333",
+            },
+          ],
+        },
+        "controls": {
+          "matchers": {
+            "color": /\\(background\\|color\\)\\$/i,
+            "date": /Date\\$/i,
+          },
+        },
+        "docs": {
+          "extractArgTypes": undefined,
+          "extractComponentDescription": undefined,
+          "renderer": undefined,
+          "source": {
+            "originalSource": "{
+  play: async ({
+    canvasElement
+  }) => {
+    const canvas = within(canvasElement);
+    const loginButton = canvas.getByRole('button', {
+      name: /Log in/i
+    });
+    await expect(loginButton).toBeInTheDocument();
+    await userEvent.click(loginButton);
+    await expect(loginButton).not.toBeInTheDocument();
+    const logoutButton = canvas.getByRole('button', {
+      name: /Log out/i
+    });
+    await expect(logoutButton).toBeInTheDocument();
+  }
+}",
+          },
+          "story": {
+            "inline": true,
+          },
+        },
+        "fileName": "./src/stories/Page.stories.ts",
+        "layout": "fullscreen",
+        "renderer": "react",
+        "throwPlayFunctionExceptions": false,
+      },
+      "story": "Logged In",
     },
   ],
 }

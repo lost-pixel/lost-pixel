@@ -9,6 +9,10 @@ cd examples \
 && cd example-storybook-v6.5-storystore-v7 \
 && node ../../dist/bin.js \
 && cd .. \
+&& echo "======== Testing: example-storybook-v8" \
+&& cd example-storybook-v8 \
+&& node ../../dist/bin.js \
+&& cd .. \
 && echo "======== Testing: example-next-js-pages" \
 && cd example-next-js-pages \
 && node ../../dist/bin.js \
