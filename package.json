@@ -62,7 +62,7 @@
     "axios": "1.6.5",
     "bundle-require": "4.0.2",
     "esbuild": "0.19.11",
-    "execa": "5.1.1",
+    "execa": "8.0.1",
     "form-data": "4.0.0",
     "fs-extra": "11.2.0",
     "get-port-please": "3.1.2",
