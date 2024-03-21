@@ -108,6 +108,7 @@ export const compareImagesViaOdiff = async (
   pixelDifference: number;
   pixelDifferencePercentage: number;
   isWithinThreshold: boolean;
+  diffLines?: number[];
 }> => {
   const result = await odiffCompare(
     baselineShotPath,
@@ -115,6 +116,7 @@ export const compareImagesViaOdiff = async (
     differenceShotPath,
     {
       failOnLayoutDiff: false,
+      captureDiffLines: true,
     },
   );
 
@@ -143,6 +145,7 @@ export const compareImagesViaOdiff = async (
       pixelDifference: Number(result.diffCount),
       pixelDifferencePercentage,
       isWithinThreshold,
+      diffLines: result.diffLines,
     };
   }
 
@@ -158,6 +161,7 @@ export const compareImages = async (
   pixelDifference: number;
   pixelDifferencePercentage: number;
   isWithinThreshold: boolean;
+  diffLines?: number[];
 }> => {
   if (isPlatformModeConfig(config)) {
     return featureNotSupported('compareImages()');

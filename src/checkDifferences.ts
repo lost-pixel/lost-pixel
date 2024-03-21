@@ -28,6 +28,7 @@ export const checkDifferences = async (shotItems: ShotItem[]) => {
       pixelDifference: number;
       pixelDifferencePercentage: number;
       isWithinThreshold: boolean;
+      diffLines?: number[];
     }
   > = {};
 
@@ -66,19 +67,24 @@ export const checkDifferences = async (shotItems: ShotItem[]) => {
         );
       }
 
-      const { pixelDifference, pixelDifferencePercentage, isWithinThreshold } =
-        await compareImages(
-          shotItem.threshold,
-          shotItem.filePathBaseline,
-          shotItem.filePathCurrent,
-          shotItem.filePathDifference,
-        );
+      const {
+        pixelDifference,
+        pixelDifferencePercentage,
+        isWithinThreshold,
+        diffLines,
+      } = await compareImages(
+        shotItem.threshold,
+        shotItem.filePathBaseline,
+        shotItem.filePathCurrent,
+        shotItem.filePathDifference,
+      );
 
       if (shallGenerateMeta()) {
         comparisonResults[shotItem.id] = {
           pixelDifference,
           pixelDifferencePercentage,
           isWithinThreshold,
+          diffLines,
         };
       }
 
