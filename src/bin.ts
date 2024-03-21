@@ -11,6 +11,7 @@ import {
   isDockerMode,
   isSitemapPageGenMode,
   isLocalDebugMode,
+  isPlatformDebugMode,
 } from './utils';
 import { sendFinalizeToAPI } from './api';
 import { config, configure, isPlatformModeConfig } from './config';
@@ -82,6 +83,49 @@ if (version) {
         'general',
         `🚀 Starting Lost Pixel in 'platform' mode`,
       );
+
+      if (isPlatformDebugMode()) {
+        log.process(
+          'info',
+          'general',
+          '🔩 Running in Platform debug mode. lost-pixel.config.ts|js & GitHub action yml will be printed.',
+        );
+        log.process('info', 'general', '🗃️ Config object:');
+        log.process('info', 'general', JSON.stringify(config, null, 2));
+
+        // Extend here with reading the path to workflow and printing it
+        const workflowFilePath = process.env.WORKFLOW_FILE_PATH;
+
+        if (workflowFilePath) {
+          // eslint-disable-next-line max-depth
+          try {
+            const workflowFileContent = fs.readFileSync(
+              path.resolve(workflowFilePath),
+              'utf8',
+            );
+
+            log.process(
+              'info',
+              'general',
+              `📄 Workflow file (${workflowFilePath}) content:`,
+            );
+            log.process('info', 'general', workflowFileContent);
+          } catch {
+            log.process(
+              'error',
+              'general',
+              `❌ ailed to read workflow file at ${workflowFilePath}`,
+            );
+          }
+        } else {
+          log.process(
+            'info',
+            'general',
+            `GitHub Action workflow file path environment variable (WORKFLOW_FILE_PATH) not set, can not print it.\n\n 
+            Note: WORKFLOW_FILE_PATH shall specify the path relative to the root of the repository`,
+          );
+        }
+      }
 
       const apiToken = await getPlatformApiToken(config);
 
