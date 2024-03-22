@@ -88,13 +88,13 @@ if (version) {
         log.process(
           'info',
           'general',
-          '🔩 Running in Platform debug mode. lost-pixel.config.ts|js & GitHub action yml will be printed.',
+          '🔩 Running in Platform debug mode. lost-pixel.config.ts|js & GitHub action yml will be printed to console.',
         );
         log.process('info', 'general', '🗃️ Config object:');
         log.process('info', 'general', JSON.stringify(config, null, 2));
 
         // Extend here with reading the path to workflow and printing it
-        const workflowFilePath = process.env.WORKFLOW_FILE_PATH;
+        const workflowFilePath = process.env.GITHUB_WORKFLOW;
 
         if (workflowFilePath) {
           // eslint-disable-next-line max-depth
@@ -114,16 +114,9 @@ if (version) {
             log.process(
               'error',
               'general',
-              `❌ ailed to read workflow file at ${workflowFilePath}`,
+              `❌ Failed to read workflow file at ${workflowFilePath}`,
             );
           }
-        } else {
-          log.process(
-            'info',
-            'general',
-            `GitHub Action workflow file path environment variable (WORKFLOW_FILE_PATH) not set, can not print it.\n\n 
-            Note: WORKFLOW_FILE_PATH shall specify the path relative to the root of the repository`,
-          );
         }
       }
 
