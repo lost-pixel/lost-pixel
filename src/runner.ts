@@ -264,6 +264,22 @@ export const platformRunner = async (
       log.process('info', 'general', '📸 Creating shots');
       const shotItems = await createShots();
 
+      const shotNames = shotItems.map((shotItem) => shotItem.shotName);
+      const uniqueShotNames = new Set(shotNames);
+
+      if (shotNames.length !== uniqueShotNames.size) {
+        const duplicates: string[] = shotNames.filter(
+          (shotName) =>
+            shotNames.filter((item) => item === shotName).length > 1,
+        );
+
+        throw new Error(
+          `Error: Shot names must be unique (check for duplicate Story names: [ ${[
+            ...new Set(duplicates),
+          ].join(', ')} ])`,
+        );
+      }
+
       const createShotsStop = process.hrtime(createShotsStart);
 
       log.process(

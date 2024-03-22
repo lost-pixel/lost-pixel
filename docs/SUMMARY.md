@@ -52,6 +52,6 @@
 
 ## ⚙ API reference
 
-* [lost-pixel.config.js|ts](api-reference/lost-pixel.config.js-or-ts.md)
+* [lostpixel.config.js|ts](api-reference/lostpixel.config.js-or-ts.md)
 * [PageScreenshotParameter](api-reference/pagescreenshotparameter.md)
 * [Mask](api-reference/mask.md)

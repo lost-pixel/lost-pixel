@@ -10,7 +10,7 @@ Lost Pixel can run in different modes to base your visual regression tests on on
 
 ### Storybook
 
-{% code title="lost-pixel.config.ts" %}
+{% code title="lostpixel.config.ts" %}
 ```typescript
 import { CustomProjectConfig } from 'lost-pixel';
 
@@ -31,7 +31,7 @@ export const config: CustomProjectConfig = {
 
 ### Ladle
 
-{% code title="lost-pixel.config.ts" %}
+{% code title="lostpixel.config.ts" %}
 ```typescript
 import { CustomProjectConfig } from 'lost-pixel';
 
@@ -53,7 +53,7 @@ export const config: CustomProjectConfig = {
 
 ### Histoire
 
-{% code title="lost-pixel.config.ts" %}
+{% code title="lostpixel.config.ts" %}
 ```typescript
 import { CustomProjectConfig } from 'lost-pixel';
 
@@ -76,7 +76,7 @@ export const config: CustomProjectConfig = {
 
 Page screenshots presume any frontend application that can run in the browser. This example uses Next.js
 
-{% code title="lost-pixel.config.ts" %}
+{% code title="lostpixel.config.ts" %}
 ```typescript
 import { CustomProjectConfig } from 'lost-pixel';
 
@@ -108,7 +108,7 @@ export const config: CustomProjectConfig = {
 
 Custom screenshots presume that you take the screenshots on your side & Lost Pixel Platform runs them for Visual Regression tests. In this example, you can use **Cypress** or **Playwright** to make the screenshots during the tests and forward them to the **lost-pixel** folder.
 
-{% code title="lost-pixel.config.ts" %}
+{% code title="lostpixel.config.ts" %}
 ```typescript
 import { CustomProjectConfig } from 'lost-pixel';
 
@@ -131,7 +131,7 @@ export const config: CustomProjectConfig = {
 
 Lost Pixel supports simultaneously using several modes to achieve visual regression testing needs. In the following example, we presume that your app packages some components you want to test with **Ladle** & some **full-page screenshots** that incorporate those components.
 
-{% code title="lost-pixel.config.ts" %}
+{% code title="lostpixel.config.ts" %}
 ```typescript
 import { CustomProjectConfig } from 'lost-pixel';
 
