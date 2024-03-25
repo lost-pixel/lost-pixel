@@ -83,13 +83,6 @@ if (version) {
         'general',
         `🚀 Starting Lost Pixel in 'platform' mode`,
       );
-      log.process(
-        'info',
-        'general',
-        process.env.LOST_PIXEL_PLATFORM_DEBUG_MODE,
-      );
-      log.process('info', 'general', process.env.GITHUB_WORKFLOW);
-      log.process('info', 'general', isPlatformDebugMode());
 
       if (isPlatformDebugMode()) {
         log.process(
