@@ -2,6 +2,7 @@ import path from 'node:path';
 import { mapLimit } from 'async';
 import type {
   Browser,
+  BrowserContextOptions,
   BrowserType,
   PageScreenshotOptions,
 } from 'playwright-core';
@@ -20,7 +21,11 @@ const takeScreenShot = async ({
   shotItem: ShotItem;
   logger: ReturnType<typeof log.item>;
 }): Promise<boolean> => {
-  const context = await browser.newContext(shotItem.browserConfig);
+  const modifiedBrowserConfig: BrowserContextOptions = {
+    ...shotItem.browserConfig,
+    ignoreHTTPSErrors: true,
+  };
+  const context = await browser.newContext(modifiedBrowserConfig);
   const page = await context.newPage();
   let success = false;
 
