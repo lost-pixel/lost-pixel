@@ -1,9 +1,6 @@
 import path from 'node:path';
 import fse, { writeFileSync } from 'fs-extra';
-import {
-  checkDifferences,
-  type Differences,
-} from './checkDifferences';
+import { checkDifferences, type Differences } from './checkDifferences';
 import {
   createShotsFolders,
   exitProcess,
@@ -91,7 +88,8 @@ export const runner = async (config: GenerateOnlyModeConfig) => {
       log.process(
         'info',
         'general',
-        `Writing meta file with ${Object.entries(differences.comparisonResults).length
+        `Writing meta file with ${
+          Object.entries(differences.comparisonResults).length
         } items.`,
       );
       writeFileSync(

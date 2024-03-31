@@ -21,12 +21,12 @@ const takeScreenShot = async ({
   browser,
   item: [index, shotItem],
   logger,
-  compareAfterShot
+  compareAfterShot,
 }: {
   browser: Browser;
   item: [number, ShotItem];
   logger: ReturnType<typeof log.item>;
-  compareAfterShot?: boolean
+  compareAfterShot?: boolean;
 }): Promise<{
   success: boolean;
   /** Defined if using compareAfterShot */
@@ -158,8 +158,7 @@ const takeScreenShot = async ({
       retryCount <= config.flakynessRetries;
       retryCount++
     ) {
-      if (retryCount > 0)
-        await sleep(config.waitBetweenFlakynessRetries);
+      if (retryCount > 0) await sleep(config.waitBetweenFlakynessRetries);
 
       const screenshotOptions: PageScreenshotOptions = {
         path: shotItem.filePathCurrent,
@@ -202,8 +201,7 @@ const takeScreenShot = async ({
             `Screenshot of '${shotItem.shotName}' taken (Retry ${retryCount}). Hash: ${currentShotHash} - Previous hash: ${lastShotHash}`,
           );
 
-          if (lastShotHash === currentShotHash)
-            break;
+          if (lastShotHash === currentShotHash) break;
         }
 
         lastShotHash = currentShotHash;
@@ -240,21 +238,20 @@ const takeScreenShot = async ({
 export const takeScreenShots = async (
   shotItems: ShotItem[],
   props: {
-    browser?: BrowserType,
-    compareAfterShot?: boolean
-  }
+    browser?: BrowserType;
+    compareAfterShot?: boolean;
+  },
 ): Promise<{ differences?: Differences }> => {
   const browser = await (props.browser ?? getBrowser()).launch();
   const total = shotItems.length;
 
-  const differences: Differences | undefined =
-    props.compareAfterShot
-      ? {
+  const differences: Differences | undefined = props.compareAfterShot
+    ? {
         aboveThresholdDifferenceItems: [],
         comparisonResults: {},
         noBaselinesItems: [],
       }
-      : undefined;
+    : undefined;
 
   await mapLimit<[number, ShotItem], void>(
     shotItems.entries(),
@@ -271,7 +268,8 @@ export const takeScreenShots = async (
       logger.process(
         'info',
         'general',
-        `Taking screenshot of '${shotItem.shotName} ${shotItem.breakpoint ? `[${shotItem.breakpoint}]` : ''
+        `Taking screenshot of '${shotItem.shotName} ${
+          shotItem.breakpoint ? `[${shotItem.breakpoint}]` : ''
         }'`,
       );
 
@@ -288,8 +286,11 @@ export const takeScreenShots = async (
         );
 
         if (config.compareAfterShot && differences && result.difference)
-          addDifferenceToDifferences({ difference: result.difference, differences, shotItem });
-
+          addDifferenceToDifferences({
+            difference: result.difference,
+            differences,
+            shotItem,
+          });
       } else {
         logger.process(
           'info',
@@ -304,4 +305,3 @@ export const takeScreenShots = async (
 
   return { differences };
 };
-

@@ -131,7 +131,8 @@
       "n/file-extension-in-import": "off",
       "no-lone-blocks": "off",
       "capitalized-comments": "off",
-      "unicorn/prefer-ternary": "off"
+      "unicorn/prefer-ternary": "off",
+      "no-await-in-loop": "off"
     }
   }
 }

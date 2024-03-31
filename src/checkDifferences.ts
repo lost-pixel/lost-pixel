@@ -122,8 +122,8 @@ export const checkDifferences = async (
       addDifferenceToDifferences({
         difference,
         differences,
-        shotItem: item[1]
-      })
+        shotItem: item[1],
+      });
     },
   );
 
@@ -135,11 +135,11 @@ export const checkDifferences = async (
 export const addDifferenceToDifferences = ({
   difference,
   differences,
-  shotItem
+  shotItem,
 }: {
-  shotItem: ShotItem,
-  differences: Differences,
-  difference: Difference
+  shotItem: ShotItem;
+  differences: Differences;
+  difference: Difference;
 }) => {
   if (difference.status === 'added')
     differences.noBaselinesItems.push(shotItem);
@@ -147,6 +147,5 @@ export const addDifferenceToDifferences = ({
     differences.aboveThresholdDifferenceItems.push(shotItem);
 
   if (difference.comparisonResult)
-    differences.comparisonResults[shotItem.id] =
-      difference.comparisonResult;
-}
+    differences.comparisonResults[shotItem.id] = difference.comparisonResult;
+};
