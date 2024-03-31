@@ -47,7 +47,7 @@ export const runner = async (config: GenerateOnlyModeConfig) => {
 
     log.process('info', 'general', '📸 Creating shots');
     const { shotItems, differences: differencesCreateShots } =
-      await createShots();
+      await createShots({ compareAfterShot: config.compareAfterShot });
 
     const createShotsStop = process.hrtime(createShotsStart);
 
@@ -339,8 +339,7 @@ export const platformRunner = async (
         [
           `🏙 `,
           `${shotItems.length} shot(s) in total.`,
-          `${shotItems.length - requiredFileHashes.length
-          } shot(s) already exist on platform.`,
+          `${shotItems.length - requiredFileHashes.length} shot(s) already exist on platform.`,
           `${requiredFileHashes.length} shot(s) will be uploaded at ${uploadUrl}.`,
         ].join(' '),
       );

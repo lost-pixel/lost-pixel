@@ -33,9 +33,11 @@ import {
 import type { Differences } from './checkDifferences';
 import { takeScreenShots } from './shots/shots';
 
-export const createShots = async (): Promise<{
+export const createShots = async ({ compareAfterShot }: {
+  compareAfterShot?: boolean
+} = {}): Promise<{
   shotItems: ShotItem[];
-  /** Defined if using compareAfterShots option */
+  /** Defined if using compareAfterShot option */
   differences?: Differences;
 }> => {
   const {
@@ -127,7 +129,7 @@ export const createShots = async (): Promise<{
           } ladle stories for screenshots on ${browser.name()}`,
         );
 
-        mergeDifferences(await takeScreenShots(shotItems, browser));
+        mergeDifferences(await takeScreenShots(shotItems, { browser, compareAfterShot }));
       });
 
       localServer?.close();
@@ -194,7 +196,7 @@ export const createShots = async (): Promise<{
           } Histoire stories for screenshots on ${browser.name()}`,
         );
 
-        mergeDifferences(await takeScreenShots(shotItems, browser));
+        mergeDifferences(await takeScreenShots(shotItems, { browser, compareAfterShot }));
       });
 
       localServer?.close();
@@ -260,7 +262,7 @@ export const createShots = async (): Promise<{
           } stories for screenshots on ${browser.name()}`,
         );
 
-        mergeDifferences(await takeScreenShots(shotItems, browser));
+        mergeDifferences(await takeScreenShots(shotItems, { browser, compareAfterShot }));
       });
 
       localServer?.close();
@@ -319,7 +321,7 @@ export const createShots = async (): Promise<{
         } pages for screenshots on ${browser.name()}`,
       );
 
-      mergeDifferences(await takeScreenShots(shotItems, browser));
+      mergeDifferences(await takeScreenShots(shotItems, { browser, compareAfterShot }));
     });
 
     log.process('info', 'general', 'Screenshots done!');

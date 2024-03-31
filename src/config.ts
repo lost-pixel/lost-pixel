@@ -366,7 +366,7 @@ const BaseConfigSchema = z.object({
    * taking all the shots and them comparing them all.
    * @default false
    */
-  compareAfterShots: z.boolean().default(false),
+  compareAfterShot: z.boolean().default(false),
 });
 
 export const PlatformModeConfigSchema = BaseConfigSchema.extend({

@@ -21,10 +21,12 @@ const takeScreenShot = async ({
   browser,
   item: [index, shotItem],
   logger,
+  compareAfterShot
 }: {
   browser: Browser;
   item: [number, ShotItem];
   logger: ReturnType<typeof log.item>;
+  compareAfterShot?: boolean
 }): Promise<{
   success: boolean;
   /** Defined if using compareAfterShot */
@@ -156,6 +158,9 @@ const takeScreenShot = async ({
       retryCount <= config.flakynessRetries;
       retryCount++
     ) {
+      if (retryCount > 0)
+        await sleep(config.waitBetweenFlakynessRetries);
+
       const screenshotOptions: PageScreenshotOptions = {
         path: shotItem.filePathCurrent,
         animations: 'disabled',
@@ -176,11 +181,11 @@ const takeScreenShot = async ({
         });
       }
 
-      if (config.compareAfterShots) {
+      if (compareAfterShot) {
         logger.process(
           'info',
           'general',
-          `Screenshot of '${shotItem.shotName}' taken (Retry ${retryCount}). Now comparing.`,
+          `Screenshot of '${shotItem.shotName}' taken${config.flakynessRetries > 0 ? ` (Retry ${retryCount})` : ''}. Now comparing.`,
         );
         difference = await checkDifference({
           item: [index, shotItem],
@@ -197,16 +202,11 @@ const takeScreenShot = async ({
             `Screenshot of '${shotItem.shotName}' taken (Retry ${retryCount}). Hash: ${currentShotHash} - Previous hash: ${lastShotHash}`,
           );
 
-          if (lastShotHash === currentShotHash) {
+          if (lastShotHash === currentShotHash)
             break;
-          }
         }
 
         lastShotHash = currentShotHash;
-      }
-
-      if (retryCount < config.flakynessRetries) {
-        await sleep(config.waitBetweenFlakynessRetries);
       }
     }
 
@@ -239,13 +239,16 @@ const takeScreenShot = async ({
 
 export const takeScreenShots = async (
   shotItems: ShotItem[],
-  _browser?: BrowserType,
+  props: {
+    browser?: BrowserType,
+    compareAfterShot?: boolean
+  }
 ): Promise<{ differences?: Differences }> => {
-  const browser = await (_browser ?? getBrowser()).launch();
+  const browser = await (props.browser ?? getBrowser()).launch();
   const total = shotItems.length;
 
   const differences: Differences | undefined =
-    config.compareAfterShots
+    props.compareAfterShot
       ? {
         aboveThresholdDifferenceItems: [],
         comparisonResults: {},
@@ -284,7 +287,7 @@ export const takeScreenShots = async (
           `Screenshot of '${shotItem.shotName}' taken and saved to '${shotItem.filePathCurrent}' in ${elapsedTime}s`,
         );
 
-        if (config.compareAfterShots && differences && result.difference)
+        if (config.compareAfterShot && differences && result.difference)
           addDifferenceToDifferences({ difference: result.difference, differences, shotItem });
 
       } else {
