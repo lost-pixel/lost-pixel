@@ -1,5 +1,5 @@
 import path from 'node:path';
-import fse, { writeFileSync } from 'fs-extra';
+import fse from 'fs-extra';
 import { checkDifferences, type Differences } from './checkDifferences';
 import {
   createShotsFolders,
@@ -92,7 +92,7 @@ export const runner = async (config: GenerateOnlyModeConfig) => {
           Object.entries(differences.comparisonResults).length
         } items.`,
       );
-      writeFileSync(
+      fse.writeFileSync(
         `${path.join(config.imagePathCurrent, 'meta')}.json`,
         JSON.stringify(differences.comparisonResults, null, 2),
       );
