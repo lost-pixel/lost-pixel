@@ -15,4 +15,3 @@ If the hash of second screenshot differs from the hash of the first one, it will
 If `flakynessRetries` is 2, it will take **at most** 3 screenshots.
 
 Read [`Compare After Shot`](./compareAfterShot.md) for an alternative behavior to this.
-
