@@ -9,20 +9,31 @@ import { log } from '../log';
 import { getBrowser, hashFile, sleep } from '../utils';
 import { config } from '../config';
 import type { ShotItem } from '../types';
+import {
+  addDifferenceToDifferences,
+  checkDifference,
+  type Difference,
+  type Differences,
+} from '../checkDifferences';
 import { resizeViewportToFullscreen, waitForNetworkRequests } from './utils';
 
 const takeScreenShot = async ({
   browser,
-  shotItem,
+  item: [index, shotItem],
   logger,
 }: {
   browser: Browser;
-  shotItem: ShotItem;
+  item: [number, ShotItem];
   logger: ReturnType<typeof log.item>;
-}): Promise<boolean> => {
+}): Promise<{
+  success: boolean;
+  /** Defined if using compareAfterShot */
+  difference?: Difference;
+}> => {
   const context = await browser.newContext(shotItem.browserConfig);
   const page = await context.newPage();
   let success = false;
+  let difference: Difference | undefined;
 
   page.on('pageerror', (exception) => {
     logger.browser('error', 'general', 'Uncaught exception:', exception);
@@ -33,7 +44,6 @@ const takeScreenShot = async ({
 
     try {
       for (const arg of message.args()) {
-        // eslint-disable-next-line no-await-in-loop
         values.push(await arg.jsonValue());
       }
     } catch (error: unknown) {
@@ -138,14 +148,15 @@ const takeScreenShot = async ({
     );
   }
 
-  let retryCount = 0;
   let lastShotHash;
 
   try {
-    while (retryCount <= config.flakynessRetries) {
-      const { elementLocator } = shotItem;
-
-      let screenshotOptions: PageScreenshotOptions = {
+    for (
+      let retryCount = 0;
+      retryCount <= config.flakynessRetries;
+      retryCount++
+    ) {
+      const screenshotOptions: PageScreenshotOptions = {
         path: shotItem.filePathCurrent,
         animations: 'disabled',
         mask: shotItem.mask
@@ -154,37 +165,49 @@ const takeScreenShot = async ({
       };
 
       // add fullPage option if no elementLocator is set
-      if (elementLocator) {
-        // eslint-disable-next-line no-await-in-loop
-        await page.locator(elementLocator).screenshot(screenshotOptions);
+      if (shotItem.elementLocator) {
+        await page
+          .locator(shotItem.elementLocator)
+          .screenshot(screenshotOptions);
       } else {
-        screenshotOptions = { ...screenshotOptions, fullPage: fullScreenMode };
-        // eslint-disable-next-line no-await-in-loop
-        await page.screenshot(screenshotOptions);
+        await page.screenshot({
+          ...screenshotOptions,
+          fullPage: fullScreenMode,
+        });
       }
 
-      const currentShotHash = hashFile(shotItem.filePathCurrent);
-
-      if (lastShotHash) {
+      if (config.compareAfterShots) {
         logger.process(
           'info',
           'general',
-          `Screenshot of '${shotItem.shotName}' taken (Retry ${retryCount}). Hash: ${currentShotHash} - Previous hash: ${lastShotHash}`,
+          `Screenshot of '${shotItem.shotName}' taken (Retry ${retryCount}). Now comparing.`,
         );
+        difference = await checkDifference({
+          item: [index, shotItem],
+        });
 
-        if (lastShotHash === currentShotHash) {
-          break;
+        if (difference.status === 'equivalent') break;
+      } else if (config.flakynessRetries > 0) {
+        const currentShotHash = hashFile(shotItem.filePathCurrent);
+
+        if (lastShotHash) {
+          logger.process(
+            'info',
+            'general',
+            `Screenshot of '${shotItem.shotName}' taken (Retry ${retryCount}). Hash: ${currentShotHash} - Previous hash: ${lastShotHash}`,
+          );
+
+          if (lastShotHash === currentShotHash) {
+            break;
+          }
         }
-      }
 
-      lastShotHash = currentShotHash;
+        lastShotHash = currentShotHash;
+      }
 
       if (retryCount < config.flakynessRetries) {
-        // eslint-disable-next-line no-await-in-loop
         await sleep(config.waitBetweenFlakynessRetries);
       }
-
-      retryCount++;
     }
 
     success = true;
@@ -211,15 +234,24 @@ const takeScreenShot = async ({
     );
   }
 
-  return success;
+  return { success, difference };
 };
 
 export const takeScreenShots = async (
   shotItems: ShotItem[],
   _browser?: BrowserType,
-) => {
+): Promise<{ differences?: Differences }> => {
   const browser = await (_browser ?? getBrowser()).launch();
   const total = shotItems.length;
+
+  const differences: Differences | undefined =
+    config.compareAfterShots
+      ? {
+        aboveThresholdDifferenceItems: [],
+        comparisonResults: {},
+        noBaselinesItems: [],
+      }
+      : undefined;
 
   await mapLimit<[number, ShotItem], void>(
     shotItems.entries(),
@@ -236,15 +268,12 @@ export const takeScreenShots = async (
       logger.process(
         'info',
         'general',
-
-        `Taking screenshot of '${shotItem.shotName} ${
-          shotItem.breakpoint ? `[${shotItem.breakpoint}]` : ''
+        `Taking screenshot of '${shotItem.shotName} ${shotItem.breakpoint ? `[${shotItem.breakpoint}]` : ''
         }'`,
       );
 
       const startTime = Date.now();
-
-      const result = await takeScreenShot({ browser, shotItem, logger });
+      const result = await takeScreenShot({ browser, item, logger });
       const endTime = Date.now();
       const elapsedTime = Number((endTime - startTime) / 1000).toFixed(3);
 
@@ -254,6 +283,10 @@ export const takeScreenShots = async (
           'general',
           `Screenshot of '${shotItem.shotName}' taken and saved to '${shotItem.filePathCurrent}' in ${elapsedTime}s`,
         );
+
+        if (config.compareAfterShots && differences && result.difference)
+          addDifferenceToDifferences({ difference: result.difference, differences, shotItem });
+
       } else {
         logger.process(
           'info',
@@ -265,4 +298,7 @@ export const takeScreenShots = async (
   );
 
   await browser.close();
+
+  return { differences };
 };
+

@@ -19,7 +19,6 @@ import {
   getPagesFromExternalLoader,
 } from './crawler/pageScreenshots';
 import { log } from './log';
-import { takeScreenShots } from './shots/shots';
 import {
   getBrowsers,
   readDirIntoShotItems,
@@ -31,8 +30,14 @@ import {
   collectHistoireStories,
   generateHistoireShotItems,
 } from './crawler/histoireScreenshots';
+import type { Differences } from './checkDifferences';
+import { takeScreenShots } from './shots/shots';
 
-export const createShots = async () => {
+export const createShots = async (): Promise<{
+  shotItems: ShotItem[];
+  /** Defined if using compareAfterShots option */
+  differences?: Differences;
+}> => {
   const {
     ladleShots,
     histoireShots,
@@ -46,6 +51,26 @@ export const createShots = async () => {
   let histoireShotItems: ShotItem[] = [];
   let pageShotItems: ShotItem[] = [];
   let customShotItems: ShotItem[] = [];
+  const differences: Differences = {
+    aboveThresholdDifferenceItems: [],
+    comparisonResults: {},
+    noBaselinesItems: [],
+  };
+
+  const mergeDifferences = (props: {
+    differences?: Differences;
+  }) => {
+    differences.aboveThresholdDifferenceItems.push(
+      ...(props.differences?.aboveThresholdDifferenceItems ?? []),
+    );
+    differences.noBaselinesItems.push(
+      ...(props.differences?.noBaselinesItems ?? []),
+    );
+    differences.comparisonResults = {
+      ...differences.comparisonResults,
+      ...props.differences?.comparisonResults,
+    };
+  };
 
   removeFilesInFolder(imagePathCurrent);
 
@@ -98,12 +123,11 @@ export const createShots = async () => {
         log.process(
           'info',
           'general',
-          `Prepared ${
-            shotItems.length
+          `Prepared ${shotItems.length
           } ladle stories for screenshots on ${browser.name()}`,
         );
 
-        await takeScreenShots(shotItems, browser);
+        mergeDifferences(await takeScreenShots(shotItems, browser));
       });
 
       localServer?.close();
@@ -166,12 +190,11 @@ export const createShots = async () => {
         log.process(
           'info',
           'general',
-          `Prepared ${
-            shotItems.length
+          `Prepared ${shotItems.length
           } Histoire stories for screenshots on ${browser.name()}`,
         );
 
-        await takeScreenShots(shotItems, browser);
+        mergeDifferences(await takeScreenShots(shotItems, browser));
       });
 
       localServer?.close();
@@ -233,12 +256,11 @@ export const createShots = async () => {
         log.process(
           'info',
           'general',
-          `Prepared ${
-            shotItems.length
+          `Prepared ${shotItems.length
           } stories for screenshots on ${browser.name()}`,
         );
 
-        await takeScreenShots(shotItems, browser);
+        mergeDifferences(await takeScreenShots(shotItems, browser));
       });
 
       localServer?.close();
@@ -293,12 +315,11 @@ export const createShots = async () => {
       log.process(
         'info',
         'general',
-        `Prepared ${
-          shotItems.length
+        `Prepared ${shotItems.length
         } pages for screenshots on ${browser.name()}`,
       );
 
-      await takeScreenShots(shotItems, browser);
+      mergeDifferences(await takeScreenShots(shotItems, browser));
     });
 
     log.process('info', 'general', 'Screenshots done!');
@@ -321,11 +342,14 @@ export const createShots = async () => {
     );
   }
 
-  return [
-    ...storybookShotItems,
-    ...pageShotItems,
-    ...ladleShotItems,
-    ...histoireShotItems,
-    ...customShotItems,
-  ];
+  return {
+    shotItems: [
+      ...storybookShotItems,
+      ...pageShotItems,
+      ...ladleShotItems,
+      ...histoireShotItems,
+      ...customShotItems,
+    ],
+    differences,
+  };
 };

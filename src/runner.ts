@@ -1,6 +1,9 @@
-import fse from 'fs-extra';
-import { checkDifferences } from './checkDifferences';
-import { createShots } from './createShots';
+import path from 'node:path';
+import fse, { writeFileSync } from 'fs-extra';
+import {
+  checkDifferences,
+  type Differences,
+} from './checkDifferences';
 import {
   createShotsFolders,
   exitProcess,
@@ -8,6 +11,7 @@ import {
   isUpdateMode,
   parseHrtimeToSeconds,
   removeFilesInFolder,
+  shallGenerateMeta,
 } from './utils';
 import type { GenerateOnlyModeConfig, PlatformModeConfig } from './config';
 import {
@@ -22,6 +26,7 @@ import {
 import { log } from './log';
 import type { ExtendedShotItem } from './types';
 import { uploadRequiredShots } from './upload';
+import { createShots } from './createShots';
 
 export const runner = async (config: GenerateOnlyModeConfig) => {
   const executionStart = process.hrtime();
@@ -41,7 +46,8 @@ export const runner = async (config: GenerateOnlyModeConfig) => {
     createShotsFolders();
 
     log.process('info', 'general', '📸 Creating shots');
-    const shotItems = await createShots();
+    const { shotItems, differences: differencesCreateShots } =
+      await createShots();
 
     const createShotsStop = process.hrtime(createShotsStart);
 
@@ -60,10 +66,39 @@ export const runner = async (config: GenerateOnlyModeConfig) => {
       await exitProcess({ shotsNumber: shotItems.length });
     }
 
-    log.process('info', 'general', '🔍 Checking differences');
-    const checkDifferenceStart = process.hrtime();
-    const { aboveThresholdDifferenceItems, noBaselinesItems } =
-      await checkDifferences(shotItems);
+    let differences: Differences;
+
+    if (differencesCreateShots) {
+      differences = differencesCreateShots;
+    } else {
+      log.process('info', 'general', '🔍 Checking differences');
+      const checkDifferenceStart = process.hrtime();
+
+      differences = await checkDifferences(shotItems);
+
+      const checkDifferenceStop = process.hrtime(checkDifferenceStart);
+
+      log.process(
+        'info',
+        'general',
+        `⏱  Checking differences took ${parseHrtimeToSeconds(
+          checkDifferenceStop,
+        )} seconds`,
+      );
+    }
+
+    if (shallGenerateMeta()) {
+      log.process(
+        'info',
+        'general',
+        `Writing meta file with ${Object.entries(differences.comparisonResults).length
+        } items.`,
+      );
+      writeFileSync(
+        `${path.join(config.imagePathCurrent, 'meta')}.json`,
+        JSON.stringify(differences.comparisonResults, null, 2),
+      );
+    }
 
     if (isUpdateMode()) {
       // Remove only the files which are no longer present in our shot items
@@ -73,14 +108,14 @@ export const runner = async (config: GenerateOnlyModeConfig) => {
       );
 
       // Synchronize differences from both lack of baseline and over threshold difference
-      for (const noBaselineItem of noBaselinesItems) {
+      for (const noBaselineItem of differences.noBaselinesItems) {
         fse.copySync(
           noBaselineItem.filePathCurrent,
           noBaselineItem.filePathBaseline,
         );
       }
 
-      for (const aboveThresholdDifferenceItem of aboveThresholdDifferenceItems) {
+      for (const aboveThresholdDifferenceItem of differences.aboveThresholdDifferenceItems) {
         fse.copySync(
           aboveThresholdDifferenceItem.filePathCurrent,
           aboveThresholdDifferenceItem.filePathBaseline,
@@ -89,30 +124,20 @@ export const runner = async (config: GenerateOnlyModeConfig) => {
     }
 
     if (
-      (aboveThresholdDifferenceItems.length > 0 ||
-        noBaselinesItems.length > 0) &&
+      (differences.aboveThresholdDifferenceItems.length > 0 ||
+        differences.noBaselinesItems.length > 0) &&
       config.failOnDifference
     ) {
       log.process(
         'info',
         'general',
-        `👋 Exiting process with ${aboveThresholdDifferenceItems.length} found differences & ${noBaselinesItems.length} baselines to update`,
+        `👋 Exiting process with ${differences.aboveThresholdDifferenceItems.length} found differences & ${differences.noBaselinesItems.length} baselines to update`,
       );
 
       if (config.generateOnly) {
         await exitProcess({ shotsNumber: shotItems.length });
       }
     }
-
-    const checkDifferenceStop = process.hrtime(checkDifferenceStart);
-
-    log.process(
-      'info',
-      'general',
-      `⏱  Checking differences took ${parseHrtimeToSeconds(
-        checkDifferenceStop,
-      )} seconds`,
-    );
 
     const executionStop = process.hrtime(executionStart);
 
@@ -262,7 +287,7 @@ export const platformRunner = async (
       createShotsFolders();
 
       log.process('info', 'general', '📸 Creating shots');
-      const shotItems = await createShots();
+      const { shotItems } = await createShots();
 
       const shotNames = shotItems.map((shotItem) => shotItem.shotName);
       const uniqueShotNames = new Set(shotNames);
@@ -314,8 +339,7 @@ export const platformRunner = async (
         [
           `🏙 `,
           `${shotItems.length} shot(s) in total.`,
-          `${
-            shotItems.length - requiredFileHashes.length
+          `${shotItems.length - requiredFileHashes.length
           } shot(s) already exist on platform.`,
           `${requiredFileHashes.length} shot(s) will be uploaded at ${uploadUrl}.`,
         ].join(' '),

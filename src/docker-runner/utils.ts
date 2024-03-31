@@ -28,7 +28,9 @@ export const executeDockerRun = async ({ version }: { version: string }) => {
     isGenerateMetaEnabled ? '-e LOST_PIXEL_GENERATE_META=true' : '',
     isLocalDebugModeEnabled ? '-e LOST_PIXEL_LOCAL=true' : '',
     // Usage: npx lost-pixel docker --dockerArgs="x y -z"
-    ...(argv.dockerArgs ? argv.dockerArgs.split(' ').filter(arg => arg.trim()) : []),
+    ...(argv.dockerArgs
+      ? argv.dockerArgs.split(' ').filter((arg) => arg.trim())
+      : []),
     `lostpixel/lost-pixel:v${version}`,
   ];
 

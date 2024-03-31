@@ -17,6 +17,7 @@
       },
       { "blankLine": "always", "prev": ["*"], "next": ["if", "return"] },
       { "blankLine": "always", "prev": ["*"], "next": ["try"] }
-    ]
+    ],
+    "no-await-in-loop": "off"
   }
 }
