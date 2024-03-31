@@ -1,12 +1,6 @@
 {
-  "plugins": [
-    "@typescript-eslint",
-    "unicorn"
-  ],
-  "extends": [
-    "plugin:@typescript-eslint/recommended",
-    "prettier"
-  ],
+  "plugins": ["@typescript-eslint", "unicorn"],
+  "extends": ["plugin:@typescript-eslint/recommended", "prettier"],
   "rules": {
     "@typescript-eslint/no-unused-vars": "error",
     "@typescript-eslint/no-explicit-any": "error",
@@ -15,44 +9,14 @@
     "no-console": "error",
     "@typescript-eslint/padding-line-between-statements": [
       "error",
-      {
-        "blankLine": "always",
-        "prev": [
-          "const",
-          "let"
-        ],
-        "next": "*"
-      },
+      { "blankLine": "always", "prev": ["const", "let"], "next": "*" },
       {
         "blankLine": "any",
-        "prev": [
-          "const",
-          "let"
-        ],
-        "next": [
-          "const",
-          "let"
-        ]
+        "prev": ["const", "let"],
+        "next": ["const", "let"]
       },
-      {
-        "blankLine": "always",
-        "prev": [
-          "*"
-        ],
-        "next": [
-          "if",
-          "return"
-        ]
-      },
-      {
-        "blankLine": "always",
-        "prev": [
-          "*"
-        ],
-        "next": [
-          "try"
-        ]
-      }
+      { "blankLine": "always", "prev": ["*"], "next": ["if", "return"] },
+      { "blankLine": "always", "prev": ["*"], "next": ["try"] }
     ]
   }
 }
