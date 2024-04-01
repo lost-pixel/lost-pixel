@@ -22,7 +22,7 @@ export const checkDifference = async ({
   total,
 }: {
   item: [number, ShotItem];
-  total?: number;
+  total: number;
 }): Promise<Difference> => {
   const logger = (message: string) => {
     log

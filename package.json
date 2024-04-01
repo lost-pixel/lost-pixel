@@ -15,6 +15,7 @@
     "build-example-storybook-v6.4": "rimraf examples/example-storybook-v6.4/storybook-static && docker run --rm -v $PWD/examples/example-storybook-v6.4:/storybook -w /storybook node:16-alpine sh -c 'npm install && npm run build-storybook'",
     "build-example-storybook-v6.5-storystore-v7": "rimraf examples/example-storybook-v6.5-storystore-v7/storybook-static && docker run --rm -v $PWD/examples/example-storybook-v6.5-storystore-v7:/storybook -w /storybook node:16-alpine sh -c 'npm install && npm run build-storybook'",
     "build-example-storybook-v8": "rimraf examples/example-storybook-v8/storybook-static && docker run --rm -v $PWD/examples/example-storybook-v8:/storybook -w /storybook node:16-alpine sh -c 'npm install && npm run build-storybook'",
+    "build-example-storybook-v8-compareAfterShot": "rimraf examples/example-storybook-v8-compareAfterShot/storybook-static && docker run --rm -v $PWD/examples/example-storybook-v8-compareAfterShot:/storybook -w /storybook node:16-alpine sh -c 'npm install && npm run build-storybook'",
     "build-example-next-js-pages": "cd examples/example-next-js-pages && npm ci --legacy-peer-deps && npm run build",
     "build-example-ladle": "cd examples/example-ladle && npm ci && npm run build",
     "build-example-vite": "cd examples/example-vite-app && npm ci && npm run build",

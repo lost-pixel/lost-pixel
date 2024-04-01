@@ -42,9 +42,15 @@ export const runner = async (config: GenerateOnlyModeConfig) => {
 
     createShotsFolders();
 
-    log.process('info', 'general', '📸 Creating shots');
+    const { compareAfterShot } = config;
+
+    log.process(
+      'info',
+      'general',
+      `📸 Creating shots${compareAfterShot ? ' with compareAfterShot' : ''}`,
+    );
     const { shotItems, differences: differencesCreateShots } =
-      await createShots({ compareAfterShot: config.compareAfterShot });
+      await createShots({ compareAfterShot });
 
     const createShotsStop = process.hrtime(createShotsStart);
 

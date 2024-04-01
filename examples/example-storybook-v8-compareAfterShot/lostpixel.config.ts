@@ -11,9 +11,9 @@ export const config: CustomProjectConfig = {
   failOnDifference: true,
 
   compareAfterShot: true,
-  flakynessRetries: 5,
+  flakynessRetries: 10,
   // These times are greatly reduced due to compareAfterShot!
-  waitBetweenFlakynessRetries: 500,
+  waitBetweenFlakynessRetries: 200,
   waitBeforeScreenshot: 0,
   waitForFirstRequest: 0,
   waitForLastRequest: 0,

@@ -19,19 +19,22 @@ import { resizeViewportToFullscreen, waitForNetworkRequests } from './utils';
 
 const takeScreenShot = async ({
   browser,
-  item: [index, shotItem],
+  item,
   logger,
   compareAfterShot,
+  total,
 }: {
   browser: Browser;
   item: [number, ShotItem];
   logger: ReturnType<typeof log.item>;
   compareAfterShot?: boolean;
+  total: number;
 }): Promise<{
   success: boolean;
   /** Defined if using compareAfterShot */
   difference?: Difference;
 }> => {
+  const [index, shotItem] = item;
   const context = await browser.newContext(shotItem.browserConfig);
   const page = await context.newPage();
   let success = false;
@@ -184,10 +187,11 @@ const takeScreenShot = async ({
         logger.process(
           'info',
           'general',
-          `Screenshot of '${shotItem.shotName}' taken${config.flakynessRetries > 0 ? ` (Retry ${retryCount})` : ''}. Now comparing.`,
+          `Screenshot of '${shotItem.shotName}' taken${retryCount > 0 ? ` (Retry ${retryCount})` : ''}.`,
         );
         difference = await checkDifference({
           item: [index, shotItem],
+          total,
         });
 
         if (difference.status === 'equivalent') break;
@@ -237,15 +241,18 @@ const takeScreenShot = async ({
 
 export const takeScreenShots = async (
   shotItems: ShotItem[],
-  props: {
-    browser?: BrowserType;
+  {
+    browser: _browser,
+    compareAfterShot,
+  }: {
+    browser: BrowserType;
     compareAfterShot?: boolean;
   },
 ): Promise<{ differences?: Differences }> => {
-  const browser = await (props.browser ?? getBrowser()).launch();
+  const browser = await (_browser ?? getBrowser()).launch();
   const total = shotItems.length;
 
-  const differences: Differences | undefined = props.compareAfterShot
+  const differences: Differences | undefined = compareAfterShot
     ? {
         aboveThresholdDifferenceItems: [],
         comparisonResults: {},
@@ -274,7 +281,13 @@ export const takeScreenShots = async (
       );
 
       const startTime = Date.now();
-      const result = await takeScreenShot({ browser, item, logger });
+      const result = await takeScreenShot({
+        browser,
+        item,
+        logger,
+        compareAfterShot,
+        total,
+      });
       const endTime = Date.now();
       const elapsedTime = Number((endTime - startTime) / 1000).toFixed(3);
 

@@ -36,6 +36,9 @@ jobs:
       - name: Build Example Storybook v8
         run: npm run build-example-storybook-v8
 
+      - name: Build Example Storybook v8 compareAfterShot
+        run: npm run build-example-storybook-v8-compareAfterShot
+
       - name: Test
         run: npm run test
 
