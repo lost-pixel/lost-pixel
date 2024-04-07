@@ -223,6 +223,8 @@ const sendToAPI = async <T extends Record<string, unknown>>(
         'API response: ',
         error.response?.data || error.message,
       );
+      console.log(error);
+      console.log(error.response);
     } else if (error instanceof Error) {
       logger('error', 'api', error.message);
     } else {
@@ -408,6 +410,8 @@ export const sendRecordLogsToAPI = async (
         'API response: ',
         error.response?.data || error.message,
       );
+      console.log(error);
+      console.log(error.response);
     } else if (error instanceof Error) {
       log.process('error', 'api', error.message);
     } else {
