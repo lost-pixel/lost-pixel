@@ -156,7 +156,7 @@ export const createShots = async () => {
 
       await mapLimit(browsers, 1, async (browser: BrowserType) => {
         const shotItems = generateHistoireShotItems(
-          histoireWebUrl!,
+          histoireWebUrl,
           collection,
           browsers.length > 1 ? browser : undefined,
         );
