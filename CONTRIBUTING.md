@@ -44,7 +44,7 @@ To develop locally:
    npx ts-node ../../src/bin.ts
    ```
 
-   will run lost-pixel against the storybook in the folder you are in.
+   will run lost-pixel against the storybook in the folder you are in. (This is a relative path to the bin.ts file so depending on the folder where you are running it you could have to change the path)
 
 6. Running lost-pixel against all storybook versions.
 
