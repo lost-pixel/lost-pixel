@@ -293,12 +293,13 @@ export const collectStories = async (url: string) => {
 };
 
 const generateBrowserConfig = (story: Story) => {
-  const browserConfig = config.configureBrowser?.({
-    ...story,
-    shotMode: 'storybook',
-  });
+  const browserConfig =
+    config.configureBrowser?.({
+      ...story,
+      shotMode: 'storybook',
+    }) ?? {};
 
-  if (story.parameters?.viewport && browserConfig) {
+  if (story.parameters?.viewport) {
     browserConfig.viewport = browserConfig.viewport ?? {
       width: 1280,
       height: 720,
