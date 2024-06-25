@@ -1,6 +1,6 @@
 # Build Stage
 
-FROM node:18.13.0-alpine as builder
+FROM node:20.15.0-alpine as builder
 
 WORKDIR /app
 
