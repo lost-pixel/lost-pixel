@@ -63,6 +63,8 @@ export const generateLadleShotItems = (
           ladleStory.parameters?.lostpixel?.elementLocator ??
           config?.storybookShots?.elementLocator ??
           '',
+        waitForSelector:
+          config?.ladleShots?.waitForSelector ?? '[data-storyloaded]',
       };
 
       const breakpoints = selectBreakpoints(

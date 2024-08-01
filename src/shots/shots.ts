@@ -75,14 +75,14 @@ const takeScreenShot = async ({
     );
   }
 
-  if (shotItem.shotMode === 'ladle') {
+  if (shotItem.waitForSelector) {
     try {
-      await page.waitForSelector('[data-storyloaded]');
+      await page.waitForSelector(shotItem.waitForSelector);
     } catch (error: unknown) {
       logger.process(
         'error',
         'timeout',
-        `Timeout while waiting for Ladle story to load: ${shotItem.url}`,
+        `Timeout while waiting for Selector ('${shotItem.waitForSelector}') to appear: ${shotItem.url}`,
         error,
       );
     }

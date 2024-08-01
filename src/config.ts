@@ -98,10 +98,17 @@ const StorybookShotsSchema = z.object({
    * [ 320, 768, 1280 ]
    */
   breakpoints: z.array(z.number()).optional(),
+
   /**
    * Target specific element on page with a selector
    */
   elementLocator: z.string().optional(),
+
+  /**
+   * Wait for a specific selector to appear on the page
+   * @example '[data-storyloaded]'
+   */
+  waitForSelector: z.string().optional(),
 });
 
 const LadleShotsSchema = z.object({
@@ -123,6 +130,12 @@ const LadleShotsSchema = z.object({
    * [ 320, 768, 1280 ]
    */
   breakpoints: z.array(z.number()).optional(),
+
+  /**
+   * Wait for a specific selector to appear on the page
+   * @example '[data-storyloaded]'
+   */
+  waitForSelector: z.string().optional(),
 });
 
 const HistoireShotsSchema = z.object({
@@ -144,6 +157,12 @@ const HistoireShotsSchema = z.object({
    * [ 320, 768, 1280 ]
    */
   breakpoints: z.array(z.number()).optional(),
+
+  /**
+   * Wait for a specific selector to appear on the page
+   * @example '[data-storyloaded]'
+   */
+  waitForSelector: z.string().optional(),
 });
 
 const PageShotsSchema = z.object({
@@ -183,6 +202,12 @@ const PageShotsSchema = z.object({
    * [ 320, 768, 1280 ]
    */
   breakpoints: z.array(z.number()).optional(),
+
+  /**
+   * Wait for a specific selector to appear on the page
+   * @example '[data-storyloaded]'
+   */
+  waitForSelector: z.string().optional(),
 });
 
 const CustomShotsSchema = z.object({
