@@ -105,7 +105,7 @@ const StorybookShotsSchema = z.object({
   elementLocator: z.string().optional(),
 
   /**
-   * Wait for a specific selector to appear on the page
+   * Wait for a specific selector before taking a screenshot
    * @example '[data-storyloaded]'
    */
   waitForSelector: z.string().optional(),
@@ -132,7 +132,7 @@ const LadleShotsSchema = z.object({
   breakpoints: z.array(z.number()).optional(),
 
   /**
-   * Wait for a specific selector to appear on the page
+   * Wait for a specific selector before taking a screenshot
    * @example '[data-storyloaded]'
    */
   waitForSelector: z.string().optional(),
@@ -159,7 +159,7 @@ const HistoireShotsSchema = z.object({
   breakpoints: z.array(z.number()).optional(),
 
   /**
-   * Wait for a specific selector to appear on the page
+   * Wait for a specific selector before taking a screenshot
    * @example '[data-storyloaded]'
    */
   waitForSelector: z.string().optional(),
@@ -204,7 +204,7 @@ const PageShotsSchema = z.object({
   breakpoints: z.array(z.number()).optional(),
 
   /**
-   * Wait for a specific selector to appear on the page
+   * Wait for a specific selector before taking a screenshot
    * @example '[data-storyloaded]'
    */
   waitForSelector: z.string().optional(),
