@@ -19,6 +19,7 @@ exports[`generatePageShotItems should generate shot items for pages with breakpo
       "width": 480,
     },
     "waitBeforeScreenshot": 1000,
+    "waitForSelector": undefined,
   },
   {
     "breakpoint": 768,
@@ -37,6 +38,7 @@ exports[`generatePageShotItems should generate shot items for pages with breakpo
       "width": 768,
     },
     "waitBeforeScreenshot": 1000,
+    "waitForSelector": undefined,
   },
   {
     "breakpoint": 480,
@@ -55,6 +57,7 @@ exports[`generatePageShotItems should generate shot items for pages with breakpo
       "width": 480,
     },
     "waitBeforeScreenshot": 1000,
+    "waitForSelector": undefined,
   },
   {
     "breakpoint": 768,
@@ -73,6 +76,7 @@ exports[`generatePageShotItems should generate shot items for pages with breakpo
       "width": 768,
     },
     "waitBeforeScreenshot": 1000,
+    "waitForSelector": undefined,
   },
 ]
 `;
@@ -91,6 +95,7 @@ exports[`generatePageShotItems should generate shot items for pages without brea
     "threshold": 0,
     "url": "https:/example.com/",
     "waitBeforeScreenshot": 1000,
+    "waitForSelector": undefined,
   },
   {
     "browserConfig": undefined,
@@ -104,6 +109,7 @@ exports[`generatePageShotItems should generate shot items for pages without brea
     "threshold": 0,
     "url": "https:/example.com/about",
     "waitBeforeScreenshot": 1000,
+    "waitForSelector": undefined,
   },
 ]
 `;
