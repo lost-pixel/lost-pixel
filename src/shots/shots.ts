@@ -77,7 +77,9 @@ const takeScreenShot = async ({
 
   if (shotItem.waitForSelector) {
     try {
-      await page.waitForSelector(shotItem.waitForSelector);
+      await page.waitForSelector(shotItem.waitForSelector, {
+        timeout: config.timeouts.loadState,
+      });
     } catch (error: unknown) {
       logger.process(
         'error',
