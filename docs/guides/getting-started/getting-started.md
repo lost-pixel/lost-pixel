@@ -42,7 +42,7 @@ coverY: 0
           run: npm run serve &
 
         - name: Lost Pixel
-          uses: lost-pixel/lost-pixel@v3.18.1
+          uses: lost-pixel/lost-pixel@v3.18.2-0
    ```
 
    {% endcode %}
