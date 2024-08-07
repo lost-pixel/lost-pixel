@@ -4,7 +4,7 @@ import { hideBin } from 'yargs/helpers';
 import { isLocalDebugMode, isUpdateMode, shallGenerateMeta } from '../utils';
 
 type ParsedYargs = {
-  configDir: 'string';
+  configDir?: string;
 };
 
 export const executeDockerRun = async ({ version }: { version: string }) => {
@@ -12,7 +12,6 @@ export const executeDockerRun = async ({ version }: { version: string }) => {
   const isGenerateMetaEnabled = shallGenerateMeta();
   const isLocalDebugModeEnabled = isLocalDebugMode();
 
-  // @ts-expect-error TBD
   const argv = yargs(hideBin(process.argv)).parse() as ParsedYargs;
 
   const args = [

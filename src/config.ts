@@ -386,6 +386,12 @@ const BaseConfigSchema = z.object({
     .args(z.custom<Page>(), StoryLikeSchema)
     .returns(z.promise(z.void()))
     .optional(),
+  /**
+   * Compare the shots right after taking them, instead of
+   * taking all the shots and them comparing them all.
+   * @default false
+   */
+  compareAfterShot: z.boolean().default(false),
 });
 
 export const PlatformModeConfigSchema = BaseConfigSchema.extend({
