@@ -226,6 +226,9 @@ const StoryLikeSchema = z.object({
   story: z.string().optional(),
   shotName: z.string().optional(),
   parameters: z.record(z.unknown()).optional(),
+  filePathBaseline: z.string().optional(),
+  filePathCurrent: z.string().optional(),
+  filePathDifference: z.string().optional(),
 });
 
 const TimeoutsSchema = z.object({
@@ -382,6 +385,15 @@ const BaseConfigSchema = z.object({
    * Configure page before screenshot
    */
   beforeScreenshot: z
+    .function()
+    .args(z.custom<Page>(), StoryLikeSchema)
+    .returns(z.promise(z.void()))
+    .optional(),
+
+  /**
+   * Perform actions after screenshot was shot
+   */
+  afterScreenshot: z
     .function()
     .args(z.custom<Page>(), StoryLikeSchema)
     .returns(z.promise(z.void()))
