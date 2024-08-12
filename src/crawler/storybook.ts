@@ -397,6 +397,7 @@ export const generateStorybookShotItems = (
           story.parameters?.lostpixel?.elementLocator ??
           config?.storybookShots?.elementLocator ??
           '',
+        waitForSelector: config?.storybookShots?.waitForSelector,
       };
 
       const storyLevelBreakpoints =
@@ -469,7 +470,7 @@ export const generateStorybookShotItems = (
             snapshot.suffix,
           );
 
-          return (breakpoints?.length === 0 ? [undefined] : breakpoints)!.map(
+          return (breakpoints?.length === 0 ? [undefined] : breakpoints).map(
             (breakpoint) => {
               label = generateLabel({ breakpoint, browser });
               fileNameWithExt = `${snapshotShotName}${label}.png`;
