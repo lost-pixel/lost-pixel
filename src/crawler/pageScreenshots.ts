@@ -71,6 +71,7 @@ export const generatePageShotItems = (
       waitBeforeScreenshot:
         page.waitBeforeScreenshot ?? config.waitBeforeScreenshot,
       mask: [...(mask ?? []), ...(page.mask ?? [])],
+      waitForSelector: config?.pageShots?.waitForSelector,
     };
 
     const breakpoints = selectBreakpoints(

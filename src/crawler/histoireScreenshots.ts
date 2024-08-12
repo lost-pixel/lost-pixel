@@ -52,6 +52,7 @@ const generateShotItemsForStory = (
         ? notSupported
         : path.join(config.imagePathDifference, fileNameWithExt),
       threshold: config.threshold,
+      waitForSelector: config?.histoireShots?.waitForSelector,
     });
   }
 

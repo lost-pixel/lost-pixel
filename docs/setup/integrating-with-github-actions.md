@@ -4,7 +4,7 @@ Lost Pixel has first-class support for GitHub Actions, offering a dedicated acti
 
 ```
 - name: Lost Pixel
-  uses: lost-pixel/lost-pixel@v3.17.0
+  uses: lost-pixel/lost-pixel@v3.18.2-0
 ```
 
 As outlined in [modes](project-configuration/modes.md), Lost Pixel can run in different modes or all of them simultaneously. You would need to build the respective provider and serve it in the action to make it available for the Lost Pixel, e.g. build & serve storybook, build & serve ladle, build & serve next app
@@ -36,7 +36,7 @@ jobs:
         run: npm run build-storybook
 
       - name: Lost Pixel
-        uses: lost-pixel/lost-pixel@v3.17.0
+        uses: lost-pixel/lost-pixel@v3.18.2-0
 ```
 {% endcode %}
 
@@ -47,7 +47,7 @@ Using Lost Pixel in **Platform Mode,** you need to provide the `LOST_PIXEL_API_K
 
 ```
 - name: Lost Pixel
-  uses: lost-pixel/lost-pixel@v3.17.0
+  uses: lost-pixel/lost-pixel@v3.18.2-0
   env:
       LOST_PIXEL_API_KEY: ${{ secrets.LOST_PIXEL_API_KEY }}
 ```

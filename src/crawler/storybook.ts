@@ -397,6 +397,7 @@ export const generateStorybookShotItems = (
           story.parameters?.lostpixel?.elementLocator ??
           config?.storybookShots?.elementLocator ??
           '',
+        waitForSelector: config?.storybookShots?.waitForSelector,
       };
 
       const storyLevelBreakpoints =
