@@ -27,29 +27,32 @@ Playwright + Lost Pixel Platform
 We need to create `lostpixel.config.js|ts` file that will run the whole setup. We will use the example of [lost-pixel.com](https://www.lost-pixel.com) as it is set up on our own platform 😊
 
 {% code title="lostpixel.config.ts" %}
+
 ```typescript
 import { CustomProjectConfig } from 'lost-pixel';
 
 export const config: CustomProjectConfig = {
-	pageShots: {
-		pages: [
-			{ path: '/', name: 'landing' },
-			{
-				path: '/blog',
-				name: 'blog',
-			},
-		],
-		baseUrl: 'http://172.17.0.1:3000',
-	},
-	lostPixelProjectId: 'we_will_paste_id_here_later',
-	apiKey: process.env.LOST_PIXEL_API_KEY,
+  pageShots: {
+    pages: [
+      { path: '/', name: 'landing' },
+      {
+        path: '/blog',
+        name: 'blog',
+      },
+    ],
+    baseUrl: 'http://172.17.0.1:3000',
+  },
+  lostPixelProjectId: 'we_will_paste_id_here_later',
+  apiKey: process.env.LOST_PIXEL_API_KEY,
 };
 ```
+
 {% endcode %}
 
 Next up is the GitHub action declaration file that lives in `.github/workflows`. We are building & serving our Next.js application & run Lost Pixel on it's pages(defined in the above file):
 
 {% code title="visual-regression.yml" %}
+
 ```yaml
 on: [push, pull_request]
 
@@ -82,10 +85,11 @@ jobs:
         run: pnpm run start &
 
       - name: Lost Pixel
-        uses: lost-pixel/lost-pixel@next
+        uses: lost-pixel/lost-pixel@v3.18.2
         env:
           LOST_PIXEL_API_KEY: ${{ secrets.LOST_PIXEL_API_KEY }}
 ```
+
 {% endcode %}
 
 ### Set up the Lost Pixel platform
