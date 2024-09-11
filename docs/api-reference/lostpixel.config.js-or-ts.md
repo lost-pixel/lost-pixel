@@ -108,3 +108,9 @@ description: >-
   * **Optional**
   * Defaults to `2000`
   * Time to wait between flakyness retries.
+* **compareAfterShot**: `boolean`
+  * **Optional**
+  * Defaults to `false`
+  * Compare the shots right after taking them, instead of taking all the shots and them comparing them all.
+
+      Further information on [compareAfterShot.md](../recipes/general-recipes/compareAfterShot.md "mention").
