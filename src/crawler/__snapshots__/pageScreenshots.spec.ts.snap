@@ -5,7 +5,12 @@ exports[`generatePageShotItems should generate shot items for pages with breakpo
   {
     "breakpoint": 480,
     "breakpointGroup": "home",
-    "browserConfig": undefined,
+    "browserConfig": {
+      "viewport": {
+        "height": 720,
+        "width": 480,
+      },
+    },
     "filePathBaseline": ".lostpixel/baseline/home__[w480px].png",
     "filePathCurrent": ".lostpixel/current/home__[w480px].png",
     "filePathDifference": ".lostpixel/difference/home__[w480px].png",
@@ -24,7 +29,12 @@ exports[`generatePageShotItems should generate shot items for pages with breakpo
   {
     "breakpoint": 768,
     "breakpointGroup": "home",
-    "browserConfig": undefined,
+    "browserConfig": {
+      "viewport": {
+        "height": 720,
+        "width": 768,
+      },
+    },
     "filePathBaseline": ".lostpixel/baseline/home__[w768px].png",
     "filePathCurrent": ".lostpixel/current/home__[w768px].png",
     "filePathDifference": ".lostpixel/difference/home__[w768px].png",
@@ -43,7 +53,12 @@ exports[`generatePageShotItems should generate shot items for pages with breakpo
   {
     "breakpoint": 480,
     "breakpointGroup": "about",
-    "browserConfig": undefined,
+    "browserConfig": {
+      "viewport": {
+        "height": 720,
+        "width": 480,
+      },
+    },
     "filePathBaseline": ".lostpixel/baseline/about__[w480px].png",
     "filePathCurrent": ".lostpixel/current/about__[w480px].png",
     "filePathDifference": ".lostpixel/difference/about__[w480px].png",
@@ -62,7 +77,12 @@ exports[`generatePageShotItems should generate shot items for pages with breakpo
   {
     "breakpoint": 768,
     "breakpointGroup": "about",
-    "browserConfig": undefined,
+    "browserConfig": {
+      "viewport": {
+        "height": 720,
+        "width": 768,
+      },
+    },
     "filePathBaseline": ".lostpixel/baseline/about__[w768px].png",
     "filePathCurrent": ".lostpixel/current/about__[w768px].png",
     "filePathDifference": ".lostpixel/difference/about__[w768px].png",
@@ -84,7 +104,7 @@ exports[`generatePageShotItems should generate shot items for pages with breakpo
 exports[`generatePageShotItems should generate shot items for pages without breakpoints: PagesWithoutBreakpoints 1`] = `
 [
   {
-    "browserConfig": undefined,
+    "browserConfig": {},
     "filePathBaseline": ".lostpixel/baseline/home.png",
     "filePathCurrent": ".lostpixel/current/home.png",
     "filePathDifference": ".lostpixel/difference/home.png",
@@ -98,7 +118,7 @@ exports[`generatePageShotItems should generate shot items for pages without brea
     "waitForSelector": undefined,
   },
   {
-    "browserConfig": undefined,
+    "browserConfig": {},
     "filePathBaseline": ".lostpixel/baseline/about.png",
     "filePathCurrent": ".lostpixel/current/about.png",
     "filePathDifference": ".lostpixel/difference/about.png",

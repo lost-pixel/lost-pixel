@@ -15,12 +15,13 @@ import { selectBreakpoints, generateLabel } from '../shots/utils';
 import { notSupported } from '../constants';
 
 const generateBrowserConfig = (page: PageScreenshotParameter) => {
-  const browserConfig = config.configureBrowser?.({
-    ...page,
-    shotMode: 'page',
-  });
+  const browserConfig =
+    config.configureBrowser?.({
+      ...page,
+      shotMode: 'page',
+    }) ?? {};
 
-  if (page.viewport && browserConfig) {
+  if (page.viewport) {
     browserConfig.viewport = browserConfig.viewport ?? {
       width: 1280,
       height: 720,
