@@ -1,7 +1,7 @@
 import { existsSync } from 'node:fs';
 import path from 'node:path';
 import {
-  LaunchOptions,
+  type LaunchOptions,
   type BrowserContextOptions,
   type Page,
 } from 'playwright-core';
