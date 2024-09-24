@@ -221,7 +221,9 @@ export const takeScreenShots = async (
   shotItems: ShotItem[],
   _browser?: BrowserType,
 ) => {
-  const browser = await (_browser ?? getBrowser()).launch();
+  const browser = await (_browser ?? getBrowser()).launch(
+    config.browserLaunchOptions,
+  );
   const total = shotItems.length;
 
   await mapLimit<[number, ShotItem], void>(

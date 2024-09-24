@@ -261,7 +261,7 @@ export const collectStoriesViaStoriesJson = async (
 };
 
 export const collectStories = async (url: string) => {
-  const browser = await getBrowser().launch();
+  const browser = await getBrowser().launch(config.browserLaunchOptions);
   const context = await browser.newContext();
 
   try {

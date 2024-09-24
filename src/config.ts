@@ -1,6 +1,10 @@
 import { existsSync } from 'node:fs';
 import path from 'node:path';
-import type { BrowserContextOptions, Page } from 'playwright-core';
+import {
+  LaunchOptions,
+  type BrowserContextOptions,
+  type Page,
+} from 'playwright-core';
 import z from 'zod';
 import { loadProjectConfigFile, loadTSProjectConfigFile } from './configHelper';
 import { log } from './log';
@@ -386,6 +390,11 @@ const BaseConfigSchema = z.object({
     .args(z.custom<Page>(), StoryLikeSchema)
     .returns(z.promise(z.void()))
     .optional(),
+
+  /**
+   * Launch options for the browser
+   */
+  browserLaunchOptions: z.custom<LaunchOptions>().optional(),
 });
 
 export const PlatformModeConfigSchema = BaseConfigSchema.extend({
