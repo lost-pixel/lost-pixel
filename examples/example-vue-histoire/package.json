@@ -21,6 +21,7 @@
     "concurrently": "^8.2.2",
     "histoire": "^0.17.17",
     "lost-pixel": "^3.18.2",
+    "sharp": "^0.33.4",
     "vite": "^5.3.1"
   }
 }
