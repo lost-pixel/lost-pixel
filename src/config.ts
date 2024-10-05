@@ -394,7 +394,13 @@ const BaseConfigSchema = z.object({
   /**
    * Launch options for the browser
    */
-  browserLaunchOptions: z.custom<LaunchOptions>().optional(),
+  browserLaunchOptions: z
+    .object({
+      chromium: z.custom<LaunchOptions>().optional(),
+      firefox: z.custom<LaunchOptions>().optional(),
+      webkit: z.custom<LaunchOptions>().optional(),
+    })
+    .optional(),
 });
 
 export const PlatformModeConfigSchema = BaseConfigSchema.extend({
