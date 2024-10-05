@@ -4,7 +4,7 @@ import type { BrowserContext, BrowserType } from 'playwright-core';
 import { readFileSync } from 'fs-extra';
 import type { ShotItem } from '../types';
 import { config, isPlatformModeConfig, type Mask } from '../config';
-import { getBrowser } from '../utils';
+import { launchBrowser } from '../utils';
 import { log } from '../log';
 import { generateLabel, selectBreakpoints } from '../shots/utils';
 import { notSupported } from '../constants';
@@ -261,7 +261,7 @@ export const collectStoriesViaStoriesJson = async (
 };
 
 export const collectStories = async (url: string) => {
-  const browser = await getBrowser().launch();
+  const browser = await launchBrowser();
   const context = await browser.newContext();
 
   try {

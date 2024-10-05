@@ -6,7 +6,7 @@ import type {
   PageScreenshotOptions,
 } from 'playwright-core';
 import { log } from '../log';
-import { getBrowser, hashFile, sleep } from '../utils';
+import { hashFile, launchBrowser, sleep } from '../utils';
 import { config } from '../config';
 import type { ShotItem } from '../types';
 import { resizeViewportToFullscreen, waitForNetworkRequests } from './utils';
@@ -221,7 +221,7 @@ export const takeScreenShots = async (
   shotItems: ShotItem[],
   _browser?: BrowserType,
 ) => {
-  const browser = await (_browser ?? getBrowser()).launch();
+  const browser = await launchBrowser(_browser);
   const total = shotItems.length;
 
   await mapLimit<[number, ShotItem], void>(
