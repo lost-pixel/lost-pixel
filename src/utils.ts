@@ -16,7 +16,7 @@ import yargs from 'yargs';
 import { hideBin } from 'yargs/helpers';
 import { config, isPlatformModeConfig } from './config';
 import { log } from './log';
-import type { ShotItem } from './types';
+import type { BrowserName, ShotItem } from './types';
 import { POST_HOG_API_KEY, notSupported } from './constants';
 
 type ParsedYargs = {
@@ -342,4 +342,11 @@ export const featureNotSupported = (feature: string) => {
   );
 
   process.exit(1);
+};
+
+export const launchBrowser = async (_browser?: BrowserType) => {
+  const browserType = _browser ?? getBrowser();
+  const browserName = browserType.name() as BrowserName;
+
+  return browserType.launch(config.browserLaunchOptions?.[browserName]);
 };
