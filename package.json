@@ -59,7 +59,7 @@
   "homepage": "https://github.com/lost-pixel/lost-pixel#readme",
   "dependencies": {
     "@types/xml2js": "^0.4.14",
-    "async": "3.2.5",
+    "async": "3.2.6",
     "axios": "1.7.4",
     "bundle-require": "4.0.2",
     "esbuild": "0.19.11",
