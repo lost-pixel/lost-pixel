@@ -10,7 +10,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Setup Node
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: 18.x
           cache: 'npm'
@@ -63,13 +63,10 @@ jobs:
       - name: Test on examples
         run: npm run test-on-examples
 
-      - name: Debugging with tmate
-        if: failure()
-        uses: mxschmitt/action-tmate@v3.18
-
       - name: Artifacts upload
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         if: failure()
         with:
           name: shots
           path: examples/**/.lostpixel
+          include-hidden-files: true
