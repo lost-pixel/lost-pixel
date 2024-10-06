@@ -64,6 +64,7 @@ jobs:
         run: npm run test-on-examples
 
       - name: Debugging with tmate
+        if: failure()
         uses: mxschmitt/action-tmate@v3.18
 
       - name: Artifacts upload
