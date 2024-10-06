@@ -29,3 +29,7 @@ cd examples \
 && cd example-vite-app \
 && node ../../dist/bin.js \
 && cd .. \
+&& echo "======== Testing: example-vue-histoire" \
+&& cd example-vue-histoire \
+&& node ../../dist/bin.js \
+&& cd .. \

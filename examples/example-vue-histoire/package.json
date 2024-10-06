@@ -1,0 +1,27 @@
+{
+  "name": "example-vue-histoire",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "start": "vite dev",
+    "dev": "concurrently --names \"APP,HISTOIRE\" -c \"bgBlue.bold,bgMagenta.bold\" \"npm run start\" \"npm run story:dev\"",
+    "build": "vite build",
+    "preview": "vite preview",
+    "story:dev": "histoire dev",
+    "story:build": "histoire build",
+    "test": "playwright test"
+  },
+  "dependencies": {
+    "vue": "^3.4.29"
+  },
+  "devDependencies": {
+    "@histoire/plugin-vue": "^0.17.17",
+    "@vitejs/plugin-vue": "^5.0.5",
+    "concurrently": "^8.2.2",
+    "histoire": "^0.17.17",
+    "lost-pixel": "^3.18.2",
+    "sharp": "^0.33.4",
+    "vite": "^5.3.1"
+  }
+}

@@ -195,6 +195,10 @@ const takeScreenShot = async ({
     logger.process('error', 'general', 'Error when taking screenshot', error);
   }
 
+  if (config.afterScreenshot) {
+    await config.afterScreenshot(page, shotItem);
+  }
+
   await context.close();
 
   const videoPath = await page.video()?.path();

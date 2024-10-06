@@ -45,6 +45,9 @@ jobs:
       - name: Build Example Vite
         run: npm run build-example-vite
 
+      - name: Build Example Histoire with Vue
+        run: npm run build-example-vue-histoire
+
       - name: Test
         run: npm run test
 
