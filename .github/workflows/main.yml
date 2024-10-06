@@ -63,6 +63,7 @@ jobs:
       - name: Test on examples
         run: npm run test-on-examples
 
+      # remove
       - name: Debugging with tmate
         if: failure()
         uses: mxschmitt/action-tmate@v3.18
