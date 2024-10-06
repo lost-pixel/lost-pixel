@@ -86,7 +86,7 @@
     "@playwright/test": "1.47.2",
     "@types/async": "3.2.24",
     "@types/fs-extra": "11.0.4",
-    "@types/jest": "29.5.11",
+    "@types/jest": "29.5.13",
     "@types/lodash.get": "4.4.9",
     "@types/lodash.kebabcase": "4.1.9",
     "@types/pixelmatch": "5.2.6",
