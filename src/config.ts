@@ -5,7 +5,7 @@ import {
   type BrowserContextOptions,
   type Page,
 } from 'playwright-core';
-import z from 'zod';
+import * as z from 'zod';
 import { loadProjectConfigFile, loadTSProjectConfigFile } from './configHelper';
 import { log } from './log';
 import { BrowserSchema, ShotModeSchema } from './types';

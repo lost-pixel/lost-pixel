@@ -7,7 +7,6 @@ import {
   readFileSync,
 } from 'node:fs';
 import * as crypto from 'node:crypto';
-import type { Buffer } from 'node:buffer';
 import { normalize, join } from 'node:path';
 import { randomUUID } from 'node:crypto';
 import { PostHog } from 'posthog-node';
@@ -320,7 +319,7 @@ export const exitProcess = async (properties: {
   }
 };
 
-const hashBuffer = (buffer: Buffer): string => {
+const hashBuffer = (buffer: Uint8Array): string => {
   const hashSum = crypto.createHash('sha256');
 
   hashSum.update(buffer);

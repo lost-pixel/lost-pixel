@@ -21,7 +21,7 @@ const generateBrowserConfig = (page: PageScreenshotParameter) => {
   });
 
   if (page.viewport && browserConfig) {
-    browserConfig.viewport = browserConfig.viewport ?? {
+    browserConfig.viewport ??= {
       width: 1280,
       height: 720,
     };
