@@ -85,7 +85,7 @@ jobs:
         run: pnpm run start &
 
       - name: Lost Pixel
-        uses: lost-pixel/lost-pixel@v3.19.0
+        uses: lost-pixel/lost-pixel@v3.20.0-0
         env:
           LOST_PIXEL_API_KEY: ${{ secrets.LOST_PIXEL_API_KEY }}
 ```
