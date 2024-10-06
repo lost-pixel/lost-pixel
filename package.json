@@ -24,21 +24,21 @@
     "run-example-vite": "cd examples/example-vite-app && npm run preview",
     "test-on-examples": "./test-on-examples.sh",
     "unused-exports": "ts-prune --error --ignore 'src/index.ts'",
-    "lint": "xo && tsc --noEmit && eslint '*/**/*.ts' && npm run unused-exports",
-    "lint-fix": "tsc --noEmit && eslint '*/**/*.ts' --fix && xo --fix",
+    "lint": "xo && npm run unused-exports",
+    "lint-fix": "xo --fix",
     "lint-staged": "lint-staged",
-    "prepare": "husky install",
+    "prepare": "husky",
     "release": "np --no-publish",
     "version": "./update-versions.sh",
     "dev": "ts-node src/bin",
     "start": "NODE_ENV=production node dist/bin.js"
   },
   "engines": {
-    "node": ">=18"
+    "node": ">=22"
   },
   "lint-staged": {
     "*.{js,ts}": [
-      "./node_modules/eslint/bin/eslint.js"
+      "npm run lint"
     ]
   },
   "husky": {
@@ -92,26 +92,25 @@
     "@types/pngjs": "6.0.5",
     "@types/serve-handler": "6.1.4",
     "@types/shelljs": "0.8.15",
-    "@typescript-eslint/eslint-plugin": "7.10.0",
-    "@typescript-eslint/parser": "7.10.0",
-    "eslint": "8.56.0",
-    "eslint-config-prettier": "9.1.0",
-    "eslint-plugin-unicorn": "50.0.1",
-    "husky": "8.0.3",
+    "husky": "9.1.6",
     "jest": "29.7.0",
-    "lint-staged": "15.2.0",
-    "prettier": "3.2.5",
-    "rimraf": "5.0.5",
+    "lint-staged": "15.2.10",
+    "prettier": "3.3.3",
+    "rimraf": "6.0.1",
     "ts-jest": "29.2.5",
     "ts-prune": "0.10.3",
     "typescript": "5.6.2",
-    "xo": "0.56.0"
+    "xo": "0.59.3"
   },
   "peerDependencies": {
     "playwright-core": ">=1.47.2"
   },
   "xo": {
     "prettier": true,
+    "ignores": [
+      "dist",
+      "examples"
+    ],
     "rules": {
       "@typescript-eslint/object-curly-spacing": "off",
       "complexity": [
@@ -119,8 +118,10 @@
         30
       ],
       "import/extensions": "off",
+      "no-unused-vars": "error",
       "unicorn/filename-case": "off",
       "unicorn/no-process-exit": "off",
+      "unicorn/prevent-abbreviations": "off",
       "node/prefer-global/process": "off",
       "@typescript-eslint/naming-convention": "off",
       "unicorn/prefer-module": "off",
