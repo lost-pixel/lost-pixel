@@ -9,8 +9,8 @@ import {
 import * as crypto from 'node:crypto';
 import type { Buffer } from 'node:buffer';
 import { normalize, join } from 'node:path';
+import { randomUUID } from 'node:crypto';
 import { PostHog } from 'posthog-node';
-import { v4 as uuid } from 'uuid';
 import { type BrowserType, chromium, firefox, webkit } from 'playwright-core';
 import yargs from 'yargs';
 import { hideBin } from 'yargs/helpers';
@@ -263,7 +263,7 @@ const sendTelemetryData = async (properties: {
   error?: unknown;
 }) => {
   const client = new PostHog(POST_HOG_API_KEY);
-  const id: string = uuid();
+  const id: string = randomUUID();
 
   try {
     log.process('info', 'general', 'Sending anonymized telemetry data.');
