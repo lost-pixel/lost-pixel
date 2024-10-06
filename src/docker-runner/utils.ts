@@ -23,6 +23,7 @@ export const executeDockerRun = async ({ version }: { version: string }) => {
     `-v ${process.cwd()}:${process.cwd()}`,
     `-e WORKSPACE=${process.cwd()}`,
     '-e DOCKER=1',
+    `-e LOST_PIXEL_DISABLE_TELEMETRY=${process.env.LOST_PIXEL_DISABLE_TELEMETRY}`,
     argv.configDir ? `-e LOST_PIXEL_CONFIG_DIR=${argv.configDir}` : '',
     isUpdateModeEnabled ? '-e LOST_PIXEL_MODE=update' : '',
     isGenerateMetaEnabled ? '-e LOST_PIXEL_GENERATE_META=true' : '',
