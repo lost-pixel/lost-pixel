@@ -63,6 +63,9 @@ jobs:
       - name: Test on examples
         run: npm run test-on-examples
 
+      - name: Debugging with tmate
+        uses: mxschmitt/action-tmate@v3.18
+
       - name: Artifacts upload
         uses: actions/upload-artifact@v3
         if: failure()
