@@ -59,10 +59,10 @@
   "homepage": "https://github.com/lost-pixel/lost-pixel#readme",
   "dependencies": {
     "@types/xml2js": "^0.4.14",
-    "async": "3.2.5",
-    "axios": "1.7.4",
+    "async": "3.2.6",
+    "axios": "1.7.7",
     "bundle-require": "4.0.2",
-    "esbuild": "0.19.11",
+    "esbuild": "0.24.0",
     "execa": "5.1.1",
     "form-data": "4.0.0",
     "fs-extra": "11.2.0",
@@ -77,7 +77,6 @@
     "serve-handler": "6.1.5",
     "shelljs": "0.8.5",
     "ts-node": "10.9.2",
-    "uuid": "9.0.1",
     "xml2js": "^0.6.2",
     "yargs": "17.7.2",
     "zod": "3.23.8"
@@ -93,7 +92,6 @@
     "@types/pngjs": "6.0.5",
     "@types/serve-handler": "6.1.4",
     "@types/shelljs": "0.8.15",
-    "@types/uuid": "9.0.8",
     "@typescript-eslint/eslint-plugin": "7.10.0",
     "@typescript-eslint/parser": "7.10.0",
     "eslint": "8.56.0",
@@ -104,13 +102,13 @@
     "lint-staged": "15.2.0",
     "prettier": "3.2.5",
     "rimraf": "5.0.5",
-    "ts-jest": "29.1.3",
+    "ts-jest": "29.2.5",
     "ts-prune": "0.10.3",
-    "typescript": "5.4.5",
+    "typescript": "5.6.2",
     "xo": "0.56.0"
   },
   "peerDependencies": {
-    "playwright-core": ">=1.37.0"
+    "playwright-core": ">=1.47.2"
   },
   "xo": {
     "prettier": true,
