@@ -36,7 +36,7 @@ coverY: 0
            run: npm run build-storybook
 
          - name: Lost Pixel
-           uses: lost-pixel/lost-pixel@v3.20.0-0
+           uses: lost-pixel/lost-pixel@v3.20.0
    ```
 
 4. _(Optional)_ Add [automatic PR for easy baseline update](../../recipes/lost-pixel-oss/automatic-baseline-update-pr.md)
