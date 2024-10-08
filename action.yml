@@ -11,8 +11,11 @@ inputs:
   CACHE_KEY:
     description: 'Cache key for the build'
     required: false
+  DOCKER_IMAGE:
+    description: 'The Docker image to use for the action'
+    required: false
 runs:
   using: 'docker'
-  image: 'docker://lostpixel/lost-pixel:v3.20.0'
+  image: "docker://${{ inputs.DOCKER_IMAGE || 'lostpixel/lost-pixel:v3.20.0' }}"
   # for branch testing
   # image: 'Dockerfile'
