@@ -8,7 +8,7 @@
   </a>
   <a href="https://www.npmjs.com/package/lost-pixel"><img src="https://img.shields.io/npm/v/lost-pixel?style=plastic" /></a> 
   <a href="https://www.npmjs.com/package/lost-pixel"><img src="https://img.shields.io/npm/dt/lost-pixel" /></a> 
-  <a href="https://github.com/lost-pixel/lost-pixel/blob/main/docs/contributing.md"><img src="https://img.shields.io/badge/PRs-welcome-brightgreen.svg" /></a>
+  <a href="https://github.com/lost-pixel/lost-pixel/blob/main/CONTRIBUTING.md"><img src="https://img.shields.io/badge/PRs-welcome-brightgreen.svg" /></a>
   <a href="https://github.com/lost-pixel/lost-pixel/blob/main/LICENSE"><img src="https://img.shields.io/github/license/lost-pixel/lost-pixel" /></a>
   <a href="https://discord.gg/WqVjk49g9m"><img src="https://img.shields.io/badge/chat-discord-blue?style=flat&logo=discord" alt="discord chat"></a>
   <a href="https://twitter.com/lostpixel_app"><img src="https://img.shields.io/twitter/follow/lostpixel_app?style=social" alt="twitter profile"></a>
