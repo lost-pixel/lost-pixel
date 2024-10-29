@@ -235,6 +235,31 @@ const StoryLikeSchema = z.object({
   filePathDifference: z.string().optional(),
 });
 
+const ShotItem = z.object({
+  shotMode: ShotModeSchema,
+  id: z.string(),
+  shotName: z.string(),
+  url: z.string(),
+  filePathBaseline: z.string(),
+  filePathCurrent: z.string(),
+  filePathDifference: z.string(),
+  browserConfig: z.custom<BrowserContextOptions>().optional(),
+  threshold: z.number(),
+  waitBeforeScreenshot: z.number().optional(),
+  importPath: z.string().optional(),
+  mask: z.array(MaskSchema).optional(),
+  viewport: z
+    .object({
+      width: z.number().optional(),
+      height: z.number().optional(),
+    })
+    .optional(),
+  breakpoint: z.number().optional(),
+  breakpointGroup: z.string().optional(),
+  elementLocator: z.string().optional(),
+  waitForSelector: z.string().optional(),
+});
+
 const TimeoutsSchema = z.object({
   /**
    * Timeout for fetching stories
