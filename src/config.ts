@@ -393,6 +393,15 @@ const BaseConfigSchema = z.object({
     .optional(),
 
   /**
+   * Filter items to check
+   */
+  filterItemsToCheck: z
+    .function()
+    .args(ShotItem)
+    .returns(z.boolean())
+    .optional(),
+
+  /**
    * Shot and file name generator for images
    */
   shotNameGenerator: z
