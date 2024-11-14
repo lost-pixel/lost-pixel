@@ -5,12 +5,11 @@ import type { BrowserType } from 'playwright-core';
 import fs from 'fs-extra';
 import { log } from '../log';
 import {
-  type Mask,
   type PageScreenshotParameter,
   config,
   isPlatformModeConfig,
 } from '../config';
-import type { ShotItem } from '../types';
+import type { Mask, ShotItem } from '../types';
 import { selectBreakpoints, generateLabel } from '../shots/utils';
 import { notSupported } from '../constants';
 
