@@ -93,7 +93,11 @@ export const createShots = async () => {
           browsers.length > 1 ? browser : undefined,
         );
 
-        const { filterItemsToCheck } = config;
+        const filterItemsToCheck =
+          'filterItemsToCheck' in config
+            ? config.filterItemsToCheck
+            : undefined;
+
         const filteredShotItems = filterItemsToCheck
           ? shotItems.filter((item) => filterItemsToCheck(item))
           : shotItems;
@@ -233,7 +237,11 @@ export const createShots = async () => {
           browsers.length > 1 ? browser : undefined,
         );
 
-        const { filterItemsToCheck } = config;
+        const filterItemsToCheck =
+          'filterItemsToCheck' in config
+            ? config.filterItemsToCheck
+            : undefined;
+
         const filteredShotItems = filterItemsToCheck
           ? shotItems.filter((item) => filterItemsToCheck(item))
           : shotItems;

@@ -376,15 +376,6 @@ const BaseConfigSchema = z.object({
     .optional(),
 
   /**
-   * Filter items to check
-   */
-  filterItemsToCheck: z
-    .function()
-    .args(ShotItem)
-    .returns(z.boolean())
-    .optional(),
-
-  /**
    * Shot and file name generator for images
    */
   shotNameGenerator: z
@@ -550,6 +541,15 @@ export const GenerateOnlyModeConfigSchema = BaseConfigSchema.extend({
    * @default 'pixelmatch'
    */
   compareEngine: z.enum(['pixelmatch', 'odiff']).default('pixelmatch'),
+
+  /**
+   * Filter stories to take screenshots of and run comparisons on (existing shots remain untouched)
+   */
+  filterItemsToCheck: z
+    .function()
+    .args(ShotItem)
+    .returns(z.boolean())
+    .optional(),
 });
 
 export const ConfigSchema = z.union([
