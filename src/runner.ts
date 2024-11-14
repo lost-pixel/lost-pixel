@@ -62,8 +62,13 @@ export const runner = async (config: GenerateOnlyModeConfig) => {
 
     log.process('info', 'general', '🔍 Checking differences');
     const checkDifferenceStart = process.hrtime();
+
+    const { filterItemsToCheck } = config;
+    const filteredShotItems = filterItemsToCheck
+      ? shotItems.filter((item) => filterItemsToCheck(item))
+      : shotItems;
     const { aboveThresholdDifferenceItems, noBaselinesItems } =
-      await checkDifferences(shotItems);
+      await checkDifferences(filteredShotItems);
 
     if (isUpdateMode()) {
       // Remove only the files which are no longer present in our shot items

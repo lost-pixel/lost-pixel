@@ -93,17 +93,26 @@ export const createShots = async () => {
           browsers.length > 1 ? browser : undefined,
         );
 
+        const filterItemsToCheck =
+          'filterItemsToCheck' in config
+            ? config.filterItemsToCheck
+            : undefined;
+
+        const filteredShotItems = filterItemsToCheck
+          ? shotItems.filter((item) => filterItemsToCheck(item))
+          : shotItems;
+
         ladleShotItems = shotItems;
 
         log.process(
           'info',
           'general',
           `Prepared ${
-            shotItems.length
+            filteredShotItems.length
           } ladle stories for screenshots on ${browser.name()}`,
         );
 
-        await takeScreenShots(shotItems, browser);
+        await takeScreenShots(filteredShotItems, browser);
       });
 
       localServer?.close();
@@ -228,17 +237,26 @@ export const createShots = async () => {
           browsers.length > 1 ? browser : undefined,
         );
 
+        const filterItemsToCheck =
+          'filterItemsToCheck' in config
+            ? config.filterItemsToCheck
+            : undefined;
+
+        const filteredShotItems = filterItemsToCheck
+          ? shotItems.filter((item) => filterItemsToCheck(item))
+          : shotItems;
+
         storybookShotItems = shotItems;
 
         log.process(
           'info',
           'general',
           `Prepared ${
-            shotItems.length
+            filteredShotItems.length
           } stories for screenshots on ${browser.name()}`,
         );
 
-        await takeScreenShots(shotItems, browser);
+        await takeScreenShots(filteredShotItems, browser);
       });
 
       localServer?.close();

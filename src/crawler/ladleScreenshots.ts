@@ -1,8 +1,8 @@
 import path from 'node:path';
 import axios from 'axios';
 import type { BrowserType } from 'playwright-core';
-import { config, isPlatformModeConfig, type Mask } from '../config';
-import type { ShotItem } from '../types';
+import { config, isPlatformModeConfig } from '../config';
+import type { Mask, ShotItem } from '../types';
 import { selectBreakpoints, generateLabel } from '../shots/utils';
 import { notSupported } from '../constants';
 import type { Story } from './storybook';
