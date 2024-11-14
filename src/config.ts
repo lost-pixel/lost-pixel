@@ -233,7 +233,7 @@ const ShotItem = z.object({
   mask: z.array(MaskSchema).optional(),
   viewport: z
     .object({
-      width: z.number().optional(),
+      width: z.number(),
       height: z.number().optional(),
     })
     .optional(),
