@@ -1,0 +1,9 @@
+{
+  "$schema": "https://unpkg.com/knip@5/schema.json",
+  "ignore": [
+    "config-templates/example.lostpixel.config.{js,ts}",
+    "examples/**/*"
+  ],
+  "ignoreDependencies": ["prettier"],
+  "ignoreBinaries": ["np"]
+}
