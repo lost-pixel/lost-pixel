@@ -76,6 +76,10 @@ export const isDockerMode = (): boolean => {
   return args._.includes('docker') || process.env.LOST_PIXEL_DOCKER === 'true';
 };
 
+export const isPlatformDebugMode = (): boolean => {
+  return process.env.LOST_PIXEL_PLATFORM_DEBUG_MODE === 'true';
+};
+
 export const isLocalDebugMode = (): boolean => {
   // @ts-expect-error TBD
   const args = yargs(hideBin(process.argv)).parse() as ParsedYargs;
