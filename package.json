@@ -31,7 +31,8 @@
     "release": "np --no-publish",
     "version": "./update-versions.sh",
     "dev": "ts-node src/bin",
-    "start": "NODE_ENV=production node dist/bin.js"
+    "start": "NODE_ENV=production node dist/bin.js",
+    "knip": "knip"
   },
   "engines": {
     "node": ">=18"
@@ -67,7 +68,6 @@
     "form-data": "4.0.0",
     "fs-extra": "11.2.0",
     "get-port-please": "3.1.2",
-    "lodash.get": "4.4.2",
     "lodash.kebabcase": "4.1.1",
     "odiff-bin": "2.6.1",
     "pixelmatch": "5.3.0",
@@ -75,7 +75,6 @@
     "pngjs": "7.0.0",
     "posthog-node": "3.5.0",
     "serve-handler": "6.1.6",
-    "shelljs": "0.8.5",
     "ts-node": "10.9.2",
     "xml2js": "^0.6.2",
     "yargs": "17.7.2",
@@ -86,14 +85,14 @@
     "@types/async": "3.2.24",
     "@types/fs-extra": "11.0.4",
     "@types/jest": "29.5.13",
-    "@types/lodash.get": "4.4.9",
     "@types/lodash.kebabcase": "4.1.9",
+    "@types/node": "22.9.3",
     "@types/pixelmatch": "5.2.6",
     "@types/pngjs": "6.0.5",
     "@types/serve-handler": "6.1.4",
-    "@types/shelljs": "0.8.15",
     "husky": "9.1.6",
     "jest": "29.7.0",
+    "knip": "5.37.2",
     "lint-staged": "15.2.10",
     "prettier": "3.3.3",
     "rimraf": "5.0.10",
