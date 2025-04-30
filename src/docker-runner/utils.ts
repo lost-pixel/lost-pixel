@@ -20,8 +20,8 @@ export const executeDockerRun = async ({ version }: { version: string }) => {
     '--rm',
     // TODO: remove interactive mode for now, while it clashes with Tauri execution
     // '-it',
-    `-v ${process.cwd()}:${process.cwd()}`,
-    `-e WORKSPACE=${process.cwd()}`,
+    `-v ${process.cwd()}:/src`,
+    `-e WORKSPACE=/src`,
     '-e DOCKER=1',
     `-e LOST_PIXEL_DISABLE_TELEMETRY=${process.env.LOST_PIXEL_DISABLE_TELEMETRY}`,
     argv.configDir ? `-e LOST_PIXEL_CONFIG_DIR=${argv.configDir}` : '',
