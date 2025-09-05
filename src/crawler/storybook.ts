@@ -50,6 +50,10 @@ export type Story = {
 type StorybookPreviewApi = {
   ready: () => Promise<void>;
   extract?: () => Promise<Record<string, Story>>;
+  channel?: {
+    on: (event: string, callback: (...args: any[]) => void) => void;
+    off: (event: string, callback: (...args: any[]) => void) => void;
+   }
 };
 
 type StorybookClientApi = {
@@ -124,7 +128,17 @@ export const collectStoriesViaWindowApi = async (
     await page.evaluate(async () => {
       const { __STORYBOOK_PREVIEW__: api } = window as WindowObject;
 
-      if (api.ready) {
+      if (api.channel) {
+        await new Promise((resolve) => {
+          const onStoryRenderPhaseChanged = (event: { newPhase: string }) => {
+            if (event.newPhase === 'completed') {
+              api.channel?.off('storyRenderPhaseChanged', onStoryRenderPhaseChanged);
+              resolve(true);
+            }
+          };
+          api.channel?.on('storyRenderPhaseChanged', onStoryRenderPhaseChanged);
+        });
+      } else if (api.ready) {
         await api.ready();
       }
     });
