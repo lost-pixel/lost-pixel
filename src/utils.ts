@@ -347,5 +347,36 @@ export const launchBrowser = async (_browser?: BrowserType) => {
   const browserType = _browser ?? getBrowser();
   const browserName = browserType.name() as BrowserName;
 
+  if (config.playwrightServer?.wsEndpoint) {
+    log.process(
+      'info',
+      'general',
+      `Connecting to remote Playwright server at ${config.playwrightServer.wsEndpoint}`,
+    );
+    
+    try {
+      const connectOptions = {
+        timeout: config.playwrightServer.connectTimeout ?? 30000,
+      };
+      
+      return await browserType.connect(
+        config.playwrightServer.wsEndpoint,
+        connectOptions,
+      );
+    } catch (error: unknown) {
+      log.process(
+        'error',
+        'general',
+        `Failed to connect to remote Playwright server: ${error}`,
+      );
+      throw error;
+    }
+  }
+  log.process(
+    'info',
+    'general',
+    `Launching local ${browserName} browser`,
+  );
+  
   return browserType.launch(config.browserLaunchOptions?.[browserName]);
 };

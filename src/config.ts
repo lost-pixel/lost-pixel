@@ -421,6 +421,25 @@ const BaseConfigSchema = z.object({
       webkit: z.custom<LaunchOptions>().optional(),
     })
     .optional(),
+
+  /**
+   * Remote Playwright server configuration
+   * When provided, Lost Pixel will connect to a remote Playwright server instead of launching a local browser
+   */
+  playwrightServer: z
+    .object({
+      /**
+       * WebSocket endpoint URL for the remote Playwright server
+       * @example 'ws://localhost:3000/'
+       */
+      wsEndpoint: z.string(),
+      /**
+       * Optional timeout for connecting to the remote server (in milliseconds)
+       * @default 30000
+       */
+      connectTimeout: z.number().default(30000).optional(),
+    })
+    .optional(),
 });
 
 export const PlatformModeConfigSchema = BaseConfigSchema.extend({
