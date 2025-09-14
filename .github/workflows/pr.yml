@@ -52,7 +52,7 @@ jobs:
           buildoptions: '--compress --force-rm'
 
       - name: Slack Notification
-        uses: 8398a7/action-slack@a74b761b4089b5d730d813fbedcd2ec5d394f3af
+        uses: 8398a7/action-slack@59b127a91e89ce70980e1bc926dca351ad0a1b32
         if: always()
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK }}
