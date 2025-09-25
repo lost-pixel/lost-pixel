@@ -63,7 +63,7 @@
     "async": "3.2.6",
     "axios": "1.7.7",
     "bundle-require": "4.0.2",
-    "esbuild": "0.24.0",
+    "esbuild": "0.25.0",
     "execa": "5.1.1",
     "form-data": "4.0.0",
     "fs-extra": "11.2.0",
