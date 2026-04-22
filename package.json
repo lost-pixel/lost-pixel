@@ -82,7 +82,7 @@
   },
   "devDependencies": {
     "@playwright/test": "1.47.2",
-    "@types/async": "3.2.24",
+    "@types/async": "3.2.25",
     "@types/fs-extra": "11.0.4",
     "@types/jest": "29.5.13",
     "@types/lodash.kebabcase": "4.1.9",
