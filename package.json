@@ -86,7 +86,7 @@
     "@types/fs-extra": "11.0.4",
     "@types/jest": "29.5.13",
     "@types/lodash.kebabcase": "4.1.9",
-    "@types/node": "22.9.3",
+    "@types/node": "22.19.17",
     "@types/pixelmatch": "5.2.6",
     "@types/pngjs": "6.0.5",
     "@types/serve-handler": "6.1.4",
