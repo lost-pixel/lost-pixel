@@ -1,3 +1,27 @@
+<div align="center">
+
+<a href="https://lost-pixel.com/blog/lost-pixel-team-is-joining-figma">
+  <img src="https://github.com/user-attachments/assets/6fb7b707-0e7e-42cc-b696-f9db743c83e5" alt="Lost Pixel joining Figma" width="500" />
+</a>
+
+
+
+## Lost Pixel is joining Figma
+
+We are sunsetting the product and building what’s next.
+
+📖 **[Read the announcement →](https://lost-pixel.com/blog/lost-pixel-team-is-joining-figma)**
+
+</div>
+
+<br />
+<br />
+<br />
+<hr />
+<br />
+<br />
+<br />
+
 <div align='center'><img width='150px' height='150px' src='https://user-images.githubusercontent.com/29632358/168112844-77e76a0d-b96f-4bc8-b753-cd39f4afd428.png'>
 </div>
 <div align="center">
