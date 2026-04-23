@@ -150,6 +150,11 @@ const HistoireShotsSchema = z.object({
    * @example '[data-storyloaded]'
    */
   waitForSelector: z.string().optional(),
+
+  /**
+   * Glob patterns for story files to exclude.
+   */
+  exclude: z.array(z.string()).optional(),
 });
 
 const PageShotsSchema = z.object({

@@ -6,6 +6,7 @@ import { config, isPlatformModeConfig } from '../config';
 import { type ShotItem } from '../types';
 import { notSupported } from '../constants';
 import { generateLabel } from '../shots/utils';
+import micromatch from 'micromatch';
 
 type HistoireStory = {
   id: string;
@@ -15,6 +16,7 @@ type HistoireStory = {
     type: string;
     width: string;
   };
+  relativePath: string;
   variants?: HistoireStory[];
 };
 
@@ -75,6 +77,13 @@ export const collectHistoireStories = async (histoireUrl: string) => {
   log.process('info', 'general', `\n=== [Histoire Mode] ${jsonUrl} ===\n`);
   const response = await axios.get<HistoireResponse>(jsonUrl);
 
+  const filteredStories = response.data.stories.filter(
+    (story) =>
+      !micromatch.isMatch(
+        story.relativePath,
+        config.histoireShots?.exclude || [],
+      ),
+  );
   // Ignore the full-config story from Histoire as it is just JSON
-  return response.data.stories;
+  return filteredStories;
 };
