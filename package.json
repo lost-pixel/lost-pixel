@@ -71,7 +71,7 @@
     "lodash.kebabcase": "4.1.1",
     "odiff-bin": "2.6.1",
     "pixelmatch": "5.3.0",
-    "playwright-core": "1.47.2",
+    "playwright-core": "1.54.1",
     "pngjs": "7.0.0",
     "posthog-node": "3.5.0",
     "serve-handler": "6.1.6",
@@ -81,7 +81,7 @@
     "zod": "3.23.8"
   },
   "devDependencies": {
-    "@playwright/test": "1.47.2",
+    "@playwright/test": "1.54.1",
     "@types/async": "3.2.24",
     "@types/fs-extra": "11.0.4",
     "@types/jest": "29.5.13",
@@ -100,9 +100,6 @@
     "ts-prune": "0.10.3",
     "typescript": "5.6.2",
     "xo": "0.59.3"
-  },
-  "peerDependencies": {
-    "playwright-core": ">=1.47.2"
   },
   "xo": {
     "prettier": true,

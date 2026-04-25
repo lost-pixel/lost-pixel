@@ -111,3 +111,5 @@ dist
 /lostpixel.config.js
 /lostpixel.config.ts
 /pagesJson.json
+
+.npmrc
